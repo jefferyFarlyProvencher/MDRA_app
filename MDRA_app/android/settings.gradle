@@ -1,0 +1,3 @@
+rootProject.name = 'MDRA_app'
+
+include ':app'
