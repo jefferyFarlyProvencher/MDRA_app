@@ -2,11 +2,12 @@ package com.mdra_app;
 
 import android.app.Application;
 
-import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
+
+import com.reactnativenavigation.NavigationApplication;
 
 import com.oblador.vectoricons.VectorIconsPackage;
 
@@ -14,9 +15,9 @@ import java.util.Arrays;
 import java.util.List;
 
 
-public class MainApplication extends Application implements ReactApplication {
+public class MainApplication extends NavigationApplication  {
 
-  private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
+  /*private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
     @Override
     public boolean getUseDeveloperSupport() {
       return BuildConfig.DEBUG;
@@ -44,6 +45,30 @@ public class MainApplication extends Application implements ReactApplication {
   @Override
   public void onCreate() {
     super.onCreate();
-    SoLoader.init(this, /* native exopackage */ false);
-  }
+    SoLoader.init(this, native exopackage false);
+  }*/
+
+  @Override
+    public boolean isDebug() {
+       // Make sure you are using BuildConfig from your own application
+       return BuildConfig.DEBUG;
+    }
+
+    protected List<ReactPackage> getPackages() {
+       // Add additional packages you require here
+       // No need to add RnnPackage and MainReactPackage
+       return Arrays.<ReactPackage>asList(
+           new VectorIconsPackage()
+       );
+    }
+
+    @Override
+    public List<ReactPackage> createAdditionalReactPackages() {
+       return getPackages();
+    }
+
+    @Override
+    public String getJSMainModuleName() {
+        return "index";
+    }
 }
