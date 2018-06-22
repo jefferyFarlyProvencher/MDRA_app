@@ -1,46 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="3b47582f-7566-4db6-8bcf-f2d044feb417" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/.gradle/2.14.1/taskArtifacts/cache.properties.lock" beforeDir="false" afterPath="$PROJECT_DIR$/android/.gradle/2.14.1/taskArtifacts/cache.properties.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/.gradle/2.14.1/taskArtifacts/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/android/.gradle/2.14.1/taskArtifacts/fileHashes.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/.gradle/2.14.1/taskArtifacts/fileSnapshots.bin" beforeDir="false" afterPath="$PROJECT_DIR$/android/.gradle/2.14.1/taskArtifacts/fileSnapshots.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/.gradle/2.14.1/taskArtifacts/fileSnapshotsToTreeSnapshotsIndex.bin" beforeDir="false" afterPath="$PROJECT_DIR$/android/.gradle/2.14.1/taskArtifacts/fileSnapshotsToTreeSnapshotsIndex.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/.gradle/2.14.1/taskArtifacts/taskArtifacts.bin" beforeDir="false" afterPath="$PROJECT_DIR$/android/.gradle/2.14.1/taskArtifacts/taskArtifacts.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/.gradle/2.14.1/tasks/_app_compileDebugJavaWithJavac/localClassSetAnalysis/localClassSetAnalysis.lock" beforeDir="false" afterPath="$PROJECT_DIR$/android/.gradle/2.14.1/tasks/_app_compileDebugJavaWithJavac/localClassSetAnalysis/localClassSetAnalysis.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/.gradle/2.14.1/tasks/_app_compileDebugJavaWithJavac/localJarClasspathSnapshot/localJarClasspathSnapshot.lock" beforeDir="false" afterPath="$PROJECT_DIR$/android/.gradle/2.14.1/tasks/_app_compileDebugJavaWithJavac/localJarClasspathSnapshot/localJarClasspathSnapshot.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/.gradle/2.14.1/tasks/_react-native-vector-icons_compileReleaseJavaWithJavac/localClassSetAnalysis/localClassSetAnalysis.lock" beforeDir="false" afterPath="$PROJECT_DIR$/android/.gradle/2.14.1/tasks/_react-native-vector-icons_compileReleaseJavaWithJavac/localClassSetAnalysis/localClassSetAnalysis.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/.gradle/2.14.1/tasks/_react-native-vector-icons_compileReleaseJavaWithJavac/localJarClasspathSnapshot/localJarClasspathSnapshot.lock" beforeDir="false" afterPath="$PROJECT_DIR$/android/.gradle/2.14.1/tasks/_react-native-vector-icons_compileReleaseJavaWithJavac/localJarClasspathSnapshot/localJarClasspathSnapshot.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/build/intermediates/incremental/mergeDebugResources/compile-file-map.properties" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build/intermediates/incremental/mergeDebugResources/compile-file-map.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/build/intermediates/incremental/packageDebug/dex-renamer-state.txt" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build/intermediates/incremental/packageDebug/dex-renamer-state.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/build/intermediates/incremental/packageDebug/file-input-save-data.txt" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build/intermediates/incremental/packageDebug/file-input-save-data.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/MDRA_app-react-native-vector-icons-unspecified_3380101fb999d48cf271e6355dc0ee2395fa6392.jar" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/MDRA_app-react-native-vector-icons-unspecified_3380101fb999d48cf271e6355dc0ee2395fa6392.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/bolts-tasks-1.4.0_e868236d55bf4144413b223186d6379e1579f627.jar" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/bolts-tasks-1.4.0_e868236d55bf4144413b223186d6379e1579f627.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/com.facebook.fbui.textlayoutbuilder-textlayoutbuilder-1.0.0_60e9616a3d0f690dc88626a19eeb14dd7b7ea95d.jar" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/com.facebook.fbui.textlayoutbuilder-textlayoutbuilder-1.0.0_60e9616a3d0f690dc88626a19eeb14dd7b7ea95d.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/com.facebook.fresco-drawee-1.3.0_8ed8eaf777d59dd0d6f16a8cea277f6f7ef6752c.jar" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/com.facebook.fresco-drawee-1.3.0_8ed8eaf777d59dd0d6f16a8cea277f6f7ef6752c.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/com.facebook.fresco-fbcore-1.3.0_78167be54e5fe112281d6900e217ce83e217a517.jar" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/com.facebook.fresco-fbcore-1.3.0_78167be54e5fe112281d6900e217ce83e217a517.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/com.facebook.fresco-fresco-1.3.0_794e7b039dcc724083ae626401ac09a24148f427.jar" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/com.facebook.fresco-fresco-1.3.0_794e7b039dcc724083ae626401ac09a24148f427.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/com.facebook.fresco-imagepipeline-1.3.0_4d567c61d290bb14978a4336920eac1f82cfdb9d.jar" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/com.facebook.fresco-imagepipeline-1.3.0_4d567c61d290bb14978a4336920eac1f82cfdb9d.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/com.facebook.fresco-imagepipeline-base-1.3.0_ff0e55ddad7d085d0e69e3779c30a4df10bb318c.jar" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/com.facebook.fresco-imagepipeline-base-1.3.0_ff0e55ddad7d085d0e69e3779c30a4df10bb318c.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/com.facebook.fresco-imagepipeline-okhttp3-1.3.0_f4714b7463597626fb26df009ef3b9dbd017d5a7.jar" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/com.facebook.fresco-imagepipeline-okhttp3-1.3.0_f4714b7463597626fb26df009ef3b9dbd017d5a7.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/com.facebook.react-react-native-0.55.4_666dfd8073142028a4ccd362d719a2d701384566.jar" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/com.facebook.react-react-native-0.55.4_666dfd8073142028a4ccd362d719a2d701384566.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/com.facebook.soloader-soloader-0.1.0_e654c1e5b0724e4a85fe1ca930927be166a6a108.jar" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/com.facebook.soloader-soloader-0.1.0_e654c1e5b0724e4a85fe1ca930927be166a6a108.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/debug_031f19cafd716c77c03fa9c69bb642b72dbc5f0a.jar" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/debug_031f19cafd716c77c03fa9c69bb642b72dbc5f0a.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/infer-annotations-4.0_e6db2a3c243788b6578da5e9e05a05128843b293.jar" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/infer-annotations-4.0_e6db2a3c243788b6578da5e9e05a05128843b293.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/javax.inject-1_eeb2043ec7cb072c5bb7369e125e2fd44b08b543.jar" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/javax.inject-1_eeb2043ec7cb072c5bb7369e125e2fd44b08b543.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/jsr305-3.0.0_5484924077ae20c949e369e4924d015f4e6ca0d0.jar" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/jsr305-3.0.0_5484924077ae20c949e369e4924d015f4e6ca0d0.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/okhttp-3.6.0_21dac35bcc007b49619d5c9aa5db2342993bcb53.jar" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/okhttp-3.6.0_21dac35bcc007b49619d5c9aa5db2342993bcb53.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/okhttp-urlconnection-3.6.0_84760420c433948dc8a6b4772e24c301c36d9b36.jar" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/okhttp-urlconnection-3.6.0_84760420c433948dc8a6b4772e24c301c36d9b36.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/okio-1.13.0_b997ba5ee4bcee614a9df6470c72129eae6d2d05.jar" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/okio-1.13.0_b997ba5ee4bcee614a9df6470c72129eae6d2d05.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/staticlayout-proxy-1.0_967deba6b001e78d26eee8643d37aee40bde2f7b.jar" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/staticlayout-proxy-1.0_967deba6b001e78d26eee8643d37aee40bde2f7b.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/build/outputs/apk/app-debug.apk" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build/outputs/apk/app-debug.apk" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Input/Input.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Input/Input.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/FormTest/FormTest.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/FormTest/FormTest.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/FormTest/mainScreenTest.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/FormTest/mainScreenTest.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
-    </list>
+    <list default="true" id="3b47582f-7566-4db6-8bcf-f2d044feb417" name="Default" comment="" />
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
     <ignored path="$PROJECT_DIR$/tmp/" />
@@ -77,8 +38,8 @@
       <file leaf-file-name="FormTest.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/screens/FormTest/FormTest.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="504">
-              <caret line="125" column="28" lean-forward="true" selection-start-line="125" selection-start-column="28" selection-end-line="125" selection-end-column="28" />
+            <state relative-caret-position="441">
+              <caret line="122" column="22" lean-forward="true" selection-start-line="122" selection-start-column="22" selection-end-line="122" selection-end-column="22" />
               <folding>
                 <element signature="e#0#43#0" expanded="true" />
               </folding>
@@ -234,6 +195,12 @@
               <item name="MDRA_app" type="b2602c69:ProjectViewProjectNode" />
               <item name="MDRA_app" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="assets" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="MDRA_app" type="b2602c69:ProjectViewProjectNode" />
+              <item name="MDRA_app" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="components" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -322,7 +289,7 @@
       <workItem from="1529507550155" duration="12222000" />
       <workItem from="1529588170432" duration="11689000" />
       <workItem from="1529672173915" duration="12391000" />
-      <workItem from="1529694696692" duration="2361000" />
+      <workItem from="1529694696692" duration="2618000" />
     </task>
     <task id="LOCAL-00001" summary="cleaned up some things to use redux properly, might need to go through this part one more time:&#10;&#10;- added configureStore,&#10;- Modified:&#10;index: to use the store and its reducers">
       <created>1529509642861</created>
@@ -345,15 +312,28 @@
       <option name="project" value="LOCAL" />
       <updated>1529602758134</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Finished formik tutorial, now time to start the actual app">
+      <created>1529698949218</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1529698949218</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Finished formik tutorial, now time to start the actual app">
+      <created>1529699127235</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1529699127235</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="46757000" />
+    <option name="totallyTimeSpent" value="47014000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="1913" y="-124" width="1474" height="1047" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.19986072" />
       <window_info anchor="bottom" id="TODO" order="7" />
@@ -387,7 +367,8 @@
     <MESSAGE value="cleaned up some things to use redux properly, might need to go through this part one more time:&#10;&#10;- added configureStore,&#10;- Modified:&#10;index: to use the store and its reducers" />
     <MESSAGE value="added formik (not tested)" />
     <MESSAGE value="added formik AND IT LAUNCHES" />
-    <option name="LAST_COMMIT_MESSAGE" value="added formik AND IT LAUNCHES" />
+    <MESSAGE value="Finished formik tutorial, now time to start the actual app" />
+    <option name="LAST_COMMIT_MESSAGE" value="Finished formik tutorial, now time to start the actual app" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/index.android.js">
@@ -723,8 +704,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/screens/FormTest/FormTest.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="504">
-          <caret line="125" column="28" lean-forward="true" selection-start-line="125" selection-start-column="28" selection-end-line="125" selection-end-column="28" />
+        <state relative-caret-position="441">
+          <caret line="122" column="22" lean-forward="true" selection-start-line="122" selection-start-column="22" selection-end-line="122" selection-end-column="22" />
           <folding>
             <element signature="e#0#43#0" expanded="true" />
           </folding>
