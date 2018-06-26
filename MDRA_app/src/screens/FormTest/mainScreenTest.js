@@ -1,12 +1,29 @@
 import React, {Component} from 'react';
-import { View, Text, StyleSheet, Platform , ScrollView} from 'react-native';
+import { View, Text, StyleSheet, Platform , ScrollView, Dimensions} from 'react-native';
+import {connect} from 'react-redux';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 
 import FormTest from './FormTest';
 
 
-export default class mainScreen extends Component{
+class mainScreen extends Component{
+
+    constructor(props) {
+        super(props);
+        Dimensions.addEventListener("change", this.updateStyles);
+    }
+
+    componentWillUnmount() {
+        Dimensions.removeEventListener("change", this.updateStyles);
+    }
+
+    updateStyles = (dims) => {
+        this.setState( {
+            ViewMode: dims.window.height > 500 ? "portrait" : "landscape"
+        });
+    };
+
 
     render() {
         return(
@@ -36,3 +53,5 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
 });
+
+export default connect()(mainScreen)

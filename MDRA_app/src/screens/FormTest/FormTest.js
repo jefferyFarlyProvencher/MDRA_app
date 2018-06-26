@@ -1,10 +1,13 @@
+//system imports
 import React, {PureComponent} from 'react';
-import {StyleSheet, TextInput, View, Alert} from 'react-native';
+import {StyleSheet, TextInput, View, Alert, Picker, Dimensions} from 'react-native';
 import { Button } from 'react-native-elements';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 
-import Input from "../../components/Input/Input"
+//src imports
+import Input from "../../components/Input/Input";
+import DropDownList from "../../components/dropDownList/DropDownList";
 
 const api = (user) => new Promise((resolve, reject) =>{
     setTimeout(() => {
@@ -18,12 +21,17 @@ const api = (user) => new Promise((resolve, reject) =>{
 });
 
 class FormTest extends PureComponent{
+    state = {
+        ViewMode: Dimensions.get('window').height > 500 ? "portrait" : "landscape",
+    };
+    
     _handleSubmit =(async (values, bag) => {
         try {
             await api(values);
             console.log(values.email);
             console.log(values.password);
-            Alert.alert("Welcome!");
+            console.log(JSON.stringify(values));
+            Alert.alert("Welcome!\n");
         }catch (e) {
             bag.setSubmitting(false);
             bag.setErrors(e);
@@ -34,7 +42,7 @@ class FormTest extends PureComponent{
         return(
             <View style={styles.container}>
                 <Formik
-                    initialValues={{ email:'', password: '', confirmPassword:''}}
+                    initialValues={{ email:'', password: '', confirmPassword:'', gender:'male', animal:'Cat'}}
                     onSubmit={this._handleSubmit}
                     validationSchema={Yup.object().shape({
                         email: Yup.string().email().required(),
@@ -85,6 +93,10 @@ class FormTest extends PureComponent{
                                     />
                                 </View>
                             </View>
+                            <View style={styles.twoPerRowContainer}>
+                                <DropDownList style={styles.inputContainer} value={values.gender} name="gender" onChange={setFieldValue} itemList={["Male","Female"]}/>
+                                <DropDownList style={styles.inputContainer} value={values.animal} name="animal" onChange={setFieldValue} itemList={["Cat","Dog"]}/>
+                            </View>
                             <Button
                                 buttonStyle={styles.button}
                                 title="Submit"
@@ -127,6 +139,7 @@ const styles = StyleSheet.create({
     },
     twoPerRowContainer: {
         flexDirection: "row",
+        justifyContent: "space-between"
     },
     inputContainer:{
         width: '50%',

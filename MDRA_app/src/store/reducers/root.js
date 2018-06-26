@@ -1,3 +1,7 @@
+import {
+
+} from '../actions/nextPage1'
+
 const initialState = {
     places:[]
 };
