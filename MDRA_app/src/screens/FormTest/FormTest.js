@@ -23,15 +23,21 @@ const api = (user) => new Promise((resolve, reject) =>{
 class FormTest extends PureComponent{
     state = {
         ViewMode: Dimensions.get('window').height > 500 ? "portrait" : "landscape",
+        formData: null,
     };
-    
+
     _handleSubmit =(async (values, bag) => {
         try {
             await api(values);
             console.log(values.email);
             console.log(values.password);
             console.log(JSON.stringify(values));
-            Alert.alert("Welcome!\n");
+            this.setState({
+                ViewMode: Dimensions.get('window').height > 500 ? "portrait" : "landscape",
+                formData: values,
+            });
+            Alert.alert("Welcome!\n"+ values.email);
+            bag.setSubmitting(false);
         }catch (e) {
             bag.setSubmitting(false);
             bag.setErrors(e);
@@ -101,7 +107,7 @@ class FormTest extends PureComponent{
                                 buttonStyle={styles.button}
                                 title="Submit"
                                 onPress={handleSubmit}
-                                disabled={!isValid || isSubmitting}
+                                disabled={(!isValid || isSubmitting)}
                                 loading={isSubmitting}
                             />
                         </View>

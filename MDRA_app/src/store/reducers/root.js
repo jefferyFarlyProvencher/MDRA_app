@@ -1,6 +1,6 @@
 import {
-
-} from '../actions/nextPage1'
+    ADD_DATA
+} from '../actions/actionTypes'
 
 const initialState = {
     places:[]
@@ -8,6 +8,11 @@ const initialState = {
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
+        case (ADD_DATA):
+            return {
+                ...state,
+            };
+            break;
         default:
             return state
     }
