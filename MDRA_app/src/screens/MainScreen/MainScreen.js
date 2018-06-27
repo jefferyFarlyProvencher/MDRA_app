@@ -15,18 +15,17 @@ class MainScreen extends Component{
         this.setState({
            loading:true,
         });
-        setTimeout(()=>{console.log("cool");startMainTabs();},3000);
+        setTimeout(()=>{console.log("cool");startMainTabs();},500);
     };
 
     render(){
         return(
             <ImageBackground source={backgroundImage} style={styles.backgroundImage}>
                 <View  style={styles.mainContainer}>
-
-                        <TouchableWithoutFeedback onPress={this._handlerOnPress}  style={styles.mainContainer}>
+                        <TouchableWithoutFeedback onPress={this._handlerOnPress}>
                                 {this.state.loading
-                                    ?<ActivityIndicator size="large" color="#555" />
-                                    :<View>
+                                    ?<ActivityIndicator size={100} color="#555" />
+                                    :<View style={styles.mainContainer}>
                                         <Text style={styles.textContainer}>Press To Start</Text>
                                     </View> }
                         </TouchableWithoutFeedback>
@@ -40,20 +39,18 @@ class MainScreen extends Component{
 const styles= StyleSheet.create({
     mainContainer:{
         flex:1,
-        justifyContent:"center",
         alignItems:"center",
-        height: '100%',
     },
 
     textContainer:{
         fontSize: 50,
         color: '#222',
-        fontFamily: 'Robotic'
+        fontFamily: 'lucida grande'
     },
 
     backgroundImage: {
         width: "100%",
-        flex:1
+        flex:1,
     },
 });
 

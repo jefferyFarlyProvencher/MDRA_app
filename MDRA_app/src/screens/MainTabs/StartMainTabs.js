@@ -11,7 +11,7 @@ const startTabs = () => {
         Navigation.startTabBasedApp({
             tabs: [
                 {
-                    screen: "MDRA_app.mainScreenTest",
+                    screen: "MDRA_app.formScreen",
                     label: "Form",
                     title: "Form",
                     icon: sources[0],

@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
     },
     inputContainer:{
         width: '50%',
-    }
+    },
 
 });
 
