@@ -1,6 +1,7 @@
 //Base imports
 import React, {Component} from 'react';
-import {View, Text, StyleSheet, Dimensions} from 'react-native';
+import {View, Text, StyleSheet, Dimensions, Button} from 'react-native';
+import {connect} from 'react-redux'
 //Package Imports
 import StepIndicator from 'react-native-step-indicator'
 
@@ -9,6 +10,7 @@ import FormScreenInitial from '../FormScreen1_initial/FormScreen_initial';
 import FormScreenTimeZonage from '../FormScreen2_timeZonage/FormScreen_timeZonage';
 import FormScreenWeights from '../FormScreen3_weights/FormScreen_weights';
 import FormScreenAdvanced from '../FormScreen4_advanced/FormScreen_advanced';
+import {addData} from "../../store/actions/addData";
 
 
 
@@ -19,13 +21,12 @@ class FormScreen extends Component{
 
     constructor(props){
         super(props);
-        this.state = {
-            currentPosition:0,
-        }
     }
 
     _screenSelector = () =>{
-      switch (this.state.currentPosition){
+        console.log('fuck' + Dimensions.get('window').height);
+        console.log(this.props.state.main.position);
+        switch (this.props.state.main.position){
           case 0:
               return(<FormScreenInitial/>);
           case 1:
@@ -36,11 +37,10 @@ class FormScreen extends Component{
               return(<FormScreenAdvanced/>);
           default:
               //do nothing
-      }
+        }
     };
 
     render(){
-        console.log('fuck' + Dimensions.get('window').height);
         const labels = ["Initial","Time Zonage","Weights"];
         const customStyles = {
             stepIndicatorSize: 19,
@@ -95,23 +95,23 @@ class FormScreen extends Component{
             <View style={styles.overTheIndicatorContainer}>
                 {this._screenSelector()}
                 <View style={styles.indicatorContainer}>
-                    <View style={this.state.currentPosition >=3 ?{ width:'80%'}: {width:'100%'}}>
+                    <View style={this.props.state.main.position >=3 ?{ width:'80%'}: {width:'100%'}}>
                     <StepIndicator
                         customStyles={customStyles}
                         stepCount={3}
-                        currentPosition={this.state.currentPosition}
+                        currentPosition={this.props.state.main.position}
                         labels={labels}
 
                     />
                     </View>
                     {
-                        this.state.currentPosition >= 3
+                        this.props.state.main.position >= 3
                         ?
                             <View style={{ width:'20%'}}>
                                 <StepIndicator
                                     customStyles={customStylesAdvancedOnly}
                                     stepCount={1}
-                                    currentPosition={this.state.currentPosition-3}
+                                    currentPosition={this.props.state.main.position-3}
                                     labels={["Advanced"]}
                                     hidden={true}
                                 />
@@ -140,4 +140,16 @@ const styles = StyleSheet.create({
     }
 });
 
-export default FormScreen
+const mapStateToProps = (state) => {
+    return {
+        state
+    };
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onAddData: (data, position) => dispatch(addData(data, position))
+    };
+};
+
+export default connect(mapStateToProps,mapDispatchToProps)(FormScreen)

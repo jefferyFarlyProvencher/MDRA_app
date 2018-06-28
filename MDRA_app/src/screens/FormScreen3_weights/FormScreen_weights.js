@@ -1,6 +1,6 @@
 //system imports
 import React, {PureComponent} from 'react';
-import {StyleSheet, View, Alert, Dimensions} from 'react-native';
+import {StyleSheet, View, Alert, Dimensions, Text} from 'react-native';
 import { Button } from 'react-native-elements';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
@@ -8,41 +8,19 @@ import * as Yup from 'yup';
 //component imports
 import Input from "../../components/Input/Input";
 import DropDownList from "../../components/dropDownList/DropDownList";
-
-
-const api = (user) => new Promise((resolve, reject) =>{
-    setTimeout(() => {
-        if(user.email=== 'hello@gmail.com') {
-            reject({email:"Email already used"})
-        }
-        else {
-            resolve();
-        }
-    }, 1000)
-});
+import {connect} from "react-redux";
+import {addData} from "../../store/actions/addData";
 
 class FormScreenWeights extends PureComponent{
     state = {
         ViewMode: Dimensions.get('window').height > 500 ? "portrait" : "landscape",
-        formData: null,
         currentPosition: 2,
     };
 
-
-
-
     _handleSubmit =(async (values, bag) => {
         try {
-            await api(values);
-            console.log(values.email);
-            console.log(values.password);
-            console.log(JSON.stringify(values));
-            this.setState({
-                ViewMode: Dimensions.get('window').height > 500 ? "portrait" : "landscape",
-                formData: values,
-            });
-            Alert.alert("Welcome!\n"+ values.email);
-            bag.setSubmitting(false);
+            this.props.onAddData(values,this.state.currentPosition);
+            Alert.alert("Moving to step 2!\n"+ values.email);
         }catch (e) {
             bag.setSubmitting(false);
             bag.setErrors(e);
@@ -178,4 +156,10 @@ const styles = StyleSheet.create({
 
 });
 
-export default FormScreenWeights;
+const mapDispatchToProps = dispatch => {
+    return {
+        onAddData: (data,position) => dispatch(addData(data,position))
+    };
+};
+
+export default connect(null,mapDispatchToProps)(FormScreenWeights);

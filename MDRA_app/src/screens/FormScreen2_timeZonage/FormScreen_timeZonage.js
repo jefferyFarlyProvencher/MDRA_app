@@ -1,6 +1,6 @@
 //system imports
 import React, {PureComponent} from 'react';
-import {StyleSheet, View, Alert, Dimensions} from 'react-native';
+import {StyleSheet, View, Alert, Dimensions, Text} from 'react-native';
 import { Button } from 'react-native-elements';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
@@ -8,6 +8,8 @@ import * as Yup from 'yup';
 //component imports
 import Input from "../../components/Input/Input";
 import DropDownList from "../../components/dropDownList/DropDownList";
+import {connect} from "react-redux";
+import {addData} from "../../store/actions/addData";
 
 
 const api = (user) => new Promise((resolve, reject) =>{
@@ -24,25 +26,13 @@ const api = (user) => new Promise((resolve, reject) =>{
 class FormScreenTimeZonage extends PureComponent{
     state = {
         ViewMode: Dimensions.get('window').height > 500 ? "portrait" : "landscape",
-        formData: null,
         currentPosition: 1,
     };
 
-
-
-
     _handleSubmit =(async (values, bag) => {
         try {
-            await api(values);
-            console.log(values.email);
-            console.log(values.password);
-            console.log(JSON.stringify(values));
-            this.setState({
-                ViewMode: Dimensions.get('window').height > 500 ? "portrait" : "landscape",
-                formData: values,
-            });
-            Alert.alert("Welcome!\n"+ values.email);
-            bag.setSubmitting(false);
+            this.props.onAddData(values,this.state.currentPosition);
+            Alert.alert("Moving to step 2!\n"+ values.email);
         }catch (e) {
             bag.setSubmitting(false);
             bag.setErrors(e);
@@ -76,6 +66,7 @@ class FormScreenTimeZonage extends PureComponent{
         };
         return(
             <View style={styles.container}>
+                <Text>Page 2</Text>
                 <Formik
                     initialValues={{ email:'', password: '', confirmPassword:'', gender:'male', animal:'Cat'}}
                     onSubmit={this._handleSubmit}
@@ -177,5 +168,10 @@ const styles = StyleSheet.create({
     }
 
 });
+const mapDispatchToProps = dispatch => {
+    return {
+        onAddData: (data,position) => dispatch(addData(data,position))
+    };
+};
 
-export default FormScreenTimeZonage;
+export default connect(null,mapDispatchToProps)(FormScreenTimeZonage);

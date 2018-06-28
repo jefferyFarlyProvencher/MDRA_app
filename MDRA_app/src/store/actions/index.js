@@ -1,1 +1,1 @@
-export {nextPage1} from './nextPage1';
+export {nextPage1} from './addData';

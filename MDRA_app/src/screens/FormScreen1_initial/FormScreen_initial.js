@@ -4,24 +4,12 @@ import {StyleSheet, View, Alert, Dimensions, ScrollView} from 'react-native';
 import { Button } from 'react-native-elements';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-import { Navigation } from 'react-native-navigation';
+import {connect}  from "react-redux";
 
 //component imports
 import Input from "../../components/Input/Input";
 import DropDownList from "../../components/dropDownList/DropDownList";
-
-
-const api = (user) => new Promise((resolve, reject) =>{
-    setTimeout(() => {
-        if(user.email=== 'hello@gmail.com') {
-            reject({email:"Email already used"})
-        }
-        else {
-            resolve();
-        }
-        //set general navigator to current+1->here->0+1
-    }, 3000)
-});
+import {addData} from "../../store/actions/addData";
 
 class FormScreenInitial extends PureComponent{
     state = {
@@ -30,19 +18,9 @@ class FormScreenInitial extends PureComponent{
         currentPosition: 0,
     };
 
-
-
-
     _handleSubmit =(async (values, bag) => {
         try {
-            await api(values);
-            console.log(values.email);
-            console.log(values.password);
-            console.log(JSON.stringify(values));
-            this.setState({
-                ViewMode: Dimensions.get('window').height > 500 ? "portrait" : "landscape",
-                formData: values,
-            });
+            this.props.onAddData(values,this.state.currentPosition);
             Alert.alert("Welcome!\n"+ values.email);
             bag.setSubmitting(false);
         }catch (e) {
@@ -158,4 +136,10 @@ const styles = StyleSheet.create({
 
 });
 
-export default FormScreenInitial;
+const mapDispatchToProps = dispatch => {
+    return {
+        onAddData: (data,position) => dispatch(addData(data,position))
+    };
+};
+
+export default connect(null,mapDispatchToProps)(FormScreenInitial);
