@@ -1,6 +1,6 @@
 //system imports
 import React, {PureComponent} from 'react';
-import {StyleSheet, View, Alert, Dimensions, Text} from 'react-native';
+import {StyleSheet, View,ScrollView, Alert, Dimensions, Text} from 'react-native';
 import { Button } from 'react-native-elements';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
@@ -11,18 +11,6 @@ import DropDownList from "../../components/dropDownList/DropDownList";
 import {connect} from "react-redux";
 import {addData} from "../../store/actions/addData";
 
-
-const api = (user) => new Promise((resolve, reject) =>{
-    setTimeout(() => {
-        if(user.email=== 'hello@gmail.com') {
-            reject({email:"Email already used"})
-        }
-        else {
-            resolve();
-        }
-    }, 3000)
-});
-
 class FormScreenTimeZonage extends PureComponent{
     state = {
         ViewMode: Dimensions.get('window').height > 500 ? "portrait" : "landscape",
@@ -30,9 +18,11 @@ class FormScreenTimeZonage extends PureComponent{
     };
 
     _handleSubmit =(async (values, bag) => {
+        console.log("AM I ALIVE?!");
         try {
+            bag.setSubmitting(false);
+            Alert.alert("Moving to step 3!\n");
             this.props.onAddData(values,this.state.currentPosition);
-            Alert.alert("Moving to step 2!\n"+ values.email);
         }catch (e) {
             bag.setSubmitting(false);
             bag.setErrors(e);
@@ -40,40 +30,26 @@ class FormScreenTimeZonage extends PureComponent{
     });
 
     render() {
-        const labels = ["Initial","Time Zonage","Weights"];
-        const customStyles = {
-            stepIndicatorSize: 19,
-            currentStepIndicatorSize:25,
-            separatorStrokeWidth: 2,
-            currentStepStrokeWidth: 3,
-            stepStrokeCurrentColor: '#fe7013',
-            stepStrokeWidth: 3,
-            stepStrokeFinishedColor: '#fe7013',
-            stepStrokeUnFinishedColor: '#aaaaaa',
-            separatorFinishedColor: '#fe7013',
-            separatorUnFinishedColor: '#aaaaaa',
-            stepIndicatorFinishedColor: '#fe7013',
-            stepIndicatorUnFinishedColor: '#ffffff',
-            stepIndicatorCurrentColor: '#ffffff',
-            stepIndicatorLabelFontSize: 13,
-            currentStepIndicatorLabelFontSize: 13,
-            stepIndicatorLabelCurrentColor: '#fe7013',
-            stepIndicatorLabelFinishedColor: '#ffffff',
-            stepIndicatorLabelUnFinishedColor: '#aaaaaa',
-            labelColor: '#999999',
-            labelSize: 13,
-            currentStepLabelColor: '#fe7013'
-        };
         return(
             <View style={styles.container}>
                 <Text>Page 2</Text>
                 <Formik
-                    initialValues={{ email:'', password: '', confirmPassword:'', gender:'male', animal:'Cat'}}
+                    initialValues={{
+                        nbTheraputicBoxes:"Two day therapeutic boxes (AM and PM)",
+                        tsDay: '8',
+                        teDay:'10',
+                        tsEvening:'13',
+                        teEvening:'15',
+                        lunch:'12',
+                        bed:'20'}}
                     onSubmit={this._handleSubmit}
                     validationSchema={Yup.object().shape({
-                        email: Yup.string().email().required(),
-                        password: Yup.string().min(6).required(),
-                        confirmPassword: Yup.string().oneOf([Yup.ref('password', null)], 'Doesn\'t match Password')
+                        tsDay: Yup.number().positive("Needs to be a positive number").lessThan(Yup.ref('teDay', null)).required(),
+                        teDay: Yup.number().positive("Needs to be a positive number").moreThan(Yup.ref('tsDay', null)).required(),
+                        tsEvening: Yup.number().positive("Needs to be a positive number").moreThan(Yup.ref('teDay'), null).required(),
+                        teEvening: Yup.number().positive("Needs to be a positive number").moreThan(Yup.ref('tsEvening', null)).required(),
+                        lunch: Yup.number().required(),
+                        bed: Yup.number().required()
                     })}
                     render={({
                                  values,
@@ -86,48 +62,68 @@ class FormScreenTimeZonage extends PureComponent{
                                  isSubmitting
                              }) => (
                         <View>
+                            <View>
+                                <DropDownList onChange={setFieldValue} name="nbTheraputicBoxes" value={values.nbTheraputicBoxes} itemList={["Two day therapeutic boxes (AM and PM)","Others...."]}/>
+                            </View>
+                            <Text> Day Time </Text>
                             <Input
-                                label="Email"
-                                autoCapitalize="none"
-                                value={values.email}
+                                label="Ts"
+                                value={values.tsDay}
                                 onChange={setFieldValue}
                                 onTouch={setFieldTouched}
-                                name="email"
-                                error={touched.email && errors.email}
+                                name="tsDay"
+                                error={touched.tsDay && errors.tsDay}
                             />
-                            <View style={styles.twoPerRowContainer}>
-                                <View style={styles.inputContainer}>
-                                    <Input
-                                        label="Password"
-                                        secureTextEntry
-                                        value={values.password}
-                                        onChange={setFieldValue}
-                                        onTouch={setFieldTouched}
-                                        name="password"
-                                        error={touched.password && errors.password}
-                                    />
-                                </View>
-                                <View style={styles.inputContainer}>
-                                    <Input
-                                        label="Confirm Password"
-                                        secureTextEntry
-                                        value={values.confirmPassword}
-                                        onChange={setFieldValue}
-                                        onTouch={setFieldTouched}
-                                        name="confirmPassword"
-                                        error={touched.confirmPassword && errors.confirmPassword}
-                                    />
-                                </View>
-                            </View>
-                            <View style={styles.twoPerRowContainer}>
-                                <DropDownList style={styles.inputContainer} value={values.gender} name="gender" onChange={setFieldValue} itemList={["Male","Female"]}/>
-                                <DropDownList style={styles.inputContainer} value={values.animal} name="animal" onChange={setFieldValue} itemList={["Cat","Dog"]}/>
-                            </View>
+
+                            <Input
+                                label="Te"
+                                value={values.teDay}
+                                onChange={setFieldValue}
+                                onTouch={setFieldTouched}
+                                name="teDay"
+                                error={touched.teDay && errors.teDay}
+                            />
+                            <Text> Evening Time </Text>
+                            <Input
+                                label="Ts"
+                                value={values.tsEvening}
+                                onChange={setFieldValue}
+                                onTouch={setFieldTouched}
+                                name="tsEvening"
+                                error={touched.tsEvening && errors.tsEvening}
+                            />
+
+                            <Input
+                                label="Te"
+                                value={values.teEvening}
+                                onChange={setFieldValue}
+                                onTouch={setFieldTouched}
+                                name="teEvening"
+                                error={touched.teEvening && errors.teEvening}
+                            />
+
+                            <Input
+                                label="Lunch Time (o'clock)"
+                                value={values.lunch}
+                                onChange={setFieldValue}
+                                onTouch={setFieldTouched}
+                                name="lunch"
+                                error={touched.lunch && errors.lunch}
+
+                            />
+
+                            <Input
+                                label="Bed Time (o'clock)"
+                                value={values.bed}
+                                onChange={setFieldValue}
+                                onTouch={setFieldTouched}
+                                name="bed"
+                                error={touched.bed && errors.bed}
+                            />
                             <Button
                                 buttonStyle={styles.button}
-                                title="Submit"
+                                title="Go to weights"
                                 onPress={handleSubmit}
-                                disabled={(!isValid || isSubmitting)}
                                 loading={isSubmitting}
                             />
                         </View>
@@ -145,6 +141,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#fff",
         alignItems: "center",
         justifyContent: "center",
+
     },
     button: {
         marginTop: 20,

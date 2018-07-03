@@ -1,6 +1,6 @@
 //system imports
 import React, {PureComponent} from 'react';
-import {StyleSheet, View, Alert, Dimensions} from 'react-native';
+import {StyleSheet, View,ScrollView ,Alert, Dimensions, Text} from 'react-native';
 import {connect} from 'react-redux';
 import { Button } from 'react-native-elements';
 import { Formik } from 'formik';
@@ -15,13 +15,13 @@ class FormScreenAdvanced extends PureComponent{
     state = {
         ViewMode: Dimensions.get('window').height > 500 ? "portrait" : "landscape",
         formData: null,
-        currentPosition: 2,
+        currentPosition: 3,
     };
 
     _handleSubmit =(async (values, bag) => {
         try {
+            Alert.alert("Moving back to step 3!\n"+ values.email);
             this.props.onAddData(values,this.state.currentPosition);
-            Alert.alert("Moving to step 2!\n"+ values.email);
         }catch (e) {
             bag.setSubmitting(false);
             bag.setErrors(e);
@@ -55,6 +55,8 @@ class FormScreenAdvanced extends PureComponent{
         };
         return(
             <View style={styles.container}>
+            <ScrollView>
+                <Text>Advanced</Text>
                 <Formik
                     initialValues={{ email:'', password: '', confirmPassword:'', gender:'male', animal:'Cat'}}
                     onSubmit={this._handleSubmit}
@@ -121,6 +123,7 @@ class FormScreenAdvanced extends PureComponent{
                         </View>
                     )}
                 />
+            </ScrollView>
             </View>
 
         );

@@ -1,6 +1,6 @@
 //system imports
 import React, {PureComponent} from 'react';
-import {StyleSheet, View, Alert, Dimensions, ScrollView} from 'react-native';
+import {StyleSheet, View, Alert, Dimensions, ScrollView, Text} from 'react-native';
 import { Button } from 'react-native-elements';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
@@ -14,33 +14,47 @@ import {addData} from "../../store/actions/addData";
 class FormScreenInitial extends PureComponent{
     state = {
         ViewMode: Dimensions.get('window').height > 500 ? "portrait" : "landscape",
-        formData: null,
         currentPosition: 0,
     };
 
     _handleSubmit =(async (values, bag) => {
         try {
-            this.props.onAddData(values,this.state.currentPosition);
-            Alert.alert("Welcome!\n"+ values.email);
             bag.setSubmitting(false);
+            Alert.alert("Welcome!\n"+ values.email);
+            this.props.onAddData(values,this.state.currentPosition);
         }catch (e) {
             bag.setSubmitting(false);
             bag.setErrors(e);
         }
     });
-
     render() {
         return(
             <View style={styles.container}>
-                <ScrollView>
+                    <Text>Page 1</Text>
                     <Formik
-                        initialValues={{ email:'', password: '', confirmPassword:'', gender:'male', animal:'Cat'}}
+                        initialValues={
+                            (this.props.data)
+                                ?{
+                                    email: this.props.data.email,
+                                    password: this.props.data.password,
+                                    confirmPassword: this.props.data.confirmPassword,
+                                    gender: this.props.data.gender,
+                                    animal: this.props.data.animal,                                }
+                                :{
+                                    email:'',
+                                    password: '',
+                                    confirmPassword:'',
+                                    gender:'male',
+                                    animal:'Cat'
+                                }
+                        }
                         onSubmit={this._handleSubmit}
                         validationSchema={Yup.object().shape({
                             email: Yup.string().email().required(),
                             password: Yup.string().min(6).required(),
                             confirmPassword: Yup.string().oneOf([Yup.ref('password', null)], 'Doesn\'t match Password')
                         })}
+                        validateOnBlur={false}
                         render={({
                                      values,
                                      handleSubmit,
@@ -86,20 +100,19 @@ class FormScreenInitial extends PureComponent{
                                     </View>
                                 </View>
                                 <View style={styles.twoPerRowContainer}>
-                                    <DropDownList style={styles.inputContainer} value={values.gender} name="gender" onChange={setFieldValue} itemList={["Male","Female"]}/>
+                                    <DropDownList style={styles.inputContainer} value={values.gender} name="gender" onChange={setFieldValue} itemList={["Male","Female", "Other", "WHEN YOU FEEL LIKE A CHAIR"]}/>
                                     <DropDownList style={styles.inputContainer} value={values.animal} name="animal" onChange={setFieldValue} itemList={["Cat","Dog"]}/>
                                 </View>
                                 <Button
                                     buttonStyle={styles.button}
                                     title="Go to next step"
                                     onPress={handleSubmit}
-                                    disabled={(!isValid || isSubmitting)}
+                                    disabled={(!isValid || isSubmitting) && this.props.data==null}
                                     loading={isSubmitting}
                                 />
                             </View>
                         )}
                     />
-                </ScrollView>
             </View>
 
         );

@@ -42,7 +42,7 @@ class DropDownList extends PureComponent{
     render() {
         const {label, error, ...rest } = this.props;
         return(
-            <View style={styles.root}>
+            <View style={[styles.root, this.props.style]}>
                 <FormLabel>{label}</FormLabel>
                 <Picker
                     {...this.props}
@@ -60,7 +60,7 @@ class DropDownList extends PureComponent{
 
 const styles = StyleSheet.create({
     root: {
-        width: '50%',
+        width: '100%',
         alignSelf: 'center',
         padding: 20
     },

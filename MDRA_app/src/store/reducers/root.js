@@ -1,5 +1,6 @@
 import {
-    ADD_DATA
+    ADD_DATA, ALLOW_ADV,
+    POS_CHNG
 } from '../actions/actionTypes'
 
 const initialState = {
@@ -7,7 +8,8 @@ const initialState = {
     Page0Data: null,
     Page1Data: null,
     Page2Data: null,
-    Page3Data: null
+    Page3Data: null,
+    advanceTabAccessible: false,
 };
 
 const reducer = (state = initialState, action) => {
@@ -34,7 +36,17 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 Page3Data: action.pageData,
-                position:action.position+1
+                position:action.position-1
+            };
+        case (POS_CHNG):
+            return{
+                ...state,
+                position:action.position
+            };
+        case (ALLOW_ADV):
+            return{
+                ...state,
+                advanceTabAccessible:  true,
             };
         default:
             return state

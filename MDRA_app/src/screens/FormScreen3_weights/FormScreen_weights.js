@@ -1,6 +1,6 @@
 //system imports
 import React, {PureComponent} from 'react';
-import {StyleSheet, View, Alert, Dimensions, Text} from 'react-native';
+import {StyleSheet, View, Alert, Dimensions, Text, ScrollView} from 'react-native';
 import { Button } from 'react-native-elements';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
@@ -10,6 +10,7 @@ import Input from "../../components/Input/Input";
 import DropDownList from "../../components/dropDownList/DropDownList";
 import {connect} from "react-redux";
 import {addData} from "../../store/actions/addData";
+import {changePosition} from "../../store/actions";
 
 class FormScreenWeights extends PureComponent{
     state = {
@@ -19,13 +20,18 @@ class FormScreenWeights extends PureComponent{
 
     _handleSubmit =(async (values, bag) => {
         try {
+            console.log("IM HERE");
+            Alert.alert("Moving to advanced for now!\n");
             this.props.onAddData(values,this.state.currentPosition);
-            Alert.alert("Moving to step 2!\n"+ values.email);
         }catch (e) {
             bag.setSubmitting(false);
             bag.setErrors(e);
         }
     });
+
+    _handleGoToAdvanced = () => {
+        this.props.onChangePosition(3)
+    };
 
     render() {
         const labels = ["Initial","Time Zonage","Weights"];
@@ -54,13 +60,19 @@ class FormScreenWeights extends PureComponent{
         };
         return(
             <View style={styles.container}>
+                <ScrollView>
                 <Formik
-                    initialValues={{ email:'', password: '', confirmPassword:'', gender:'male', animal:'Cat'}}
+                    initialValues={{ weight1:'100', weight2: '100', weight3:'100', weight4:'100', weight5:'100', weight6:'100', weight7:'100'}}
                     onSubmit={this._handleSubmit}
                     validationSchema={Yup.object().shape({
-                        email: Yup.string().email().required(),
-                        password: Yup.string().min(6).required(),
-                        confirmPassword: Yup.string().oneOf([Yup.ref('password', null)], 'Doesn\'t match Password')
+                        weight1: Yup.number().positive("Needs to be a positive number").lessThan(201, "Cannot exceed 200"),
+                        weight2: Yup.number().positive("Needs to be a positive number").lessThan(201, "Cannot exceed 200"),
+                        weight3: Yup.number().positive("Needs to be a positive number").lessThan(201, "Cannot exceed 200"),
+                        weight4: Yup.number().positive("Needs to be a positive number").lessThan(201, "Cannot exceed 200"),
+                        weight5: Yup.number().positive("Needs to be a positive number").lessThan(201, "Cannot exceed 200"),
+                        weight6: Yup.number().positive("Needs to be a positive number").lessThan(201, "Cannot exceed 200"),
+                        weight7: Yup.number().positive("Needs to be a positive number").lessThan(201, "Cannot exceed 200"),
+
                     })}
                     render={({
                                  values,
@@ -74,52 +86,87 @@ class FormScreenWeights extends PureComponent{
                              }) => (
                         <View>
                             <Input
-                                label="Email"
+                                label="Percentage of time in the day TB or in PM TB"
                                 autoCapitalize="none"
-                                value={values.email}
+                                value={values.weight1}
                                 onChange={setFieldValue}
                                 onTouch={setFieldTouched}
-                                name="email"
-                                error={touched.email && errors.email}
+                                name="weight1"
+                                error={touched.weight1 && errors.weight1}
                             />
-                            <View style={styles.twoPerRowContainer}>
-                                <View style={styles.inputContainer}>
-                                    <Input
-                                        label="Password"
-                                        secureTextEntry
-                                        value={values.password}
-                                        onChange={setFieldValue}
-                                        onTouch={setFieldTouched}
-                                        name="password"
-                                        error={touched.password && errors.password}
-                                    />
-                                </View>
-                                <View style={styles.inputContainer}>
-                                    <Input
-                                        label="Confirm Password"
-                                        secureTextEntry
-                                        value={values.confirmPassword}
-                                        onChange={setFieldValue}
-                                        onTouch={setFieldTouched}
-                                        name="confirmPassword"
-                                        error={touched.confirmPassword && errors.confirmPassword}
-                                    />
-                                </View>
-                            </View>
-                            <View style={styles.twoPerRowContainer}>
-                                <DropDownList style={styles.inputContainer} value={values.gender} name="gender" onChange={setFieldValue} itemList={["Male","Female"]}/>
-                                <DropDownList style={styles.inputContainer} value={values.animal} name="animal" onChange={setFieldValue} itemList={["Cat","Dog"]}/>
-                            </View>
+                            <Input
+                                label="Percentage of time in Evening TB"
+                                autoCapitalize="none"
+                                value={values.weight2}
+                                onChange={setFieldValue}
+                                onTouch={setFieldTouched}
+                                name="weight2"
+                                error={touched.weight2 && errors.weight2}
+                            />
+                            <Input
+                                label="Percentage of responders in the day TB or in PM TB"
+                                autoCapitalize="none"
+                                value={values.weight3}
+                                onChange={setFieldValue}
+                                onTouch={setFieldTouched}
+                                name="weight3"
+                                error={touched.weight3 && errors.weight3}
+                            />
+                            <Input
+                                label="Percentage of responders in the evening TB"
+                                autoCapitalize="none"
+                                value={values.weight4}
+                                onChange={setFieldValue}
+                                onTouch={setFieldTouched}
+                                name="weight4"
+                                error={touched.weight4 && errors.weight4}
+                            />
+                            <Input
+                                label="Roller Coaster Effect"
+                                autoCapitalize="none"
+                                value={values.weight5}
+                                onChange={setFieldValue}
+                                onTouch={setFieldTouched}
+                                name="weight5"
+                                error={touched.weight5 && errors.weight5}
+                            />
+                            <Input
+                                label="Percentage of time in the AM TB"
+                                autoCapitalize="none"
+                                value={values.weight6}
+                                onChange={setFieldValue}
+                                onTouch={setFieldTouched}
+                                name="weight6"
+                                error={touched.weight6 && errors.weight6}
+                            />
+                            <Input
+                                label="Percentage of responders in the AM TB"
+                                autoCapitalize="none"
+                                value={values.weight7}
+                                onChange={setFieldValue}
+                                onTouch={setFieldTouched}
+                                name="weight7"
+                                error={touched.weight7 && errors.weight7}
+                            />
                             <Button
                                 buttonStyle={styles.button}
-                                title="Submit"
+                                title="Calculate dosages"
                                 onPress={handleSubmit}
-                                disabled={(!isValid || isSubmitting)}
                                 loading={isSubmitting}
                             />
                         </View>
                     )}
                 />
+                {this.props.advancedAllowed
+                    ?
+                    <Button
+                        buttonStyle={styles.button}
+                        title="Go to advanced"
+                        onPress={this._handleGoToAdvanced}
+                    />
+                    :null
+                }
+                </ScrollView>
             </View>
 
         );
@@ -158,7 +205,8 @@ const styles = StyleSheet.create({
 
 const mapDispatchToProps = dispatch => {
     return {
-        onAddData: (data,position) => dispatch(addData(data,position))
+        onAddData: (data,position) => dispatch(addData(data,position)),
+        onChangePosition: (position) => dispatch(changePosition(position))
     };
 };
 
