@@ -37,7 +37,7 @@ class SideDrawer extends Component{
                             name= {Platform.OS==='android'? "ios-nutrition" :"ios-log-out-outline"}
                             color="#52afff" style={styles.drawerItemIcon}
                         />
-                        <Text>Access advanced tab</Text>
+                        <Text>Advanced tab enabler</Text>
                     </View>
                 </TouchableOpacity>
 

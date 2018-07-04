@@ -46,7 +46,7 @@ const reducer = (state = initialState, action) => {
         case (ALLOW_ADV):
             return{
                 ...state,
-                advanceTabAccessible:  true,
+                advanceTabAccessible:  !state.advanceTabAccessible,
             };
         default:
             return state

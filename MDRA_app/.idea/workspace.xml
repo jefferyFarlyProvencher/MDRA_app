@@ -2,23 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3b47582f-7566-4db6-8bcf-f2d044feb417" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/src/store/actions/allowAdvancedOptions.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/store/actions/changePosition.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/.gradle/2.14.1/taskArtifacts/cache.properties.lock" beforeDir="false" afterPath="$PROJECT_DIR$/android/.gradle/2.14.1/taskArtifacts/cache.properties.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/.gradle/2.14.1/taskArtifacts/fileSnapshots.bin" beforeDir="false" afterPath="$PROJECT_DIR$/android/.gradle/2.14.1/taskArtifacts/fileSnapshots.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/.gradle/2.14.1/taskArtifacts/fileSnapshotsToTreeSnapshotsIndex.bin" beforeDir="false" afterPath="$PROJECT_DIR$/android/.gradle/2.14.1/taskArtifacts/fileSnapshotsToTreeSnapshotsIndex.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/.gradle/2.14.1/taskArtifacts/taskArtifacts.bin" beforeDir="false" afterPath="$PROJECT_DIR$/android/.gradle/2.14.1/taskArtifacts/taskArtifacts.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/dropDownList/DropDownList.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/dropDownList/DropDownList.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/FormScreen/FormScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/FormScreen/FormScreen.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/FormScreen1_initial/FormScreen_initial.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/FormScreen1_initial/FormScreen_initial.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/FormScreen2_timeZonage/FormScreen_timeZonage.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/FormScreen2_timeZonage/FormScreen_timeZonage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/FormScreen3_weights/FormScreen_weights.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/FormScreen3_weights/FormScreen_weights.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/FormScreen4_advanced/FormScreen_advanced.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/FormScreen4_advanced/FormScreen_advanced.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/screens/SideDrawer/SideDrawer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/SideDrawer/SideDrawer.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/store/actions/actionTypes.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/actions/actionTypes.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/store/actions/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/actions/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/store/reducers/root.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/reducers/root.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -36,21 +21,20 @@
       <file leaf-file-name="FormScreen.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/screens/FormScreen/FormScreen.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="403">
+            <state relative-caret-position="3633">
               <caret line="177" selection-start-line="177" selection-end-line="178" />
               <folding>
                 <element signature="e#15#54#0" expanded="true" />
-                <element signature="e#256#330#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="SideDrawer.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="SideDrawer.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/screens/SideDrawer/SideDrawer.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="273">
-              <caret line="31" column="35" selection-start-line="31" selection-start-column="35" selection-end-line="31" selection-end-column="35" />
+            <state relative-caret-position="399">
+              <caret line="40" column="27" lean-forward="true" selection-start-line="40" selection-start-column="27" selection-end-line="40" selection-end-column="27" />
               <folding>
                 <element signature="e#0#39#0" expanded="true" />
               </folding>
@@ -61,11 +45,10 @@
       <file leaf-file-name="FormScreen_advanced.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/screens/FormScreen4_advanced/FormScreen_advanced.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="294">
+            <state relative-caret-position="441">
               <caret line="23" column="68" selection-start-line="23" selection-start-column="68" selection-end-line="23" selection-end-column="68" />
               <folding>
                 <element signature="e#17#60#0" expanded="true" />
-                <element signature="e#294#343#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -74,7 +57,7 @@
       <file leaf-file-name="FormScreen_timeZonage.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/screens/FormScreen2_timeZonage/FormScreen_timeZonage.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="377">
+            <state relative-caret-position="882">
               <caret line="45" column="37" selection-start-line="45" selection-start-column="37" selection-end-line="45" selection-end-column="37" />
               <folding>
                 <element signature="e#17#60#0" expanded="true" />
@@ -83,7 +66,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="FormScreen_weights.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="FormScreen_weights.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/screens/FormScreen3_weights/FormScreen_weights.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="420">
@@ -98,7 +81,7 @@
       <file leaf-file-name="FormScreen_initial.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/screens/FormScreen1_initial/FormScreen_initial.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-523">
+            <state relative-caret-position="2226">
               <caret line="108" column="58" selection-start-line="108" selection-start-column="58" selection-end-line="108" selection-end-column="58" />
               <folding>
                 <element signature="e#17#60#0" expanded="true" />
@@ -128,11 +111,8 @@
       <file leaf-file-name="root.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/store/reducers/root.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="297">
-              <caret line="38" column="41" selection-start-line="38" selection-start-column="41" selection-end-line="38" selection-end-column="41" />
-              <folding>
-                <element signature="e#0#67#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="507">
+              <caret line="48" column="66" selection-start-line="48" selection-start-column="66" selection-end-line="48" selection-end-column="66" />
             </state>
           </provider>
         </entry>
@@ -198,12 +178,12 @@
         <option value="$PROJECT_DIR$/src/store/actions/actionTypes.js" />
         <option value="$PROJECT_DIR$/src/store/actions/allowAdvancedOptions.js" />
         <option value="$PROJECT_DIR$/src/store/actions/index.js" />
-        <option value="$PROJECT_DIR$/src/screens/SideDrawer/SideDrawer.js" />
         <option value="$PROJECT_DIR$/src/screens/FormScreen/FormScreen.js" />
         <option value="$PROJECT_DIR$/src/screens/FormScreen2_timeZonage/FormScreen_timeZonage.js" />
-        <option value="$PROJECT_DIR$/src/store/reducers/root.js" />
         <option value="$PROJECT_DIR$/src/screens/FormScreen4_advanced/FormScreen_advanced.js" />
         <option value="$PROJECT_DIR$/src/screens/FormScreen3_weights/FormScreen_weights.js" />
+        <option value="$PROJECT_DIR$/src/store/reducers/root.js" />
+        <option value="$PROJECT_DIR$/src/screens/SideDrawer/SideDrawer.js" />
       </list>
     </option>
   </component>
@@ -223,9 +203,9 @@
       <path value="$PROJECT_DIR$/package.json" />
     </packageJsonPaths>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds">
     <option name="x" value="-8" />
-    <option name="width" value="1333" />
+    <option name="width" value="1457" />
     <option name="height" value="1038" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -427,7 +407,8 @@
       <workItem from="1529672173915" duration="12391000" />
       <workItem from="1529694696692" duration="4173000" />
       <workItem from="1530021594789" duration="8116000" />
-      <workItem from="1530035248658" duration="77960000" />
+      <workItem from="1530035248658" duration="78089000" />
+      <workItem from="1530702786249" duration="1676000" />
     </task>
     <task id="LOCAL-00001" summary="cleaned up some things to use redux properly, might need to go through this part one more time:&#10;&#10;- added configureStore,&#10;- Modified:&#10;index: to use the store and its reducers">
       <created>1529509642861</created>
@@ -499,18 +480,24 @@
       <option name="project" value="LOCAL" />
       <updated>1530215192070</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Created an advanced tab enabler, complete with kinda nice indicator adder">
+      <created>1530651136013</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1530651136013</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="134645000" />
+    <option name="totallyTimeSpent" value="136450000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
+    <frame x="-6" y="0" width="1165" height="830" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info anchor="bottom" id="TypeScript" order="7" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.22207534" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.29787233" />
       <window_info anchor="bottom" id="TODO" order="7" />
       <window_info anchor="bottom" id="Docker" order="8" show_stripe_button="false" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" weight="0.32893288" />
@@ -525,6 +512,7 @@
       <window_info anchor="bottom" id="Inspection" order="6" weight="0.4" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="bottom" id="TypeScript" order="7" />
       <window_info anchor="bottom" id="Messages" order="0" visible="true" weight="0.32897604" />
       <window_info anchor="bottom" id="Message" order="1" />
       <window_info anchor="bottom" id="Cvs" order="5" weight="0.25" />
@@ -546,7 +534,8 @@
     <MESSAGE value="Works, just about to add stepindicator wish me luck" />
     <MESSAGE value="stepindactor works, lets try to insert redux" />
     <MESSAGE value="redux works, what to do now?" />
-    <option name="LAST_COMMIT_MESSAGE" value="redux works, what to do now?" />
+    <MESSAGE value="Created an advanced tab enabler, complete with kinda nice indicator adder" />
+    <option name="LAST_COMMIT_MESSAGE" value="Created an advanced tab enabler, complete with kinda nice indicator adder" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -554,7 +543,6 @@
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/src/screens/FormScreen1_initial/FormScreen_initial.js</url>
           <line>62</line>
-          <properties lambdaOrdinal="-1" />
         </line-breakpoint>
       </breakpoints>
       <option name="time" value="1" />
@@ -657,9 +645,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state>
           <caret column="7" selection-start-column="7" selection-end-column="7" />
-          <folding>
-            <element signature="e#0#43#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -696,9 +681,7 @@
     <entry file="file://$PROJECT_DIR$/app.json">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/store/actions/actionTypes">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/store/actions/actionTypes" />
     <entry file="file://$PROJECT_DIR$/src/screens/FormTest/mainScreenTest.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="756">
@@ -774,13 +757,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/store/actions/isDataEmpty.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="6" column="6" lean-forward="true" selection-start-line="6" selection-start-column="6" selection-end-line="6" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/store/actions/isDataEmpty.js" />
     <entry file="file://$PROJECT_DIR$/src/screens/MainTabs/StartMainTabs.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-481">
@@ -812,9 +789,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/store/actions/allowAdvancedOptions">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/store/actions/allowAdvancedOptions" />
     <entry file="file://$PROJECT_DIR$/src/store/actions/actionTypes.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="42">
@@ -822,23 +797,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/store/actions/allowAdvancedOptions.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="84">
-          <caret line="4" column="23" selection-start-line="4" selection-start-column="23" selection-end-line="4" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/store/actions/changePosition.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="147">
-          <caret line="7" column="2" selection-start-line="7" selection-start-column="2" selection-end-line="7" selection-end-column="2" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/screens/FormScreen1_initial/FormScreen_initial.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-523">
+        <state relative-caret-position="2226">
           <caret line="108" column="58" selection-start-line="108" selection-start-column="58" selection-end-line="108" selection-end-column="58" />
           <folding>
             <element signature="e#17#60#0" expanded="true" />
@@ -846,58 +807,29 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/screens/SideDrawer/SideDrawer.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="273">
-          <caret line="31" column="35" selection-start-line="31" selection-start-column="35" selection-end-line="31" selection-end-column="35" />
-          <folding>
-            <element signature="e#0#39#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/store/actions/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="84">
-          <caret line="4" column="28" selection-start-line="4" selection-start-column="28" selection-end-line="4" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/screens/FormScreen/FormScreen.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="403">
+        <state relative-caret-position="3633">
           <caret line="177" selection-start-line="177" selection-end-line="178" />
           <folding>
             <element signature="e#15#54#0" expanded="true" />
-            <element signature="e#256#330#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/store/reducers/root.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="297">
-          <caret line="38" column="41" selection-start-line="38" selection-start-column="41" selection-end-line="38" selection-end-column="41" />
-          <folding>
-            <element signature="e#0#67#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/screens/FormScreen4_advanced/FormScreen_advanced.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="294">
+        <state relative-caret-position="441">
           <caret line="23" column="68" selection-start-line="23" selection-start-column="68" selection-end-line="23" selection-end-column="68" />
           <folding>
             <element signature="e#17#60#0" expanded="true" />
-            <element signature="e#294#343#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/screens/FormScreen2_timeZonage/FormScreen_timeZonage.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="377">
+        <state relative-caret-position="882">
           <caret line="45" column="37" selection-start-line="45" selection-start-column="37" selection-end-line="45" selection-end-column="37" />
           <folding>
             <element signature="e#17#60#0" expanded="true" />
@@ -911,6 +843,44 @@
           <caret line="24" column="45" selection-start-line="24" selection-start-column="45" selection-end-line="24" selection-end-column="45" />
           <folding>
             <element signature="e#17#60#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/store/actions/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="84">
+          <caret line="4" column="28" selection-start-line="4" selection-start-column="28" selection-end-line="4" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/store/actions/changePosition.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="147">
+          <caret line="7" column="2" selection-start-line="7" selection-start-column="2" selection-end-line="7" selection-end-column="2" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/store/actions/allowAdvancedOptions.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="84">
+          <caret line="4" column="23" selection-start-line="4" selection-start-column="23" selection-end-line="4" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/store/reducers/root.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="507">
+          <caret line="48" column="66" selection-start-line="48" selection-start-column="66" selection-end-line="48" selection-end-column="66" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/screens/SideDrawer/SideDrawer.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="399">
+          <caret line="40" column="27" lean-forward="true" selection-start-line="40" selection-start-column="27" selection-end-line="40" selection-end-column="27" />
+          <folding>
+            <element signature="e#0#39#0" expanded="true" />
           </folding>
         </state>
       </provider>
