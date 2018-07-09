@@ -9,7 +9,11 @@ import {connect}  from "react-redux";
 //component imports
 import Input from "../../components/Input/Input";
 import DropDownList from "../../components/dropDownList/DropDownList";
+
+//actions imports
 import {addData} from "../../store/actions/addData";
+import {changePosition} from "../../store/actions/changePosition";
+
 
 class FormScreenInitial extends PureComponent{
     state = {
@@ -21,7 +25,8 @@ class FormScreenInitial extends PureComponent{
         try {
             bag.setSubmitting(false);
             Alert.alert("Welcome!\n"+ values.email);
-            this.props.onAddData(values,this.state.currentPosition);
+            this.props.onChangePosition(this.state.currentPosition+1);
+            this.props.onAddData(values, this.state.currentPosition);
         }catch (e) {
             bag.setSubmitting(false);
             bag.setErrors(e);
@@ -50,9 +55,9 @@ class FormScreenInitial extends PureComponent{
                         }
                         onSubmit={this._handleSubmit}
                         validationSchema={Yup.object().shape({
-                            email: Yup.string().email().required(),
-                            password: Yup.string().min(6).required(),
-                            confirmPassword: Yup.string().oneOf([Yup.ref('password', null)], 'Doesn\'t match Password')
+                            email: Yup.string().email(),
+                            password: Yup.string().min(6),
+                            confirmPassword: Yup.string().oneOf([Yup.ref('email')], 'Doesn\'t match Password')
                         })}
                         validateOnBlur={false}
                         render={({
@@ -151,7 +156,8 @@ const styles = StyleSheet.create({
 
 const mapDispatchToProps = dispatch => {
     return {
-        onAddData: (data,position) => dispatch(addData(data,position))
+        onAddData: (data, position) => dispatch(addData(data, position)),
+        onChangePosition: (pos) => dispatch(changePosition(pos))
     };
 };
 

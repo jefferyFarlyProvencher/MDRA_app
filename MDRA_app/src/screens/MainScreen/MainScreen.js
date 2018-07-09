@@ -15,7 +15,7 @@ class MainScreen extends Component{
         this.setState({
            loading:true,
         });
-        setTimeout(()=>{console.log("cool");startMainTabs();},500);
+        setTimeout(()=>{console.log("cool");startMainTabs();},300);
     };
 
     render(){

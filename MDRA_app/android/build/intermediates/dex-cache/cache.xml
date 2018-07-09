@@ -183,6 +183,15 @@
     </item>
     <item
         is-multidex="false"
+        jar="C:\Users\jeffe\Documents\here\git_documents\MDRA_app\android\app\build\intermediates\exploded-aar\MDRA_app\react-native-wheel-picker\unspecified\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="41a1baa329b59a50ce4d0bc645445f998882cbf2">
+        <dex dex="C:\Users\jeffe\Documents\here\git_documents\MDRA_app\android\app\build\intermediates\pre-dexed\debug\MDRA_app-react-native-wheel-picker-unspecified_6472a0a8153136a2122bb63a31c87c24c8372ac7.jar" />
+    </item>
+    <item
+        is-multidex="false"
         jar="C:\Users\jeffe\Documents\here\git_documents\MDRA_app\android\app\build\intermediates\exploded-aar\com.facebook.fresco\fbcore\1.3.0\jars\classes.jar"
         jumboMode="false"
         optimize="true"
@@ -471,12 +480,30 @@
     </item>
     <item
         is-multidex="false"
+        jar="C:\Users\jeffe\Documents\here\git_documents\MDRA_app\android\app\build\intermediates\exploded-aar\cn.aigestudio.wheelpicker\WheelPicker\1.0.3\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="bb3505675ad34af8ab25f32cb124687b700b6fc7">
+        <dex dex="C:\Users\jeffe\Documents\here\git_documents\MDRA_app\android\app\build\intermediates\pre-dexed\debug\cn.aigestudio.wheelpicker-WheelPicker-1.0.3_36975a4f806b5c75cac3fade203587177fe41b9d.jar" />
+    </item>
+    <item
+        is-multidex="false"
         jar="C:\Users\jeffe\Documents\here\git_documents\MDRA_app\android\app\build\intermediates\exploded-aar\com.facebook.react\react-native\0.55.4\jars\libs\infer-annotations-4.0.jar"
         jumboMode="false"
         optimize="true"
         revision="23.0.1"
         sha1="9809e90be788acdb479b2b44e2112f3295a03068">
         <dex dex="C:\Users\jeffe\Documents\here\git_documents\MDRA_app\android\app\build\intermediates\pre-dexed\debug\infer-annotations-4.0_e6db2a3c243788b6578da5e9e05a05128843b293.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\jeffe\Documents\here\git_documents\MDRA_app\android\app\build\intermediates\exploded-aar\MDRA_app\react-native-svg\unspecified\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="79c5e00d315083e7d2919bc021f85dc29e242f27">
+        <dex dex="C:\Users\jeffe\Documents\here\git_documents\MDRA_app\android\app\build\intermediates\pre-dexed\debug\MDRA_app-react-native-svg-unspecified_dc7d68fb498958c395650e50e6617c59d21eb2b0.jar" />
     </item>
     <item
         is-multidex="false"

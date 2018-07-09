@@ -9,7 +9,10 @@ import * as Yup from 'yup';
 import Input from "../../components/Input/Input";
 import DropDownList from "../../components/dropDownList/DropDownList";
 import {connect} from "react-redux";
+
 import {addData} from "../../store/actions/addData";
+import {changePosition} from "../../store/actions/changePosition";
+
 
 class FormScreenTimeZonage extends PureComponent{
     state = {
@@ -18,11 +21,11 @@ class FormScreenTimeZonage extends PureComponent{
     };
 
     _handleSubmit =(async (values, bag) => {
-        console.log("AM I ALIVE?!");
         try {
             bag.setSubmitting(false);
-            Alert.alert("Moving to step 3!\n");
-            this.props.onAddData(values,this.state.currentPosition);
+            Alert.alert("Welcome!\n"+ values.email);
+            this.props.onAddData(values, this.state.currentPosition);
+            this.props.onChangePosition(this.state.currentPosition+1);
         }catch (e) {
             bag.setSubmitting(false);
             bag.setErrors(e);
@@ -44,12 +47,12 @@ class FormScreenTimeZonage extends PureComponent{
                         bed:'20'}}
                     onSubmit={this._handleSubmit}
                     validationSchema={Yup.object().shape({
-                        tsDay: Yup.number().positive("Needs to be a positive number").lessThan(Yup.ref('teDay', null)).required(),
-                        teDay: Yup.number().positive("Needs to be a positive number").moreThan(Yup.ref('tsDay', null)).required(),
-                        tsEvening: Yup.number().positive("Needs to be a positive number").moreThan(Yup.ref('teDay'), null).required(),
-                        teEvening: Yup.number().positive("Needs to be a positive number").moreThan(Yup.ref('tsEvening', null)).required(),
-                        lunch: Yup.number().required(),
-                        bed: Yup.number().required()
+                        tsDay: Yup.number().positive().lessThan(Yup.ref('teDay', null)).required(),
+                        teDay: Yup.number().positive().moreThan(Yup.ref('tsDay', null)).required(),
+                        tsEvening: Yup.number().positive().moreThan(Yup.ref('teDay'), null).required(),
+                        teEvening: Yup.number().positive().lessThan(Yup.ref('bed',null)).moreThan(Yup.ref('tsEvening', null)).required(),
+                        lunch: Yup.number().positive().lessThan(Yup.ref('tsEvening',null)).moreThan(Yup.ref('teDay',null)).required(),
+                        bed: Yup.number().positive().lessThan(24).moreThan(Yup.ref('teEvening',null)).required()
                     })}
                     render={({
                                  values,
@@ -73,6 +76,7 @@ class FormScreenTimeZonage extends PureComponent{
                                 onTouch={setFieldTouched}
                                 name="tsDay"
                                 error={touched.tsDay && errors.tsDay}
+                                keyboardType="numeric"
                             />
 
                             <Input
@@ -82,6 +86,7 @@ class FormScreenTimeZonage extends PureComponent{
                                 onTouch={setFieldTouched}
                                 name="teDay"
                                 error={touched.teDay && errors.teDay}
+                                keyboardType="numeric"
                             />
                             <Text> Evening Time </Text>
                             <Input
@@ -91,6 +96,7 @@ class FormScreenTimeZonage extends PureComponent{
                                 onTouch={setFieldTouched}
                                 name="tsEvening"
                                 error={touched.tsEvening && errors.tsEvening}
+                                keyboardType="numeric"
                             />
 
                             <Input
@@ -100,6 +106,7 @@ class FormScreenTimeZonage extends PureComponent{
                                 onTouch={setFieldTouched}
                                 name="teEvening"
                                 error={touched.teEvening && errors.teEvening}
+                                keyboardType="numeric"
                             />
 
                             <Input
@@ -109,7 +116,7 @@ class FormScreenTimeZonage extends PureComponent{
                                 onTouch={setFieldTouched}
                                 name="lunch"
                                 error={touched.lunch && errors.lunch}
-
+                                keyboardType="numeric"
                             />
 
                             <Input
@@ -119,6 +126,7 @@ class FormScreenTimeZonage extends PureComponent{
                                 onTouch={setFieldTouched}
                                 name="bed"
                                 error={touched.bed && errors.bed}
+                                keyboardType="numeric"
                             />
                             <Button
                                 buttonStyle={styles.button}
@@ -167,7 +175,8 @@ const styles = StyleSheet.create({
 });
 const mapDispatchToProps = dispatch => {
     return {
-        onAddData: (data,position) => dispatch(addData(data,position))
+        onAddData: (data,position) => dispatch(addData(data,position)),
+        onChangePosition: (position) => dispatch(changePosition(position))
     };
 };
 

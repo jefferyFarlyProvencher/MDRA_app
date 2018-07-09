@@ -16,6 +16,7 @@ import FormScreenInitial from './src/screens/FormScreen1_initial/FormScreen_init
 import FormScreenTimeZonage from './src/screens/FormScreen2_timeZonage/FormScreen_timeZonage';
 import FormScreenWeights from './src/screens/FormScreen3_weights/FormScreen_weights';
 import FormScreenAdvanced from './src/screens/FormScreen4_advanced/FormScreen_advanced';
+import ResultTest from './src/screens/ResultTest/ResultTest';
 
 const store = configureStore();
 
@@ -30,6 +31,7 @@ Navigation.registerComponent('MDRA_app.formScreenInitial', () => FormScreenIniti
 Navigation.registerComponent('MDRA_app.formScreenTimeZonage', () => FormScreenTimeZonage, store, Provider);
 Navigation.registerComponent('MDRA_app.formScreenWeights', () => FormScreenWeights, store, Provider);
 Navigation.registerComponent('MDRA_app.formScreenAdvanced', () => FormScreenAdvanced, store, Provider);
+Navigation.registerComponent('MDRA_app.resultTest', () => ResultTest, store, Provider);
 
 
 //start App

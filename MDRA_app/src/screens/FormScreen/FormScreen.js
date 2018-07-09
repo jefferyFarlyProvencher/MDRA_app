@@ -1,9 +1,10 @@
 //Base imports
 import React, {Component} from 'react';
-import {View,ScrollView, Text, StyleSheet, Dimensions, Button} from 'react-native';
-import {connect} from 'react-redux'
+import {View,ScrollView, Text, StyleSheet, Modal, Button} from 'react-native';
+import {connect} from 'react-redux';
+import { Navigation } from 'react-native-navigation';
 //Package Imports
-import StepIndicator from 'react-native-step-indicator'
+import StepIndicator from 'react-native-step-indicator';
 
 //Screen Imports
 import FormScreenInitial from '../FormScreen1_initial/FormScreen_initial';
@@ -44,7 +45,7 @@ class FormScreen extends Component{
                 isDataNotNull = this.props.state.main.Page0Data
             }
             if (pageNumber === 1) {
-                isDataNotNull = this.props.state.main.Page1Data
+                isDataNotNull = this.props.state.main.Page1Data;
             }
             if (pageNumber === 2) {
                 isDataNotNull = this.props.state.main.Page2Data
@@ -111,6 +112,15 @@ class FormScreen extends Component{
                         {this._screenSelector()}
                     </View>
                 </ScrollView>
+                <View style={{marginBottom:50}}>
+                    <Button title="fuck" onPress={() =>{
+                        console.log("sssssss");
+                        Navigation.push({
+                            screen: 'MDRA_app.resultTest',
+                            title: 'New Screen',
+                        })
+                    }}/>
+                </View>
                 <View style={styles.indicatorContainer}>
                     <View style={this.props.state.main.advanceTabAccessible ?{ width:'80%'}: {width:'100%'}}>
                         <StepIndicator
