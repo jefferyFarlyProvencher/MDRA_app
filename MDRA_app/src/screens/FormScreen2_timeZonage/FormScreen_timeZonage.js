@@ -23,7 +23,6 @@ class FormScreenTimeZonage extends PureComponent{
     _handleSubmit =(async (values, bag) => {
         try {
             bag.setSubmitting(false);
-            Alert.alert("Welcome!\n"+ values.email);
             this.props.onAddData(values, this.state.currentPosition);
             this.props.onChangePosition(this.state.currentPosition+1);
         }catch (e) {

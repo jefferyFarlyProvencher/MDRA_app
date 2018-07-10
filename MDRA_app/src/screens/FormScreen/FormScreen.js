@@ -11,6 +11,7 @@ import FormScreenInitial from '../FormScreen1_initial/FormScreen_initial';
 import FormScreenTimeZonage from '../FormScreen2_timeZonage/FormScreen_timeZonage';
 import FormScreenWeights from '../FormScreen3_weights/FormScreen_weights';
 import FormScreenAdvanced from '../FormScreen4_advanced/FormScreen_advanced';
+import SendFormScreen from '../SendFormScreen/SendFormScreen';
 import {addData, changePosition} from "../../store/actions/index";
 
 
@@ -23,15 +24,17 @@ class FormScreen extends Component{
     _screenSelector = () =>{
         console.log(this.props.state.main.position);
         switch (this.props.state.main.position){
-          case 0:
-              return(<FormScreenInitial data={this.props.state.main.Page0Data}/>);
-          case 1:
-              return(<FormScreenTimeZonage data={this.props.state.main.Page1Data}/>);
-          case 2:
-              return(<FormScreenWeights data={this.props.state.main.Page2Data} advancedAllowed={this.props.state.main.advanceTabAccessible}/>);
-          case 3:
-              return(<FormScreenAdvanced data={this.props.state.main.Page3Data}/>);
-          default:
+            case 0:
+                return(<FormScreenInitial data={this.props.state.main.Page0Data}/>);
+            case 1:
+                return(<FormScreenTimeZonage data={this.props.state.main.Page1Data}/>);
+            case 2:
+                return(<FormScreenWeights data={this.props.state.main.Page2Data} advancedAllowed={this.props.state.main.advanceTabAccessible}/>);
+            case 3:
+                return(<FormScreenAdvanced data={this.props.state.main.Page3Data}/>);
+            case 4:
+                return(<SendFormScreen/>)
+            default:
               //do nothing
         }
     };
@@ -107,20 +110,11 @@ class FormScreen extends Component{
 
         return(
             <View style={styles.overTheIndicatorContainer}>
-                <ScrollView>
+                <ScrollView contentContainerStyle={{flexGrow:1}}>
                     <View style={styles.formPageContainer}>
                         {this._screenSelector()}
                     </View>
                 </ScrollView>
-                <View style={{marginBottom:50}}>
-                    <Button title="fuck" onPress={() =>{
-                        console.log("sssssss");
-                        Navigation.push({
-                            screen: 'MDRA_app.resultTest',
-                            title: 'New Screen',
-                        })
-                    }}/>
-                </View>
                 <View style={styles.indicatorContainer}>
                     <View style={this.props.state.main.advanceTabAccessible ?{ width:'80%'}: {width:'100%'}}>
                         <StepIndicator

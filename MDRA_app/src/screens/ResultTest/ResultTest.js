@@ -26,7 +26,8 @@ class ResultTest extends PureComponent{
 
     render() {
         return (
-            <View>
+            <View style={{backgroundColor:"white"}}>
+                <View style={{borderWidth:10, borderColor:"red", height:100}}/>
                 <View style={{ flexDirection: 'row', height: 300, paddingVertical: 16 }}>
                     <BarChart
                         style={{ flex: 1, marginLeft: 8 }}

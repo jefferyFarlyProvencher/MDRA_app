@@ -22,14 +22,8 @@ class FormScreenWeights extends PureComponent{
     _handleSubmit =(async (values, bag) => {
         try {
             bag.setSubmitting(false);
-            Alert.alert("going to results?");
             this.props.onAddData(values, this.state.currentPosition);
-            this.props.navigation.push(this.props.componentId,{
-                screen: {
-                    screen: "MDRA_app.resultTest",
-                    title: "ResultTest"
-                }
-            });
+            this.props.onChangePosition(4)
         }catch (e) {
             bag.setSubmitting(false);
             bag.setErrors(e);
@@ -174,7 +168,7 @@ class FormScreenWeights extends PureComponent{
                             />
                             <Button
                                 buttonStyle={styles.button}
-                                title="Calculate dosages"
+                                title="Calculate dosages!"
                                 onPress={handleSubmit}
                                 loading={isSubmitting}
                             />

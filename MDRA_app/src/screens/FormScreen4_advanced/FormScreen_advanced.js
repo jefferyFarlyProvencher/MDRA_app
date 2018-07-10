@@ -10,6 +10,7 @@ import * as Yup from 'yup';
 import Input from "../../components/Input/Input";
 import DropDownList from "../../components/dropDownList/DropDownList";
 import {addData} from "../../store/actions/addData";
+import {changePosition} from "../../store/actions";
 
 class FormScreenAdvanced extends PureComponent{
     state = {
@@ -20,8 +21,10 @@ class FormScreenAdvanced extends PureComponent{
 
     _handleSubmit =(async (values, bag) => {
         try {
-            Alert.alert("Moving back to step 3!\n"+ values.email);
+            console.log("sending data!\n");
             this.props.onAddData(values,this.state.currentPosition);
+            this.props.onChangePosition(4)
+
         }catch (e) {
             bag.setSubmitting(false);
             bag.setErrors(e);
@@ -115,7 +118,7 @@ class FormScreenAdvanced extends PureComponent{
                             </View>
                             <Button
                                 buttonStyle={styles.button}
-                                title="Submit"
+                                title="Calculate Dosage!"
                                 onPress={handleSubmit}
                                 disabled={(!isValid || isSubmitting)}
                                 loading={isSubmitting}
@@ -162,7 +165,8 @@ const styles = StyleSheet.create({
 
 const mapDispatchToProps = dispatch => {
     return {
-        onAddData: (data,position) => dispatch(addData(data,position))
+        onAddData: (data,position) => dispatch(addData(data,position)),
+        onChangePosition: (position) => dispatch(changePosition(position))
     };
 };
 
