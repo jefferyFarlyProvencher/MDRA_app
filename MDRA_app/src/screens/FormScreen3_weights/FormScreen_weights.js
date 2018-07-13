@@ -17,22 +17,20 @@ class FormScreenWeights extends PureComponent{
     state = {
         ViewMode: Dimensions.get('window').height > 500 ? "portrait" : "landscape",
         currentPosition: 2,
+        targetPosition: 4,
     };
 
     _handleSubmit =(async (values, bag) => {
+        let target = this.props.advancedAllowed? 3: 4;
         try {
             bag.setSubmitting(false);
             this.props.onAddData(values, this.state.currentPosition);
-            this.props.onChangePosition(4)
+            this.props.onChangePosition(target)
         }catch (e) {
             bag.setSubmitting(false);
             bag.setErrors(e);
         }
     });
-
-    _handleGoToAdvanced = () => {
-        this.props.onChangePosition(3)
-    };
 
     render() {
         return(
@@ -166,24 +164,25 @@ class FormScreenWeights extends PureComponent{
                                 error={touched.weight7 && errors.weight7}
                                 keyboardType="numeric"
                             />
+                            {this.props.advancedAllowed
+                            ?
                             <Button
                                 buttonStyle={styles.button}
-                                title="Calculate dosages!"
+                                title="Go to the Advanced Parameters section"
                                 onPress={handleSubmit}
                                 loading={isSubmitting}
                             />
+                            :<Button
+                                buttonStyle={styles.button}
+                                title= {"Calculate dosages!"}
+                                onPress={handleSubmit}
+                                loading={isSubmitting}
+                                />
+                        }
                         </View>
                     )}
                 />
-                {this.props.advancedAllowed
-                    ?
-                    <Button
-                        buttonStyle={styles.button}
-                        title="Go to advanced"
-                        onPress={this._handleGoToAdvanced}
-                    />
-                    :null
-                }
+
                 </ScrollView>
             </View>
 

@@ -58,15 +58,34 @@ class FormScreenAdvanced extends PureComponent{
         };
         return(
             <View style={styles.container}>
-            <ScrollView>
-                <Text>Advanced</Text>
+                <Text>Advanced Parameters</Text>
                 <Formik
-                    initialValues={{ email:'', password: '', confirmPassword:'', gender:'male', animal:'Cat'}}
+                    initialValues={{
+                        tsTimeHalfDayAM: '8' ,
+                        teTimeHalfDayAM: '12',
+                        tsTimeHalfDayPM: '12',
+                        teTimeHalfDayPM: '16',
+                        cMinTheraputicHalfDayAM: '6',
+                        cMaxTheraputicHalfDayAM: '20',
+                        cMinTheraputicDayPM: '6',
+                        cMaxTheraputicDayPM: '20',
+                        cMinTheraputicEvening: '0',
+                        cMaxTheraputicEvening: '6',
+                        threshold: '80',
+                        }}
                     onSubmit={this._handleSubmit}
                     validationSchema={Yup.object().shape({
-                        email: Yup.string().email().required(),
-                        password: Yup.string().min(6).required(),
-                        confirmPassword: Yup.string().oneOf([Yup.ref('password', null)], 'Doesn\'t match Password')
+                        tsTimeHalfDayAM: Yup.number().positive().lessThan(Yup.ref('teTimeHalfDayAM', null)).required(),
+                        teTimeHalfDayAM: Yup.number().positive().moreThan(Yup.ref('tsTimeHalfDayAM', null)).required(),
+                        tsTimeHalfDayPM: Yup.number().positive().lessThan(Yup.ref('teTimeHalfDayPM', null)).required(),
+                        teTimeHalfDayPM: Yup.number().positive().moreThan(Yup.ref('tsTimeHalfDayPM', null)).required(),
+                        cMinTheraputicHalfDayAM: Yup.number().positive().lessThan(Yup.ref('cMaxTheraputicHalfDayAM', null)).required(),
+                        cMaxTheraputicHalfDayAM: Yup.number().positive().moreThan(Yup.ref('cMinTheraputicHalfDayAM', null)).required(),
+                        cMinTheraputicDayPM: Yup.number().positive().lessThan(Yup.ref('cMaxTheraputicDayPM', null)).required(),
+                        cMaxTheraputicDayPM: Yup.number().positive().moreThan(Yup.ref('cMinTheraputicDayPM', null)).required(),
+                        cMinTheraputicEvening: Yup.number().positive().lessThan(Yup.ref('cMaxTheraputicEvening'), null).required(),
+                        cMaxTheraputicEvening: Yup.number().positive().moreThan(Yup.ref('cMinTheraputicEvening',null)).required(),
+                        threshold: Yup.number().positive().lessThan(100).required()
                     })}
                     render={({
                                  values,
@@ -79,54 +98,135 @@ class FormScreenAdvanced extends PureComponent{
                                  isSubmitting
                              }) => (
                         <View>
-                            <Input
-                                label="Email"
-                                autoCapitalize="none"
-                                value={values.email}
-                                onChange={setFieldValue}
-                                onTouch={setFieldTouched}
-                                name="email"
-                                error={touched.email && errors.email}
-                            />
-                            <View style={styles.twoPerRowContainer}>
-                                <View style={styles.inputContainer}>
+                            <View>
+                                <Text> Half Day (AM)</Text>
+                                <View>
                                     <Input
-                                        label="Password"
-                                        secureTextEntry
-                                        value={values.password}
+                                        label="Ts"
+                                        value={values.tsTimeHalfDayAM}
                                         onChange={setFieldValue}
                                         onTouch={setFieldTouched}
-                                        name="password"
-                                        error={touched.password && errors.password}
+                                        name="tsTimeHalfDayAM"
+                                        error={errors.tsTimeHalfDayAM}
+                                        keyboardType="numeric"
                                     />
-                                </View>
-                                <View style={styles.inputContainer}>
+
                                     <Input
-                                        label="Confirm Password"
-                                        secureTextEntry
-                                        value={values.confirmPassword}
+                                        label="Te"
+                                        value={values.teTimeHalfDayAM}
                                         onChange={setFieldValue}
                                         onTouch={setFieldTouched}
-                                        name="confirmPassword"
-                                        error={touched.confirmPassword && errors.confirmPassword}
+                                        name="teTimeHalfDayAM"
+                                        error={errors.teTimeHalfDayAM}
+                                        keyboardType="numeric"
                                     />
                                 </View>
+                                <Text> Half Day (PM) </Text>
+                                <View>
+                                    <Input
+                                        label="Ts"
+                                        value={values.tsTimeHalfDayPM}
+                                        onChange={setFieldValue}
+                                        onTouch={setFieldTouched}
+                                        name="tsEvening"
+                                        error={errors.tsTimeHalfDayPM}
+                                        keyboardType="numeric"
+                                    />
+                                    <Input
+                                    label="Te"
+                                    value={values.teTimeHalfDayPM}
+                                    onChange={setFieldValue}
+                                    onTouch={setFieldTouched}
+                                    name="teEvening"
+                                    error={errors.teTimeHalfDayPM}
+                                    keyboardType="numeric"
+                                    />
+                                </View>
+                                <Text> Half Day (AM) </Text>
+                                <View>
+                                    <Input
+                                        label="Cmin"
+                                        value={values.cMinTheraputicHalfDayAM}
+                                        onChange={setFieldValue}
+                                        onTouch={setFieldTouched}
+                                        name="cMinTheraputicHalfDayAM"
+                                        error={errors.cMinTheraputicHalfDayAM}
+                                        keyboardType="numeric"
+                                    />
+
+                                    <Input
+                                        label="Cmax"
+                                        value={values.cMaxTheraputicHalfDayAM}
+                                        onChange={setFieldValue}
+                                        onTouch={setFieldTouched}
+                                        name="cMaxTheraputicHalfDayAM"
+                                        error={errors.cMaxTheraputicHalfDayAM}
+                                        keyboardType="numeric"
+                                    />
+                                </View>
+                                <Text> Half Day (PM) or Day </Text>
+                                <View>
+                                    <Input
+                                        label="Cmin"
+                                        value={values.cMinTheraputicDayAM}
+                                        onChange={setFieldValue}
+                                        onTouch={setFieldTouched}
+                                        name="cMinTheraputicDayPM"
+                                        error={errors.cMinTheraputicDayAM}
+                                        keyboardType="numeric"
+                                    />
+
+                                    <Input
+                                        label="Cmax"
+                                        value={values.cMaxTheraputicDayPM}
+                                        onChange={setFieldValue}
+                                        onTouch={setFieldTouched}
+                                        name="cMaxTheraputicDayPM"
+                                        error={errors.cMaxTheraputicDayPM}
+                                        keyboardType="numeric"
+                                    />
+                                </View>
+                                <Text> Evening</Text>
+                                <View>
+                                    <Input
+                                        label="Cmin"
+                                        value={values.cMinTheraputicEvening}
+                                        onChange={setFieldValue}
+                                        onTouch={setFieldTouched}
+                                        name="cMinTheraputicEvening"
+                                        error={errors.cMinTheraputicEvening}
+                                        keyboardType="numeric"
+                                    />
+
+                                    <Input
+                                        label="Cmax"
+                                        value={values.cMaxTheraputicEvening}
+                                        onChange={setFieldValue}
+                                        onTouch={setFieldTouched}
+                                        name="cMaxTheraputicEvening"
+                                        error={errors.cMaxTheraputicEvening}
+                                        keyboardType="numeric"
+                                    />
+                                </View>
+                                <Text> Threshold </Text>
+                                <Input
+                                    value={values.threshold}
+                                    onChange={setFieldValue}
+                                    onTouch={setFieldTouched}
+                                    name="threshold"
+                                    error={errors.threshold}
+                                    keyboardType="numeric"
+                                />
+                                <Button
+                                    buttonStyle={styles.button}
+                                    title="Send Form"
+                                    onPress={handleSubmit}
+                                    loading={isSubmitting}
+                                />
                             </View>
-                            <View style={styles.twoPerRowContainer}>
-                                <DropDownList style={styles.inputContainer} value={values.gender} name="gender" onChange={setFieldValue} itemList={["Male","Female"]}/>
-                                <DropDownList style={styles.inputContainer} value={values.animal} name="animal" onChange={setFieldValue} itemList={["Cat","Dog"]}/>
-                            </View>
-                            <Button
-                                buttonStyle={styles.button}
-                                title="Calculate Dosage!"
-                                onPress={handleSubmit}
-                                disabled={(!isValid || isSubmitting)}
-                                loading={isSubmitting}
-                            />
                         </View>
                     )}
                 />
-            </ScrollView>
             </View>
 
         );

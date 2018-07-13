@@ -2,6 +2,8 @@ import React, {PureComponent} from 'react';
 import {View, Button} from 'react-native';
 import 'react-native-svg';
 
+import Draggable from 'react-native-draggable';
+
 import {BarChart, Grid} from 'react-native-svg-charts';
 
 class ResultTest extends PureComponent{
@@ -37,9 +39,12 @@ class ResultTest extends PureComponent{
                         contentInset={{ top: 10, bottom: 10 }}
                         spacing={0.2}
                         gridMin={0}
-                    >
+                        >
                         <Grid direction={Grid.Direction.VERTICAL}/>
                     </BarChart>
+                    <Draggable reverse={false} renderColor='red' renderShape='circle' offsetX={0} offsetY={-300} renderText='B' borderOnly={true}/>
+                    <Draggable renderSize={56} renderColor='black' offsetX={-100} offsetY={-200} renderText='A' pressDrag={()=>alert('touched!!')}/>
+                    <Draggable renderSize={56} renderColor='black' offsetX={-100} offsetY={-200} renderText='A' pressDrag={()=>alert('touched!!')} borderOnly={true} borderSize={101}/>
                 </View>
                 <Button title="Press me" onPress={this._handleOnPress}/>
             </View>

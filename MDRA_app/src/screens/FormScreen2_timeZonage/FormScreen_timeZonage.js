@@ -65,7 +65,11 @@ class FormScreenTimeZonage extends PureComponent{
                              }) => (
                         <View>
                             <View>
-                                <DropDownList onChange={setFieldValue} name="nbTheraputicBoxes" value={values.nbTheraputicBoxes} itemList={["Two day therapeutic boxes (AM and PM)","Others...."]}/>
+                                <DropDownList
+                                    onChange={setFieldValue}
+                                    name="nbTheraputicBoxes"
+                                    value={values.nbTheraputicBoxes}
+                                    itemList={["One day therapeutic box (from AM to PM)","Two day therapeutic boxes (AM and PM)"]}/>
                             </View>
                             <Text> Day Time </Text>
                             <Input

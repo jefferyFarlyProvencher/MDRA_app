@@ -42,12 +42,13 @@ class Input extends PureComponent{
     render() {
         const {label, error, ...rest } = this.props;
         return(
-            <View style={styles.root}>
+            <View style={[styles.root,this.props.style]}>
                 <FormLabel>{label}</FormLabel>
                 <FormInput
                     placeholder={label}
                     onBlur={this._handleTouch}
                     onChangeText={this._handleChange}
+                    style={{justifyContent:'center'}}
                     {...rest}
                 />
                 {error && <FormValidationMessage>{error}</FormValidationMessage>}
@@ -61,6 +62,7 @@ const styles = StyleSheet.create({
     root: {
         width: '90%',
         alignSelf: 'center',
+        justifyContent: 'center',
     }
 });
 

@@ -1,8 +1,7 @@
 import React, {PureComponent} from 'react';
-import {StyleSheet, Text, View, ScrollView, Picker} from 'react-native';
+import {StyleSheet,View, Picker} from 'react-native';
 
 import {
-    FormInput,
     FormValidationMessage,
     FormLabel
 } from 'react-native-elements';
@@ -48,6 +47,7 @@ class DropDownList extends PureComponent{
                     {...this.props}
                     selectedValue={this.props.value}
                     style={styles.pickerStyle}
+                    itemStyle={styles.itemStyle}
                     onValueChange={(itemValue, itemIndex) => this._handleChange(itemValue)}
                     children={this._handlePickerItem()}
                 >
@@ -62,10 +62,13 @@ const styles = StyleSheet.create({
     root: {
         width: '100%',
         alignSelf: 'center',
-        padding: 20
     },
     pickerStyle:{
-        height: 50, width: "100%"
+        height: 50,
+        width: "100%",
+    },
+    itemStyle: {
+        textAlign: 'center',
     }
 });
 

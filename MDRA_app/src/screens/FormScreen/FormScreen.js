@@ -33,7 +33,7 @@ class FormScreen extends Component{
             case 3:
                 return(<FormScreenAdvanced data={this.props.state.main.Page3Data}/>);
             case 4:
-                return(<SendFormScreen/>)
+                return(<SendFormScreen/>);
             default:
               //do nothing
         }
@@ -166,7 +166,8 @@ const styles = StyleSheet.create({
         bottom: 0,
         left: 0,
         backgroundColor: '#FFF',
-        paddingTop: 5,
+        paddingTop: 10,
+        margin:0
     }
 });
 
