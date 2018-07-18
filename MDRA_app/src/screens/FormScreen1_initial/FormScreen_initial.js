@@ -93,7 +93,7 @@ class FormScreenInitial extends PureComponent{
                         validationSchema={Yup.object().shape({
                             numberOfSimulations: Yup.number().positive().lessThan(10001).integer("Must be an integer"),
                             weight: Yup.number().positive().lessThan(80).integer("Must be an integer"),
-                            adminTime: Yup.number().positive().lessThan(24).integer("Must be an integer"),
+                            adminTime1: Yup.number().positive().lessThan(24).integer("Must be an integer"),
                         })}
                         validateOnBlur={false}
                         render={({
@@ -143,7 +143,10 @@ class FormScreenInitial extends PureComponent{
                                             style={[styles.inputContainer, {width:"55%"}]}
                                             label={ "Drug Formulation" }
                                             value={values.formula1}
-                                            name="formula1" onChange={(name, value) =>{this.setCurrentFormulation(1,value);  setFieldValue(name, value)}}
+                                            name="formula1" onChange={(name, value) =>
+                                            {
+                                                this.setCurrentFormulation(1,value);  setFieldValue(name, value)
+                                            }}
                                             itemList={["Ritalin IR","Pms-Methylphenidate IR", "Concerta", "Pms-Methylphenidate ER", "Biphentin"]}/>
                                         <DropDownList
                                             style={[styles.inputContainer, {width:"35%"}]}
@@ -167,7 +170,7 @@ class FormScreenInitial extends PureComponent{
                                                 onChange={setFieldValue}
                                                 onTouch={setFieldTouched}
                                                 name="adminTime1"
-                                                error={touched.adminTime1 && errors.adminTime1}
+                                                error={errors.adminTime1}
                                                 keyboardType="numeric"
                                             />
                                         </View>

@@ -11,7 +11,8 @@ import FormScreenInitial from '../FormScreen1_initial/FormScreen_initial';
 import FormScreenTimeZonage from '../FormScreen2_timeZonage/FormScreen_timeZonage';
 import FormScreenWeights from '../FormScreen3_weights/FormScreen_weights';
 import FormScreenAdvanced from '../FormScreen4_advanced/FormScreen_advanced';
-import SendFormScreen from '../SendFormScreen/SendFormScreen';
+import SendFormScreen from '../SendFormScreen/SendFormScreen'
+import ResultTest from '../ResultTest/ResultTest';
 import {addData, changePosition} from "../../store/actions/index";
 
 
@@ -40,7 +41,6 @@ class FormScreen extends Component{
     };
 
     indicatorPressedHandler = (pageNumber) => {
-        console.log(pageNumber);
         //if the page selected is different from current page
         if(pageNumber !== this.props.state.main.position) {
             isDataNotNull = 0;

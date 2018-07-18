@@ -168,11 +168,11 @@ class FormScreenAdvanced extends PureComponent{
                                 <View>
                                     <Input
                                         label="Cmin"
-                                        value={values.cMinTheraputicDayAM}
+                                        value={values.cMinTheraputicDayPM}
                                         onChange={setFieldValue}
                                         onTouch={setFieldTouched}
                                         name="cMinTheraputicDayPM"
-                                        error={errors.cMinTheraputicDayAM}
+                                        error={errors.cMinTheraputicDayPM}
                                         keyboardType="numeric"
                                     />
 
