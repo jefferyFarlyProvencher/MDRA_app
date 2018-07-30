@@ -11,8 +11,8 @@ const ResultsList = (props) => {
                 renderItem ={(info)=> (
                     <ListItem
                         roundAvatar
-                        title="whuit"
-                        subtitle="hey"
+                        title="Test Result"
+                        subtitle={""+Date.now()}
                         key={info.key}
                         onPress = {() => {
                         props.onItemSelected(info.item.key);

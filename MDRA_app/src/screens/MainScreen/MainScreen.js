@@ -11,6 +11,12 @@ class MainScreen extends Component{
         startAnim: new Animated.Value(1)
     };
 
+    componentWillMount() {
+        this.props.navigator.setStyle({
+            navBarHidden: true
+        });
+    }
+
     _handlerOnPress = () => {
         this.setState({
            loading:true,
@@ -40,10 +46,10 @@ const styles= StyleSheet.create({
     mainContainer:{
         alignItems:"center",
         justifyContent:"center",
-        height:"70%",
-        width: "80%",
+        height: '30%',
         backgroundColor: 'rgba(52, 52, 52, 0.7)',
-        borderRadius:50,
+        borderRadius:80,
+        padding: 5,
     },
 
     textContainer:{

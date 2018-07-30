@@ -20,7 +20,18 @@ import {addData, changePosition} from "../../store/actions/index";
 class FormScreen extends Component{
     constructor(props){
         super(props);
+        this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent);
     }
+
+    onNavigatorEvent = event => {
+        if(event.type === "NavBarButtonPress") {
+            if(event.id === "sideDrawerToggle"){
+                this.props.navigator.toggleDrawer({
+                    side: "right"
+                });
+            }
+        }
+    };
 
     _screenSelector = () =>{
         console.log(this.props.state.main.position);

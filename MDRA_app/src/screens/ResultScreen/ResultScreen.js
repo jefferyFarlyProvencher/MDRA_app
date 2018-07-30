@@ -7,9 +7,31 @@ import ResultsList from "../../components/ResultsList/ResultsList";
 
 
 class ResultScreen extends Component{
-
+    constructor(props){
+        super(props);
+        this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent);
+    }
     state = {
         placesAnim: new Animated.Value(0)
+    };
+
+    componentWillMount() {
+        this.props.navigator.setStyle({
+            navBarTransparent: true,
+            navBarNoBorder: true,
+            topBarElevationShadowEnabled: false,
+            drawUnderNavBar: true
+        });
+    }
+
+    onNavigatorEvent = event => {
+        if(event.type === "NavBarButtonPress") {
+            if(event.id === "sideDrawerToggle"){
+                this.props.navigator.toggleDrawer({
+                    side: "right"
+                });
+            }
+        }
     };
 
     itemSelectedHandler = key => {
@@ -38,12 +60,12 @@ class ResultScreen extends Component{
                 <ResultsList list ={this.props.state.main.resultsList} onItemSelected={this.itemSelectedHandler}/>
             </View>
         );
-        console.log(this.props.state.main.resultsList);
+//        console.log(this.props.state.main.resultsList);
         return(
             <View>
                 {this.props.state.main.resultsList.length > 0
                     ? content
-                    : <Text>This doesn't have any results yet</Text>
+                    : <Text style={{justifyContent:'center', alignItems:'center'}}>This doesn't have any results yet</Text>
                 }
             </View>
         )

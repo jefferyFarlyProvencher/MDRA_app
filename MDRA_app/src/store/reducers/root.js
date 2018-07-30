@@ -15,6 +15,7 @@ const initialState = {
     Page2Data: null,
     Page3Data: null,
     advanceTabAccessible: false,
+    receivedData: null,
     resultsList: [{key:'1',data:[10, 20, 30, 40, 50]},{key:'2',data:[70, 10, 50, 5, 5]}],
 };
 

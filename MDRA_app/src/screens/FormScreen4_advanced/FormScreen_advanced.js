@@ -61,6 +61,7 @@ class FormScreenAdvanced extends PureComponent{
                 <Text>Advanced Parameters</Text>
                 <Formik
                     initialValues={{
+                        numberOfSimulations: '1000',
                         tsTimeHalfDayAM: '8' ,
                         teTimeHalfDayAM: '12',
                         tsTimeHalfDayPM: '12',
@@ -75,6 +76,7 @@ class FormScreenAdvanced extends PureComponent{
                         }}
                     onSubmit={this._handleSubmit}
                     validationSchema={Yup.object().shape({
+                        numberOfSimulations: Yup.number().positive().lessThan(10001).integer("Must be an integer"),
                         tsTimeHalfDayAM: Yup.number().positive().lessThan(Yup.ref('teTimeHalfDayAM', null)).required(),
                         teTimeHalfDayAM: Yup.number().positive().moreThan(Yup.ref('tsTimeHalfDayAM', null)).required(),
                         tsTimeHalfDayPM: Yup.number().positive().lessThan(Yup.ref('teTimeHalfDayPM', null)).required(),
@@ -98,6 +100,16 @@ class FormScreenAdvanced extends PureComponent{
                                  isSubmitting
                              }) => (
                         <View>
+                            <Input
+                                label="Number of Simulations"
+                                autoCapitalize="none"
+                                value={values.numberOfSimulations}
+                                onChange={setFieldValue}
+                                onTouch={setFieldTouched}
+                                name="numberOfSimulations"
+                                error={errors.numberOfSimulations}
+                                keyboardType="numeric"
+                            />
                             <View>
                                 <Text> Half Day (AM)</Text>
                                 <View>

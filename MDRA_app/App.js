@@ -18,6 +18,9 @@ import SendFormScreen from './src/screens/SendFormScreen/SendFormScreen';
 import FormTest from './src/screens/FormTest/FormTest'
 import mainScreenTest from './src/screens/FormTest/mainScreenTest';
 import ResultTest from './src/screens/ResultTest/ResultTest';
+import Slider from  './src/components/CustomMultiSlider/CustomMultiSlider'
+
+import SendForm from './src/components/SendForm/SendForm';
 
 const store = configureStore();
 
@@ -33,12 +36,15 @@ Navigation.registerComponent('MDRA_app.formScreenTimeZonage', () => FormScreenTi
 Navigation.registerComponent('MDRA_app.formScreenWeights', () => FormScreenWeights, store, Provider);
 Navigation.registerComponent('MDRA_app.formScreenAdvanced', () => FormScreenAdvanced, store, Provider);
 Navigation.registerComponent('MDRA_app.resultTest', () => ResultTest, store, Provider);
+Navigation.registerComponent('MDRA_app.sendForm',() => SendForm, store, Provider);
+Navigation.registerComponent('MDRA_app.custom',() => Slider);
+
 
 
 //start App
 Navigation.startSingleScreenApp({
     screen: {
         screen: "MDRA_app.mainScreen",
-        title: "mainScreen"
+        title: "mainScreen",
     }
 });

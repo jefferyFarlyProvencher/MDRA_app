@@ -5,6 +5,7 @@ import {connect} from 'react-redux';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 import {allowAdvancedOptions} from "../../store/actions";
+import SendForm from '../../components/SendForm/SendForm'
 
 class SideDrawer extends Component{
     logOutHandler = () => {
@@ -14,6 +15,12 @@ class SideDrawer extends Component{
                 title: "mainScreen"
             }
         });
+    };
+
+    handleConnectionTest = async()=>{
+        console.log("commencing");
+        console.log(await SendForm());
+        console.log("RETURNED");
     };
 
     render() {
@@ -38,6 +45,16 @@ class SideDrawer extends Component{
                             color="#52afff" style={styles.drawerItemIcon}
                         />
                         <Text>Advanced tab enabler</Text>
+                    </View>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={this.handleConnectionTest}>
+                    <View  style={styles.drawerItem}>
+                        <Icon
+                            size={40}
+                            name= {Platform.OS==='android'? "md-sync" :"ios-sync"}
+                            color="#52afff" style={styles.drawerItemIcon}
+                        />
+                        <Text>Connect test</Text>
                     </View>
                 </TouchableOpacity>
 

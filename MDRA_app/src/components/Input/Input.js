@@ -1,5 +1,5 @@
 import React, {PureComponent} from 'react';
-import {StyleSheet, Text, View, ScrollView} from 'react-native';
+import {StyleSheet, Text, View, Switch} from 'react-native';
 
 import {
     FormInput,
@@ -28,11 +28,17 @@ class Input extends PureComponent{
 
         },
 
-        inputValue: ""
+        inputValue: "",
+
+        switchValue: true,
     };
 
-    _handleChange = (value)=> {
-      this.props.onChange(this.props.name, value)
+    constructor(props){
+        super(props);
+    }
+
+    _handleChangeText = (value)=> {
+        this.props.onChange(this.props.name, value)
     };
 
     _handleTouch = () => {
@@ -45,10 +51,11 @@ class Input extends PureComponent{
             <View style={[styles.root,this.props.style]}>
                 <FormLabel>{label}</FormLabel>
                 <FormInput
+                    center
                     placeholder={label}
                     onBlur={this._handleTouch}
-                    onChangeText={this._handleChange}
-                    style={{justifyContent:'center'}}
+                    onChangeText={this._handleChangeText}
+                    containerStyle={[{justifyContent:'center'}, error?{backgroundColor:"#ffb8c3"}:{backgroundColor:"white"}]}
                     {...rest}
                 />
                 {error && <FormValidationMessage>{error}</FormValidationMessage>}
