@@ -46,7 +46,7 @@ class ResultScreen extends Component{
         }
         console.log(key);
         this.props.navigator.push({
-            screen: "MDRA_app.resultTest",
+            screen: "MDRA_app.resultPage",
             title: selResult.date,
             passProps: {
                 selectedPosition: selPosition

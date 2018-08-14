@@ -12,7 +12,6 @@ import FormScreenTimeZonage from '../FormScreen2_timeZonage/FormScreen_timeZonag
 import FormScreenWeights from '../FormScreen3_weights/FormScreen_weights';
 import FormScreenAdvanced from '../FormScreen4_advanced/FormScreen_advanced';
 import SendFormScreen from '../SendFormScreen/SendFormScreen'
-import ResultTest from '../ResultTest/ResultTest';
 import {addData, changePosition} from "../../store/actions/index";
 
 
@@ -34,7 +33,7 @@ class FormScreen extends Component{
     };
 
     _screenSelector = () =>{
-        console.log(this.props.state.main.position);
+        //console.log(this.props.state.main.position);
         switch (this.props.state.main.position){
             case 0:
                 return(<FormScreenInitial data={this.props.state.main.Page0Data}/>);

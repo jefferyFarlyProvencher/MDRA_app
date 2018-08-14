@@ -22,19 +22,20 @@ class FormScreenInitial extends PureComponent{
         currentPosition: 0,
         //formulation values are there to set the dosage
         formulaValues: ["Ritalin IR","Ritalin IR","Ritalin IR","Ritalin IR"],
-        //Number of things give (1 to 4)
-        amountOfDrugs:1,
+        //Number of pill given (1 to 4)
+        amountOfPills:this.props.data
+            ?this.props.data.amountOfPills
+                ? this.props.data.amountOfPills
+                : 1
+            :1,
         //Switch value indicates if weight is in pounds (true) or in kg (false)
-        switchValue: false
+        switchValue: this.props.data?
+            this.props.data.switchWeightFormat: false,
     };
 
     _handleSubmit =(async (values, bag) => {
         try {
             bag.setSubmitting(false);
-            if(this.state.switchValue){
-                values.weight = ""+parseFloat(values.weight)*0.45359237;
-
-            }
             this.props.onChangePosition(this.state.currentPosition+1);
             this.props.onAddData(values, this.state.currentPosition);
         }catch (e) {
@@ -44,20 +45,17 @@ class FormScreenInitial extends PureComponent{
     });
 
     _handleChangeSwitch = (switchBoolean) => {
-        console.log(this.state.switchValue);
         this.setState(oldState =>{
             return {
                 ...oldState,
                 switchValue:switchBoolean
             }
         });
-        console.log(this.state.switchValue);
-
     };
 
     _handleValidation = () => {
         let requiredMessage = "This is required";
-        switch (this.state.amountOfDrugs)
+        switch (this.state.amountOfPills)
         {
 
             case 1:
@@ -99,22 +97,22 @@ class FormScreenInitial extends PureComponent{
     };
 
     addDrugs = () => {
-        if (this.state.amountOfDrugs <4) {
+        if (this.state.amountOfPills <4) {
             this.setState(oldState => {
                 return {
                     ...oldState,
-                    amountOfDrugs: oldState.amountOfDrugs + 1
+                    amountOfPills: oldState.amountOfPills + 1
                 }
             })
         }
     };
 
     removeDrugs = () =>{
-        if(this.state.amountOfDrugs >1) {
+        if(this.state.amountOfPills >1) {
             this.setState(oldState => {
                 return {
                     ...oldState,
-                    amountOfDrugs: oldState.amountOfDrugs - 1
+                    amountOfPills: oldState.amountOfPills - 1
                 }
             })
         }
@@ -175,26 +173,30 @@ class FormScreenInitial extends PureComponent{
                                     adminTime3: this.props.data.adminTime3,
                                     formulation3: this.props.data.formulation3,
                                     food3: this.props.data.food3,
+                                    amountOfPills: this.props.data.amountOfPills,
+                                    switchWeightFormat: this.props.switchValue
                                 }
                                 :{
                                     gender: 'Male',
                                     weight: '',
-                                    dose0: '',
+                                    dose0: '10',
                                     adminTime0: '',
                                     formula0: 'Ritalin IR',
-                                    food0: '',
-                                    dose1: '',
+                                    food0: 'No',
+                                    dose1: '10',
                                     adminTime1: '',
                                     formula1: 'Ritalin IR',
-                                    food1: '',
-                                    dose2: '',
+                                    food1: 'No',
+                                    dose2: '10',
                                     adminTime2: '',
                                     formula2: 'Ritalin IR',
-                                    food2: '',
-                                    dose3: '',
+                                    food2: 'No',
+                                    dose3: '10',
                                     adminTime3: '',
                                     formula3: 'Ritalin IR',
-                                    food3: '',
+                                    food3: 'No',
+                                    amountOfPills: this.state.amountOfPills,
+                                    switchWeightFormat: this.state.switchValue,
                                 }
                         }
                         onSubmit={this._handleSubmit}
@@ -236,7 +238,11 @@ class FormScreenInitial extends PureComponent{
                                         <View style={{paddingTop:"20%", marginLeft:0}}>
                                             <Switch
                                                 value={this.state.switchValue}
-                                                onValueChange={(value)=>this._handleChangeSwitch(value)}
+                                                onValueChange={(value) => {
+                                                    setFieldValue('switchWeightFormat', !this.state.switchValue);
+                                                    this._handleChangeSwitch(value);
+                                                    }
+                                                }
                                             />
                                         </View>
                                     </View>
@@ -248,7 +254,8 @@ class FormScreenInitial extends PureComponent{
                                             style={[styles.inputContainer, {width:"55%"}]}
                                             label={ "Drug Formulation" }
                                             value={values.formula0}
-                                            name="formula0" onChange={(name, value) =>
+                                            name="formula0"
+                                            onChange={(name, value) =>
                                             {
                                                 this.setCurrentFormulation(0,value);  setFieldValue(name, value)
                                             }}
@@ -257,7 +264,8 @@ class FormScreenInitial extends PureComponent{
                                             style={[styles.inputContainer, {width:"35%"}]}
                                             label={"Food Intake"}
                                             value={values.food0}
-                                            name="food0" onChange={setFieldValue}
+                                            name="food0"
+                                            onChange={setFieldValue}
                                             itemList={["No","Yes"]}/>
                                     </View>
                                     <View style={styles.twoPerRowContainer}>
@@ -282,7 +290,7 @@ class FormScreenInitial extends PureComponent{
                                     </View>
                                 </View>
                                 {
-                                    this.state.amountOfDrugs >= 2
+                                    this.state.amountOfPills >= 2
                                         ?
                                     <View style={styles.drugContainer}>
                                         <View style={styles.twoPerRowContainer}>
@@ -317,7 +325,7 @@ class FormScreenInitial extends PureComponent{
                                                     onChange={setFieldValue}
                                                     onTouch={setFieldTouched}
                                                     name="adminTime1"
-                                                    error={this.state.amountOfDrugs>=1?(touched.adminTime1 && errors.adminTime1): null}
+                                                    error={this.state.amountOfPills>=1?(touched.adminTime1 && errors.adminTime1): null}
                                                     keyboardType="numeric"
                                                 />
                                             </View>
@@ -326,7 +334,7 @@ class FormScreenInitial extends PureComponent{
                                         :null
                                 }
                                 {
-                                    this.state.amountOfDrugs >= 3
+                                    this.state.amountOfPills >= 3
                                         ?
                                     <View style={styles.drugContainer}>
                                         <View style={styles.twoPerRowContainer}>
@@ -361,7 +369,7 @@ class FormScreenInitial extends PureComponent{
                                                     onChange={setFieldValue}
                                                     onTouch={setFieldTouched}
                                                     name="adminTime2"
-                                                    error={this.state.amountOfDrugs>=2?(touched.adminTime2&& errors.adminTime2): null }
+                                                    error={this.state.amountOfPills>=2?(touched.adminTime2&& errors.adminTime2): null }
                                                     keyboardType="numeric"
                                                 />
                                             </View>
@@ -370,7 +378,7 @@ class FormScreenInitial extends PureComponent{
                                         :null
                                 }
                                 {
-                                    this.state.amountOfDrugs >= 4
+                                    this.state.amountOfPills >= 4
                                         ?
                                     <View style={styles.drugContainer}>
                                         <View style={styles.twoPerRowContainer}>
@@ -415,7 +423,7 @@ class FormScreenInitial extends PureComponent{
                                                     onChange={setFieldValue}
                                                     onTouch={setFieldTouched}
                                                     name="adminTime3"
-                                                    error={this.state.amountOfDrugs>=3?(touched.adminTime3 && errors.adminTime3): null}
+                                                    error={this.state.amountOfPills>=3?(touched.adminTime3 && errors.adminTime3): null}
                                                     keyboardType="numeric"
                                                 />
                                             </View>
@@ -428,14 +436,21 @@ class FormScreenInitial extends PureComponent{
                                     <Button
                                         buttonStyle={styles.button}
                                         title="+"
-                                        onPress={this.addDrugs}
-                                        disabled={this.state.amountOfDrugs>=4}
+                                        onPress={() =>{
+                                            setFieldValue("amountOfPills", this.state.amountOfPills+1);
+                                            this.addDrugs();
+                                        }}
+                                        disabled={this.state.amountOfPills>=4}
                                     />
                                     <Button
                                         buttonStyle={styles.button}
                                         title="-"
-                                        onPress={this.removeDrugs}
-                                        disabled={this.state.amountOfDrugs<=1}
+                                        onPress={() => {
+                                            setFieldValue("amountOfPills", this.state.amountOfPills-1);
+                                            this.removeDrugs();
+                                        }
+                                        }
+                                        disabled={this.state.amountOfPills<=1}
                                     />
                                 </View>
                                 <Button

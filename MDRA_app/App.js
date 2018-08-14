@@ -18,7 +18,7 @@ import SendFormScreen from './src/screens/SendFormScreen/SendFormScreen';
 import FormTest from './src/screens/FormTest/FormTest'
 import mainScreenTest from './src/screens/FormTest/mainScreenTest';
 import ResultTest from './src/screens/ResultTest/ResultTest';
-import Slider from  './src/components/CustomMultiSlider/CustomMultiSlider'
+import ResultPage from './src/screens/ResultPage/ResultPage';
 
 import SendForm from './src/components/SendForm/SendForm';
 
@@ -37,9 +37,7 @@ Navigation.registerComponent('MDRA_app.formScreenWeights', () => FormScreenWeigh
 Navigation.registerComponent('MDRA_app.formScreenAdvanced', () => FormScreenAdvanced, store, Provider);
 Navigation.registerComponent('MDRA_app.resultTest', () => ResultTest, store, Provider);
 Navigation.registerComponent('MDRA_app.sendForm',() => SendForm, store, Provider);
-Navigation.registerComponent('MDRA_app.custom',() => Slider);
-
-
+Navigation.registerComponent('MDRA_app.resultPage',() => ResultPage, store, Provider);
 
 //start App
 Navigation.startSingleScreenApp({

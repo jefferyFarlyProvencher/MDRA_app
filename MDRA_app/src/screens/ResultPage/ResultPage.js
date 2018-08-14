@@ -1,26 +1,24 @@
 import React, {PureComponent} from 'react';
-import {View, Button, StyleSheet} from 'react-native';
+import {View, Button, StyleSheet, Text, ScrollView, Dimensions, Platform} from 'react-native';
 import 'react-native-svg';
 import { IndicatorViewPager, PagerTitleIndicator, PagerDotIndicator } from 'rn-viewpager'
-
-import * as shape from 'd3-shape'
-import * as scale from 'd3-scale'
-
-import {G,Svg,Path,Rect,Text,Line} from 'react-native-svg'
 
 import Draggable from 'react-native-draggable';
 
 import {connect} from 'react-redux';
 
-import {BarChart, Grid, PieChart, StackedAreaChart,XAxis, YAxis} from 'react-native-svg-charts';
+import Slider from '../../components/CustomMultiSlider/CustomMultiSlider';
 
-import Slider from '../../components/CustomMultiSlider/CustomMultiSlider'
+import {VictoryContainer} from "victory-native";
 
+import GraphComponent from '../../components/ResultPage_GraphComponent/GraphComponent';
+import PieChartComponent from '../../components/ResultPage_PieChartsComponent/PieChartsComponent';
 
 class ResultPage extends PureComponent{
     state = {
         listLength: this.props.state.main.resultsList.length,
         currentPosition: this.props.selectedPosition,
+        orientation:true, //portrait true, landscape false
     };
 
     _renderDotIndicator() {
@@ -65,34 +63,33 @@ class ResultPage extends PureComponent{
 
     render() {
 
-        const randomColor = () =>
-            ('#' + (Math.random() * 0xFFFFFF << 0).toString(16) + '000000').slice(0, 7);
-
-        const pieData = this.props.state.main
-            .resultsList[this.state.currentPosition].data
-            .filter(value => value > 0)
-            .map((value, index) => ({
-                value,
-                svg: {
-                    fill: randomColor(),
-                    onPress: () => console.log('press', index),
-                },
-                key: `pie-${index}`,
-            }));
-
-
-
         return (
-            <View style={{backgroundColor:"white"}}>
+            <View style={{backgroundColor:"#AAA"}}>
                 <IndicatorViewPager
                     style={{height:'93%'}}
                     indicator={this._renderDotIndicator()}
                 >
                     <View>
-                        <Text>Area Charts</Text>
+                        <ScrollView>
+                            <View style={{alignItems:'center',justifyContent:"center"}}>
+                                <Text>Area Charts</Text>
+                                <GraphComponent
+                                    data={this.props.state.main.resultsList[this.state.currentPosition].data}
+                                    style={{backgroundColor:"white"}}
+                                />
+                            </View>
+                        </ScrollView>
                     </View>
                     <View>
-                        <Text>Pie Charts</Text>
+                        <ScrollView>
+                            <View style={this.state.orientation?styles.pieChartStylesPortrait:styles.pieChartStylesLandscape}>
+                                <Text>Pie Charts</Text>
+                                <PieChartComponent
+                                    data={this.props.state.main.resultsList[this.state.currentPosition].data}
+                                    style={{backgroundColor:"white"}}
+                                />
+                            </View>
+                        </ScrollView>
                     </View>
                 </IndicatorViewPager>
                 <View style={{flexDirection:"row", justifyContent:'center'}}>
@@ -131,7 +128,19 @@ class ResultPage extends PureComponent{
 const styles = StyleSheet.create({
     buttonStyle: {
         width: 300
-    }
+    },
+
+    pieChartStylesPortrait: {
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+
+    pieChartStylesLandscape: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
 });
 
 const mapStateToProps = (state) => {

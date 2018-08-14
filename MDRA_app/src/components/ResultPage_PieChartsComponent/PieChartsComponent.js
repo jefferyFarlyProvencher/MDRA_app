@@ -1,33 +1,26 @@
 import React, {PureComponent} from 'react';
-import {View, Button, StyleSheet} from 'react-native';
-import 'react-native-svg';
-import { IndicatorViewPager, PagerTitleIndicator, PagerDotIndicator } from 'rn-viewpager'
+import {View, Button, StyleSheet, Text, TouchableWithoutFeedback} from 'react-native';
 
-import * as shape from 'd3-shape'
-import * as scale from 'd3-scale'
-
-import {G,Svg,Path,Rect,Text,Line} from 'react-native-svg'
-
-import Draggable from 'react-native-draggable';
-
-import {connect} from 'react-redux';
-
-import {BarChart, Grid, PieChart, StackedAreaChart,XAxis, YAxis} from 'react-native-svg-charts';
-
-import Slider from '../../components/CustomMultiSlider/CustomMultiSlider'
-
+import {VictoryPie} from 'victory-native';
 
 class ResultTest extends PureComponent{
     state = {
-        listLength: this.props.state.main.resultsList.length,
-        currentPosition: this.props.selectedPosition,
+
     };
 
+/*    generateDataObjects(dataArray){
+        objectsArray = [];
+        for(let i = 0; i < dataArray.length; i++)
+        {
+            objectsArray.push({
+                x: i,
+                y:dataArray[i],
+                label: i
+            })
+        }
+    }
+*/
     render() {
-
-        const randomColor = () =>
-            ('#' + (Math.random() * 0xFFFFFF << 0).toString(16) + '000000').slice(0, 7);
-
         /*
         if (isNaN(characNRAM)) {
           pieDataset.D1 = [0, 0, 0, 0, 0, 0];
@@ -54,34 +47,33 @@ class ResultTest extends PureComponent{
          */
 
 
-        const pieData1 = this.props.state.main
-            .resultsList[this.state.currentPosition].data.
-            .filter(value => value > 0)
-            .map((value, index) => ({
-                value,
-                svg: {
-                    fill: randomColor(),
-                    onPress: () => console.log('press', index),
-                },
-                key: `pie1-${index}`,
-            }));
-
-        const pieData2 = this.props.state.main
-            .resultsList[this.state.currentPosition].data.
-            .filter(value => value > 0)
-            .map((value, index) => ({
-                value,
-                svg: {
-                    fill: randomColor(),
-                    onPress: () => console.log('press', index),
-                },
-                key: `pie1-${index}`,
-            }));
-
         return(
             <View>
-                <PieChart data={pieData1} style={{height: 200, margin: 10}} />
-                <PieChart data={pieData2} style={{height: 200}} />
+                <TouchableWithoutFeedback onPress={()=>{console.log("YOU VIOLATED ME")}}>
+                    <View>
+                        <Text>
+                            Pie 1
+                        </Text>
+                        <View style={this.props.style}>
+                            <VictoryPie
+                                radius={100}
+                                data={[this.props.data.characNR, this.props.data.characNRR, this.props.data.characR, this.props.data.characRAR, this.props.data.characAR, this.props.data.characNRRAR]}
+                                //animate={{duration: 500}}
+                            />
+                        </View>
+                        <Text>
+                            Pie 2
+                        </Text>
+                        <View style={[this.props.style]}>
+                            <VictoryPie
+                                radius={100}
+                                data={[this.props.data.characNRNuit, this.props.data.characNRRNuit, this.props.data.characRNuit, this.props.data.characRARNuit, this.props.data.characARNuit, this.props.data.characNRRARNuit]}
+                                //animate={{duration: 500}}
+                            />
+                        </View>
+                        <View style={{backgroundColor:'transparent', height:'100%', width:'100%',position:"absolute" ,left:0, top:0}}/>
+                    </View>
+                </TouchableWithoutFeedback>
             </View>
         )
     }
@@ -93,10 +85,4 @@ const styles = StyleSheet.create({
     }
 });
 
-const mapStateToProps = (state) => {
-    return {
-        state
-    };
-};
-
-export default connect(mapStateToProps)(ResultTest);
+export default ResultTest;

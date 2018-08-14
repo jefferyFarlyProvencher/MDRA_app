@@ -3,16 +3,9 @@ import {View, Button, StyleSheet} from 'react-native';
 import 'react-native-svg';
 import { IndicatorViewPager, PagerTitleIndicator, PagerDotIndicator } from 'rn-viewpager'
 
-import * as shape from 'd3-shape'
-import * as scale from 'd3-scale'
-
-import {G,Svg,Path,Rect,Text,Line} from 'react-native-svg'
-
 import Draggable from 'react-native-draggable';
 
 import {connect} from 'react-redux';
-
-import {BarChart, Grid, PieChart, StackedAreaChart,XAxis, YAxis} from 'react-native-svg-charts';
 
 import Slider from '../../components/CustomMultiSlider/CustomMultiSlider'
 
@@ -225,8 +218,6 @@ class ResultTest extends PureComponent{
                         />
                     </View>
                     <View>
-                        <PieChart data={pieData} style={{height: 200, margin: 10}} />
-                        <PieChart data={pieData} style={{height: 200}} />
                     </View>
                 </IndicatorViewPager>
                 <View style={{flexDirection:"row", justifyContent:'center'}}>

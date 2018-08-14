@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
-import { View, Text,Platform, Dimensions, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text,Platform, Dimensions, StyleSheet, TouchableOpacity, ToastAndroid } from 'react-native';
 import {Navigation} from 'react-native-navigation';
 import {connect} from 'react-redux';
 
 import Icon from 'react-native-vector-icons/Ionicons';
-import {allowAdvancedOptions} from "../../store/actions";
+import {addToResultList, allowAdvancedOptions} from "../../store/actions";
 import SendForm from '../../components/SendForm/SendForm'
 
 class SideDrawer extends Component{
@@ -21,6 +21,17 @@ class SideDrawer extends Component{
         console.log("commencing");
         console.log(await SendForm());
         console.log("RETURNED");
+    };
+
+    handleCreatorTest = async () => {
+        let data = await SendForm();
+        if(data !== -1) {
+            //console.log(JSON.stringify(data));
+            this.props.onAddToResultList(data);
+            //console.log(JSON.stringify(FormatReceivedData(data)));
+            //this.props.onAddToResultList(FormatReceivedData(data));
+            ToastAndroid.showWithGravity("Data added to List", 1, ToastAndroid.BOTTOM);
+        }
     };
 
     render() {
@@ -57,6 +68,16 @@ class SideDrawer extends Component{
                         <Text>Connect test</Text>
                     </View>
                 </TouchableOpacity>
+                <TouchableOpacity onPress={this.handleCreatorTest}>
+                    <View  style={styles.drawerItem}>
+                        <Icon
+                            size={40}
+                            name= {Platform.OS==='android'? "md-bowtie" :"ios-bowtie"}
+                            color="#52afff" style={styles.drawerItemIcon}
+                        />
+                        <Text>Create test</Text>
+                    </View>
+                </TouchableOpacity>
 
             </View>
         );
@@ -86,7 +107,8 @@ const styles = StyleSheet.create({
 
 const mapDispatchToProps = dispatch => {
     return {
-        allowAdvancedOptions: () => dispatch(allowAdvancedOptions())
+        allowAdvancedOptions: () => dispatch(allowAdvancedOptions()),
+        onAddToResultList: (data)=> dispatch(addToResultList(data))
     };
 };
 

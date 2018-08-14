@@ -23,6 +23,7 @@ class FormScreenTimeZonage extends PureComponent{
     _handleSubmit =(async (values, bag) => {
         try {
             bag.setSubmitting(false);
+            values.nbTheraputicBoxes = values.nbTheraputicBoxes === "Two day therapeutic boxes (AM and PM)"? '2' : '1';
             this.props.onAddData(values, this.state.currentPosition);
             this.props.onChangePosition(this.state.currentPosition+1);
         }catch (e) {

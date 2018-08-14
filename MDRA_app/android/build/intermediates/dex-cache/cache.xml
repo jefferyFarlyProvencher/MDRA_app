@@ -484,7 +484,7 @@
         jumboMode="false"
         optimize="true"
         revision="25.0.1"
-        sha1="79c5e00d315083e7d2919bc021f85dc29e242f27">
+        sha1="a47939101f2d044583f8be5d0608f5a98e8f3502">
         <dex dex="C:\Users\jeffe\Documents\here\git_documents\MDRA_app\android\app\build\intermediates\pre-dexed\debug\MDRA_app-react-native-svg-unspecified_dc7d68fb498958c395650e50e6617c59d21eb2b0.jar" />
     </item>
     <item
