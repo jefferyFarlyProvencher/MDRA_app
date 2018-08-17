@@ -1,32 +1,56 @@
 import React, {PureComponent} from 'react';
 import {View, Button, StyleSheet, Text, ScrollView, Dimensions, Platform} from 'react-native';
 import 'react-native-svg';
-import { IndicatorViewPager, PagerTitleIndicator, PagerDotIndicator } from 'rn-viewpager'
+import { IndicatorViewPager, PagerTitleIndicator, PagerTabIndicator } from 'rn-viewpager'
 
+//What is this?
 import Draggable from 'react-native-draggable';
 
+//Image imports
+import areaImage from '../../assets/area_small.png';
+import pieImage from '../../assets/pie_small.png';
+
+//redux imports
 import {connect} from 'react-redux';
 
-import Slider from '../../components/CustomMultiSlider/CustomMultiSlider';
-
-import {VictoryContainer} from "victory-native";
-
+//component imports
 import GraphComponent from '../../components/ResultPage_GraphComponent/GraphComponent';
 import PieChartComponent from '../../components/ResultPage_PieChartsComponent/PieChartsComponent';
 
-class ResultPage extends PureComponent{
+class ResultPage extends PureComponent {
     state = {
         listLength: this.props.state.main.resultsList.length,
         currentPosition: this.props.selectedPosition,
-        orientation:true, //portrait true, landscape false
+        orientation: true, //portrait true, landscape false
     };
 
-    _renderDotIndicator() {
-        return <PagerDotIndicator
-            pageCount={2}
-            selectedDotStyle={{backgroundColor:"black"}}
-        />;
-    }
+    _renderTabIndicator = () => {
+        return (
+            <PagerTabIndicator
+                tabs={
+                    [
+                        {
+                            text: 'Area',
+                            iconSource: areaImage,
+                            selectedIconSource: areaImage
+                        },
+                        {
+                            text: 'Pie',
+                            iconSource: pieImage,
+                            selectedIconSource: pieImage
+                        }
+                    ]
+                }
+                iconStyle={{height:30, width:30}}
+                selectedIconStyle={{height:40, width:40}}
+            />
+        )
+    };
+
+    
+    _renderTitleIndicator = () => {
+        return <PagerTabIndicator titles={['Area', 'Pie']}/>
+    };
     _handleOnPress2 = () => {
         if(this.state.currentPosition!==0) {
             console.log("changing pos back");
@@ -64,13 +88,19 @@ class ResultPage extends PureComponent{
     render() {
 
         return (
-            <View style={{backgroundColor:"#AAA"}}>
+            <View style={{backgroundColor:"#AAA", flex: 1}}>
                 <IndicatorViewPager
-                    style={{height:'93%'}}
-                    indicator={this._renderDotIndicator()}
+                    style={{height:'93%', width:"100%"}}
+                    indicator={this._renderTabIndicator()}
+                    indicatorOnTop={true}
                 >
                     <View>
-                        <ScrollView>
+                        <ScrollView
+                            contentContainerStyle={{
+                                flexGrow: 1,
+                                justifyContent: 'space-between'
+                            }}
+                        >
                             <View style={{alignItems:'center',justifyContent:"center"}}>
                                 <Text>Area Charts</Text>
                                 <GraphComponent
@@ -149,4 +179,4 @@ const mapStateToProps = (state) => {
     };
 };
 
-export default connect(mapStateToProps)(ResultPage);
+export default connect(mapStateToProps,null)(ResultPage);

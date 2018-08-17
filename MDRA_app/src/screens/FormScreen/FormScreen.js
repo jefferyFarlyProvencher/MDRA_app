@@ -11,7 +11,7 @@ import FormScreenInitial from '../FormScreen1_initial/FormScreen_initial';
 import FormScreenTimeZonage from '../FormScreen2_timeZonage/FormScreen_timeZonage';
 import FormScreenWeights from '../FormScreen3_weights/FormScreen_weights';
 import FormScreenAdvanced from '../FormScreen4_advanced/FormScreen_advanced';
-import SendFormScreen from '../SendFormScreen/SendFormScreen'
+import SendFormScreen from '../SendFormScreen/SendFormScreen';
 import {addData, changePosition} from "../../store/actions/index";
 
 

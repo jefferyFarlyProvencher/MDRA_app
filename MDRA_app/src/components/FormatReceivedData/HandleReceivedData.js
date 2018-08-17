@@ -85,7 +85,7 @@ export default HandleReceivedData = (data) => {
 
             rce: 100.0 - (parseFloat(allResults[32])).toFixed(0) + '%'
         };
-        console.log("RECEIVED DATA: " + JSON.stringify(receivedData));
+        //console.log("RECEIVED DATA: " + JSON.stringify(receivedData));
         return receivedData;
     }
     else{

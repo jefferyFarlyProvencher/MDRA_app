@@ -8,16 +8,19 @@ import * as Yup from 'yup';
 //component imports
 import Input from "../../components/Input/Input";
 import DropDownList from "../../components/dropDownList/DropDownList";
-import {connect} from "react-redux";
 
+//redux imports
+import {connect} from "react-redux";
 import {addData} from "../../store/actions/addData";
 import {changePosition} from "../../store/actions/changePosition";
 
-
+//Look we all know time zonage is a weird name, but I didn't know what the
+//page was going to look like so leave it as it is, CUZ IT'S FUNNY!
 class FormScreenTimeZonage extends PureComponent{
     state = {
         ViewMode: Dimensions.get('window').height > 500 ? "portrait" : "landscape",
         currentPosition: 1,
+        array: [0,10]
     };
 
     _handleSubmit =(async (values, bag) => {
@@ -38,13 +41,15 @@ class FormScreenTimeZonage extends PureComponent{
                 <Text>Page 2</Text>
                 <Formik
                     initialValues={{
-                        nbTheraputicBoxes:"Two day therapeutic boxes (AM and PM)",
+                        nbTheraputicBoxes:"One day therapeutic box (from AM to PM)",
                         tsDay: '8',
                         teDay:'10',
                         tsEvening:'13',
                         teEvening:'15',
                         lunch:'12',
-                        bed:'20'}}
+                        bed:'20',
+                        slider1: [0,10]
+                    }}
                     onSubmit={this._handleSubmit}
                     validationSchema={Yup.object().shape({
                         tsDay: Yup.number().positive().lessThan(Yup.ref('teDay', null)).required(),

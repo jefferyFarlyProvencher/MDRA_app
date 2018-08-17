@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import {View, Text, TouchableWithoutFeedback, Image, Animated} from 'react-native';
+
 import {connect} from "react-redux";
+import {removeData} from '../../store/actions/index';
 
 
 import ResultsList from "../../components/ResultsList/ResultsList";
@@ -44,7 +46,7 @@ class ResultScreen extends Component{
                 selPosition = i;
             }
         }
-        console.log(key);
+        //console.log(key);
         this.props.navigator.push({
             screen: "MDRA_app.resultPage",
             title: selResult.date,
@@ -57,7 +59,7 @@ class ResultScreen extends Component{
     render(){
         let content = (
             <View>
-                <ResultsList list ={this.props.state.main.resultsList} onItemSelected={this.itemSelectedHandler}/>
+                <ResultsList list ={this.props.state.main.resultsList} onItemSelected={this.itemSelectedHandler} onRemoveData={this.props.onRemoveData}/>
             </View>
         );
 //        console.log(this.props.state.main.resultsList);
@@ -78,5 +80,10 @@ const mapStateToProps = (state) => {
     };
 };
 
+const mapDispatchToProps = (dispatch) => {
+    return {
+        onRemoveData: (key) => dispatch(removeData(key)),
+    }
+};
 
-export default connect(mapStateToProps,null)(ResultScreen)
+export default connect(mapStateToProps,mapDispatchToProps)(ResultScreen)

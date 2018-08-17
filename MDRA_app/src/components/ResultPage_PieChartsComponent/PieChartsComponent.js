@@ -49,8 +49,7 @@ class ResultTest extends PureComponent{
 
         return(
             <View>
-                <TouchableWithoutFeedback onPress={()=>{console.log("YOU VIOLATED ME")}}>
-                    <View>
+
                         <Text>
                             Pie 1
                         </Text>
@@ -58,6 +57,7 @@ class ResultTest extends PureComponent{
                             <VictoryPie
                                 radius={100}
                                 data={[this.props.data.characNR, this.props.data.characNRR, this.props.data.characR, this.props.data.characRAR, this.props.data.characAR, this.props.data.characNRRAR]}
+                                colorScale={['#1b3e70', '#62c9e4', '#c2c822', '#f8c82c', '#ed5f6d','#f6922d']}
                                 //animate={{duration: 500}}
                             />
                         </View>
@@ -68,12 +68,11 @@ class ResultTest extends PureComponent{
                             <VictoryPie
                                 radius={100}
                                 data={[this.props.data.characNRNuit, this.props.data.characNRRNuit, this.props.data.characRNuit, this.props.data.characRARNuit, this.props.data.characARNuit, this.props.data.characNRRARNuit]}
+                                colorScale={['#1b3e70', '#62c9e4', '#c2c822', '#f8c82c', '#ed5f6d','#f6922d']}
+
                                 //animate={{duration: 500}}
                             />
                         </View>
-                        <View style={{backgroundColor:'transparent', height:'100%', width:'100%',position:"absolute" ,left:0, top:0}}/>
-                    </View>
-                </TouchableWithoutFeedback>
             </View>
         )
     }

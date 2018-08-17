@@ -1,6 +1,6 @@
 import {
     ADD_DATA, ADD_LIST, ALLOW_ADV,
-    POS_CHNG
+    POS_CHNG, REMOVE_LIST, RENAME_LIST
 } from '../actions/actionTypes'
 
 const initialState = {
@@ -16,7 +16,7 @@ const initialState = {
     Page3Data: null,
     advanceTabAccessible: false,
     receivedData: null,
-    resultsList: []//{key:'1',data:[10, 20, 30, 40, 50]},{key:'2',data:[70, 10, 50, 5, 5]}],
+    resultsList: []//{key:'1',data:[data], name:name}}],
 };
 
 const reducer = (state = initialState, action) => {
@@ -56,8 +56,27 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 resultsList: state.resultsList.concat({
                     key: Math.random().toString(),
-                    data: action.data
+                    data: action.data,
+                    name: action.name
                 }),
+            };
+        case(REMOVE_LIST):
+            return{
+                ...state,
+                resultsList: state.resultsList.filter(place => {
+                    return place.key !== action.key;
+                }),
+            };
+        case(RENAME_LIST):
+            newList = state.resultsList.filter(place => {
+                            return place.key !== action.key;
+                    }).push(
+                state.resultsList.filter(place => {
+                    return place.key === action.key;
+                }).name = action.name
+            );
+            return{
+                ...state
             };
         default:
             return state

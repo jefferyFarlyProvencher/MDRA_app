@@ -23,32 +23,49 @@
 *
  */
 
+findFormulaNumber = (pillName) => {
+  switch(pillName) {
+      case "Ritalin IR":
+          return 1;
+      case "Pms-Methylphenidate IR":
+          return 2;
+      case "Concerta":
+          return 3;
+      case "Pms-Methylphenidate ER":
+          return 4;
+      case "Biphentin":
+          return 5;
+  }
+};
 
 
-
+/*
+    Sets the proper amount of pills by adding the corresponding 1,2,3,4
+     texts to the overall request.
+ */
 preparePills = (page0Data) => {
     let elementTOreturn = (
-        'formulation1='+page0Data.formula0 +
+        '&formulation1='+findFormulaNumber(page0Data.formula0) +
         '&quantitedose1='+page0Data.dose0 +
         '&momentdose1='+page0Data.adminTime0 +
         '&Food1='+(page0Data.food0 ==='Yes'? '1':'0')+ //turns yes/no into bool vals
     ((page0Data.amountOfPills > 1)
         ?
-        'formulation2='+page0Data.formula1 +
+        '&formulation2='+findFormulaNumber(page0Data.formula1) +
         '&quantitedose2='+page0Data.dose1 +
-        '&momentdose2=8'+page0Data.adminTime1 +
+        '&momentdose2='+page0Data.adminTime1 +
         '&Food2='+(page0Data.food1 ==='Yes'? '1':'0')
         :'')+
     ((page0Data.amountOfPills > 2)
         ?
-        'formulation3='+page0Data.formula2 +
+        '&formulation3='+findFormulaNumber(page0Data.formula2) +
         '&quantitedose3='+page0Data.dose2 +
         '&momentdose3='+page0Data.adminTime2 +
         '&Food3='+(page0Data.food2 ==='Yes'? '1':'0')
         :'')+
     ((page0Data.amountOfPills > 3)
         ?
-        'formulation4='+page0Data.formula3 +
+        '&formulation4='+findFormulaNumber(page0Data.formula3) +
         '&quantitedose4='+page0Data.dose3 +
         '&momentdose4='+page0Data.adminTime3 +
         '&Food4='+(page0Data.food3 ==='Yes'? '1':'0')
@@ -57,6 +74,13 @@ preparePills = (page0Data) => {
 
     console.log (elementTOreturn);
     return elementTOreturn;
+};
+
+verifyUnitConversion = (originalWeight, switchWeightFormat) => {
+    let allo = (switchWeightFormat  //turns lbs to kg
+        ? (""+parseFloat(originalWeight)*0.45359237)
+        :originalWeight);
+    return allo;
 };
 
 export default PrepareToSend= (data) => {
@@ -77,7 +101,7 @@ export default PrepareToSend= (data) => {
     let page3Data = data.Page3Data //if else continues bellow
         ? data.Page3Data
         : {
-            numbberOfSimulations: '1000',
+            numberOfSimulations: '1000',
             tsTimeHalfDayAM: '8',
             teTimeHalfDayAM: '12',
             tsTimeHalfDayPM: '12',
@@ -95,11 +119,10 @@ export default PrepareToSend= (data) => {
 
     if (verifyData(page0Data, page1Data, page2Data, page3Data)){
 
-        dataToReturn = '/?nInd=' + page3Data.numberOfSimulations +
-            '&Gender=' + page0Data.gender +
-            '&weight=' + (page0Data.switchWeightFormat  //turns lbs to kg
-                ? ""+parseFloat(page0Data.weight)*0.45359237
-                :page0Data.weight) +
+        dataToReturn = (
+            'nInd=' + page3Data.numberOfSimulations +
+            '&Gender=' + (page0Data.gender==='Male'?'1': '0') +
+            '&weight=' + verifyUnitConversion(page0Data.weight, page0Data.switchWeightFormat) +
             '&a=' + page3Data.cMinTheraputicDayPM +
             '&b=' + page3Data.cMaxTheraputicDayPM +
             '&c=' + page1Data.tsEvening  +
@@ -125,10 +148,10 @@ export default PrepareToSend= (data) => {
             '&heureducoucher=' + page1Data.bed +
             '&startLunchTime=' + page1Data.lunch +
             'Morning=0'+
-            preparePills(page0Data);
+            preparePills(page0Data));
 
     }
-    let placebotDataToReturn =
+    let placeboDataToReturn =
         'nInd=1000' +
         '&Gender=1' +
         '&weight=40' +
@@ -162,8 +185,9 @@ export default PrepareToSend= (data) => {
         '&momentdose1=8' +
         '&Food1=0';
 
-    console.log(dataToReturn);
-    return placebotDataToReturn;
+    //console.log("PLACEBO: "+ placeboDataToReturn);
+    console.log("NORMAL: "+ dataToReturn);
+    return dataToReturn;
 }
 
 let verifyData = (page0,page1,page2,page3) => {

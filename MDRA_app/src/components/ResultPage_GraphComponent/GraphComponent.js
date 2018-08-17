@@ -24,7 +24,7 @@ class GraphComponent extends PureComponent{
 
     generateDataSingle = (scoreTable) => {
         let returnResult = [];
-        for(let i = 0; i < scoreTable.length-1; i++){
+        for(let i = 0; i < scoreTable.length-1; i+=3){
             returnResult.push({x:i/10, y:parseFloat(scoreTable[i])});
         }
         return returnResult;
@@ -32,10 +32,10 @@ class GraphComponent extends PureComponent{
 
     generateDataDouble = (scoreTableY,scoreTableY0) => {
         let returnResult = [];
-        for(let i = 0; i < scoreTableY.length-1; i++){
+        for(let i = 0; i < scoreTableY.length-1; i+=3){
             returnResult.push({x:i/10, y:parseFloat(scoreTableY[i]),y0:parseFloat(scoreTableY0[i])});
         }
-        console.log("RETURN RESULT: "+ JSON.stringify(returnResult));
+        //console.log("RETURN RESULT: "+ JSON.stringify(returnResult));
         return returnResult;
     };
 
@@ -68,30 +68,31 @@ class GraphComponent extends PureComponent{
 
     };
     render(){
-        console.log(this.generateDataSingle(this.props.data.percentile10));
+        //console.log(this.generateDataSingle(this.props.data.percentile10));
         return(
             <View style={[this.props.style]}>
                 <VictoryChart
                     //animate={{ duration: this.state.animationTime}}
+                    domain={{x:[0,30], y: [0,25]}}
                 >
                     <VictoryArea
-                        style={{data: {fill: '#c43a31'}}}
+                        style={{data: {fill: '#cbe3f3'}}}
                         data={this.generateDataDouble(this.props.data.percentile10, this.props.data.percentile90)}
                     />
                     <VictoryArea
-                        style={{data: {fill: '#c4c134'}}}
+                        style={{data: {fill: '#a7cfeb'}}}
                         data={this.generateDataDouble(this.props.data.percentile20, this.props.data.percentile80)}
                     />
                     <VictoryArea
-                        style={{data: {fill: '#00c422'}}}
+                        style={{data: {fill: '#8dc1e5'}}}
                         data={this.generateDataDouble(this.props.data.percentile30, this.props.data.percentile70)}
                     />
                     <VictoryArea
-                        style={{data: {fill: '#55a3c4'}}}
+                        style={{data: {fill: '#7bb7e1'}}}
                         data={this.generateDataDouble(this.props.data.percentile40, this.props.data.percentile60)}
                     />
                     <VictoryLine
-                        style={{data: {stroke: '#0040c4'}}}
+                        style={{data: {stroke: '#4c92cd'}}}
                         data={this.generateDataSingle(this.props.data.percentileY)}
                     />
 
