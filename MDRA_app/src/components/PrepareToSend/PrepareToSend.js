@@ -33,18 +33,33 @@ findFormulaNumber = (pillName) => {
           return 3;
       case "Pms-Methylphenidate ER":
           return 4;
-      case "Biphentin":
-          return 5;
   }
 };
 
+handleMultiBoxes = (page1Data) => {
+    console.log("hey");
+    let elementToReturn = "";
+    if(page1Data.nbTheraputicBoxes === "One therapeutic box (from AM to PM)"){
+        elementToReturn += '&zc=-1&zd=-1&zzc=-1&zzd=-1';
+    }
+    else if(page1Data.nbTheraputicBoxes === "Two therapeutic boxes (AM and PM)")
+    {
+        elementToReturn += (
+            '&zc=' + page1Data.tsDay +
+            '&zd=' + page1Data.teDay +
+            '&zzc=' + page1Data.tsPM +
+            '&zzd=' + page1Data.tePM);
+    }
+    console.log(elementToReturn);
+    return elementToReturn
+};
 
 /*
     Sets the proper amount of pills by adding the corresponding 1,2,3,4
      texts to the overall request.
  */
 preparePills = (page0Data) => {
-    let elementTOreturn = (
+    let elementToReturn = (
         '&formulation1='+findFormulaNumber(page0Data.formula0) +
         '&quantitedose1='+page0Data.dose0 +
         '&momentdose1='+page0Data.adminTime0 +
@@ -72,8 +87,8 @@ preparePills = (page0Data) => {
         :'')
     );
 
-    console.log (elementTOreturn);
-    return elementTOreturn;
+    //console.log (elementToReturn);
+    return elementToReturn;
 };
 
 verifyUnitConversion = (originalWeight, switchWeightFormat) => {
@@ -98,7 +113,7 @@ export default PrepareToSend= (data) => {
             weight6: "100",
             weight7: "100",
         };
-    let page3Data = data.Page3Data //if else continues bellow
+    let page3Data = data.Page3Data //? : continues bellow
         ? data.Page3Data
         : {
             numberOfSimulations: '1000',
@@ -118,15 +133,21 @@ export default PrepareToSend= (data) => {
     let dataToReturn = '-1';
 
     if (verifyData(page0Data, page1Data, page2Data, page3Data)){
-
+        let doesItHaveTwoBoxes = page1Data.nbTheraputicBoxes === "Two therapeutic boxes (AM and PM)";
         dataToReturn = (
             'nInd=' + page3Data.numberOfSimulations +
             '&Gender=' + (page0Data.gender==='Male'?'1': '0') +
             '&weight=' + verifyUnitConversion(page0Data.weight, page0Data.switchWeightFormat) +
             '&a=' + page3Data.cMinTheraputicDayPM +
             '&b=' + page3Data.cMaxTheraputicDayPM +
-            '&c=' + page1Data.tsEvening  +
-            '&d=' + page1Data.teEvening  +
+            '&c=' + ((doesItHaveTwoBoxes)
+                ? page1Data.tsPM
+                : page1Data.tsDay)
+                +
+            '&d=' + ((doesItHaveTwoBoxes)
+                ? page1Data.tePM
+                : page1Data.teDay)
+                +
             '&e=' + page3Data.cMinTheraputicEvening  +
             '&f=' + page3Data.cMaxTheraputicEvening  +
             '&g=' + page1Data.tsEvening  +
@@ -141,55 +162,20 @@ export default PrepareToSend= (data) => {
             '&palier=' + page3Data.threshold +
             '&za=' + page3Data.cMinTheraputicHalfDayAM +
             '&zb=' + page3Data.cMaxTheraputicHalfDayAM +
-            '&zc=' + page3Data.cMinTheraputicDayPM +
-            '&zd=' + page3Data.cMaxTheraputicDayPM +
-            '&zzc=' + page3Data.cMinTheraputicEvening +
-            '&zzd=' + page3Data.cMaxTheraputicEvening +
+            handleMultiBoxes(page1Data)+
             '&heureducoucher=' + page1Data.bed +
             '&startLunchTime=' + page1Data.lunch +
-            'Morning=0'+
+            '&Morning='+ ((doesItHaveTwoBoxes)
+                ? 1 : 0)+
             preparePills(page0Data));
 
     }
-    let placeboDataToReturn =
-        'nInd=1000' +
-        '&Gender=1' +
-        '&weight=40' +
-        '&a=6' +
-        '&b=20' +
-        '&c=8' +
-        '&d=18' +
-        '&e=0' +
-        '&f=6' +
-        '&g=20' +
-        '&h=22' +
-        '&WTI1=100' +
-        '&WTI2=100' +
-        '&WTI3=100&' +
-        'WTI4=100' +
-        '&WTI5=100' +
-        '&WTI6=0' +
-        '&WTI7=0' +
-        '&palier=80' +
-        '&za=6' +
-        '&zb=20' +
-        '&zc=-1' +
-        '&zd=-1' +
-        '&zzc=-1' +
-        '&zzd=-1' +
-        '&heureducoucher=22' +
-        '&startLunchTime=12' +
-        '&Morning=0&' +
-        'formulation1=1' +
-        '&quantitedose1=10' +
-        '&momentdose1=8' +
-        '&Food1=0';
 
-    //console.log("PLACEBO: "+ placeboDataToReturn);
-    console.log("NORMAL: "+ dataToReturn);
+    //console.log("DATA TO SEND: "+ dataToReturn);
     return dataToReturn;
 }
 
+//TODO?
 let verifyData = (page0,page1,page2,page3) => {
     return true//We hope that formik's/yup's verification works properly....
 };

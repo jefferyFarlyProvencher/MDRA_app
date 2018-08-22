@@ -1,10 +1,10 @@
 //Base imports
 import React, {Component} from 'react';
-import {View,ScrollView, Text, StyleSheet, Modal, Button} from 'react-native';
+import {View,ScrollView, KeyboardAvoidingView, Text, StyleSheet, Modal, Button} from 'react-native';
 import {connect} from 'react-redux';
-import { Navigation } from 'react-native-navigation';
 //Package Imports
 import StepIndicator from 'react-native-step-indicator';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 //Screen Imports
 import FormScreenInitial from '../FormScreen1_initial/FormScreen_initial';
@@ -69,7 +69,7 @@ class FormScreen extends Component{
     };
 
     render(){
-        const labels = ["Initial","Time Zonage","Weights"];
+        const labels = ["Initial","Therapeutic Boxes","Weights"];
         const customStyles = {
             stepIndicatorSize: 19,
             currentStepIndicatorSize:25,
@@ -120,11 +120,11 @@ class FormScreen extends Component{
 
         return(
             <View style={styles.overTheIndicatorContainer}>
-                <ScrollView contentContainerStyle={{flexGrow:1}}>
-                    <View style={styles.formPageContainer}>
+                <KeyboardAwareScrollView contentContainerStyle={{flexGrow:1}}>
+                    <KeyboardAvoidingView style={styles.formPageContainer} behavior="padding">
                         {this._screenSelector()}
-                    </View>
-                </ScrollView>
+                    </KeyboardAvoidingView>
+                </KeyboardAwareScrollView>
                 <View style={styles.indicatorContainer}>
                     <View style={this.props.state.main.advanceTabAccessible ?{ width:'80%'}: {width:'100%'}}>
                         <StepIndicator

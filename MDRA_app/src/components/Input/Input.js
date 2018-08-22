@@ -38,7 +38,16 @@ class Input extends PureComponent{
     }
 
     _handleChangeText = (value)=> {
+
         this.props.onChange(this.props.name, value)
+    };
+
+    _handleTextToHour = (value) => {
+        let Hours = "00";
+        if(value.includes("."))
+        {
+
+        }
     };
 
     _handleTouch = () => {
@@ -53,7 +62,14 @@ class Input extends PureComponent{
                 <FormInput
                     center
                     placeholder={label}
-                    onBlur={this._handleTouch}
+                    onBlur={(value) =>
+                        {
+                            if(this.props.time) {
+                                this._handleTextToHour(value);
+                            }
+                            this._handleTouch();
+                        }
+                    }
                     onChangeText={this._handleChangeText}
                     containerStyle={[{justifyContent:'center'}, error?{backgroundColor:"#ffb8c3"}:{backgroundColor:"white"}]}
                     {...rest}

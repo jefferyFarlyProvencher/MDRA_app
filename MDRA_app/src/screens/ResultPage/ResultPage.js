@@ -101,10 +101,11 @@ class ResultPage extends PureComponent {
                                 justifyContent: 'space-between'
                             }}
                         >
-                            <View style={{alignItems:'center',justifyContent:"center"}}>
+                            <View style={{alignItems:'center',justifyContent:"center"}} pointerEvents="none">
                                 <Text>Area Charts</Text>
                                 <GraphComponent
                                     data={this.props.state.main.resultsList[this.state.currentPosition].data}
+                                    formData = {this.props.state.main.resultsList[this.state.currentPosition].formData}
                                     style={{backgroundColor:"white"}}
                                 />
                             </View>
@@ -112,7 +113,7 @@ class ResultPage extends PureComponent {
                     </View>
                     <View>
                         <ScrollView>
-                            <View style={this.state.orientation?styles.pieChartStylesPortrait:styles.pieChartStylesLandscape}>
+                            <View style={this.state.orientation?styles.pieChartStylesPortrait:styles.pieChartStylesLandscape} pointerEvents="none">
                                 <Text>Pie Charts</Text>
                                 <PieChartComponent
                                     data={this.props.state.main.resultsList[this.state.currentPosition].data}

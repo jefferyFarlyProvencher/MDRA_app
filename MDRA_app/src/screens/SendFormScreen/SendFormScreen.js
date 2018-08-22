@@ -1,13 +1,11 @@
 //system imports
 import React,{PureComponent} from 'react';
 import {View, Text, TouchableOpacity, ActivityIndicator, Animated, StyleSheet, ToastAndroid} from 'react-native';
-import { Navigation } from 'react-native-navigation';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 //component imports
 import PrepareToSend from '../../components/PrepareToSend/PrepareToSend';
 import SendForm from '../../components/SendForm/SendForm';
-import FormatReceivedData from '../../components/FormatReceivedData/HandleReceivedData';
 
 //redux imports
 import {connect} from "react-redux";
@@ -32,6 +30,27 @@ class SendFormScreen extends PureComponent{
         );
     };
 
+    prepareToStoreData (data) {
+        //console.log(JSON.stringify(data));
+        //current data in redux will be copied to be stored with the result
+        let formData = [
+            this.props.state.main.Page0Data,
+            this.props.state.main.Page1Data,
+            this.props.state.main.Page2Data,
+            this.props.state.main.Page3Data
+        ];
+
+        console.log(formData);
+
+        //everything is added to the resultsList
+        this.props.onAddToResultList(data, this.generateName(), formData);
+        this.setState((oldState) =>({
+            ...oldState,
+            dataReceived: true,
+            textToDisplay: "DATA RECEIVED!!!"
+        }));
+    }
+
     sendRequest = async () => {
         this.setState((oldState) =>({
             ...oldState,
@@ -41,17 +60,7 @@ class SendFormScreen extends PureComponent{
         let data = await SendForm(preparedData);
         //console.log(JSON.stringify(data));
         if(data !== -1) {
-            //console.log(JSON.stringify(data));
-            console.log(this.generateName());
-            this.props.onAddToResultList(data, this.generateName());
-            //console.log(JSON.stringify(FormatReceivedData(data)));
-            //this.props.onAddToResultList(FormatReceivedData(data));
-            this.setState((oldState) =>({
-                ...oldState,
-                dataReceived: true,
-                textToDisplay: "DATA RECEIVED!!!"
-            }));
-
+            this.prepareToStoreData(data);
             if (this.state.dataReceived) {
                 ToastAndroid.showWithGravity("Data added to List", 1, ToastAndroid.BOTTOM);
             }
@@ -112,7 +121,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onAddToResultList: (data,name)=>dispatch(addToResultList(data, name)),
+        onAddToResultList: (data,name, formData)=>dispatch(addToResultList(data, name, formData)),
         onChangePosition:   (pos) => dispatch(changePosition(pos))
     };
 };

@@ -16,7 +16,7 @@ const initialState = {
     Page3Data: null,
     advanceTabAccessible: false,
     receivedData: null,
-    resultsList: []//{key:'1',data:[data], name:name}}],
+    resultsList: []//{key:'1',data:[data],formData:[], name:name}}],
 };
 
 const reducer = (state = initialState, action) => {
@@ -47,16 +47,28 @@ const reducer = (state = initialState, action) => {
                 position:action.position
             };
         case (ALLOW_ADV):
-            return{
-                ...state,
-                advanceTabAccessible:  !state.advanceTabAccessible,
-            };
+            //if position is at advanced screen, return to weights screen
+            if(state.position === 3)
+            {
+                return{
+                    ...state,
+                    position:2,
+                    advanceTabAccessible:  !state.advanceTabAccessible,
+                };
+            }
+            else{
+                return{
+                    ...state,
+                    advanceTabAccessible:  !state.advanceTabAccessible,
+                };
+            }
         case(ADD_LIST):
             return{
                 ...state,
                 resultsList: state.resultsList.concat({
                     key: Math.random().toString(),
                     data: action.data,
+                    formData: action.formData,
                     name: action.name
                 }),
             };

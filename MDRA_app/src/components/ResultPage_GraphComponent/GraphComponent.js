@@ -6,7 +6,6 @@ import {VictoryArea, VictoryChart, VictoryLine} from "victory-native";
 import Draggable from 'react-native-draggable';
 
 
-
 class GraphComponent extends PureComponent{
     state = {
         animationTime:1000
@@ -23,22 +22,30 @@ class GraphComponent extends PureComponent{
     };
 
     generateDataSingle = (scoreTable) => {
+        //identifies the lateral translation required for the graph
+        let startXPosition = this.findStartXPosition();
+
         let returnResult = [];
         for(let i = 0; i < scoreTable.length-1; i+=3){
-            returnResult.push({x:i/10, y:parseFloat(scoreTable[i])});
+            returnResult.push({x:(i/10)+startXPosition, y:parseFloat(scoreTable[i])});
         }
         return returnResult;
     };
 
+    //generates the couples used for the tracing of the area graph
     generateDataDouble = (scoreTableY,scoreTableY0) => {
+        //identifies the lateral translation required for the graph
+        let startXPosition = this.findStartXPosition();
+
         let returnResult = [];
         for(let i = 0; i < scoreTableY.length-1; i+=3){
-            returnResult.push({x:i/10, y:parseFloat(scoreTableY[i]),y0:parseFloat(scoreTableY0[i])});
+            returnResult.push({x:((i/10)+startXPosition), y:parseFloat(scoreTableY[i]),y0:parseFloat(scoreTableY0[i])});
         }
         //console.log("RETURN RESULT: "+ JSON.stringify(returnResult));
         return returnResult;
     };
 
+    //generates the data used to trace the line for the top corner of the rectangles
     generateSquareTopLeft = (x,y,height,width) => {
         let square = [{x:x,y:y}];
         //left side
@@ -53,6 +60,7 @@ class GraphComponent extends PureComponent{
         }
         return square;
     };
+    //generates the data used to trace the line for the bottom corner of the rectangles
     generateSquareBottomRight = (x,y,height,width) =>{
         let square = [{x:x,y:y}];
         //top
@@ -67,13 +75,107 @@ class GraphComponent extends PureComponent{
         return square;//right
 
     };
+
+    //finds the x position at which the graph tracing will start
+    findStartXPosition = () =>
+    {
+        let currentEarliestAdminTime = parseInt(this.props.formData[0].adminTime0);
+        let pillQuantity = parseInt(this.props.formData[0].amountOfPills);
+        let otherAdminTime = null;
+        if(pillQuantity > 1){
+             otherAdminTime = parseInt(this.props.formData[0].adminTime1);
+            if(currentEarliestAdminTime > otherAdminTime)
+            {
+                currentEarliestAdminTime = otherAdminTime;
+            }
+        }
+        if(pillQuantity > 2){
+            otherAdminTime = parseInt(this.props.formData[0].adminTime2);
+            if(currentEarliestAdminTime > otherAdminTime)
+            {
+                currentEarliestAdminTime = otherAdminTime;
+            }
+        }
+        if(pillQuantity > 3){
+            otherAdminTime = parseInt(this.props.formData[0].adminTime3);
+            if(currentEarliestAdminTime > otherAdminTime)
+            {
+                currentEarliestAdminTime = otherAdminTime;
+            }
+        }
+
+        //console.log("Current earliest time:" + currentEarliestAdminTime);
+        return currentEarliestAdminTime;
+    };
+
     render(){
         //console.log(this.generateDataSingle(this.props.data.percentile10));
+        //setting advanced page data if null
+        let advancedPageData = this.props.formData[3]
+            ? this.props.formData[3]
+            : {
+                numberOfSimulations: '1000',
+                tsTimeHalfDayAM: '8',
+                teTimeHalfDayAM: '12',
+                tsTimeHalfDayPM: '12',
+                teTimeHalfDayPM: '16',
+                cMinTheraputicHalfDayAM: '6',
+                cMaxTheraputicHalfDayAM: '20',
+                cMinTheraputicDayPM: '6',
+                cMaxTheraputicDayPM: '20',
+                cMinTheraputicEvening: '0',
+                cMaxTheraputicEvening: '6',
+                threshold: '80'
+            };
+        //PREPERATION
+        //Boxes
+        //first box
+        let firstBoxX = parseFloat(this.props.formData[1].tsDay);
+        let firstBoxY = null;
+        let firstBoxWidth = parseFloat(this.props.formData[1].teDay)-parseFloat(this.props.formData[1].tsDay);
+        let firstBoxHeight = null;
+        //secondBox
+        let secondBoxX = parseFloat(this.props.formData[1].tsPM);
+        let secondBoxY = null;
+        let secondBoxWidth = parseFloat(this.props.formData[1].tePM)-parseFloat(this.props.formData[1].tsPM);
+        let secondBoxHeight = null;
+        //eveningBox
+        let eveningBoxX = parseFloat(this.props.formData[1].tsEvening);
+        let eveningBoxY = parseFloat(advancedPageData.cMinTheraputicEvening);
+        let eveningBoxWidth = parseFloat(this.props.formData[1].teEvening)-parseFloat(this.props.formData[1].tsEvening);
+        let eveningBoxHeight = parseFloat(advancedPageData.cMaxTheraputicEvening)-parseFloat(advancedPageData.cMinTheraputicEvening);
+
+        if(this.props.formData[1].nbTheraputicBoxes === "Two therapeutic boxes (AM and PM)") {
+            firstBoxY = parseFloat(advancedPageData.cMinTheraputicHalfDayAM);
+            firstBoxHeight = parseFloat(advancedPageData.cMaxTheraputicHalfDayAM)-parseFloat(advancedPageData.cMinTheraputicHalfDayAM);
+            secondBoxY = parseFloat(advancedPageData.cMinTheraputicDayPM);
+            secondBoxHeight = parseFloat(advancedPageData.cMaxTheraputicDayPM)-parseFloat(advancedPageData.cMinTheraputicDayPM);
+        }
+        else{
+            firstBoxY = parseFloat(advancedPageData.cMinTheraputicDayPM);
+            firstBoxHeight = parseFloat(advancedPageData.cMaxTheraputicDayPM)-parseFloat(advancedPageData.cMinTheraputicDayPM);
+        }
+
+        //percentages
+        let firstBoxPercentage = null;
+        let secondBoxPercentage = null;
+        //substr removes the %
+        let eveningBoxPercentage = parseFloat(this.props.data.TIEffE.substr(0,this.props.data.TIEffE.length-1));
+        if(this.props.formData[1].nbTheraputicBoxes === "Two therapeutic boxes (AM and PM)")
+        {
+            firstBoxPercentage = parseFloat(this.props.data.TIEffD1s.substr(0,this.props.data.TIEffD1s.length-1));
+            secondBoxPercentage = parseFloat(this.props.data.TIEffD2.substr(0,this.props.data.TIEffD2.length-1));
+        }
+        else{
+            firstBoxPercentage = parseFloat(this.props.data.TIEffD2.substr(0,this.props.data.TIEffD2.length-1));
+        }
+
+        ///ACTUAL RENDERING STARTS HERE
         return(
             <View style={[this.props.style]}>
                 <VictoryChart
                     //animate={{ duration: this.state.animationTime}}
-                    domain={{x:[0,30], y: [0,25]}}
+                    domain={{x:[0,30],y: [0,25]}}
                 >
                     <VictoryArea
                         style={{data: {fill: '#cbe3f3'}}}
@@ -97,23 +199,32 @@ class GraphComponent extends PureComponent{
                     />
 
                     <VictoryLine
-                        style={{data:{stroke:this. therapeuticBoxFormatter(80)}}}
-                        data={this.generateSquareTopLeft(1,3,14,10)}
+                        style={{data:{stroke:this.therapeuticBoxFormatter(firstBoxPercentage)}}}
+                        data={this.generateSquareTopLeft(firstBoxX,firstBoxY,firstBoxHeight,firstBoxWidth)}
                     />
                     <VictoryLine
-                        style={{data:{stroke:this. therapeuticBoxFormatter(80)}}}
-                        data={this.generateSquareBottomRight(1,3,14,10)}
+                        style={{data:{stroke:this.therapeuticBoxFormatter(firstBoxPercentage)}}}
+                        data={this.generateSquareBottomRight(firstBoxX,firstBoxY,firstBoxHeight,firstBoxWidth)}
+                    />
+
+                    <VictoryLine
+                        style={{data:{stroke:(secondBoxPercentage !== null)? this. therapeuticBoxFormatter(secondBoxPercentage):"transparent"}}}
+                        data={this.generateSquareTopLeft(secondBoxX,secondBoxY,secondBoxHeight,secondBoxWidth)}
                     />
                     <VictoryLine
-                        style={{data:{stroke:this. therapeuticBoxFormatter(80)}}}
-                        data={this.generateSquareTopLeft(20,0,6,2)}
+                        style={{data:{stroke:(secondBoxPercentage !== null)? this. therapeuticBoxFormatter(secondBoxPercentage):"transparent"}}}
+                        data={this.generateSquareBottomRight(secondBoxX,secondBoxY,secondBoxHeight,secondBoxWidth)} //(x,y,height,width)
+                    />
+
+                    <VictoryLine
+                        style={{data:{stroke:this.therapeuticBoxFormatter(eveningBoxPercentage)}}}
+                        data={this.generateSquareTopLeft(eveningBoxX,eveningBoxY,eveningBoxHeight,eveningBoxWidth)}
                     />
                     <VictoryLine
-                        style={{data:{stroke:this. therapeuticBoxFormatter(80)}}}
-                        data={this.generateSquareBottomRight(20,0,6,2)}
+                        style={{data:{stroke:this.therapeuticBoxFormatter(eveningBoxPercentage)}}}
+                        data={this.generateSquareBottomRight(eveningBoxX,eveningBoxY,eveningBoxHeight,eveningBoxWidth)}
                     />
                </VictoryChart>
-                <View style={{backgroundColor:'transparent', height:'100%', width:'100%',position:"absolute" ,left:0, top:0}}/>
             </View>
         )
     }
