@@ -71,7 +71,7 @@ class Input extends PureComponent{
                         }
                     }
                     onChangeText={this._handleChangeText}
-                    containerStyle={[{justifyContent:'center'}, error?{backgroundColor:"#ffb8c3"}:{backgroundColor:"white"}]}
+                    containerStyle={[{justifyContent:'flex-start'}, error?{backgroundColor:"#ffb8c3"}:{backgroundColor:"white"}]}
                     {...rest}
                 />
                 {error && <FormValidationMessage>{error}</FormValidationMessage>}
@@ -83,7 +83,7 @@ class Input extends PureComponent{
 
 const styles = StyleSheet.create({
     root: {
-        width: '90%',
+        width: '100%',
         alignSelf: 'center',
         justifyContent: 'center',
     }

@@ -16,6 +16,7 @@ class SendFormScreen extends PureComponent{
     state = {
         dataReceived: false,
         textToDisplay: 'Data Sending?!',
+        iconName: "md-refresh"
 
     };
 
@@ -44,11 +45,7 @@ class SendFormScreen extends PureComponent{
 
         //everything is added to the resultsList
         this.props.onAddToResultList(data, this.generateName(), formData);
-        this.setState((oldState) =>({
-            ...oldState,
-            dataReceived: true,
-            textToDisplay: "DATA RECEIVED!!!"
-        }));
+
     }
 
     sendRequest = async () => {
@@ -61,9 +58,22 @@ class SendFormScreen extends PureComponent{
         //console.log(JSON.stringify(data));
         if(data !== -1) {
             this.prepareToStoreData(data);
+            this.setState((oldState) =>({
+                ...oldState,
+                dataReceived: true,
+                textToDisplay: "DATA RECEIVED!!!"
+            }));
             if (this.state.dataReceived) {
                 ToastAndroid.showWithGravity("Data added to List", 1, ToastAndroid.BOTTOM);
             }
+        }
+        else{
+            this.setState((oldState) =>({
+                ...oldState,
+                dataReceived: true,
+                textToDisplay: "*****CONNECTION ERROR*****",
+                iconName: "ios-warning-outline"
+            }));
         }
     };
 
@@ -84,8 +94,8 @@ class SendFormScreen extends PureComponent{
                         ?<ActivityIndicator size={100} color="red" />
                         :<Icon
                             size={150}
-                            name="md-refresh"
-                            color="grey"
+                            name={this.state.iconName}
+                            color="purple"
                             />
                     }
                     {

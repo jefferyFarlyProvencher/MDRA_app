@@ -1,5 +1,14 @@
 import React,{Component} from 'react';
-import {View, Text, TouchableWithoutFeedback, ImageBackground, ActivityIndicator, Animated, StyleSheet} from 'react-native';
+import {
+    View,
+    Text,
+    TouchableWithoutFeedback,
+    ImageBackground,
+    ActivityIndicator,
+    Animated,
+    StyleSheet,
+    Dimensions
+} from 'react-native';
 
 import startMainTabs from '../MainTabs/StartMainTabs'
 
@@ -11,7 +20,48 @@ class MainScreen extends Component{
         startAnim: new Animated.Value(1)
     };
 
+    _handleWaitingOnStart_grow = () => {
+        Animated.timing(this.state.startAnim,{
+            toValue: 1.1,
+            duration: 200,
+            useNativeDriver: true
+        }).start()
+    };
+
+    _handleWaitingOnStart_small = () => {
+        Animated.timing(this.state.startAnim,{
+            toValue: 1,
+            duration: 500,
+            useNativeDriver: true
+        }).start()
+    };
+
+    startBreathAnimation = () => {
+        if(!this.state.loading)
+        {
+            this._handleWaitingOnStart_grow();
+            setTimeout(
+                ()=>
+                {
+                    this._handleWaitingOnStart_small();
+                    setTimeout(
+                        ()=> {
+                            this.startBreathAnimation();
+                        },
+                        550)
+                    }
+                ,230
+            )
+        }
+    };
+
     componentWillMount() {
+        this.props.navigator.setStyle({
+            navBarHidden: true
+        });
+    }
+
+    componentDidMount() {
         this.props.navigator.setStyle({
             navBarHidden: true
         });
@@ -21,21 +71,40 @@ class MainScreen extends Component{
         this.setState({
            loading:true,
         });
-        setTimeout(()=>{console.log("cool");startMainTabs();},300);
+        setTimeout(()=>{console.log("cool");startMainTabs();},1000);
     };
 
     render(){
+        this.startBreathAnimation();
         return(
             <ImageBackground source={backgroundImage} resizeMode='cover' style={styles.backgroundImage} blurRadius={0.5}>
-                <View  style={this.state.loading?null:styles.mainContainer}>
+                <Animated.View style={[
+                    {transform: [{scale: this.state.startAnim.interpolate({
+                                inputRange: [1,1.1],
+                                outputRange: [1,1.1]
+                            })
+                        }]
+                    },
+                    (this.state.loading)?null:styles.mainContainer
+                ]}
+                ><View>
+
                         <TouchableWithoutFeedback onPress={this._handlerOnPress}>
                                 {this.state.loading
-                                    ?<ActivityIndicator size={100} color="#555" />
-                                    :<View style={styles.textContainer}>
-                                        <Text style={styles.textStyle}>Press To Start</Text>
-                                    </View> }
+                                    ?<ActivityIndicator size={100} color="#765F97" />
+                                    :<View style={[styles.textContainer,]}>
+                                        <Text style={[
+                                            styles.textStyle,
+                                            ]}
+                                        >
+                                            Press To Start
+                                        </Text>
+                                    </View>
+                                }
                         </TouchableWithoutFeedback>
+
                 </View>
+                </Animated.View>
             </ImageBackground>
 
         )
@@ -47,7 +116,8 @@ const styles= StyleSheet.create({
         alignItems:"center",
         justifyContent:"center",
         height: '30%',
-        backgroundColor: 'rgba(52, 52, 52, 0.7)',
+        opacity: 0.9,
+        backgroundColor: '#9479c4',
         borderRadius:80,
         padding: 5,
     },
@@ -63,9 +133,12 @@ const styles= StyleSheet.create({
 
     textStyle:{
         fontSize: 50,
-        color: '#eee',
+        color: '#FFF',
         textAlign:'center',
-        fontFamily: 'lucida grande'
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontFamily: 'lucida grande',
+        width: "75%"
     },
 
     backgroundImage: {

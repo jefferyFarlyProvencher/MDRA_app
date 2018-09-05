@@ -50,7 +50,7 @@ handleMultiBoxes = (page1Data) => {
             '&zzc=' + page1Data.tsPM +
             '&zzd=' + page1Data.tePM);
     }
-    console.log(elementToReturn);
+    //console.log(elementToReturn);
     return elementToReturn
 };
 
@@ -87,7 +87,7 @@ preparePills = (page0Data) => {
         :'')
     );
 
-    //console.log (elementToReturn);
+    console.log (elementToReturn);
     return elementToReturn;
 };
 
@@ -171,7 +171,8 @@ export default PrepareToSend= (data) => {
 
     }
 
-    //console.log("DATA TO SEND: "+ dataToReturn);
+    console.log("DATA TO SEND: "+ dataToReturn);
+
     return dataToReturn;
 }
 

@@ -56,7 +56,7 @@ let SendForm = async(preparedData) => {
             })
         });*/
         let responseJson = await response.json();
-        //console.log("RESULT:"+JSON.stringify(responseJson));
+        console.log("RESULT:"+JSON.stringify(responseJson));
         if(responseJson)
             console.log("----FETCHING OVER-----\n");
             return HandleReceivedData(responseJson['data']);
@@ -66,7 +66,7 @@ let SendForm = async(preparedData) => {
         console.log("----FETCHING ERROR-----\n");
         console.log(err);
 
-        return HandleReceivedData(2);
+        return (-1);
     }
 };
 

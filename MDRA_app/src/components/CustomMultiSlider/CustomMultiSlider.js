@@ -1,6 +1,5 @@
 import React, {PureComponent} from 'react';
-import {View, Button, StyleSheet, Dimensions, Text} from 'react-native';
-import 'react-native-svg';
+import {View, Button, StyleSheet, Dimensions, Text, Animated, TouchableWithoutFeedback} from 'react-native';
 
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 
@@ -9,25 +8,32 @@ class CustomMultiSlider extends PureComponent{
     state= {
         numberOfDots: 1,
         showScreen: false,
-        valuesArray:[this.props.max],
+        valuesArray:this.props.values.slice(),
         selectedDot: 1,
-        screenOpacity: 0
+        screenOpacityAnimation: new Animated.Value(0.3),
+        secondScreenVisible: !!this.props.values[1]
+    };
+
+    _handlesOnValueChangeStart = () => {
+        Animated.timing(this.state.screenOpacityAnimation,{
+            toValue: 1,
+            duration: 150,
+            useNativeDriver: true
+        }).start()
+    };
+
+    _handlesOnValueChangeFinish = () => {
+        Animated.timing(this.state.screenOpacityAnimation,{
+            toValue: 0.3,
+            duration:400,
+            useNativeDriver: true
+        }).start()
     };
 
     render(){
         //console.log(this.generateDataSingle(this.props.data.percentile10));
         return(
             <View style={[this.props.style, styles.containerStyle]}>
-                {this.state.showScreen
-                    ?this.state.numberOfDots===2
-                        ?<View style={styles.rulerPercentContainer}>
-                            <Text>{this.state.valuesArray[0]}</Text><Text>{this.state.valuesArray[1]}</Text>
-                        </View>
-                        :<View style={styles.rulerPercentContainer}>
-                            <Text>{this.state.valuesArray[0]}</Text><Text>{this.state.valuesArray[1]}</Text>
-                        </View>
-                    :<View/>
-                }
                 <MultiSlider
                     containerStyle={{padding:0, marginBottom:0}}
                     trackStyle={{padding:0, marginBottom:0}}
@@ -36,44 +42,84 @@ class CustomMultiSlider extends PureComponent{
                     max={this.props.max}
                     step={this.props.step}
                     values={this.props.values}
+                    onValuesChangeStart={this._handlesOnValueChangeStart}
                     onValuesChange={
                         (values) => {
-                            this.setState((oldState) => {
-                                return (
-                                    {
-                                        ...oldState,
-                                        valuesArray: values,
-                                        showScreen: true
-                                    }
-                                );
-                            })
+                            clearTimeout(this.sliderTimeoutId);
+                            this.sliderTimeoutId = setTimeout(() =>
+                                this.setState((oldState) =>
+                                {
+                                    return (
+                                        {
+                                            ...oldState,
+                                            valuesArray: values,
+                                        }
+                                    );
+                                }),
+                                0
+                            )
                         }
                     }
                     onValuesChangeFinish={
-                        () => {
-                            this.setState((oldState) => {
-                                return (
-                                    {
-                                        ...oldState,
-                                        showScreen: false
-                                    }
-                                );
-                            });
-                            this.props.onValuesChange(this.state.valuesArray)
+                        (values) => {
+                            console.log(values);
+                            this._handlesOnValueChangeFinish();
+                            this.props.onValuesChange(this.state.valuesArray);
+
                         }
                     }
+                    allowOverlap={false}
+                    snapped={true}
                 />
                 <View style={styles.rulerStyle}>
                     <Text>{this.props.min}</Text>
-                    {
-                        <View
-                            style={{
-                                borderBottomColor: 'transparent',
-                                borderBottomWidth: 1,
-                                width: this.props.sliderLength,
-                            }}
-                        />
-                    }
+                    <View
+                        style={{
+                            borderBottomColor: 'transparent',
+                            borderBottomWidth: 1,
+                            width: (this.props.sliderLength/3),
+                        }}
+                    />
+                    <TouchableWithoutFeedback
+                        onTouch={() => alert("This does not change the values. " +
+                            "Please modify the values at the corresponding Start Time and End Time " +
+                            "of each corresponding section.")}>
+                        <View>
+
+                                <Animated.View style={[
+                                    styles.animatedContainerStyle,
+                                    {
+                                        opacity: this.state.screenOpacityAnimation,
+                                        width: this.props.sliderLength/3,
+                                        borderRadius:20,
+                                        borderWidth: 1,
+                                    },
+                                    ]}
+                                >
+                                    <View style={[
+                                        styles.rulerPercentContainer,
+                                        this.state.valuesArray[1]?{width:"50%",borderRightWidth:1}:{width:"100%"},
+                                        ]}>
+                                        <Text>{this.state.valuesArray[0]}</Text>
+                                    </View>
+                                    {this.state.secondScreenVisible
+                                        ? <View style={[styles.rulerPercentContainer,{width:"50%"}]}>
+                                            <Text>{this.state.valuesArray[1]}</Text>
+                                        </View>
+                                        : <View/>
+                                    }
+                                </Animated.View>
+                        </View>
+                    </TouchableWithoutFeedback>
+
+                    <View
+                        style={{
+                            borderBottomColor: 'transparent',
+                            borderBottomWidth: 1,
+                            width: (this.props.sliderLength/3),
+                        }}
+                    />
+
                     <Text>{this.props.max}</Text>
                 </View>
 
@@ -88,7 +134,6 @@ const styles = StyleSheet.create({
     rulerStyle: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginBottom: 10
     },
 
     containerStyle: {
@@ -96,10 +141,14 @@ const styles = StyleSheet.create({
     },
 
     rulerPercentContainer: {
-        borderWidth: 1,
-        borderColor: 'black',
         paddingHorizontal: 10,
-        paddingVertical: 5
+        paddingVertical: 5,
+        borderColor: 'black',
+    },
+
+    animatedContainerStyle: {
+        flexDirection:"row",
+        alignItems: 'center'
     }
 });
 

@@ -43,15 +43,17 @@ class DropDownList extends PureComponent{
         return(
             <View style={[styles.root, this.props.style]}>
                 <FormLabel>{label}</FormLabel>
-                <Picker
-                    {...this.props}
-                    selectedValue={this.props.value}
-                    style={styles.pickerStyle}
-                    itemStyle={styles.itemStyle}
-                    onValueChange={(itemValue, itemIndex) => this._handleChange(itemValue)}
-                    children={this._handlePickerItem()}
-                >
-                </Picker>
+                <View style={styles.pickerContainer}>
+                    <Picker
+                        {...this.props}
+                        selectedValue={this.props.value}
+                        style={styles.pickerStyle}
+                        itemStyle={styles.itemStyle}
+                        onValueChange={(itemValue, itemIndex) => this._handleChange(itemValue)}
+                        children={this._handlePickerItem()}
+                    >
+                    </Picker>
+                </View>
                 {error && <FormValidationMessage>{error}</FormValidationMessage>}
             </View>
         );
@@ -67,8 +69,16 @@ const styles = StyleSheet.create({
         height: 50,
         width: "100%",
     },
+    pickerContainer:{
+        borderRadius: 90,
+        backgroundColor: '#e7daff',
+        alignItems: 'center',
+        justifyContent:'center',
+    },
     itemStyle: {
         textAlign: 'center',
+        justifyContent: 'center',
+        alignItems:'center'
     }
 });
 

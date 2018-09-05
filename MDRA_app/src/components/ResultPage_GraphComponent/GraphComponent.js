@@ -38,8 +38,12 @@ class GraphComponent extends PureComponent{
         let startXPosition = this.findStartXPosition();
 
         let returnResult = [];
-        for(let i = 0; i < scoreTableY.length-1; i+=3){
-            returnResult.push({x:((i/10)+startXPosition), y:parseFloat(scoreTableY[i]),y0:parseFloat(scoreTableY0[i])});
+        for(let i = 1; i < scoreTableY.length-1; i+=3) {
+                returnResult.push({
+                    x: ((i / 10) + startXPosition),
+                    y: parseFloat(scoreTableY[i]),
+                    y0: parseFloat(scoreTableY0[i])
+                });
         }
         //console.log("RETURN RESULT: "+ JSON.stringify(returnResult));
         return returnResult;
@@ -49,12 +53,12 @@ class GraphComponent extends PureComponent{
     generateSquareTopLeft = (x,y,height,width) => {
         let square = [{x:x,y:y}];
         //left side
-        for(let i = 1; i < height+1; i++)
+        for(let i = 0.5; i < height+0.5; i=i+0.5)
         {
             square.push({x:x,y:y+i})
         }
         //top
-        for(let i = 1; i < width+1; i++)
+        for(let i = 0.5; i < width+0.5; i=i+0.5)
         {
             square.push({x:x+i,y:y+height})
         }
@@ -64,11 +68,11 @@ class GraphComponent extends PureComponent{
     generateSquareBottomRight = (x,y,height,width) =>{
         let square = [{x:x,y:y}];
         //top
-        for(let i = 1; i < width+1; i++)
+        for(let i = 1; i < width+0.5; i=i+0.5)
         {
             square.push({x:x+i,y:y})
         }
-        for(let i = 0; i < height+1; i++)
+        for(let i = 0; i < height+0.5; i=i+0.5)
         {
             square.push({x:x+width,y:y+i});
         }
@@ -172,7 +176,7 @@ class GraphComponent extends PureComponent{
 
         ///ACTUAL RENDERING STARTS HERE
         return(
-            <View style={[this.props.style]}>
+            <View style={[this.props.style]} pointerEvents="none">
                 <VictoryChart
                     //animate={{ duration: this.state.animationTime}}
                     domain={{x:[0,30],y: [0,25]}}

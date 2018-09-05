@@ -20,6 +20,7 @@ let formatReceivedData = (fullData) => {
 };
 
 export default HandleReceivedData = (data) => {
+    console.log("Received data: "+data);
     if(typeof data ==='string') {
         //removing all useless chars
         data = data.replace(/\n/g, '');

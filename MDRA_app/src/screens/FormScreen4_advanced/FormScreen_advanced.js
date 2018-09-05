@@ -60,20 +60,36 @@ class FormScreenAdvanced extends PureComponent{
             <View style={styles.container}>
                 <Text>Advanced Parameters</Text>
                 <Formik
-                    initialValues={{
-                        numberOfSimulations: '1000',
-                        tsTimeHalfDayAM: '8' ,
-                        teTimeHalfDayAM: '12',
-                        tsTimeHalfDayPM: '12',
-                        teTimeHalfDayPM: '16',
-                        cMinTheraputicHalfDayAM: '6',
-                        cMaxTheraputicHalfDayAM: '20',
-                        cMinTheraputicDayPM: '6',
-                        cMaxTheraputicDayPM: '20',
-                        cMinTheraputicEvening: '0',
-                        cMaxTheraputicEvening: '6',
-                        threshold: '80',
-                        }}
+                    initialValues={(this.props.data)
+                        ?{
+                            numberOfSimulations: this.props.data.numberOfSimulations,
+                            tsTimeHalfDayAM: this.props.data.tsTimeHalfDayAM ,
+                            teTimeHalfDayAM: this.props.data.teTimeHalfDayAM,
+                            tsTimeHalfDayPM: this.props.data.tsTimeHalfDayPM,
+                            teTimeHalfDayPM: this.props.data.teTimeHalfDayPM,
+                            cMinTherapeuticHalfDayAM: this.props.data.cMinTherapeuticHalfDayAM,
+                            cMaxTherapeuticHalfDayAM: this.props.data.cMaxTherapeuticHalfDayAM,
+                            cMinTherapeuticDayPM: this.props.data.cMinTherapeuticDayPM,
+                            cMaxTherapeuticDayPM: this.props.data.cMaxTherapeuticDayPM,
+                            cMinTherapeuticEvening: this.props.data.cMinTherapeuticEvening,
+                            cMaxTherapeuticEvening: this.props.data.cMaxTherapeuticEvening,
+                            threshold: this.props.data.threshold,
+                        }
+                        :{
+                            numberOfSimulations: '1000',
+                            tsTimeHalfDayAM: '8' ,
+                            teTimeHalfDayAM: '12',
+                            tsTimeHalfDayPM: '12',
+                            teTimeHalfDayPM: '16',
+                            cMinTherapeuticHalfDayAM: '6',
+                            cMaxTherapeuticHalfDayAM: '20',
+                            cMinTherapeuticDayPM: '6',
+                            cMaxTherapeuticDayPM: '20',
+                            cMinTherapeuticEvening: '0',
+                            cMaxTherapeuticEvening: '6',
+                            threshold: '80',
+                        }
+                    }
                     onSubmit={this._handleSubmit}
                     validationSchema={Yup.object().shape({
                         numberOfSimulations: Yup.number().positive().lessThan(10001).integer("Must be an integer"),
@@ -81,12 +97,12 @@ class FormScreenAdvanced extends PureComponent{
                         teTimeHalfDayAM: Yup.number().positive().moreThan(Yup.ref('tsTimeHalfDayAM', null)).required(),
                         tsTimeHalfDayPM: Yup.number().positive().lessThan(Yup.ref('teTimeHalfDayPM', null)).required(),
                         teTimeHalfDayPM: Yup.number().positive().moreThan(Yup.ref('tsTimeHalfDayPM', null)).required(),
-                        cMinTheraputicHalfDayAM: Yup.number().positive().lessThan(Yup.ref('cMaxTheraputicHalfDayAM', null)).required(),
-                        cMaxTheraputicHalfDayAM: Yup.number().positive().moreThan(Yup.ref('cMinTheraputicHalfDayAM', null)).required(),
-                        cMinTheraputicDayPM: Yup.number().positive().lessThan(Yup.ref('cMaxTheraputicDayPM', null)).required(),
-                        cMaxTheraputicDayPM: Yup.number().positive().moreThan(Yup.ref('cMinTheraputicDayPM', null)).required(),
-                        cMinTheraputicEvening: Yup.number().positive().lessThan(Yup.ref('cMaxTheraputicEvening'), null).required(),
-                        cMaxTheraputicEvening: Yup.number().positive().moreThan(Yup.ref('cMinTheraputicEvening',null)).required(),
+                        cMinTherapeuticHalfDayAM: Yup.number().positive().lessThan(Yup.ref('cMaxTherapeuticHalfDayAM', null)).required(),
+                        cMaxTherapeuticHalfDayAM: Yup.number().positive().moreThan(Yup.ref('cMinTherapeuticHalfDayAM', null)).required(),
+                        cMinTherapeuticDayPM: Yup.number().positive().lessThan(Yup.ref('cMaxTherapeuticDayPM', null)).required(),
+                        cMaxTherapeuticDayPM: Yup.number().positive().moreThan(Yup.ref('cMinTherapeuticDayPM', null)).required(),
+                        cMinTherapeuticEvening: Yup.number().positive().lessThan(Yup.ref('cMaxTherapeuticEvening'), null).required(),
+                        cMaxTherapeuticEvening: Yup.number().positive().moreThan(Yup.ref('cMinTherapeuticEvening',null)).required(),
                         threshold: Yup.number().positive().lessThan(100).required()
                     })}
                     render={({
@@ -111,68 +127,25 @@ class FormScreenAdvanced extends PureComponent{
                                 keyboardType="numeric"
                             />
                             <View>
-                                <Text> Half Day (AM)</Text>
-                                <View>
-                                    <Input
-                                        label="Ts"
-                                        value={values.tsTimeHalfDayAM}
-                                        onChange={setFieldValue}
-                                        onTouch={setFieldTouched}
-                                        name="tsTimeHalfDayAM"
-                                        error={errors.tsTimeHalfDayAM}
-                                        keyboardType="numeric"
-                                    />
-
-                                    <Input
-                                        label="Te"
-                                        value={values.teTimeHalfDayAM}
-                                        onChange={setFieldValue}
-                                        onTouch={setFieldTouched}
-                                        name="teTimeHalfDayAM"
-                                        error={errors.teTimeHalfDayAM}
-                                        keyboardType="numeric"
-                                    />
-                                </View>
-                                <Text> Half Day (PM) </Text>
-                                <View>
-                                    <Input
-                                        label="Ts"
-                                        value={values.tsTimeHalfDayPM}
-                                        onChange={setFieldValue}
-                                        onTouch={setFieldTouched}
-                                        name="tsEvening"
-                                        error={errors.tsTimeHalfDayPM}
-                                        keyboardType="numeric"
-                                    />
-                                    <Input
-                                    label="Te"
-                                    value={values.teTimeHalfDayPM}
-                                    onChange={setFieldValue}
-                                    onTouch={setFieldTouched}
-                                    name="teEvening"
-                                    error={errors.teTimeHalfDayPM}
-                                    keyboardType="numeric"
-                                    />
-                                </View>
                                 <Text> Half Day (AM) </Text>
                                 <View>
                                     <Input
                                         label="Cmin"
-                                        value={values.cMinTheraputicHalfDayAM}
+                                        value={values.cMinTherapeuticHalfDayAM}
                                         onChange={setFieldValue}
                                         onTouch={setFieldTouched}
-                                        name="cMinTheraputicHalfDayAM"
-                                        error={errors.cMinTheraputicHalfDayAM}
+                                        name="cMinTherapeuticHalfDayAM"
+                                        error={errors.cMinTherapeuticHalfDayAM}
                                         keyboardType="numeric"
                                     />
 
                                     <Input
                                         label="Cmax"
-                                        value={values.cMaxTheraputicHalfDayAM}
+                                        value={values.cMaxTherapeuticHalfDayAM}
                                         onChange={setFieldValue}
                                         onTouch={setFieldTouched}
-                                        name="cMaxTheraputicHalfDayAM"
-                                        error={errors.cMaxTheraputicHalfDayAM}
+                                        name="cMaxTherapeuticHalfDayAM"
+                                        error={errors.cMaxTherapeuticHalfDayAM}
                                         keyboardType="numeric"
                                     />
                                 </View>
@@ -180,21 +153,21 @@ class FormScreenAdvanced extends PureComponent{
                                 <View>
                                     <Input
                                         label="Cmin"
-                                        value={values.cMinTheraputicDayPM}
+                                        value={values.cMinTherapeuticDayPM}
                                         onChange={setFieldValue}
                                         onTouch={setFieldTouched}
-                                        name="cMinTheraputicDayPM"
-                                        error={errors.cMinTheraputicDayPM}
+                                        name="cMinTherapeuticDayPM"
+                                        error={errors.cMinTherapeuticDayPM}
                                         keyboardType="numeric"
                                     />
 
                                     <Input
                                         label="Cmax"
-                                        value={values.cMaxTheraputicDayPM}
+                                        value={values.cMaxTherapeuticDayPM}
                                         onChange={setFieldValue}
                                         onTouch={setFieldTouched}
-                                        name="cMaxTheraputicDayPM"
-                                        error={errors.cMaxTheraputicDayPM}
+                                        name="cMaxTherapeuticDayPM"
+                                        error={errors.cMaxTherapeuticDayPM}
                                         keyboardType="numeric"
                                     />
                                 </View>
@@ -202,21 +175,21 @@ class FormScreenAdvanced extends PureComponent{
                                 <View>
                                     <Input
                                         label="Cmin"
-                                        value={values.cMinTheraputicEvening}
+                                        value={values.cMinTherapeuticEvening}
                                         onChange={setFieldValue}
                                         onTouch={setFieldTouched}
-                                        name="cMinTheraputicEvening"
-                                        error={errors.cMinTheraputicEvening}
+                                        name="cMinTherapeuticEvening"
+                                        error={errors.cMinTherapeuticEvening}
                                         keyboardType="numeric"
                                     />
 
                                     <Input
                                         label="Cmax"
-                                        value={values.cMaxTheraputicEvening}
+                                        value={values.cMaxTherapeuticEvening}
                                         onChange={setFieldValue}
                                         onTouch={setFieldTouched}
-                                        name="cMaxTheraputicEvening"
-                                        error={errors.cMaxTheraputicEvening}
+                                        name="cMaxTherapeuticEvening"
+                                        error={errors.cMaxTherapeuticEvening}
                                         keyboardType="numeric"
                                     />
                                 </View>

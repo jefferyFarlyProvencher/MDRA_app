@@ -5,11 +5,10 @@ import { Button } from 'react-native-elements';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 
-import MultiSlider from '@ptomasroos/react-native-multi-slider'
-
 //component imports
 import Input from "../../components/Input/Input";
 import CustomMultiSlider from "../../components/CustomMultiSlider/CustomMultiSlider";
+import LinedLabel from "../../components/LinedLabel/LinedLabel";
 
 //redux imports
 import {connect} from "react-redux";
@@ -42,7 +41,26 @@ class FormScreenWeights extends PureComponent{
             <View style={styles.container}>
                 <ScrollView>
                 <Formik
-                    initialValues={{ weight1:'100', weight2: '100', weight3:'100', weight4:'100', weight5:'100', weight6:'100', weight7:'100'}}
+                    initialValues={(this.props.data)
+                        ?{
+                            weight1:this.props.data.weight1,
+                            weight2:this.props.data.weight2,
+                            weight3:this.props.data.weight3,
+                            weight4:this.props.data.weight4,
+                            weight5:this.props.data.weight5,
+                            weight6:this.props.data.weight6,
+                            weight7:this.props.data.weight7
+                        }
+                        : {
+                            weight1:'100',
+                            weight2: '100',
+                            weight3:'100',
+                            weight4:'100',
+                            weight5:'100',
+                            weight6:'100',
+                            weight7:'100'
+                        }
+                    }
                     onSubmit={this._handleSubmit}
                     validationSchema={
                         Yup.object().shape({
@@ -100,25 +118,12 @@ class FormScreenWeights extends PureComponent{
                                  isSubmitting
                              }) => (
                         <View>
-                            <View
-                                style={{margin:20, flexDirection:'row', justifyContent:'space-around'}}
-                            >
-                                <CustomMultiSlider
-                                    sliderLength={Dimensions.get('window').width * 0.80}
-                                    min={0}
-                                    max={100}
-                                    step={1}
-                                    values={[parseFloat(values.weight1)]}
-                                    onValuesChange={
-                                        (values) => {
-                                            setFieldValue('weight1', values[0].toString());
-                                            setFieldValue('weight3', values[0].toString());
-                                        }
-                                    }
-                                />
-                            </View>
-                            {console.log(this.props.state.main.Page1Data.nbTheraputicBoxes)}
-                            {(this.props.state.main.Page1Data.nbTheraputicBoxes === "Two therapeutic boxes (AM and PM)")?
+                            <View>
+                                <View>
+                                    <LinedLabel
+                                        label={"Weight of Box 1"}
+                                    />
+                                </View>
                                 <View
                                     style={{margin:20, flexDirection:'row', justifyContent:'space-around'}}
                                 >
@@ -127,49 +132,91 @@ class FormScreenWeights extends PureComponent{
                                         min={0}
                                         max={100}
                                         step={1}
-                                        values={[parseFloat(values.weight6)]}
+                                        values={[parseFloat(values.weight1)]}
                                         onValuesChange={
-                                            (someValues) => {
-                                                setFieldValue('weight6', someValues[0].toString());
-                                                setFieldValue('weight7', someValues[0].toString());
+                                            (values) => {
+                                                setFieldValue('weight1', values[0].toString());
+                                                setFieldValue('weight3', values[0].toString());
                                             }
                                         }
                                     />
                                 </View>
+                            </View>
+                            {(this.props.state.main.Page1Data.nbTheraputicBoxes === "Two therapeutic boxes (AM and PM)")?
+                                <View>
+                                    <View>
+                                        <LinedLabel
+                                            label={"Weight of Box 2"}
+                                        />
+                                    </View>
+                                    <View
+                                        style={{margin:20, flexDirection:'row', justifyContent:'space-around'}}
+                                    >
+
+                                        <CustomMultiSlider
+                                            sliderLength={Dimensions.get('window').width * 0.80}
+                                            min={0}
+                                            max={100}
+                                            step={1}
+                                            values={[parseFloat(values.weight6)]}
+                                            onValuesChange={
+                                                (someValues) => {
+                                                    setFieldValue('weight6', someValues[0].toString());
+                                                    setFieldValue('weight7', someValues[0].toString());
+                                                }
+                                            }
+                                        />
+                                    </View>
+                                </View>
                                 :<View/>
                             }
-                            <View
-                                style={{margin:20, flexDirection:'row', justifyContent:'space-around'}}
-                            >
-                                <CustomMultiSlider
-                                    sliderLength={Dimensions.get('window').width * 0.80}
-                                    min={0}
-                                    max={100}
-                                    step={1}
-                                    values={[parseFloat(values.weight3)]}
-                                    onValuesChange={
-                                        (someValues) => {
-                                            setFieldValue('weight2', someValues[0].toString());
-                                            setFieldValue('weight4', someValues[0].toString());
-                                        }
-                                    }
-                                />
-                            </View>
-                            <View
-                                style={{margin:20, flexDirection:'row', justifyContent:'space-around'}}
-                            >
+                            <View>
+                                <View>
+                                    <LinedLabel
+                                        label={"Weight of Evening Box "}
+                                    />
+                                </View>
+                                <View
+                                    style={{margin:20, flexDirection:'row', justifyContent:'space-around'}}
+                                >
+
                                     <CustomMultiSlider
                                         sliderLength={Dimensions.get('window').width * 0.80}
                                         min={0}
                                         max={100}
                                         step={1}
-                                        values={[parseFloat(values.weight5)]}
+                                        values={[parseFloat(values.weight2)]}
                                         onValuesChange={
-                                            (values) => {
-                                                setFieldValue('weight5', values[0].toString());
+                                            (someValues) => {
+                                                setFieldValue('weight2', someValues[0].toString());
+                                                setFieldValue('weight4', someValues[0].toString());
                                             }
                                         }
                                     />
+                                </View>
+                            </View>
+                            <View>
+                                <View>
+                                    <LinedLabel
+                                        label={"Weight of threshold "}
+                                    />
+                                </View>
+                                <View
+                                    style={{margin:20, flexDirection:'row', justifyContent:'space-around'}}
+                                >
+                                        <CustomMultiSlider
+                                            sliderLength={Dimensions.get('window').width * 0.80}
+                                            min={0}
+                                            max={100}
+                                            step={1}
+                                            values={[parseFloat(values.weight5)]}
+                                            onValuesChange={
+                                                (values) => {
+                                                    setFieldValue('weight5', values[0].toString());
+                                                }
+                                            }
+                                        />
+                                </View>
                             </View>
                             {this.state.fullForm
                                 ?<View>

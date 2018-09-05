@@ -1,9 +1,10 @@
 //system imports
 import React, {PureComponent} from 'react';
-import {StyleSheet, View, Alert, Dimensions, Switch, Text, KeyboardAvoidingView, NetInfo, ScrollView} from 'react-native';
+import {StyleSheet, View, Alert, Dimensions, Switch, Text,Platform, NetInfo, ScrollView} from 'react-native';
 import { Button } from 'react-native-elements';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
+import Icon from "react-native-vector-icons/FontAwesome"
 
 //component imports
 import Input from "../../components/Input/Input";
@@ -21,8 +22,10 @@ class FormScreenInitial extends PureComponent{
         //current position is the current step of the form
         currentPosition: 0,
         //formulation values are there to set the dosage
+        //TODO do the thing properly
         formulaValues: ["Ritalin IR","Ritalin IR","Ritalin IR","Ritalin IR"],
-        //Number of pill given (1 to 4)
+        //if there is data and an amountOfPills,
+        // Number of pill given (1 to 4)
         amountOfPills:this.props.data
             ?this.props.data.amountOfPills
                 ? this.props.data.amountOfPills
@@ -213,7 +216,7 @@ class FormScreenInitial extends PureComponent{
                                      isSubmitting
                                  }) => (
                             <View>
-                                <View style={styles.twoPerRowContainer}>
+                                <View style={[styles.twoPerRowContainer,{marginBottom:"5%"}]}>
                                     <DropDownList
                                         style={styles.inputContainer}
                                         value={values.gender}
@@ -221,21 +224,24 @@ class FormScreenInitial extends PureComponent{
                                         name="gender"
                                         onChange={setFieldValue}
                                         itemList={["Male","Female"]}/>
-                                    <View style={[styles.inputContainer,styles.twoPerRowContainer, {width:"55%", } ]}>
+                                    <View style={[styles.inputContainer,styles.twoPerRowContainer, {width:"45%", justifyContent:"space-around"} ]}>
                                         <View style={{width:"80%", marginRight:0}}>
-                                        <Input
-                                            label={"Weight " + (this.state.switchValue?"(lbs)":"(Kg)")}
-                                            value={values.weight}
-                                            onChange={(name,value) =>{
-                                                setFieldValue(name,value)
-                                            }}
-                                            onTouch={setFieldTouched}
-                                            name="weight"
-                                            error={touched.weight && errors.weight}
-                                            keyboardType="numeric"
-                                        />
+                                            <Input
+                                                label={"Weight"}
+                                                value={values.weight}
+                                                onChange={(name,value) =>{
+                                                    setFieldValue(name,value)
+                                                }}
+                                                onTouch={setFieldTouched}
+                                                name="weight"
+                                                error={touched.weight && errors.weight}
+                                                keyboardType="numeric"
+                                            />
                                         </View>
-                                        <View style={{paddingTop:"20%", marginLeft:0}}>
+                                        <View style={{paddingTop:"20%", marginLeft:0, paddingRight:20, flexDirection:'row', justifyContent:'center'}}>
+                                            <View style={{paddingTop:"25%"}}>
+                                                <Text>{(this.state.switchValue?"lbs":"kg ")}</Text>
+                                            </View>
                                             <Switch
                                                 value={this.state.switchValue}
                                                 onValueChange={(value) => {
@@ -243,6 +249,9 @@ class FormScreenInitial extends PureComponent{
                                                     this._handleChangeSwitch(value);
                                                     }
                                                 }
+                                                tintColor={"#a8eebc"}
+                                                onTintColor={"#b1d6ee"}
+                                                thumbTintColor={(Platform==="ios"? undefined: 'white')}
                                             />
                                         </View>
                                     </View>
@@ -427,25 +436,27 @@ class FormScreenInitial extends PureComponent{
                                         :null
                                 }
                                 </View>
-                                <View>
+                                <View style={styles.pillButtonsContainer}>
                                     <Button
-                                        buttonStyle={styles.button}
-                                        title="+"
-                                        onPress={() =>{
-                                            setFieldValue("amountOfPills", this.state.amountOfPills+1);
-                                            this.addDrugs();
-                                        }}
-                                        disabled={this.state.amountOfPills>=4}
-                                    />
-                                    <Button
-                                        buttonStyle={styles.button}
-                                        title="-"
+                                        icon={{ name: 'minus', type: 'font-awesome' }}
+                                        buttonStyle={styles.pillButton}
+                                        title="Remove a pill!"
                                         onPress={() => {
                                             setFieldValue("amountOfPills", this.state.amountOfPills-1);
                                             this.removeDrugs();
                                         }
                                         }
                                         disabled={this.state.amountOfPills<=1}
+                                    />
+                                    <Button
+                                        iconRight={{ name: 'plus', type: 'font-awesome'}}
+                                        buttonStyle={styles.pillButton}
+                                        title="Add a pill!"
+                                        onPress={() =>{
+                                            setFieldValue("amountOfPills", this.state.amountOfPills+1);
+                                            this.addDrugs();
+                                        }}
+                                        disabled={this.state.amountOfPills>=4}
                                     />
                                 </View>
                                 <Button
@@ -470,6 +481,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#fff",
         alignItems: "center",
         justifyContent: "center",
+        padding: 10
     },
     button: {
         marginTop: 20,
@@ -477,16 +489,29 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center"
     },
+
+    pillButton: {
+        borderRadius:100,
+    },
+
+    pillButtonsContainer: {
+        flexDirection:'row',
+        justifyContent: "center",
+        alignItems: 'flex-end',
+        borderWidth:1
+    },
+
     twoPerRowContainer: {
         flexDirection: "row",
-        justifyContent: "space-between"
-
+        justifyContent: 'space-between',
     },
+
     inputContainer:{
         width: '45%',
     },
     indicatorContainer:{
-        flex:1,flexDirection: "row",
+        flex:1,
+        flexDirection: "row",
         justifyContent:"space-between",
         position: "absolute",
         bottom: 0,
@@ -496,8 +521,10 @@ const styles = StyleSheet.create({
     drugContainer:{
         borderColor:"#555",
         borderWidth: 0.5,
+        borderRadius:20,
         width: "95%",
         marginLeft: 10,
+        padding: 10
     },
 
 });

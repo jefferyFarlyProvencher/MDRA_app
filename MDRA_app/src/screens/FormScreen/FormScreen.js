@@ -1,6 +1,15 @@
 //Base imports
 import React, {Component} from 'react';
-import {View,ScrollView, KeyboardAvoidingView, Text, StyleSheet, Modal, Button} from 'react-native';
+import {
+    View,
+    ScrollView,
+    KeyboardAvoidingView,
+    Text,
+    StyleSheet,
+    Modal,
+    Button,
+    BackHandler,
+    Alert} from 'react-native';
 import {connect} from 'react-redux';
 //Package Imports
 import StepIndicator from 'react-native-step-indicator';
@@ -15,8 +24,36 @@ import SendFormScreen from '../SendFormScreen/SendFormScreen';
 import {addData, changePosition} from "../../store/actions/index";
 
 
-
 class FormScreen extends Component{
+
+    handleBackButton = () => {
+        if(this.props.state.main.position === 0)Alert.alert(
+            'Exit App',
+            'Exiting the application?', [
+                {
+                text: 'Cancel',
+                onPress: (() => console.log('Cancel Pressed')),
+                style: 'cancel'
+                }, {
+                text: 'OK',
+                    onPress: () => BackHandler.exitApp(),
+                }
+            ],
+            {
+                cancelable: false
+            }
+        );
+        return true;
+    };
+
+    componentDidMount() {
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+    };
+
+    componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+    };
+
     constructor(props){
         super(props);
         this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent);
@@ -177,7 +214,7 @@ const styles = StyleSheet.create({
         left: 0,
         backgroundColor: '#FFF',
         paddingTop: 10,
-        margin:0
+        margin:0,
     }
 });
 
