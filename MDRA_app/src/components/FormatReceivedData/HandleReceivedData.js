@@ -2,6 +2,9 @@
 /*
  * FormatReceivedData works as a data reducer,
  * although it messes up the graphs afterwards...
+ * so right now it is called but doesn't do anything
+ * ***UPDATE*** reducer is located on the tracer itself (graph), not on the handleData
+ * so I should delete it, but too lazy rn
  */
 let formatReceivedData = (fullData) => {
     let halfedData = [];
@@ -21,7 +24,7 @@ let formatReceivedData = (fullData) => {
 
 export default HandleReceivedData = (data) => {
     console.log("Received data: "+data);
-    if(typeof data ==='string') {
+    if(data && data.length && typeof data ==='string'){
         //removing all useless chars
         data = data.replace(/\n/g, '');
         data = data.replace(/\r/g, '');
@@ -90,7 +93,7 @@ export default HandleReceivedData = (data) => {
         return receivedData;
     }
     else{
-        console.log("not a string");
+        console.log("not a string or string is empty");
         console.log(data);
         return -1;
     }

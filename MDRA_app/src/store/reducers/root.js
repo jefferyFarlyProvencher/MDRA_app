@@ -16,7 +16,7 @@ const initialState = {
     Page3Data: null,
     advanceTabAccessible: false,
     receivedData: null,
-    resultsList: []//{key:'1',data:[data],formData:[], name:name}}],
+    resultsList: []//{key:'1',data:[data],formData:[], name:name, id: id}}],
 };
 
 const reducer = (state = initialState, action) => {
@@ -69,27 +69,47 @@ const reducer = (state = initialState, action) => {
                     key: Math.random().toString(),
                     data: action.data,
                     formData: action.formData,
-                    name: action.name
+                    name: action.name,
+                    id: action.name
                 }),
             };
         case(REMOVE_LIST):
             return{
                 ...state,
-                resultsList: state.resultsList.filter(place => {
-                    return place.key !== action.key;
+                resultsList: state.resultsList.filter(result => {
+                    return result.key !== action.key;
                 }),
             };
-        case(RENAME_LIST):
-            newList = state.resultsList.filter(place => {
-                            return place.key !== action.key;
-                    }).push(
-                state.resultsList.filter(place => {
-                    return place.key === action.key;
-                }).name = action.name
-            );
-            return{
-                ...state
+        case(RENAME_LIST): {
+            let target = 0;
+            console.log(state.resultsList.length);
+            for (let i = 0; i < state.resultsList.length; i++) {
+                console.log(i);
+                if (state.resultsList[i].key === action.key) {
+
+                    target = i;
+                    break;
+                }
+            }
+            console.log(target);
+            console.log("IF NOT NULL HERE WHAT IT SHOULD EQUAL: " + JSON.stringify(state.resultsList[target].name));
+            let targetedObject = state.resultsList[target];
+            console.log(JSON.stringify(targetedObject));
+            let updatedResult = {
+                key: targetedObject.key,
+                data: targetedObject.data,
+                formData: targetedObject.formData,
+                name: action.newName,
+                id: targetedObject.id
             };
+            //console.log(JSON.stringify(updatedResult));
+            state.resultsList.splice(target, 1);
+            state.resultsList.splice(target,0,updatedResult);
+            //console.log(JSON.stringify(state.resultsList.name));
+            return {
+                ...state
+            }
+        }
         default:
             return state
     }

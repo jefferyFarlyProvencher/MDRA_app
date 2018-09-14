@@ -29,7 +29,8 @@ class FormScreenWeights extends PureComponent{
         try {
             bag.setSubmitting(false);
             this.props.onAddData(values, this.state.currentPosition);
-            this.props.onChangePosition(target)
+            this.props.setPage(target);
+            this.props.onChangePosition(target);
         }catch (e) {
             bag.setSubmitting(false);
             bag.setErrors(e);
@@ -142,33 +143,35 @@ class FormScreenWeights extends PureComponent{
                                     />
                                 </View>
                             </View>
-                            {(this.props.state.main.Page1Data.nbTheraputicBoxes === "Two therapeutic boxes (AM and PM)")?
-                                <View>
+                            {(this.props.state.main.Page1Data)
+                                ? (this.props.state.main.Page1Data.nbTheraputicBoxes === "Two therapeutic boxes (AM and PM)")?
                                     <View>
-                                        <LinedLabel
-                                            label={"Weight of Box 2"}
-                                        />
-                                    </View>
-                                    <View
-                                        style={{margin:20, flexDirection:'row', justifyContent:'space-around'}}
-                                    >
+                                        <View>
+                                            <LinedLabel
+                                                label={"Weight of Box 2"}
+                                            />
+                                        </View>
+                                        <View
+                                            style={{margin:20, flexDirection:'row', justifyContent:'space-around'}}
+                                        >
 
-                                        <CustomMultiSlider
-                                            sliderLength={Dimensions.get('window').width * 0.80}
-                                            min={0}
-                                            max={100}
-                                            step={1}
-                                            values={[parseFloat(values.weight6)]}
-                                            onValuesChange={
-                                                (someValues) => {
-                                                    setFieldValue('weight6', someValues[0].toString());
-                                                    setFieldValue('weight7', someValues[0].toString());
+                                            <CustomMultiSlider
+                                                sliderLength={Dimensions.get('window').width * 0.80}
+                                                min={0}
+                                                max={100}
+                                                step={1}
+                                                values={[parseFloat(values.weight6)]}
+                                                onValuesChange={
+                                                    (someValues) => {
+                                                        setFieldValue('weight6', someValues[0].toString());
+                                                        setFieldValue('weight7', someValues[0].toString());
+                                                    }
                                                 }
-                                            }
-                                        />
+                                            />
+                                        </View>
                                     </View>
-                                </View>
-                                :<View/>
+                                    :<View/>
+                                :<View/> //if state is null
                             }
                             <View>
                                 <View>

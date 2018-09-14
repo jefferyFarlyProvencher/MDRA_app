@@ -1,8 +1,9 @@
 import {RENAME_LIST} from './actionTypes';
 
-export const renameData = (key) => {
+export const renameData = (key, newName) => {
   return {
       type: RENAME_LIST,
-      key: key
+      key: key,
+      newName: newName
   }
 };

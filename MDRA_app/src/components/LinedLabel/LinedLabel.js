@@ -3,6 +3,10 @@ import {StyleSheet, View, Dimensions, Text} from 'react-native';
 
 class LinedLabel extends PureComponent{
 
+    //props that it takes:
+    // textPosition, label
+    // and style props for the back of the style of the line label container
+
     state={
       textPosition: this.props.textPosition? this.props.textPosition: "center"
     };
@@ -58,6 +62,7 @@ class LinedLabel extends PureComponent{
 }
 const styles = StyleSheet.create({
     root: {
+        flex:1,
         width: '100%',
         alignSelf: 'center',
         justifyContent: 'center',
@@ -73,7 +78,11 @@ const styles = StyleSheet.create({
     textStyle: {
         width: "40%",
         alignItems: 'center',
-        backgroundColor:"#ffd79e"
+        justifyContent: 'center',
+        backgroundColor:"transparent",
+        borderWidth: 1,
+        borderColor: '#919191'
+
     }
 
 });

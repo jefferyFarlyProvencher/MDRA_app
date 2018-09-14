@@ -1,5 +1,5 @@
 import React, {PureComponent} from 'react';
-import {View, Button, StyleSheet, Text,TouchableWithoutFeedback, TouchableHighlight, Modal } from 'react-native';
+import {View, Button, StyleSheet, Text,TouchableWithoutFeedback, TouchableOpacity, TouchableHighlight ,Modal } from 'react-native';
 
 import {VictoryPie} from 'victory-native';
 
@@ -14,11 +14,11 @@ class ResultTest extends PureComponent{
         objectsArray = [];
         for(let i = 0; i < dataArray.length; i++)
         {
-            let parsedData = parseFloat(dataArray[i])*100;
+            let parsedData = (parseFloat(dataArray[i])*100);
             objectsArray.push({
                 x: i,
                 y:parsedData,
-                label: (parsedData>0)?parsedData+"%": ""
+                label: (parsedData.toFixed(2)>5)?parsedData.toFixed(2)+"%": " "
             })
         }
         return objectsArray
@@ -43,11 +43,16 @@ class ResultTest extends PureComponent{
     };
 
     handlePieClick= (visible, pieData)=>{
+        let correctedPieData = pieData.slice();
+        for(let i=0; i < correctedPieData.length; i++)
+        {
+            correctedPieData[i] = (parseFloat(correctedPieData[i])*100).toFixed(2)+"%";
+        }
         this.setState((oldState) => {
                 return({
                     ...oldState,
                     modalVisible: visible,
-                    modalPieData:pieData
+                    modalPieData:correctedPieData
                 })
             }
         );
@@ -189,33 +194,51 @@ class ResultTest extends PureComponent{
                             </TouchableWithoutFeedback>
                             <View style={{marginTop: 22, height: "80%", width:"80%", backgroundColor: '#FFF'}}>
                                 <View>
-                                    <Text>Hello World!</Text>
-                                    <View>
-                                        <View style={{backgroundColor:'#1b3e70'}}>
-                                            <Text>{this.state.modalPieData?this.state.modalPieData[0]:"0"}</Text>
-                                        </View>
-                                        <View style={{backgroundColor:'#62c9e4'}}>
-                                            <Text>{this.state.modalPieData?this.state.modalPieData[1]:"1"}</Text>
-                                        </View>
-                                        <View style={{backgroundColor:'#c2c822'}}>
-                                            <Text>{this.state.modalPieData?this.state.modalPieData[2]:"2"}</Text>
-                                        </View>
-                                        <View style={{backgroundColor: '#f8c82c',}}>
-                                            <Text>{this.state.modalPieData?this.state.modalPieData[3]:"3"}</Text>
-                                        </View>
-                                        <View style={{backgroundColor:'#ed5f6d'}}>
-                                            <Text>{this.state.modalPieData?this.state.modalPieData[4]:"4"}</Text>
-                                        </View>
-                                        <View style={{backgroundColor:'#f6922d'}}>
-                                            <Text>{this.state.modalPieData?this.state.modalPieData[5]:"5"}</Text>
-                                        </View>
-
+                                    <View style={styles.modalColors}>
+                                        <Text>Percentages</Text>
                                     </View>
-                                    <TouchableHighlight
-                                        onPress={() => {this.setModalVisible(!this.state.modalVisible);}}
-                                    >
-                                        <Text>Close</Text>
-                                    </TouchableHighlight>
+                                    <View>
+                                        <View style={[{backgroundColor:'#1b3e70'},styles.modalColors]}>
+                                            <Text style={styles.ColorTextStyle}>
+                                                {this.state.modalPieData?this.state.modalPieData[0]:"0"}
+                                                </Text>
+                                        </View>
+                                        <View style={[{backgroundColor:'#62c9e4'},styles.modalColors]}>
+                                            <Text style={styles.ColorTextStyle}>
+                                                {this.state.modalPieData?this.state.modalPieData[1]:"1"}
+                                                </Text>
+                                        </View>
+                                        <View style={[{backgroundColor:'#c2c822'},styles.modalColors]}>
+                                            <Text style={styles.ColorTextStyle}>
+                                                {this.state.modalPieData?this.state.modalPieData[2]:"2"}
+                                                </Text>
+                                        </View>
+                                        <View style={[{backgroundColor: '#f8c82c',},styles.modalColors]}>
+                                            <Text style={styles.ColorTextStyle}>
+                                                {this.state.modalPieData?this.state.modalPieData[3]:"3"}
+                                                </Text>
+                                        </View>
+                                        <View style={[{backgroundColor:'#ed5f6d'},styles.modalColors]}>
+                                            <Text style={styles.ColorTextStyle}>
+                                                {this.state.modalPieData?this.state.modalPieData[4]:"4"}
+                                                </Text>
+                                        </View>
+                                        <View style={[{backgroundColor:'#f6922d'},styles.modalColors]}>
+                                            <Text style={styles.ColorTextStyle}>
+                                                {this.state.modalPieData?this.state.modalPieData[5]:"5"}
+                                                </Text>
+                                        </View>
+                                        <View style={{height:"13%", width:"100%"}}>
+                                            <TouchableOpacity
+                                                onPress={() => {this.setModalVisible(!this.state.modalVisible);}}
+
+                                            >
+                                                <View style={{width:'100%', height:"100%",justifyContent: "center", alignItems: "center",backgroundColor:"#aaa"}}>
+                                                    <Text>Close</Text>
+                                                </View>
+                                            </TouchableOpacity>
+                                        </View>
+                                    </View>
                                 </View>
                             </View>
                         </View>
@@ -229,6 +252,17 @@ class ResultTest extends PureComponent{
 const styles = StyleSheet.create({
     buttonStyle: {
         width: 300
+    },
+
+    modalColors: {
+        height: "13.1%",
+        width: "100%",
+        justifyContent: "center",
+        alignItems: "center",
+    },
+
+    ColorTextStyle: {
+        color: "#FFF",
     }
 });
 

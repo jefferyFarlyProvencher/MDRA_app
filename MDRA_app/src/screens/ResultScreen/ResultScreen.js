@@ -1,11 +1,17 @@
 import React, {Component} from 'react';
-import {View, Text, TouchableWithoutFeedback, Image, Animated} from 'react-native';
+import {View, Text, TouchableWithoutFeedback, Animated, Modal, StyleSheet} from 'react-native';
+
+import {Formik} from "formik";
+
+import {Button} from 'react-native-elements';
 
 import {connect} from "react-redux";
-import {removeData} from '../../store/actions/index';
+import {removeData, renameData} from '../../store/actions/index';
 
 
 import ResultsList from "../../components/ResultsList/ResultsList";
+import Input from "../../components/Input/Input";
+import * as Yup from "yup";
 
 
 class ResultScreen extends Component{
@@ -14,7 +20,12 @@ class ResultScreen extends Component{
         this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent);
     }
     state = {
-        placesAnim: new Animated.Value(0)
+        //placesAnim: new Animated.Value(0)
+        modalVisible: false,
+        renameTarget: null,
+        currentNewName: null,
+        //selected is linked to extraData in the list and not the actual selection
+        selected: false
     };
 
     componentWillMount() {
@@ -56,23 +67,154 @@ class ResultScreen extends Component{
         });
     };
 
+    setModalVisible = (visible) => {
+        this.setState((oldState) => {
+                return({
+                    ...oldState,
+                    modalVisible: visible,
+                })
+            }
+        );
+    };
+
+    handleOnRenamePressed = (key) =>
+    {
+        this.setState((oldState) => {
+                return({
+                    ...oldState,
+                    modalVisible: true,
+                    renameTarget: key,
+                    selected: true,
+                })
+            }
+        );
+    };
+
+    _handleSubmit =(async (values, bag) => {
+        try {
+            this.props.onRenameData(this.state.renameTarget,values.newName);
+            this.setState((oldState)=>{
+                return({
+                    ...oldState,
+                })
+            });
+            this.setModalVisible(false);
+        }catch (e) {
+            bag.setSubmitting(false);
+            bag.setErrors(e);
+        }
+    });
+
     render(){
         let content = (
             <View>
-                <ResultsList list ={this.props.state.main.resultsList} onItemSelected={this.itemSelectedHandler} onRemoveData={this.props.onRemoveData}/>
+                <ResultsList
+                    list ={this.props.state.main.resultsList}
+                    onItemSelected={this.itemSelectedHandler}
+                    onRemoveData={this.props.onRemoveData}
+                    onRenameData={this.handleOnRenamePressed}
+                    extraData={this.state}
+                />
             </View>
         );
 //        console.log(this.props.state.main.resultsList);
         return(
             <View>
-                {this.props.state.main.resultsList.length > 0
-                    ? content
-                    : <Text style={{justifyContent:'center', alignItems:'center'}}>This doesn't have any results yet</Text>
-                }
+                <View>
+                    {this.props.state.main.resultsList.length > 0
+                        ? content
+                        : <Text style={{justifyContent:'center', alignItems:'center'}}>This doesn't have any results yet</Text>
+                    }
+                </View>
+                <View>
+                    <Modal
+                        animationType="fade"
+                        transparent={true}
+                        visible={this.state.modalVisible}
+                        onRequestClose={() => {
+                            this.setModalVisible(!this.state.modalVisible);
+                        }}
+                        style={{height: "80%", width:"80%"}}
+                    >
+                        <View
+                            style={{
+                                flex: 1,
+                                flexDirection: 'column',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+
+                            }}
+                        >
+                            <TouchableWithoutFeedback
+                                onPress={() => {this.setModalVisible(!this.state.modalVisible);}}
+                            >
+                                <View
+                                    style={{
+                                        backgroundColor:'#000',
+                                        opacity: 0.5,
+                                        flex:1,
+                                        width: "100%",
+                                        height: "100%",
+                                        position: "absolute",
+                                    }}
+                                />
+                            </TouchableWithoutFeedback>
+                            <View style={styles.modalStyle}>
+                                <Formik
+                                    initialValues={{ newName: JSON.stringify(this.props.state.main.data)}}
+                                    onSubmit={this._handleSubmit}
+                                    validationSchema={Yup.object().shape({
+                                        newName: Yup.string().required(),
+                                    })}
+                                    render={({
+                                                 values,
+                                                 handleSubmit,
+                                                 setFieldValue,
+                                                 errors,
+                                                 touched,
+                                                 setFieldTouched,
+                                                 isValid,
+                                                 isSubmitting
+                                             }) => (
+                                        <View>
+                                            <Input
+                                                label="New Name"
+                                                autoCapitalize="none"
+                                                value={values.newName}
+                                                onChange={setFieldValue}
+                                                onTouch={setFieldTouched}
+                                                name="newName"
+                                                error={touched.newName && errors.newName}
+                                            />
+                                            <Button
+                                                title={"Cancel"}
+                                                onPress={() =>{this.setModalVisible(false)}}
+                                            />
+                                            <Button
+                                                title="OK"
+                                                onPress={handleSubmit}
+                                            />
+                                        </View>
+                                    )}
+                                />
+                            </View>
+                        </View>
+                    </Modal>
+                </View>
             </View>
         )
     }
 }
+
+const styles = StyleSheet.create({
+    modalStyle:{
+        marginTop: 22,
+        height: "50%",
+        width:"80%",
+        backgroundColor: '#EEE',
+        paddingTop: "20%",
+    }
+});
 
 const mapStateToProps = (state) => {
     return {
@@ -83,6 +225,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         onRemoveData: (key) => dispatch(removeData(key)),
+        onRenameData: (key, newName) => dispatch(renameData(key,newName))
     }
 };
 

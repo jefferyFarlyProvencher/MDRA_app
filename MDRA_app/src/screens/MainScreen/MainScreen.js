@@ -87,7 +87,7 @@ class MainScreen extends Component{
                     },
                     (this.state.loading)?null:styles.mainContainer
                 ]}
-                ><View>
+                ><View style={{alignItems:"center", justifyContent:"center"}}>
 
                         <TouchableWithoutFeedback onPress={this._handlerOnPress}>
                                 {this.state.loading
@@ -113,8 +113,7 @@ class MainScreen extends Component{
 
 const styles= StyleSheet.create({
     mainContainer:{
-        alignItems:"center",
-        justifyContent:"center",
+
         height: '30%',
         opacity: 0.9,
         backgroundColor: '#9479c4',

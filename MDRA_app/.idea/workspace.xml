@@ -2,77 +2,29 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3b47582f-7566-4db6-8bcf-f2d044feb417" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/src/assets/area_small.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/assets/pie_small.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/LinedLabel/LinedLabel.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/SyncStore/SyncStore.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/screens/FormScreen1_initial/FormScreen_initialV2.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/App.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/android/.gradle/2.14.1/taskArtifacts/cache.properties.lock" beforeDir="false" afterPath="$PROJECT_DIR$/android/.gradle/2.14.1/taskArtifacts/cache.properties.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/.gradle/2.14.1/taskArtifacts/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/android/.gradle/2.14.1/taskArtifacts/fileHashes.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/android/.gradle/2.14.1/taskArtifacts/fileSnapshots.bin" beforeDir="false" afterPath="$PROJECT_DIR$/android/.gradle/2.14.1/taskArtifacts/fileSnapshots.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/android/.gradle/2.14.1/taskArtifacts/fileSnapshotsToTreeSnapshotsIndex.bin" beforeDir="false" afterPath="$PROJECT_DIR$/android/.gradle/2.14.1/taskArtifacts/fileSnapshotsToTreeSnapshotsIndex.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/android/.gradle/2.14.1/taskArtifacts/taskArtifacts.bin" beforeDir="false" afterPath="$PROJECT_DIR$/android/.gradle/2.14.1/taskArtifacts/taskArtifacts.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/.gradle/2.14.1/tasks/_app_compileDebugJavaWithJavac/localClassSetAnalysis/localClassSetAnalysis.lock" beforeDir="false" afterPath="$PROJECT_DIR$/android/.gradle/2.14.1/tasks/_app_compileDebugJavaWithJavac/localClassSetAnalysis/localClassSetAnalysis.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/.gradle/2.14.1/tasks/_app_compileDebugJavaWithJavac/localJarClasspathSnapshot/localJarClasspathSnapshot.lock" beforeDir="false" afterPath="$PROJECT_DIR$/android/.gradle/2.14.1/tasks/_app_compileDebugJavaWithJavac/localJarClasspathSnapshot/localJarClasspathSnapshot.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/.gradle/2.14.1/tasks/_react-native-vector-icons_compileReleaseJavaWithJavac/localClassSetAnalysis/localClassSetAnalysis.lock" beforeDir="false" afterPath="$PROJECT_DIR$/android/.gradle/2.14.1/tasks/_react-native-vector-icons_compileReleaseJavaWithJavac/localClassSetAnalysis/localClassSetAnalysis.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/.gradle/2.14.1/tasks/_react-native-vector-icons_compileReleaseJavaWithJavac/localJarClasspathSnapshot/localJarClasspathSnapshot.lock" beforeDir="false" afterPath="$PROJECT_DIR$/android/.gradle/2.14.1/tasks/_react-native-vector-icons_compileReleaseJavaWithJavac/localJarClasspathSnapshot/localJarClasspathSnapshot.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/build/intermediates/incremental/mergeDebugResources/compile-file-map.properties" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build/intermediates/incremental/mergeDebugResources/compile-file-map.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/build/intermediates/incremental/packageDebug/dex-renamer-state.txt" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build/intermediates/incremental/packageDebug/dex-renamer-state.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/build/intermediates/incremental/packageDebug/file-input-save-data.txt" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build/intermediates/incremental/packageDebug/file-input-save-data.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/MDRA_app-react-native-navigation-unspecified_7ba947c01682f1c1bb7e84b91326cfaea97e85de.jar" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/MDRA_app-react-native-navigation-unspecified_7ba947c01682f1c1bb7e84b91326cfaea97e85de.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/MDRA_app-react-native-svg-unspecified_dc7d68fb498958c395650e50e6617c59d21eb2b0.jar" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/MDRA_app-react-native-svg-unspecified_dc7d68fb498958c395650e50e6617c59d21eb2b0.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/MDRA_app-react-native-vector-icons-unspecified_3380101fb999d48cf271e6355dc0ee2395fa6392.jar" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/MDRA_app-react-native-vector-icons-unspecified_3380101fb999d48cf271e6355dc0ee2395fa6392.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/bolts-tasks-1.4.0_e868236d55bf4144413b223186d6379e1579f627.jar" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/bolts-tasks-1.4.0_e868236d55bf4144413b223186d6379e1579f627.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/com.android.support-animated-vector-drawable-25.3.1_a3fee674b6425a49851e57a77617c99da86cbcbd.jar" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/com.android.support-animated-vector-drawable-25.3.1_a3fee674b6425a49851e57a77617c99da86cbcbd.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/com.android.support-appcompat-v7-25.3.1_ed0faced8cd21b460f30dc36942c7442295e9f82.jar" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/com.android.support-appcompat-v7-25.3.1_ed0faced8cd21b460f30dc36942c7442295e9f82.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/com.android.support-design-25.3.1_d9afc658de0f3e721fa0d0a486cd0b1bb7068a89.jar" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/com.android.support-design-25.3.1_d9afc658de0f3e721fa0d0a486cd0b1bb7068a89.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/com.android.support-recyclerview-v7-25.3.1_410b10a6050d043041826788af6cc6b4312acde9.jar" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/com.android.support-recyclerview-v7-25.3.1_410b10a6050d043041826788af6cc6b4312acde9.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/com.android.support-support-compat-25.3.1_487fc59d838c580aca2e0db2a2ce27341510f553.jar" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/com.android.support-support-compat-25.3.1_487fc59d838c580aca2e0db2a2ce27341510f553.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/com.android.support-support-core-ui-25.3.1_6250e24fe8b3ceff679a4782b3a2b958a90e48ef.jar" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/com.android.support-support-core-ui-25.3.1_6250e24fe8b3ceff679a4782b3a2b958a90e48ef.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/com.android.support-support-core-utils-25.3.1_18bf7e2962c14b4801109c1dc81e54dccb41ed4a.jar" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/com.android.support-support-core-utils-25.3.1_18bf7e2962c14b4801109c1dc81e54dccb41ed4a.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/com.android.support-support-fragment-25.3.1_87705be439e34a89592e52026a10752cf60ef4a7.jar" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/com.android.support-support-fragment-25.3.1_87705be439e34a89592e52026a10752cf60ef4a7.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/com.android.support-support-media-compat-25.3.1_b925c3a990c3f25d76d5a83f29429af70cab5c1c.jar" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/com.android.support-support-media-compat-25.3.1_b925c3a990c3f25d76d5a83f29429af70cab5c1c.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/com.android.support-support-v4-25.3.1_89fc3d231615cda12d32cb21cac6d4da5b5d3237.jar" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/com.android.support-support-v4-25.3.1_89fc3d231615cda12d32cb21cac6d4da5b5d3237.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/com.android.support-support-vector-drawable-25.3.1_96205d1e88e1b354e62193c18ea98baf068e4ea5.jar" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/com.android.support-support-vector-drawable-25.3.1_96205d1e88e1b354e62193c18ea98baf068e4ea5.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/com.android.support-transition-25.3.1_b024f9deb7d2c687c631197a579f24b105f4f349.jar" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/com.android.support-transition-25.3.1_b024f9deb7d2c687c631197a579f24b105f4f349.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/com.aurelhubert-ahbottomnavigation-2.0.6_5928abab6b30892813381e9c319d13ed233ed2ef.jar" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/com.aurelhubert-ahbottomnavigation-2.0.6_5928abab6b30892813381e9c319d13ed233ed2ef.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/com.balysv.materialmenu-material-menu-1.5.4_d71416fbe9bd9e6ef35d09554316d2e4625560f3.jar" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/com.balysv.materialmenu-material-menu-1.5.4_d71416fbe9bd9e6ef35d09554316d2e4625560f3.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/com.balysv.materialmenu-material-menu-toolbar-1.5.4_98755d1c35d1f079a6b70ee0559237c10f4fb4c8.jar" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/com.balysv.materialmenu-material-menu-toolbar-1.5.4_98755d1c35d1f079a6b70ee0559237c10f4fb4c8.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/com.facebook.fbui.textlayoutbuilder-textlayoutbuilder-1.0.0_60e9616a3d0f690dc88626a19eeb14dd7b7ea95d.jar" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/com.facebook.fbui.textlayoutbuilder-textlayoutbuilder-1.0.0_60e9616a3d0f690dc88626a19eeb14dd7b7ea95d.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/com.facebook.fresco-drawee-1.3.0_8ed8eaf777d59dd0d6f16a8cea277f6f7ef6752c.jar" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/com.facebook.fresco-drawee-1.3.0_8ed8eaf777d59dd0d6f16a8cea277f6f7ef6752c.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/com.facebook.fresco-fbcore-1.3.0_78167be54e5fe112281d6900e217ce83e217a517.jar" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/com.facebook.fresco-fbcore-1.3.0_78167be54e5fe112281d6900e217ce83e217a517.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/com.facebook.fresco-fresco-1.3.0_794e7b039dcc724083ae626401ac09a24148f427.jar" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/com.facebook.fresco-fresco-1.3.0_794e7b039dcc724083ae626401ac09a24148f427.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/com.facebook.fresco-imagepipeline-1.3.0_4d567c61d290bb14978a4336920eac1f82cfdb9d.jar" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/com.facebook.fresco-imagepipeline-1.3.0_4d567c61d290bb14978a4336920eac1f82cfdb9d.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/com.facebook.fresco-imagepipeline-base-1.3.0_ff0e55ddad7d085d0e69e3779c30a4df10bb318c.jar" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/com.facebook.fresco-imagepipeline-base-1.3.0_ff0e55ddad7d085d0e69e3779c30a4df10bb318c.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/com.facebook.fresco-imagepipeline-okhttp3-1.3.0_f4714b7463597626fb26df009ef3b9dbd017d5a7.jar" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/com.facebook.fresco-imagepipeline-okhttp3-1.3.0_f4714b7463597626fb26df009ef3b9dbd017d5a7.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/com.facebook.react-react-native-0.55.4_666dfd8073142028a4ccd362d719a2d701384566.jar" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/com.facebook.react-react-native-0.55.4_666dfd8073142028a4ccd362d719a2d701384566.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/com.facebook.soloader-soloader-0.1.0_e654c1e5b0724e4a85fe1ca930927be166a6a108.jar" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/com.facebook.soloader-soloader-0.1.0_e654c1e5b0724e4a85fe1ca930927be166a6a108.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/debug_031f19cafd716c77c03fa9c69bb642b72dbc5f0a.jar" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/debug_031f19cafd716c77c03fa9c69bb642b72dbc5f0a.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/infer-annotations-4.0_e6db2a3c243788b6578da5e9e05a05128843b293.jar" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/infer-annotations-4.0_e6db2a3c243788b6578da5e9e05a05128843b293.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/javax.inject-1_eeb2043ec7cb072c5bb7369e125e2fd44b08b543.jar" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/javax.inject-1_eeb2043ec7cb072c5bb7369e125e2fd44b08b543.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/jsr305-3.0.0_5484924077ae20c949e369e4924d015f4e6ca0d0.jar" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/jsr305-3.0.0_5484924077ae20c949e369e4924d015f4e6ca0d0.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/library-2.4.0_203589f7b326bc7a6e4247f64af3d955aff203eb.jar" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/library-2.4.0_203589f7b326bc7a6e4247f64af3d955aff203eb.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/okhttp-3.6.0_21dac35bcc007b49619d5c9aa5db2342993bcb53.jar" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/okhttp-3.6.0_21dac35bcc007b49619d5c9aa5db2342993bcb53.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/okhttp-urlconnection-3.6.0_84760420c433948dc8a6b4772e24c301c36d9b36.jar" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/okhttp-urlconnection-3.6.0_84760420c433948dc8a6b4772e24c301c36d9b36.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/okio-1.13.0_b997ba5ee4bcee614a9df6470c72129eae6d2d05.jar" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/okio-1.13.0_b997ba5ee4bcee614a9df6470c72129eae6d2d05.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/staticlayout-proxy-1.0_967deba6b001e78d26eee8643d37aee40bde2f7b.jar" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/staticlayout-proxy-1.0_967deba6b001e78d26eee8643d37aee40bde2f7b.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/support-annotations-25.3.1_9dc9beb9ea034d1b94741aa705feb3a0afee2a0f.jar" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build/intermediates/pre-dexed/debug/support-annotations-25.3.1_9dc9beb9ea034d1b94741aa705feb3a0afee2a0f.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/build/outputs/apk/app-debug.apk" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build/outputs/apk/app-debug.apk" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/CustomMultiSlider/CustomMultiSlider.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/CustomMultiSlider/CustomMultiSlider.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/FormatReceivedData/HandleReceivedData.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/FormatReceivedData/HandleReceivedData.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Input/Input.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Input/Input.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/PrepareToSend/PrepareToSend.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/PrepareToSend/PrepareToSend.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ResultPage_GraphComponent/GraphComponent.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ResultPage_GraphComponent/GraphComponent.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/LinedLabel/LinedLabel.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/LinedLabel/LinedLabel.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/ResultPage_PieChartsComponent/PieChartsComponent.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ResultPage_PieChartsComponent/PieChartsComponent.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/SendForm/SendForm.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/SendForm/SendForm.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/dropDownList/DropDownList.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/dropDownList/DropDownList.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/FormScreen/FormScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/FormScreen/FormScreen.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ResultsList/ResultsList.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ResultsList/ResultsList.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/screens/FormScreen1_initial/FormScreen_initial.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/FormScreen1_initial/FormScreen_initial.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/screens/FormScreen2_timeZonage/FormScreen_timeZonage.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/FormScreen2_timeZonage/FormScreen_timeZonage.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/screens/FormScreen3_weights/FormScreen_weights.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/FormScreen3_weights/FormScreen_weights.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/FormScreen4_advanced/FormScreen_advanced.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/FormScreen4_advanced/FormScreen_advanced.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screens/FormScreenV2/FormScreenV2.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/FormScreenV2/FormScreenV2.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/screens/MainScreen/MainScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/MainScreen/MainScreen.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/ResultPage/ResultPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/ResultPage/ResultPage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/SendFormScreen/SendFormScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/SendFormScreen/SendFormScreen.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screens/MainTabs/StartMainTabs.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/MainTabs/StartMainTabs.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screens/ResultScreen/ResultScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/ResultScreen/ResultScreen.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/store/actions/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/actions/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/store/actions/renameData.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/actions/renameData.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/store/configureStore.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/configureStore.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/store/reducers/root.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/reducers/root.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -86,53 +38,65 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="FormScreen_initial.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/screens/FormScreen1_initial/FormScreen_initial.js">
+      <file leaf-file-name="ResultsList.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/components/ResultsList/ResultsList.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="210">
-              <caret line="18" column="46" selection-start-line="18" selection-start-column="46" selection-end-line="18" selection-end-column="46" />
+            <state relative-caret-position="21">
+              <caret line="20" column="39" selection-start-line="20" selection-start-column="39" selection-end-line="20" selection-end-column="39" />
               <folding>
-                <element signature="e#17#60#0" expanded="true" />
+                <element signature="e#0#25#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DropDownList.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/components/dropDownList/DropDownList.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1638">
-              <caret line="84" column="25" selection-start-line="84" selection-start-column="25" selection-end-line="84" selection-end-column="25" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="FormScreen.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/screens/FormScreen/FormScreen.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="273">
-              <caret line="30" column="23" selection-start-line="30" selection-start-column="23" selection-end-line="30" selection-end-column="23" />
-              <folding>
-                <element signature="e#15#54#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="PrepareToSend.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/components/PrepareToSend/PrepareToSend.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="362">
-              <caret line="173" selection-start-line="173" selection-end-line="173" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MainScreen.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="MainScreen.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/screens/MainScreen/MainScreen.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="348">
-              <caret line="138" column="33" selection-start-line="138" selection-start-column="33" selection-end-line="138" selection-end-column="33" />
+            <state>
+              <caret line="65" column="30" lean-forward="true" selection-start-line="65" selection-start-column="30" selection-end-line="65" selection-end-column="30" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ResultScreen.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/screens/ResultScreen/ResultScreen.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="77">
+              <caret line="214" column="24" selection-start-line="214" selection-start-column="24" selection-end-line="214" selection-end-column="24" />
+              <folding>
+                <element signature="e#0#39#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SyncStore.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/components/SyncStore/SyncStore.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state>
+              <caret lean-forward="true" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="root.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/store/reducers/root.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="497">
+              <caret line="111" column="9" selection-start-line="111" selection-start-column="9" selection-end-line="111" selection-end-column="9" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="configureStore.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/store/configureStore.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="392">
+              <caret line="59" column="2" lean-forward="true" selection-start-line="59" selection-start-column="2" selection-end-line="59" selection-end-column="2" />
+              <folding>
+                <element signature="e#0#26#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -140,8 +104,32 @@
       <file leaf-file-name="SendForm.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/components/SendForm/SendForm.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1281">
+            <state relative-caret-position="541">
               <caret line="62" selection-start-line="62" selection-end-line="62" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="App.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/App.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="294">
+              <caret line="27" column="27" selection-start-line="27" selection-start-column="27" selection-end-line="27" selection-end-column="27" />
+              <folding>
+                <element signature="e#170#231#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="registerContainerWithRedux.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/store/HOC/registerContainerWithRedux.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="441">
+              <caret line="21" selection-start-line="21" selection-end-line="21" />
+              <folding>
+                <element signature="e#0#41#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -149,42 +137,8 @@
       <file leaf-file-name="HandleReceivedData.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/components/FormatReceivedData/HandleReceivedData.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="462">
-              <caret line="22" column="34" selection-start-line="22" selection-start-column="34" selection-end-line="22" selection-end-column="34" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="SendFormScreen.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/screens/SendFormScreen/SendFormScreen.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1470">
-              <caret line="75" column="16" selection-start-line="75" selection-start-column="16" selection-end-line="75" selection-end-column="16" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="FormScreen_weights.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/screens/FormScreen3_weights/FormScreen_weights.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4410">
-              <caret line="218" column="32" selection-start-line="218" selection-start-column="32" selection-end-line="218" selection-end-column="32" />
-              <folding>
-                <element signature="e#17#60#0" expanded="true" />
-                <element signature="e#275#324#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ResultPage.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/screens/ResultPage/ResultPage.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3171">
-              <caret line="158" column="29" selection-start-line="158" selection-start-column="29" selection-end-line="158" selection-end-column="29" />
-              <folding>
-                <element signature="e#0#43#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="140">
+              <caret line="25" column="40" lean-forward="true" selection-start-line="25" selection-start-column="40" selection-end-line="25" selection-end-column="40" />
             </state>
           </provider>
         </entry>
@@ -193,18 +147,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>position</find>
-      <find>;</find>
-      <find>=</find>
-      <find>let</find>
-      <find>Te</find>
-      <find>totalScore</find>
-      <find>c</find>
-      <find>portal</find>
-      <find>page</find>
-      <find>switch</find>
-      <find>console.log</find>
-      <find>values</find>
       <find>console</find>
       <find>resultsList</find>
       <find>inputContainer</find>
@@ -223,6 +165,18 @@
       <find>pieData</find>
       <find>dataReceived</find>
       <find>error</find>
+      <find>set</find>
+      <find>setPage</find>
+      <find>PM</find>
+      <find>Evening</find>
+      <find>float</find>
+      <find>high</find>
+      <find>setState</find>
+      <find>handle</find>
+      <find>handleOnRe</find>
+      <find>this.props</find>
+      <find>setsta</find>
+      <find>format</find>
     </findStrings>
     <replaceStrings>
       <replace>svg.g</replace>
@@ -256,12 +210,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/android/app/src/main/java/com/mdra_app/MainApplication.java" />
-        <option value="$PROJECT_DIR$/src/functions/_handleOnlyNumbers.js" />
-        <option value="$PROJECT_DIR$/src/functions/_handleSubmit.js" />
-        <option value="$PROJECT_DIR$/src/store/actions/addData.js" />
-        <option value="$PROJECT_DIR$/android/app/build.gradle" />
-        <option value="$PROJECT_DIR$/src/components/DraggableItem/DraggableItem.js" />
         <option value="$PROJECT_DIR$/node_modules/react-native-draggable/Draggable.js" />
         <option value="$PROJECT_DIR$/android/settings.gradle" />
         <option value="$PROJECT_DIR$/node_modules/react-native-svg-charts/src/grid.js" />
@@ -270,43 +218,49 @@
         <option value="$PROJECT_DIR$/src/components/CustomMultiSlider/NonReusableMultiSlider.js" />
         <option value="$PROJECT_DIR$/src/screens/ResultTest/ResultTest.js" />
         <option value="$PROJECT_DIR$/src/components/FormatReceivedData/FormatReceivedData.js" />
-        <option value="$PROJECT_DIR$/App.js" />
         <option value="$PROJECT_DIR$/src/functions/OnPressFix.js" />
         <option value="$PROJECT_DIR$/src/screens/SideDrawer/SideDrawer.js" />
         <option value="$PROJECT_DIR$/src/store/actions/deletePlace.js" />
         <option value="$PROJECT_DIR$/src/store/actions/deleteFromList.js" />
         <option value="$PROJECT_DIR$/src/store/actions/deleteData.js" />
         <option value="$PROJECT_DIR$/src/store/actions/removeData.js" />
-        <option value="$PROJECT_DIR$/src/store/actions/index.js" />
-        <option value="$PROJECT_DIR$/src/store/actions/renameData.js" />
         <option value="$PROJECT_DIR$/src/store/actions/actionTypes.js" />
         <option value="$PROJECT_DIR$/node_modules/rn-viewpager/docs/indicatorviewpager.md" />
         <option value="$PROJECT_DIR$/node_modules/rn-viewpager/viewpager/IndicatorViewPager.js" />
-        <option value="$PROJECT_DIR$/src/components/ResultsList/ResultsList.js" />
-        <option value="$PROJECT_DIR$/src/screens/ResultScreen/ResultScreen.js" />
         <option value="$PROJECT_DIR$/src/components/HandleReceivedData/HandleReceivedData.js" />
         <option value="$PROJECT_DIR$/src/store/actions/addToResultList.js" />
-        <option value="$PROJECT_DIR$/src/store/reducers/root.js" />
         <option value="$PROJECT_DIR$/android/app/src/main/AndroidManifest.xml" />
         <option value="$PROJECT_DIR$/src/components/dropDownList/DropDownList.js" />
         <option value="$PROJECT_DIR$/src/components/Input/Input.js" />
         <option value="$PROJECT_DIR$/src/components/LineLabel/LineLabel.js" />
         <option value="$PROJECT_DIR$/src/components/CustomMultiSlider/CustomMultiSlider.js" />
-        <option value="$PROJECT_DIR$/src/screens/FormScreen3_weights/FormScreen_weights.js" />
-        <option value="$PROJECT_DIR$/src/components/LinedLabel/LinedLabel.js" />
         <option value="$PROJECT_DIR$/src/screens/FormScreen4_advanced/FormScreen_advanced.js" />
         <option value="$PROJECT_DIR$/src/components/ResultPage_GraphComponent/GraphComponent.js" />
         <option value="$PROJECT_DIR$/src/components/PieResultsModal/PieResultsModal.js" />
-        <option value="$PROJECT_DIR$/src/components/ResultPage_PieChartsComponent/PieChartsComponent.js" />
         <option value="$PROJECT_DIR$/src/components/SendForm/SendForm.js" />
         <option value="$PROJECT_DIR$/src/screens/FormScreen/FormScreen.js" />
-        <option value="$PROJECT_DIR$/src/screens/FormScreen2_timeZonage/FormScreen_timeZonage.js" />
-        <option value="$PROJECT_DIR$/src/screens/ResultPage/ResultPage.js" />
-        <option value="$PROJECT_DIR$/src/screens/FormScreen1_initial/FormScreen_initial.js" />
         <option value="$PROJECT_DIR$/src/screens/SendFormScreen/SendFormScreen.js" />
-        <option value="$PROJECT_DIR$/src/components/FormatReceivedData/HandleReceivedData.js" />
         <option value="$PROJECT_DIR$/src/components/PrepareToSend/PrepareToSend.js" />
+        <option value="$PROJECT_DIR$/src/screens/ResultPage/ResultPage.js" />
+        <option value="$PROJECT_DIR$/src/screens/MainTabs/StartMainTabs.js" />
+        <option value="$PROJECT_DIR$/src/screens/FormScreen1_initial/FormScreen_initialV2.js" />
+        <option value="$PROJECT_DIR$/src/screens/FormScreen3_weights/FormScreen_weights.js" />
+        <option value="$PROJECT_DIR$/src/components/LinedLabel/LinedLabel.js" />
+        <option value="$PROJECT_DIR$/src/components/ResultPage_PieChartsComponent/PieChartsComponent.js" />
+        <option value="$PROJECT_DIR$/src/screens/FormScreenV2/FormScreenV2.js" />
+        <option value="$PROJECT_DIR$/src/store/actions/index.js" />
+        <option value="$PROJECT_DIR$/src/store/actions/renameData.js" />
+        <option value="$PROJECT_DIR$/src/screens/FormScreen2_timeZonage/FormScreen_timeZonage.js" />
+        <option value="$PROJECT_DIR$/src/screens/FormTest/FormTest.js" />
+        <option value="$PROJECT_DIR$/src/screens/FormScreen1_initial/FormScreen_initial.js" />
+        <option value="$PROJECT_DIR$/src/components/ResultsList/ResultsList.js" />
+        <option value="$PROJECT_DIR$/src/screens/ResultScreen/ResultScreen.js" />
+        <option value="$PROJECT_DIR$/src/components/SyncStore/SyncStore.js" />
         <option value="$PROJECT_DIR$/src/screens/MainScreen/MainScreen.js" />
+        <option value="$PROJECT_DIR$/App.js" />
+        <option value="$PROJECT_DIR$/src/components/FormatReceivedData/HandleReceivedData.js" />
+        <option value="$PROJECT_DIR$/src/store/configureStore.js" />
+        <option value="$PROJECT_DIR$/src/store/reducers/root.js" />
       </list>
     </option>
   </component>
@@ -327,10 +281,9 @@
     </packageJsonPaths>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="1916" />
-    <option name="y" value="7" />
-    <option name="width" value="1387" />
-    <option name="height" value="1047" />
+    <option name="x" value="1920" />
+    <option name="width" value="1435" />
+    <option name="height" value="1044" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -338,7 +291,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -383,6 +335,13 @@
               <item name="MDRA_app" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="components" type="462c0819:PsiDirectoryNode" />
+              <item name="Input" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="MDRA_app" type="b2602c69:ProjectViewProjectNode" />
+              <item name="MDRA_app" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="components" type="462c0819:PsiDirectoryNode" />
               <item name="LinedLabel" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -397,7 +356,21 @@
               <item name="MDRA_app" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="components" type="462c0819:PsiDirectoryNode" />
+              <item name="ResultsList" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="MDRA_app" type="b2602c69:ProjectViewProjectNode" />
+              <item name="MDRA_app" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="components" type="462c0819:PsiDirectoryNode" />
               <item name="SendForm" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="MDRA_app" type="b2602c69:ProjectViewProjectNode" />
+              <item name="MDRA_app" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="components" type="462c0819:PsiDirectoryNode" />
+              <item name="SyncStore" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="MDRA_app" type="b2602c69:ProjectViewProjectNode" />
@@ -424,7 +397,35 @@
               <item name="MDRA_app" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="screens" type="462c0819:PsiDirectoryNode" />
+              <item name="FormScreen2_timeZonage" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="MDRA_app" type="b2602c69:ProjectViewProjectNode" />
+              <item name="MDRA_app" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="screens" type="462c0819:PsiDirectoryNode" />
               <item name="FormScreen3_weights" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="MDRA_app" type="b2602c69:ProjectViewProjectNode" />
+              <item name="MDRA_app" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="screens" type="462c0819:PsiDirectoryNode" />
+              <item name="FormScreen4_advanced" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="MDRA_app" type="b2602c69:ProjectViewProjectNode" />
+              <item name="MDRA_app" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="screens" type="462c0819:PsiDirectoryNode" />
+              <item name="FormScreenV2" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="MDRA_app" type="b2602c69:ProjectViewProjectNode" />
+              <item name="MDRA_app" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="screens" type="462c0819:PsiDirectoryNode" />
+              <item name="FormTest" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="MDRA_app" type="b2602c69:ProjectViewProjectNode" />
@@ -438,7 +439,21 @@
               <item name="MDRA_app" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="screens" type="462c0819:PsiDirectoryNode" />
+              <item name="MainTabs" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="MDRA_app" type="b2602c69:ProjectViewProjectNode" />
+              <item name="MDRA_app" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="screens" type="462c0819:PsiDirectoryNode" />
               <item name="ResultPage" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="MDRA_app" type="b2602c69:ProjectViewProjectNode" />
+              <item name="MDRA_app" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="screens" type="462c0819:PsiDirectoryNode" />
+              <item name="ResultScreen" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="MDRA_app" type="b2602c69:ProjectViewProjectNode" />
@@ -447,14 +462,35 @@
               <item name="screens" type="462c0819:PsiDirectoryNode" />
               <item name="SendFormScreen" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="MDRA_app" type="b2602c69:ProjectViewProjectNode" />
+              <item name="MDRA_app" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="store" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="MDRA_app" type="b2602c69:ProjectViewProjectNode" />
+              <item name="MDRA_app" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="store" type="462c0819:PsiDirectoryNode" />
+              <item name="HOC" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="MDRA_app" type="b2602c69:ProjectViewProjectNode" />
+              <item name="MDRA_app" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="store" type="462c0819:PsiDirectoryNode" />
+              <item name="reducers" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="SearchEverywhereHistoryKey" value="sendForm&#9;FILE&#9;file://C:/Users/jeffe/Documents/here/git_documents/MDRA_app/src/screens/SendFormScreen/SendFormScreen.js&#10;svg&#9;null&#9;null&#10;navigat&#9;null&#9;null&#10;register&#9;null&#9;null" />
+    <property name="SearchEverywhereHistoryKey" value="ViewPagerAndroid&#9;null&#9;null&#10;sendForm&#9;FILE&#9;file://C:/Users/jeffe/Documents/here/git_documents/MDRA_app/src/screens/SendFormScreen/SendFormScreen.js&#10;svg&#9;null&#9;null&#10;navigat&#9;null&#9;null&#10;register&#9;null&#9;null" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../../rncourse" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
@@ -462,19 +498,19 @@
     <property name="nodejs_package_manager_path" value="yarn" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\jeffe\Documents\here\git_documents\MDRA_app\src\store\actions" />
-      <recent name="C:\Users\jeffe\Documents\here\git_documents\MDRA_app\src\components" />
-      <recent name="C:\Users\jeffe\Documents\here\git_documents\MDRA_app\src\screens\FormScreen4_advanced" />
-      <recent name="C:\Users\jeffe\Documents\here\git_documents\MDRA_app\src\screens" />
-      <recent name="C:\Users\jeffe\Documents\here\git_documents\MDRA_app\src\assets" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\jeffe\Documents\here\git_documents\MDRA_app\src\components\CustomMultiSlider" />
       <recent name="C:\Users\jeffe\Documents\here\git_documents\MDRA_app\src\screens\ResultTest" />
       <recent name="C:\Users\jeffe\Documents\here\git_documents\MDRA_app\src\screens" />
       <recent name="C:\Users\jeffe\Documents\here\git_documents\MDRA_app\src\components\chartTest" />
       <recent name="C:\Users\jeffe\Documents\here\git_documents\MDRA_app\src" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\jeffe\Documents\here\git_documents\MDRA_app\src\store\actions" />
+      <recent name="C:\Users\jeffe\Documents\here\git_documents\MDRA_app\src\components" />
+      <recent name="C:\Users\jeffe\Documents\here\git_documents\MDRA_app\src\screens\FormScreen4_advanced" />
+      <recent name="C:\Users\jeffe\Documents\here\git_documents\MDRA_app\src\screens" />
+      <recent name="C:\Users\jeffe\Documents\here\git_documents\MDRA_app\src\assets" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -557,7 +593,14 @@
       <workItem from="1536066086771" duration="600000" />
       <workItem from="1536072489560" duration="1710000" />
       <workItem from="1536084686811" duration="628000" />
-      <workItem from="1536153044141" duration="988000" />
+      <workItem from="1536153044141" duration="8836000" />
+      <workItem from="1536169093624" duration="1924000" />
+      <workItem from="1536171214237" duration="1731000" />
+      <workItem from="1536173308996" duration="1731000" />
+      <workItem from="1536175221557" duration="2135000" />
+      <workItem from="1536177444194" duration="14226000" />
+      <workItem from="1536338368593" duration="27680000" />
+      <workItem from="1536930362283" duration="6382000" />
     </task>
     <task id="LOCAL-00001" summary="cleaned up some things to use redux properly, might need to go through this part one more time:&#10;&#10;- added configureStore,&#10;- Modified:&#10;index: to use the store and its reducers">
       <created>1529509642861</created>
@@ -692,27 +735,34 @@
       <option name="project" value="LOCAL" />
       <updated>1534947896642</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="Added:&#10; - fade Animation to customSlider&#10; - Red color to a false input&#10; - Line label with a center, right and left option&#10; - A number label for pie graphs&#10; - send form returns -1 if an error occured&#10; - function to prevent back button form exiting app&#10; - some icons here and there&#10; - breathing animation to mainscreen&#10; Modified:&#10; - Advanced params for correspondance with IMac webapp">
+      <created>1536154816149</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1536154816150</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="684926000" />
+    <option name="totallyTimeSpent" value="748583000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1916" y="7" width="1387" height="1047" extended-state="0" />
+    <frame x="1920" y="0" width="1435" height="1044" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.17716828" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.17179671" />
       <window_info anchor="bottom" id="TODO" order="7" />
       <window_info anchor="bottom" id="Docker" order="9" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.5040771" side_tool="true" visible="true" weight="0.20242023" />
+      <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.5010737" side_tool="true" visible="true" weight="0.3289183" />
+      <window_info anchor="bottom" id="Version Control" order="12" sideWeight="0.49033645" weight="0.15562914" />
       <window_info anchor="bottom" id="Run" order="3" />
       <window_info id="npm" order="2" side_tool="true" />
-      <window_info anchor="bottom" id="Version Control" order="12" sideWeight="0.4959229" visible="true" weight="0.20242023" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info anchor="bottom" id="Terminal" order="10" />
-      <window_info anchor="bottom" id="Debug" order="4" weight="0.4" />
+      <window_info anchor="bottom" id="Terminal" order="10" sideWeight="0.49892628" visible="true" weight="0.3289183" />
       <window_info id="Favorites" order="3" side_tool="true" />
+      <window_info anchor="bottom" id="Debug" order="4" weight="0.4" />
       <window_info anchor="bottom" id="TypeScript" order="8" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.24945295" />
       <window_info anchor="bottom" id="Inspection" order="6" weight="0.4" />
@@ -749,14 +799,15 @@
     <MESSAGE value="Modified some things, added react-native-loading-spinner-overlay to make the transition between restart form and form more fluid &lt;= might change how it is currently in order to make traversing the form more fluid in general, &#10;&#10;created a rename (non functional, only prints) and delete on list, but not a confirmation for either.&#10;&#10;Added proper colors to piecharts, and areaChart,&#10;Added button selector for the resultpage&#10;&#10;Prepare to send now formats data that is going to be sent at 99% (missing right formulation numbers)" />
     <MESSAGE value="PreparetoSend works properly, as well as the graphs' square (allegedly).&#10;&#10;Each result now contains its formData. &#10;&#10;Created a customSlider that displays max and min possible of the slider and makes the value of the currently modified element appear." />
     <MESSAGE value="PreparetoSend works properly, as well as the graphs' square (allegedly).&#10;&#10;Each result now contains its formData. &#10;&#10;Created a customSlider that displays max and min possible of the slider and makes the value of the currently modified element appear.&#10;&#10;KeyboardAvoidingView now works, I guess." />
-    <option name="LAST_COMMIT_MESSAGE" value="PreparetoSend works properly, as well as the graphs' square (allegedly).&#10;&#10;Each result now contains its formData. &#10;&#10;Created a customSlider that displays max and min possible of the slider and makes the value of the currently modified element appear.&#10;&#10;KeyboardAvoidingView now works, I guess." />
+    <MESSAGE value="Added:&#10; - fade Animation to customSlider&#10; - Red color to a false input&#10; - Line label with a center, right and left option&#10; - A number label for pie graphs&#10; - send form returns -1 if an error occured&#10; - function to prevent back button form exiting app&#10; - some icons here and there&#10; - breathing animation to mainscreen&#10; Modified:&#10; - Advanced params for correspondance with IMac webapp" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added:&#10; - fade Animation to customSlider&#10; - Red color to a false input&#10; - Line label with a center, right and left option&#10; - A number label for pie graphs&#10; - send form returns -1 if an error occured&#10; - function to prevent back button form exiting app&#10; - some icons here and there&#10; - breathing animation to mainscreen&#10; Modified:&#10; - Advanced params for correspondance with IMac webapp" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/src/screens/FormScreen1_initial/FormScreen_initial.js</url>
-          <line>180</line>
+          <line>187</line>
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/src/screens/ResultPage/ResultPage.js</url>
@@ -768,72 +819,10 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/functions/OnPressFix.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="481">
-          <caret line="33" column="15" selection-start-line="33" selection-start-column="15" selection-end-line="33" selection-end-column="15" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/store/HOC/registerContainerWithRedux.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="436">
-          <caret line="66" selection-start-line="66" selection-end-line="66" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/android/app/build/intermediates/incremental/packageDebug/dex-renamer-state.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="21">
-          <caret line="1" column="8" selection-start-line="1" selection-start-column="8" selection-end-line="1" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/android/app/build/outputs/logs/manifest-merger-debug-report.txt">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/android/app/build/intermediates/incremental/packageDebug/file-input-save-data.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="42">
-          <caret line="2" column="9" selection-start-line="2" selection-start-column="9" selection-end-line="2" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/store/actions/allowAdvancedOptions.js">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/store/actions/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="168">
-          <caret line="8" column="40" selection-start-line="8" selection-start-column="40" selection-end-line="8" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/store/actions/actionTypes.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="5" column="34" selection-start-line="5" selection-start-column="34" selection-end-line="5" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/store/actions/renameData.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="147">
-          <caret line="7" column="2" lean-forward="true" selection-start-line="7" selection-start-column="2" selection-end-line="7" selection-end-column="2" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/store/actions/removeData.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="84">
           <caret line="4" column="23" selection-start-line="4" selection-start-column="23" selection-end-line="4" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/store/configureStore.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="336">
-          <caret line="18" column="14" selection-start-line="18" selection-start-column="14" selection-end-line="18" selection-end-column="14" />
         </state>
       </provider>
     </entry>
@@ -896,20 +885,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/screens/ResultScreen/ResultScreen.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="61" column="150" selection-start-line="61" selection-start-column="150" selection-end-line="61" selection-end-column="150" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/ResultsList/ResultsList.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="945">
-          <caret line="45" column="7" selection-start-line="45" selection-start-column="7" selection-end-line="45" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/android/app/src/main/AndroidManifest.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="336">
@@ -917,31 +892,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/Input/Input.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="546">
-          <caret line="78" column="19" selection-start-line="3" selection-end-line="91" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/screens/MainTabs/StartMainTabs.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="42">
-          <caret line="2" column="17" selection-start-line="2" selection-start-column="17" selection-end-line="2" selection-end-column="52" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/node_modules/@ptomasroos/react-native-multi-slider/MultiSlider.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-9645">
           <caret line="23" column="41" selection-start-line="23" selection-start-column="41" selection-end-line="23" selection-end-column="41" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/LinedLabel/LinedLabel.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1554">
-          <caret line="75" column="32" selection-start-line="75" selection-start-column="32" selection-end-line="75" selection-end-column="32" />
         </state>
       </provider>
     </entry>
@@ -953,38 +907,10 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/components/PieResultsModal/PieResultsModal.js" />
-    <entry file="file://$PROJECT_DIR$/App.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="336">
-          <caret line="17" column="54" selection-start-line="17" selection-start-column="54" selection-end-line="17" selection-end-column="54" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/store/reducers/root.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="273">
-          <caret line="16" column="32" selection-start-line="16" selection-start-column="32" selection-end-line="16" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/ResultPage_PieChartsComponent/PieChartsComponent.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2373">
-          <caret line="113" column="37" selection-start-line="113" selection-start-column="37" selection-end-line="113" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/components/ResultPage_GraphComponent/GraphComponent.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3738">
           <caret line="178" column="65" selection-start-line="178" selection-start-column="65" selection-end-line="178" selection-end-column="65" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/screens/FormScreen2_timeZonage/FormScreen_timeZonage.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="798">
-          <caret line="50" selection-start-line="50" selection-end-line="50" />
         </state>
       </provider>
     </entry>
@@ -1012,6 +938,30 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/dropDownList/DropDownList.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1638">
+          <caret line="84" column="25" selection-start-line="84" selection-start-column="25" selection-end-line="84" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/PrepareToSend/PrepareToSend.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3591">
+          <caret line="173" selection-start-line="173" selection-end-line="173" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/screens/MainTabs/StartMainTabs.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="357">
+          <caret line="19" column="29" selection-start-line="19" selection-start-column="29" selection-end-line="19" selection-end-column="29" />
+          <folding>
+            <element signature="e#0#51#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/screens/FormScreen4_advanced/FormScreen_advanced.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1470">
@@ -1023,30 +973,24 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/screens/ResultPage/ResultPage.js">
+    <entry file="file://$PROJECT_DIR$/node_modules/react-native/Libraries/react-native/react-native-implementation.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3171">
-          <caret line="158" column="29" selection-start-line="158" selection-start-column="29" selection-end-line="158" selection-end-column="29" />
-          <folding>
-            <element signature="e#0#43#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="21">
+          <caret line="59" column="50" selection-start-line="59" selection-start-column="50" selection-end-line="59" selection-end-column="50" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/screens/FormScreen/FormScreen.js">
+    <entry file="file://$PROJECT_DIR$/node_modules/react-native/Libraries/Components/ViewPager/ViewPagerAndroid.android.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="273">
-          <caret line="30" column="23" selection-start-line="30" selection-start-column="23" selection-end-line="30" selection-end-column="23" />
-          <folding>
-            <element signature="e#15#54#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="226">
+          <caret line="213" column="9" selection-start-line="213" selection-start-column="2" selection-end-line="213" selection-end-column="9" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/screens/FormScreen3_weights/FormScreen_weights.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4410">
-          <caret line="218" column="32" selection-start-line="218" selection-start-column="32" selection-end-line="218" selection-end-column="32" />
+        <state relative-caret-position="287">
+          <caret line="24" column="6" selection-start-line="24" selection-start-column="6" selection-end-line="24" selection-end-column="6" />
           <folding>
             <element signature="e#17#60#0" expanded="true" />
             <element signature="e#275#324#0" expanded="true" />
@@ -1054,55 +998,198 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/screens/FormScreen1_initial/FormScreen_initial.js">
+    <entry file="file://$PROJECT_DIR$/src/screens/FormScreen1_initial/FormScreen_initialV2.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="18" column="46" selection-start-line="18" selection-start-column="46" selection-end-line="18" selection-end-column="46" />
+        <state relative-caret-position="5145">
+          <caret line="255" column="30" selection-start-line="255" selection-start-column="30" selection-end-line="255" selection-end-column="30" />
           <folding>
             <element signature="e#17#60#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/dropDownList/DropDownList.js">
+    <entry file="file://$PROJECT_DIR$/src/components/LinedLabel/LinedLabel.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1638">
-          <caret line="84" column="25" selection-start-line="84" selection-start-column="25" selection-end-line="84" selection-end-column="25" />
+        <state relative-caret-position="1323">
+          <caret line="64" column="15" selection-start-line="64" selection-start-column="15" selection-end-line="64" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/ResultPage_PieChartsComponent/PieChartsComponent.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="5082">
+          <caret line="245" column="23" selection-start-line="160" selection-start-column="16" selection-end-line="245" selection-end-column="23" />
+          <folding>
+            <element signature="e#0#43#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/store/actions/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="10" column="38" selection-start-line="10" selection-start-column="38" selection-end-line="10" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/screens/FormScreen/FormScreen.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1113">
+          <caret line="91" column="26" selection-start-line="91" selection-start-column="26" selection-end-line="91" selection-end-column="56" />
+          <folding>
+            <element signature="e#15#54#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/screens/FormScreenV2/FormScreenV2.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="287">
+          <caret line="171" column="54" lean-forward="true" selection-start-line="171" selection-start-column="54" selection-end-line="171" selection-end-column="54" />
+          <folding>
+            <element signature="e#15#54#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/store/actions/renameData.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="5" column="15" selection-start-line="5" selection-start-column="15" selection-end-line="5" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/Input/Input.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1008">
+          <caret line="73" column="35" selection-start-line="73" selection-start-column="35" selection-end-line="73" selection-end-column="35" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/screens/SendFormScreen/SendFormScreen.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1470">
+        <state relative-caret-position="462">
           <caret line="75" column="16" selection-start-line="75" selection-start-column="16" selection-end-line="75" selection-end-column="16" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/SendForm/SendForm.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1281">
-          <caret line="62" selection-start-line="62" selection-end-line="62" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/FormatReceivedData/HandleReceivedData.js">
+    <entry file="file://$PROJECT_DIR$/src/screens/FormTest/FormTest.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="462">
-          <caret line="22" column="34" selection-start-line="22" selection-start-column="34" selection-end-line="22" selection-end-column="34" />
+          <caret line="70" column="19" lean-forward="true" selection-start-line="70" selection-start-column="19" selection-end-line="70" selection-end-column="19" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/PrepareToSend/PrepareToSend.js">
+    <entry file="file://$PROJECT_DIR$/src/screens/FormScreen1_initial/FormScreen_initial.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="362">
-          <caret line="173" selection-start-line="173" selection-end-line="173" />
+        <state relative-caret-position="-189">
+          <caret line="212" column="31" selection-start-line="212" selection-start-column="31" selection-end-line="212" selection-end-column="31" />
+          <folding>
+            <element signature="e#17#60#0" expanded="true" />
+            <element signature="e#358#407#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/screens/ResultPage/ResultPage.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2541">
+          <caret line="162" column="24" selection-start-line="162" selection-start-column="24" selection-end-line="162" selection-end-column="39" />
+          <folding>
+            <element signature="e#0#43#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/screens/FormScreen2_timeZonage/FormScreen_timeZonage.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="777">
+          <caret line="49" column="7" selection-start-line="39" selection-start-column="4" selection-end-line="49" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/ResultsList/ResultsList.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="21">
+          <caret line="20" column="39" selection-start-line="20" selection-start-column="39" selection-end-line="20" selection-end-column="39" />
+          <folding>
+            <element signature="e#0#25#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/screens/ResultScreen/ResultScreen.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="77">
+          <caret line="214" column="24" selection-start-line="214" selection-start-column="24" selection-end-line="214" selection-end-column="24" />
+          <folding>
+            <element signature="e#0#39#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/screens/MainScreen/MainScreen.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="348">
-          <caret line="138" column="33" selection-start-line="138" selection-start-column="33" selection-end-line="138" selection-end-column="33" />
+        <state>
+          <caret line="65" column="30" lean-forward="true" selection-start-line="65" selection-start-column="30" selection-end-line="65" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/FormatReceivedData/HandleReceivedData.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="140">
+          <caret line="25" column="40" lean-forward="true" selection-start-line="25" selection-start-column="40" selection-end-line="25" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/store/HOC/registerContainerWithRedux.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="441">
+          <caret line="21" selection-start-line="21" selection-end-line="21" />
+          <folding>
+            <element signature="e#0#41#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="294">
+          <caret line="27" column="27" selection-start-line="27" selection-start-column="27" selection-end-line="27" selection-end-column="27" />
+          <folding>
+            <element signature="e#170#231#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/SendForm/SendForm.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="541">
+          <caret line="62" selection-start-line="62" selection-end-line="62" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/store/configureStore.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="392">
+          <caret line="59" column="2" lean-forward="true" selection-start-line="59" selection-start-column="2" selection-end-line="59" selection-end-column="2" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/SyncStore/SyncStore.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret lean-forward="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/store/reducers/root.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="497">
+          <caret line="111" column="9" selection-start-line="111" selection-start-column="9" selection-end-line="111" selection-end-column="9" />
         </state>
       </provider>
     </entry>

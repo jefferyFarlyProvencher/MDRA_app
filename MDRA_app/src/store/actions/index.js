@@ -7,3 +7,5 @@ export {allowAdvancedOptions} from './allowAdvancedOptions';
 export {addToResultList} from './addToResultList';
 
 export {removeData} from './removeData';
+
+export {renameData} from './renameData'

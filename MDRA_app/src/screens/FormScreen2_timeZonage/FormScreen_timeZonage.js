@@ -41,6 +41,7 @@ class FormScreenTimeZonage extends PureComponent{
         try {
             this.props.onAddData(values, this.state.currentPosition);
             bag.setSubmitting(false);
+            this.props.setPage(this.state.currentPosition+1);
             this.props.onChangePosition(this.state.currentPosition+1);
         }catch (e) {
             bag.setSubmitting(false);
@@ -86,7 +87,7 @@ class FormScreenTimeZonage extends PureComponent{
             <View style={styles.container}>
                 <KeyboardAvoidingView>
                 <ScrollView>
-                <Text>Page 2 AKA: THERAPEUTIC BOXES</Text>
+                <Text>Page 2: THERAPEUTIC BOXES</Text>
                 <Formik
                     initialValues={(this.props.data)
                         ?{
@@ -264,7 +265,7 @@ class FormScreenTimeZonage extends PureComponent{
                             }
                             <View>
                                 <LinedLabel
-                                    label={"PM time"}
+                                    label={"Evening time"}
                                     textPosition="left"/>
                                 <View style={styles.twoPerRowContainer}>
                                     <View style={styles.inputContainerForTwo}>

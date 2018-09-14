@@ -1,5 +1,5 @@
 import React from 'react'
-import {View, Text,StyleSheet, FlatList} from 'react-native'
+import {View, Text,StyleSheet, FlatList, RefreshControl} from 'react-native'
 import {List, ListItem} from 'react-native-elements'
 import Swipeout  from 'react-native-swipeout'
 
@@ -9,15 +9,15 @@ const ResultsList = (props) => {
     };
 
     const handleOnPressRename = (key) => {
-        //TODO: launch rename prompt
-        props.onRenameData(key, newName);
-      console.log("Should rename this item: "+ key);
+        props.onRenameData(key);
+        console.log("Should rename this item: "+ key);
     };
     return(
         <List>
             <FlatList
                 style={styles.listContainer}
                 data = {props.list}
+                extraData={props.extraData}
                 renderItem ={(info)=> (
                     <Swipeout
                         right={
@@ -41,7 +41,7 @@ const ResultsList = (props) => {
                     >
                         <ListItem
                             roundAvatar
-                            title="Test Result"
+                            title={"Test Result: "+info.item.id}
                             subtitle={info.item.name}
                             key={info.item.key}
                             onPress = {() => {

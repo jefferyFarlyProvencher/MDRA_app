@@ -9,6 +9,7 @@ import Icon from "react-native-vector-icons/FontAwesome"
 //component imports
 import Input from "../../components/Input/Input";
 import DropDownList from "../../components/dropDownList/DropDownList";
+import LinedLabel from "../../components/LinedLabel/LinedLabel";
 
 //actions imports
 import {connect}  from "react-redux";
@@ -22,8 +23,11 @@ class FormScreenInitial extends PureComponent{
         //current position is the current step of the form
         currentPosition: 0,
         //formulation values are there to set the dosage
-        //TODO do the thing properly
-        formulaValues: ["Ritalin IR","Ritalin IR","Ritalin IR","Ritalin IR"],
+        formulaValues:
+            this.props.data
+                ?[this.props.data.formula0,this.props.data.formula1,this.props.data.formula2,this.props.data.formula3]
+                :["Ritalin IR","Ritalin IR","Ritalin IR","Ritalin IR"]
+        ,
         //if there is data and an amountOfPills,
         // Number of pill given (1 to 4)
         amountOfPills:this.props.data
@@ -38,9 +42,12 @@ class FormScreenInitial extends PureComponent{
 
     _handleSubmit =(async (values, bag) => {
         try {
+            this.props.onAddData(values, this.state.currentPosition);
             bag.setSubmitting(false);
             this.props.onChangePosition(this.state.currentPosition+1);
-            this.props.onAddData(values, this.state.currentPosition);
+            console.log("doing setPage");
+            this.props.setPage(this.state.currentPosition+1);
+
         }catch (e) {
             bag.setSubmitting(false);
             bag.setErrors(e);
@@ -258,6 +265,7 @@ class FormScreenInitial extends PureComponent{
                                 </View>
                                 <View>
                                 <View style={styles.drugContainer}>
+                                    <LinedLabel label={"Formulation 1"} textPosition={"center"}/>
                                     <View style={styles.twoPerRowContainer}>
                                         <DropDownList
                                             style={[styles.inputContainer, {width:"55%"}]}
@@ -302,6 +310,7 @@ class FormScreenInitial extends PureComponent{
                                     this.state.amountOfPills >= 2
                                         ?
                                     <View style={styles.drugContainer}>
+                                        <LinedLabel label={"Formulation 2"} textPosition={"center"}/>
                                         <View style={styles.twoPerRowContainer}>
                                             <DropDownList
                                                 style={[styles.inputContainer, {width:"55%"}]}
@@ -347,6 +356,7 @@ class FormScreenInitial extends PureComponent{
                                     this.state.amountOfPills >= 3
                                         ?
                                     <View style={styles.drugContainer}>
+                                        <LinedLabel label={"Formulation 3"} textPosition={"center"}/>
                                         <View style={styles.twoPerRowContainer}>
                                             <DropDownList
                                                 style={[styles.inputContainer, {width:"55%"}]}
@@ -391,6 +401,7 @@ class FormScreenInitial extends PureComponent{
                                     this.state.amountOfPills >= 4
                                         ?
                                     <View style={styles.drugContainer}>
+                                        <LinedLabel label={"Formulation 4"} textPosition={"center"}/>
                                         <View style={styles.twoPerRowContainer}>
                                             <DropDownList
                                                 style={[styles.inputContainer, {width:"55%"}]}
