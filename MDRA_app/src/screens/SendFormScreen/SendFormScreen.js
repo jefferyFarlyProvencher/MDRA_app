@@ -21,7 +21,16 @@ class SendFormScreen extends PureComponent{
     };
 
     componentWillMount(){
-        this.sendRequest();
+        if(this.props.state.main.Page0Data) {
+            this.sendRequest();
+        }
+        else{
+            this.setState((oldState) =>({
+                ...oldState,
+                dataReceived: true,
+                textToDisplay: "DATA RECEIVED!!!"
+            }));
+        }
     }
 
     generateName = () => {

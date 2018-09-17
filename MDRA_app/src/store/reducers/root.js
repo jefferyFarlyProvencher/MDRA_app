@@ -110,6 +110,13 @@ const reducer = (state = initialState, action) => {
                 ...state
             }
         }
+        /*case(SET_LIST):
+        {
+            return {
+                ...state,
+                resultsList: action.list
+            }
+        }*/
         default:
             return state
     }

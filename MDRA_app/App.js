@@ -1,3 +1,4 @@
+import React from 'react';
 import { Navigation } from 'react-native-navigation';
 import {Provider} from 'react-redux';
 
@@ -24,25 +25,26 @@ import ResultPage from './src/screens/ResultPage/ResultPage';
 
 import SendForm from './src/components/SendForm/SendForm';
 
-const store = configureStore();
-console.log("STORE: "+store);
+const configureStoreResult = configureStore();
+const store = configureStoreResult.store;
+const persistor = configureStoreResult.persistor;
 
 // register all screens of the app (including internal ones)
 Navigation.registerComponent('MDRA_app.formTest', () => FormTest);
 Navigation.registerComponent('MDRA_app.mainScreenTest', () => mainScreenTest);
 Navigation.registerComponent('MDRA_app.mainScreen', ()=>MainScreen);
-Navigation.registerComponent('MDRA_app.resultScreen',()=>ResultScreen,store, Provider);
-Navigation.registerComponent('MDRA_app.sideDrawerScreen', () => SideDrawer, store, Provider);
-Navigation.registerComponent('MDRA_app.formScreen', ()=>FormScreen, store, Provider);
-Navigation.registerComponent('MDRA_app.formScreenV2', ()=>FormScreenV2, store, Provider);
-Navigation.registerComponent('MDRA_app.formScreenInitial', () => FormScreenInitial, store, Provider);
-Navigation.registerComponent('MDRA_app.formScreenInitialV2', () => FormScreenInitialV2, store, Provider);
-Navigation.registerComponent('MDRA_app.formScreenTimeZonage', () => FormScreenTimeZonage, store, Provider);
-Navigation.registerComponent('MDRA_app.formScreenWeights', () => FormScreenWeights, store, Provider);
-Navigation.registerComponent('MDRA_app.formScreenAdvanced', () => FormScreenAdvanced, store, Provider);
-Navigation.registerComponent('MDRA_app.resultTest', () => ResultTest, store, Provider);
-Navigation.registerComponent('MDRA_app.sendForm',() => SendForm, store, Provider);
-Navigation.registerComponent('MDRA_app.resultPage',() => ResultPage, store, Provider);
+Navigation.registerComponent('MDRA_app.resultScreen',()=>ResultScreen,store, Provider, persistor);
+Navigation.registerComponent('MDRA_app.sideDrawerScreen', () => SideDrawer, store, Provider, persistor);
+Navigation.registerComponent('MDRA_app.formScreen', ()=> FormScreen, store, Provider, persistor);
+Navigation.registerComponent('MDRA_app.formScreenV2', ()=> FormScreenV2, store, Provider, persistor);
+Navigation.registerComponent('MDRA_app.formScreenInitial', () => FormScreenInitial, store, Provider, persistor);
+Navigation.registerComponent('MDRA_app.formScreenInitialV2', () => FormScreenInitialV2, store, Provider, persistor);
+Navigation.registerComponent('MDRA_app.formScreenTimeZonage', () => FormScreenTimeZonage, store, Provider, persistor);
+Navigation.registerComponent('MDRA_app.formScreenWeights', () => FormScreenWeights, store, Provider, persistor);
+Navigation.registerComponent('MDRA_app.formScreenAdvanced', () => FormScreenAdvanced, store, Provider, persistor);
+Navigation.registerComponent('MDRA_app.resultTest', () => ResultTest, store, Provider, persistor);
+Navigation.registerComponent('MDRA_app.sendForm',() => SendForm, store, Provider, persistor);
+Navigation.registerComponent('MDRA_app.resultPage',() => ResultPage, store, Provider, persistor);
 
 //start App
 Navigation.startSingleScreenApp({
