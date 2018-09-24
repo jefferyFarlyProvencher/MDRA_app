@@ -1,6 +1,6 @@
 //system imports
 import React,{PureComponent} from 'react';
-import {View, Text, TouchableOpacity, ActivityIndicator, Animated, StyleSheet, ToastAndroid} from 'react-native';
+import {View, Text, TouchableOpacity, ActivityIndicator, Animated, StyleSheet, ToastAndroid, Platform} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 //component imports
@@ -88,7 +88,7 @@ class SendFormScreen extends PureComponent{
 
     _handlerOnPress = async () => {
         let message = (!this.state.dataReceived)? "Not Received Yet": "Received!";
-        ToastAndroid.showWithGravity("GOING BACK TO PAGE 1!!!", 1, ToastAndroid.TOP);
+        //ToastAndroid.showWithGravity("GOING BACK TO PAGE 1!!!", 1, ToastAndroid.TOP);
         this.props.onChangePosition(0);
     };
 
@@ -100,7 +100,7 @@ class SendFormScreen extends PureComponent{
                     <View>
                     {
                         !this.state.dataReceived
-                        ?<ActivityIndicator size={100} color="red" />
+                        ?<ActivityIndicator size={Platform.OS=='android'?100:1} color="red" />
                         :<Icon
                             size={150}
                             name={this.state.iconName}

@@ -20,7 +20,7 @@ const startTabs = () => {
                             {
                                 icon: sources[2], //Sources comes from the array up from here, [2] for the 3rd item sp ios-menu
                                 title: "Menu",
-                                id: "sideDrawerToggle"
+                                id: "sideDrawerToggle",
                             }
                         ]
                     }
@@ -47,7 +47,8 @@ const startTabs = () => {
             drawer: {
                 right: {
                     screen: "MDRA_app.sideDrawerScreen"
-                }
+                },
+                disableOpenGesture: true
             },
 
             appStyle:{

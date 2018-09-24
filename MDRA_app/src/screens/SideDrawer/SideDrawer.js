@@ -1,10 +1,20 @@
 import React, {Component} from 'react';
-import { View, Text,Platform, Dimensions, StyleSheet, TouchableOpacity, ToastAndroid } from 'react-native';
+import {
+    View,
+    Text,
+    Platform,
+    Dimensions,
+    StyleSheet,
+    TouchableOpacity,
+    ToastAndroid,
+    Alert,
+    BackHandler
+} from 'react-native';
 import {Navigation} from 'react-native-navigation';
 import {connect} from 'react-redux';
 
 import Icon from 'react-native-vector-icons/Ionicons';
-import {addToResultList, allowAdvancedOptions} from "../../store/actions";
+import {addToResultList, allowAdvancedOptions, emptyResultList} from "../../store/actions";
 import SendForm from '../../components/SendForm/SendForm'
 
 class SideDrawer extends Component{
@@ -24,7 +34,7 @@ class SideDrawer extends Component{
     };
 
     handleCreatorTest = async () => {
-        let data = await SendForm();
+        /*let data = await SendForm();
         if(data !== -1) {
             //console.log(JSON.stringify(data));
             this.props.onAddToResultList(data);
@@ -32,6 +42,47 @@ class SideDrawer extends Component{
             //this.props.onAddToResultList(FormatReceivedData(data));
             ToastAndroid.showWithGravity("Data added to List", 1, ToastAndroid.BOTTOM);
         }
+        */
+    };
+    emptyConfirmation = () => {
+        let choice = false;
+        Alert.alert(
+            'Confirmation',
+            'Do you really want to erase all of the Results?', [
+                {
+                    text: 'Nevermind, no',
+                    onPress: (() => console.log('Cancel Pressed')),
+                    style: 'cancel'
+                }, {
+                    text: 'Yes, erase everything',
+                    onPress: () => choice=true
+                }
+            ],
+            {
+                cancelable: false
+            }
+        );
+        return choice;
+    };
+
+    handleEmptyResultList = async() => {
+        Alert.alert(
+            'Confirmation',
+            'Do you really want to erase all of the Results?', [
+                {
+                    text: 'Nevermind, no',
+                    onPress: (() => console.log('Cancel Pressed')),
+                    style: 'cancel'
+                }, {
+                    text: 'Yes, erase everything',
+                    onPress: () => this.props.onEmptyResultList()
+                }
+            ],
+            {
+                cancelable: false
+            }
+        );
+
     };
 
     render() {
@@ -78,6 +129,16 @@ class SideDrawer extends Component{
                         <Text>Create test</Text>
                     </View>
                 </TouchableOpacity>
+                <TouchableOpacity onPress={this.handleEmptyResultList}>
+                    <View  style={styles.drawerItem}>
+                        <Icon
+                            size={40}
+                            name= {Platform.OS==='android'? "md-trash" :"ios-trash"}
+                            color="#52afff" style={styles.drawerItemIcon}
+                        />
+                        <Text>Empty Result List</Text>
+                    </View>
+                </TouchableOpacity>
 
             </View>
         );
@@ -108,7 +169,8 @@ const styles = StyleSheet.create({
 const mapDispatchToProps = dispatch => {
     return {
         allowAdvancedOptions: () => dispatch(allowAdvancedOptions()),
-        onAddToResultList: (data)=> dispatch(addToResultList(data))
+        onAddToResultList: (data)=> dispatch(addToResultList(data)),
+        onEmptyResultList: () => dispatch(emptyResultList())
     };
 };
 

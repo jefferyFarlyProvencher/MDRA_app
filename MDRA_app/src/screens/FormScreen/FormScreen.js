@@ -90,7 +90,7 @@ class FormScreen extends Component{
     indicatorPressedHandler = (pageNumber) => {
         //if the page selected is different from current page
         if(pageNumber !== this.props.state.main.position) {
-            isDataNotNull = 0;
+            let isDataNotNull = 0;
             if (pageNumber === 0) {
                 isDataNotNull = this.props.state.main.Page0Data
             }

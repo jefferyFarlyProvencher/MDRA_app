@@ -1,6 +1,6 @@
 import {
     ADD_DATA, ADD_LIST, ALLOW_ADV,
-    POS_CHNG, REMOVE_LIST, RENAME_LIST
+    POS_CHNG, REMOVE_LIST, RENAME_LIST, EMPTY_LIST
 } from '../actions/actionTypes'
 
 const initialState = {
@@ -110,13 +110,13 @@ const reducer = (state = initialState, action) => {
                 ...state
             }
         }
-        /*case(SET_LIST):
+        case(EMPTY_LIST):
         {
             return {
                 ...state,
-                resultsList: action.list
+                resultsList: []
             }
-        }*/
+        }
         default:
             return state
     }

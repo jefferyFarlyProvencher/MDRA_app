@@ -7,7 +7,8 @@ import {
     ActivityIndicator,
     Animated,
     StyleSheet,
-    Dimensions
+    Dimensions,
+    Platform
 } from 'react-native';
 
 import startMainTabs from '../MainTabs/StartMainTabs'
@@ -91,7 +92,7 @@ class MainScreen extends Component{
 
                         <TouchableWithoutFeedback onPress={this._handlerOnPress}>
                                 {this.state.loading
-                                    ?<ActivityIndicator size={100} color="#765F97" />
+                                    ?<ActivityIndicator size={Platform.OS=='android'?100:1} color="#765F97" />
                                     :<View style={[styles.textContainer,]}>
                                         <Text style={[
                                             styles.textStyle,
@@ -136,7 +137,6 @@ const styles= StyleSheet.create({
         textAlign:'center',
         alignItems: 'center',
         justifyContent: 'center',
-        fontFamily: 'lucida grande',
         width: "75%"
     },
 

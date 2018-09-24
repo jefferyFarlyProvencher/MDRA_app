@@ -166,12 +166,13 @@ class FormScreen extends Component{
 
         return(
             <View style={styles.overTheIndicatorContainer}>
-                {this.props.state.main.position < 4?
+                {this.props.state.main.position < 4 || undefined?
                     <View style={{flex:1}}>
                         <IndicatorViewPager
                             style={{height:'90%', width:"100%"}}
                             indicatorOnTop={true}
                             horizontalScroll={false}
+                            scrollEnabled={false}
                             ref={viewPager => { this.viewPager = viewPager; }}
                         >
                             <View>

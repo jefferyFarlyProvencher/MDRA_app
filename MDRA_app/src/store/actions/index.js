@@ -8,4 +8,6 @@ export {addToResultList} from './addToResultList';
 
 export {removeData} from './removeData';
 
-export {renameData} from './renameData'
+export {renameData} from './renameData';
+
+export { emptyResultList } from './emptyResultList';

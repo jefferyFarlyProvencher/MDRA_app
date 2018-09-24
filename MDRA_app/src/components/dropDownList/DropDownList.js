@@ -48,7 +48,6 @@ class DropDownList extends PureComponent{
                         {...this.props}
                         selectedValue={this.props.value}
                         style={styles.pickerStyle}
-                        itemStyle={styles.itemStyle}
                         onValueChange={(itemValue, itemIndex) => this._handleChange(itemValue)}
                         children={this._handlePickerItem()}
                     >
