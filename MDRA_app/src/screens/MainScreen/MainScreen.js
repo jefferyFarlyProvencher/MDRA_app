@@ -92,7 +92,7 @@ class MainScreen extends Component{
 
                         <TouchableWithoutFeedback onPress={this._handlerOnPress}>
                                 {this.state.loading
-                                    ?<ActivityIndicator size={Platform.OS=='android'?100:1} color="#765F97" />
+                                    ?<ActivityIndicator size={Platform.OS=='android'?100:0} color="#765F97" />
                                     :<View style={[styles.textContainer,]}>
                                         <Text style={[
                                             styles.textStyle,
