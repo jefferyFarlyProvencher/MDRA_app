@@ -112,7 +112,7 @@ class ResultTest extends PureComponent{
                             radius={100}
                             data={this.generateDataObjects(firstPieData)}
                             colorScale={['#1b3e70', '#62c9e4', '#c2c822', '#f8c82c', '#ed5f6d','#f6922d']}
-                            //animate={{duration: 500}}
+                            animate={{duration: 500}}
                             innerRadius={50}
                         />
                     </View>
@@ -131,7 +131,7 @@ class ResultTest extends PureComponent{
                                 radius={100}
                                 data={this.generateDataObjects(firstPieData)}
                                 colorScale={['#1b3e70', '#62c9e4', '#c2c822', '#f8c82c', '#ed5f6d','#f6922d']}
-                                //animate={{duration: 500}}
+                                animate={{duration: 500}}
                                 innerRadius={50}
                             />
                         </View>
@@ -153,7 +153,7 @@ class ResultTest extends PureComponent{
                             data={this.generateDataObjects(secondPieData)}
                             colorScale={['#1b3e70', '#62c9e4', '#c2c822', '#f8c82c', '#ed5f6d','#f6922d']}
                             labels={this.handleLabels(secondPieData)}
-                            //animate={{duration: 500}}
+                            animate={{duration: 500}}
                             innerRadius={50}
                         />
                     </View>

@@ -15,7 +15,6 @@ import {
 import { Button } from 'react-native-elements';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-import Picker from 'react-native-picker';
 
 //component imports
 import Input from "../../components/Input/Input";
@@ -168,17 +167,10 @@ class FormScreenInitial extends PureComponent{
         }
     };
 
-    _togglePicker = () => {
-        if(Picker.isPickerShow())
-        {
-            Picker.toggle();
-        }
-    };
-
 
     render() {
         let drugList = ["Ritalin IR","Pms-Methylphenidate IR", "Concerta", "Pms-Methylphenidate ER"];
-        let picker = Picker;
+        let picker = this.props.Picker;
         return(
             <View style={styles.container}>
                 <Text>Page 1</Text>
@@ -297,7 +289,8 @@ class FormScreenInitial extends PureComponent{
                                             name="formula0"
                                             onChange={(name, value) =>
                                             {
-                                                this.setCurrentFormulation(0,value);  setFieldValue(name, value)
+                                                this.setCurrentFormulation(0,value);
+                                                setFieldValue(name, value)
                                             }}
                                             itemList={drugList}
                                             Picker={picker}
@@ -338,7 +331,7 @@ class FormScreenInitial extends PureComponent{
                                 {
                                     this.state.amountOfPills >= 2
                                         ?
-                                        <View style={styles.drugContainer}>
+                                        <View style={[styles.styleEvenFormulations,styles.drugContainer]}>
                                             <LinedLabel label={"Formulation 2"} textPosition={"center"}/>
                                             <View style={styles.twoPerRowContainer}>
                                                 <DropDownListV2
@@ -539,7 +532,6 @@ const styles = StyleSheet.create({
         backgroundColor: "#fff",
         alignItems: "center",
         justifyContent: "center",
-        padding: 10
     },
     button: {
         marginTop: 20,
@@ -553,10 +545,12 @@ const styles = StyleSheet.create({
     },
 
     pillButtonsContainer: {
+        width: '100%',
         flexDirection:'row',
         justifyContent: "center",
         alignItems: 'flex-end',
-        borderWidth:1
+        borderWidth:0,
+        marginTop: (Dimensions.get('window').height)*0.005
     },
 
     twoPerRowContainer: {
@@ -576,12 +570,21 @@ const styles = StyleSheet.create({
         left: 0,
     },
 
+    styleEvenFormulations:{
+      backgroundColor: '#ebebeb',
+    },
+
+    styleUnevenFormulations:{
+
+    },
+
     drugContainer:{
         borderColor:"#555",
         borderWidth: 0.5,
         borderRadius:20,
         width: "95%",
-        marginLeft: 10,
+        marginLeft: 0,
+        marginBottom:3,
         padding: 10
     },
 

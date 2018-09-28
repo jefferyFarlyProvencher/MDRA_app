@@ -103,7 +103,7 @@ class ResultPage extends PureComponent {
     render() {
 
         return (
-            <View style={{backgroundColor:"#AAA", flex: 1}}>
+            <View style={{backgroundColor:"#FFF", flex: 1}}>
                 <IndicatorViewPager
                     style={{height:'90%', width:"100%"}}
                     indicator={this._renderTabIndicator()}

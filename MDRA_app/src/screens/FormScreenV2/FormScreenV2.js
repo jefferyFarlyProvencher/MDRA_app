@@ -16,6 +16,7 @@ import {PagerDotIndicator, IndicatorViewPager} from 'rn-viewpager'
 //Package Imports
 import StepIndicator from 'react-native-step-indicator';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import Picker from 'react-native-picker';
 
 //Screen Imports
 import FormScreenInitial from '../FormScreen1_initial/FormScreen_initialV2';
@@ -161,15 +162,15 @@ class FormScreen extends Component{
                             <View>
                                 <ScrollView>
                                     <KeyboardAwareScrollView>
-                                        <FormScreenInitial data={this.props.state.main.Page0Data} setPage={this.handleSetPage}/>
+                                        <FormScreenInitial data={this.props.state.main.Page0Data} setPage={this.handleSetPage} Picker={Picker}/>
                                     </KeyboardAwareScrollView>
                                 </ScrollView>
                             </View>
                             <View>
-                                <FormScreenTimeZonage data={this.props.state.main.Page1Data} setPage={this.handleSetPage}/>
+                                <FormScreenTimeZonage data={this.props.state.main.Page1Data} setPage={this.handleSetPage} Picker={Picker}/>
                             </View>
                             <View>
-                                <FormScreenWeights data={this.props.state.main.Page2Data} advancedAllowed={this.props.state.main.advanceTabAccessible} setPage={this.handleSetPage}/>
+                                <FormScreenWeights data={this.props.state.main.Page2Data} advancedAllowed={this.props.state.main.advanceTabAccessible} setPage={this.handleSetPage} Picker={Picker}/>
                             </View>
                             {this.props.state.main.advanceTabAccessible ?
                                 <View style={{flex:1}}>

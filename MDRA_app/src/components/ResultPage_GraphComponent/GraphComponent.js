@@ -1,5 +1,5 @@
 import React, {PureComponent} from 'react';
-import {View, Button, StyleSheet, Dimensions} from 'react-native';
+import {View, Button, StyleSheet, Dimensions, Platform} from 'react-native';
 import 'react-native-svg';
 
 import {VictoryArea, VictoryChart, VictoryLine} from "victory-native";
@@ -8,7 +8,7 @@ import Draggable from 'react-native-draggable';
 
 class GraphComponent extends PureComponent{
     state = {
-        animationTime:1000
+        animationTime:500
     };
 
     therapeuticBoxFormatter = (score) => {
@@ -178,7 +178,7 @@ class GraphComponent extends PureComponent{
         return(
             <View style={[this.props.style]} pointerEvents="none">
                 <VictoryChart
-                    //animate={{ duration: this.state.animationTime}}
+                    animate={Platform.OS==="ios"?{ duration: this.state.animationTime}:null}
                     domain={{x:[0,30],y: [0,25]}}
                 >
                     <VictoryArea

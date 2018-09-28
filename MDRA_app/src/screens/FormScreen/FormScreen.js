@@ -14,6 +14,7 @@ import {connect} from 'react-redux';
 //Package Imports
 import StepIndicator from 'react-native-step-indicator';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import Picker from 'react-native-picker';
 
 //Screen Imports
 import FormScreenInitial from '../FormScreen1_initial/FormScreen_initial';
@@ -71,15 +72,16 @@ class FormScreen extends Component{
 
     _screenSelector = () =>{
         //console.log(this.props.state.main.position);
+        let picker = Picker;
         switch (this.props.state.main.position){
             case 0:
-                return(<FormScreenInitial data={this.props.state.main.Page0Data}/>);
+                return(<FormScreenInitial data={this.props.state.main.Page0Data} Picker={picker}/>);
             case 1:
-                return(<FormScreenTimeZonage data={this.props.state.main.Page1Data}/>);
+                return(<FormScreenTimeZonage data={this.props.state.main.Page1Data} Picker={picker}/>);
             case 2:
-                return(<FormScreenWeights data={this.props.state.main.Page2Data} advancedAllowed={this.props.state.main.advanceTabAccessible}/>);
+                return(<FormScreenWeights data={this.props.state.main.Page2Data} advancedAllowed={this.props.state.main.advanceTabAccessible} Picker={picker}/>);
             case 3:
-                return(<FormScreenAdvanced data={this.props.state.main.Page3Data}/>);
+                return(<FormScreenAdvanced data={this.props.state.main.Page3Data} Picker={picker}/>);
             case 4:
                 return(<SendFormScreen/>);
             default:

@@ -44,26 +44,6 @@ class SideDrawer extends Component{
         }
         */
     };
-    emptyConfirmation = () => {
-        let choice = false;
-        Alert.alert(
-            'Confirmation',
-            'Do you really want to erase all of the Results?', [
-                {
-                    text: 'Nevermind, no',
-                    onPress: (() => console.log('Cancel Pressed')),
-                    style: 'cancel'
-                }, {
-                    text: 'Yes, erase everything',
-                    onPress: () => choice=true
-                }
-            ],
-            {
-                cancelable: false
-            }
-        );
-        return choice;
-    };
 
     handleEmptyResultList = async() => {
         Alert.alert(
@@ -88,7 +68,9 @@ class SideDrawer extends Component{
     render() {
         return(
             <View style = {[{width: Dimensions.get("window").width *0.7}, styles.container]}>
-                <Text style={{marginVertical:10}}>SideDrawer</Text>
+                <View>
+                    <Text style={{marginVertical:10, textAlign: "center", fontSize: 30}}>Menu</Text>
+                </View>
                 <TouchableOpacity onPress={this.logOutHandler}>
                     <View  style={styles.drawerItem}>
                         <Icon
@@ -130,11 +112,11 @@ class SideDrawer extends Component{
                     </View>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={this.handleEmptyResultList}>
-                    <View  style={styles.drawerItem}>
+                    <View  style={[styles.drawerItem,{borderBottomWidth: 1,}]}>
                         <Icon
                             size={40}
                             name= {Platform.OS==='android'? "md-trash" :"ios-trash"}
-                            color="#52afff" style={styles.drawerItemIcon}
+                            color="#52afff" style={[styles.drawerItemIcon]}
                         />
                         <Text>Empty Result List</Text>
                     </View>
@@ -158,7 +140,8 @@ const styles = StyleSheet.create({
        flexDirection: "row",
         alignItems: "center",
        padding:10,
-       backgroundColor: "#eeeeee"
+       backgroundColor: "#fff",
+       borderTopWidth: 1,
    },
 
    drawerItemIcon: {
