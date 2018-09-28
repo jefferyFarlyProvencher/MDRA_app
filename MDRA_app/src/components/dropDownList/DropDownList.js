@@ -1,6 +1,5 @@
 import React, {PureComponent} from 'react';
-import {StyleSheet,View} from 'react-native';
-import Picker from 'react-native-picker';
+import {StyleSheet,View, Picker} from 'react-native';
 
 import {
     FormValidationMessage,
@@ -50,8 +49,8 @@ class DropDownList extends PureComponent{
                         selectedValue={this.props.value}
                         style={styles.pickerStyle}
                         onValueChange={(itemValue, itemIndex) => this._handleChange(itemValue)}
-                        children={this._handlePickerItem()}
                     >
+                        {this._handlePickerItem()}
                     </Picker>
                 </View>
                 {error && <FormValidationMessage>{error}</FormValidationMessage>}

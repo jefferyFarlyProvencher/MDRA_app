@@ -4552,6 +4552,10 @@ react-native-navigation@^1.1.471:
   dependencies:
     lodash "4.x.x"
 
+react-native-picker@^4.3.7:
+  version "4.3.7"
+  resolved "https://registry.yarnpkg.com/react-native-picker/-/react-native-picker-4.3.7.tgz#9842e8c62ff0d8b676e9514d9f9172413c0518a8"
+
 react-native-step-indicator@0.0.9:
   version "0.0.9"
   resolved "https://registry.yarnpkg.com/react-native-step-indicator/-/react-native-step-indicator-0.0.9.tgz#939b78b43c131c048cf52493c4ed8a1bbc8ce034"

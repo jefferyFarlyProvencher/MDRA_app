@@ -22,6 +22,7 @@ import FormTest from './src/screens/FormTest/FormTest'
 import mainScreenTest from './src/screens/FormTest/mainScreenTest';
 import ResultTest from './src/screens/ResultTest/ResultTest';
 import ResultPage from './src/screens/ResultPage/ResultPage';
+import PickerTest from './src/screens/PickerTest/PickerTest';
 
 import SendForm from './src/components/SendForm/SendForm';
 
@@ -45,6 +46,7 @@ Navigation.registerComponent('MDRA_app.formScreenAdvanced', () => FormScreenAdva
 Navigation.registerComponent('MDRA_app.resultTest', () => ResultTest, store, Provider, persistor);
 Navigation.registerComponent('MDRA_app.sendForm',() => SendForm, store, Provider, persistor);
 Navigation.registerComponent('MDRA_app.resultPage',() => ResultPage, store, Provider, persistor);
+Navigation.registerComponent('MDRA_app.pickerTest',() => PickerTest);
 
 //start App
 Navigation.startSingleScreenApp({

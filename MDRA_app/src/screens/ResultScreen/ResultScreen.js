@@ -1,17 +1,17 @@
+//system
 import React, {Component} from 'react';
 import {View, Text, TouchableWithoutFeedback, Animated, Modal, StyleSheet} from 'react-native';
-
 import {Formik} from "formik";
-
 import {Button} from 'react-native-elements';
-
 import {connect} from "react-redux";
+import * as Yup from "yup";
+import Spinner from "react-native-loading-spinner-overlay";
+//actions
 import {removeData, renameData} from '../../store/actions/index';
 
-
+//components
 import ResultsList from "../../components/ResultsList/ResultsList";
 import Input from "../../components/Input/Input";
-import * as Yup from "yup";
 
 
 class ResultScreen extends Component{
@@ -25,7 +25,8 @@ class ResultScreen extends Component{
         renameTarget: null,
         currentNewName: null,
         //selected is linked to extraData in the list and not the actual selection
-        selected: false
+        selected: false,
+        visible: false
     };
 
     componentWillMount() {
@@ -125,6 +126,9 @@ class ResultScreen extends Component{
                         ? content
                         : <Text style={{justifyContent:'center', alignItems:'center'}}>This doesn't have any results yet</Text>
                     }
+                </View>
+                <View>
+                    <Spinner visible={this.state.visible} textContent={"Loading..."} textStyle={{color: '#FFF'}} />
                 </View>
                 <View>
                     <Modal

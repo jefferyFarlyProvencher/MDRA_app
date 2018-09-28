@@ -10,7 +10,6 @@ const ResultsList = (props) => {
 
     const handleOnPressRename = (key) => {
         props.onRenameData(key);
-        console.log("Should rename this item: "+ key);
     };
     return(
         <List>

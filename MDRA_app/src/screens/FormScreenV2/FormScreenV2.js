@@ -18,7 +18,7 @@ import StepIndicator from 'react-native-step-indicator';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 //Screen Imports
-import FormScreenInitial from '../FormScreen1_initial/FormScreen_initial';
+import FormScreenInitial from '../FormScreen1_initial/FormScreen_initialV2';
 import FormScreenTimeZonage from '../FormScreen2_timeZonage/FormScreen_timeZonage';
 import FormScreenWeights from '../FormScreen3_weights/FormScreen_weights';
 import FormScreenAdvanced from '../FormScreen4_advanced/FormScreen_advanced';
@@ -76,28 +76,11 @@ class FormScreen extends Component{
         this.viewPager.setPage(pageNumber);
     };
 
-    _screenSelector = () =>{
-        //console.log(this.props.state.main.position);
-        switch (this.props.state.main.position){
-            case 0:
-                return(<FormScreenInitial data={this.props.state.main.Page0Data}/>);
-            case 1:
-                return(<FormScreenTimeZonage data={this.props.state.main.Page1Data}/>);
-            case 2:
-                return(<FormScreenWeights data={this.props.state.main.Page2Data} advancedAllowed={this.props.state.main.advanceTabAccessible}/>);
-            case 3:
-                return(<FormScreenAdvanced data={this.props.state.main.Page3Data}/>);
-            case 4:
-                return(<SendFormScreen/>);
-            default:
-            //do nothing
-        }
-    };
 
     indicatorPressedHandler = (pageNumber) => {
         //if the page selected is different from current page
         if(pageNumber !== this.props.state.main.position) {
-            isDataNotNull = 0;
+            let isDataNotNull = 0;
             if (pageNumber === 0) {
                 isDataNotNull = this.props.state.main.Page0Data
             }

@@ -11,7 +11,7 @@ class ResultTest extends PureComponent{
     };
 
     generateDataObjects(dataArray){
-        objectsArray = [];
+        let objectsArray = [];
         for(let i = 0; i < dataArray.length; i++)
         {
             let parsedData = (parseFloat(dataArray[i])*100);
@@ -26,7 +26,7 @@ class ResultTest extends PureComponent{
 
 
     handleLabels= (data) => {
-        labels = [""];
+        let labels = [""];
         for(let i = 0; i < data.length; i++)
         {
             let percentage = parseFloat(data[i])*100;

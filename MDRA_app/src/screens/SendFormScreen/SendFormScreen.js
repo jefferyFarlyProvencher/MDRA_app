@@ -73,7 +73,7 @@ class SendFormScreen extends PureComponent{
                 textToDisplay: "DATA RECEIVED!!!"
             }));
             if (this.state.dataReceived) {
-                ToastAndroid.showWithGravity("Data added to List", 1, ToastAndroid.BOTTOM);
+                if(Platform.OS==="android")ToastAndroid.showWithGravity("Data added to List", 1, ToastAndroid.BOTTOM);
             }
         }
         else{
@@ -100,7 +100,7 @@ class SendFormScreen extends PureComponent{
                     <View>
                     {
                         !this.state.dataReceived
-                        ?<ActivityIndicator size={Platform.OS=='android'?100:1} color="red" />
+                        ?<ActivityIndicator size={Platform.OS==='android'?100:0} color="red" />
                         :<Icon
                             size={150}
                             name={this.state.iconName}

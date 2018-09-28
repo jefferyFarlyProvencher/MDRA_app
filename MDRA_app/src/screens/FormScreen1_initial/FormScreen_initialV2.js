@@ -1,16 +1,26 @@
 //system imports
 import React, {PureComponent} from 'react';
-import {StyleSheet, View, Alert, Dimensions, Switch, Text,Platform, NetInfo, ScrollView} from 'react-native';
+import {
+    StyleSheet,
+    View,
+    Alert,
+    Dimensions,
+    Switch,
+    Text,
+    Platform,
+    NetInfo,
+    ScrollView,
+    TouchableWithoutFeedback
+} from 'react-native';
 import { Button } from 'react-native-elements';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-import Icon from "react-native-vector-icons/FontAwesome"
-
-import {PagerDotIndicator, IndicatorViewPager} from 'rn-viewpager';
+import Picker from 'react-native-picker';
 
 //component imports
 import Input from "../../components/Input/Input";
-import DropDownList from "../../components/dropDownList/DropDownList";
+import DropDownListV2 from "../../components/dropDownList/DropDownListV2";
+import LinedLabel from "../../components/LinedLabel/LinedLabel";
 
 //actions imports
 import {connect}  from "react-redux";
@@ -24,8 +34,11 @@ class FormScreenInitial extends PureComponent{
         //current position is the current step of the form
         currentPosition: 0,
         //formulation values are there to set the dosage
-        //TODO do the thing properly
-        formulaValues: ["Ritalin IR","Ritalin IR","Ritalin IR","Ritalin IR"],
+        formulaValues:
+            this.props.data
+                ?[this.props.data.formula0,this.props.data.formula1,this.props.data.formula2,this.props.data.formula3]
+                :["Ritalin IR","Ritalin IR","Ritalin IR","Ritalin IR"]
+        ,
         //if there is data and an amountOfPills,
         // Number of pill given (1 to 4)
         amountOfPills:this.props.data
@@ -40,9 +53,12 @@ class FormScreenInitial extends PureComponent{
 
     _handleSubmit =(async (values, bag) => {
         try {
+            this.props.onAddData(values, this.state.currentPosition);
             bag.setSubmitting(false);
             this.props.onChangePosition(this.state.currentPosition+1);
-            this.props.onAddData(values, this.state.currentPosition);
+            console.log("doing setPage");
+            this.props.setPage(this.state.currentPosition+1);
+
         }catch (e) {
             bag.setSubmitting(false);
             bag.setErrors(e);
@@ -124,46 +140,19 @@ class FormScreenInitial extends PureComponent{
     };
     //Sets current formulation for each
     setCurrentFormulation = (index, value)=>{
-        if(index && value) {
-            let copyOfArray = (this.state.formulaValues).slice();
-            copyOfArray[index] = value;
-            this.setState(oldState => {
-                return ({
-                    ...oldState,
-                    formulaValues: copyOfArray
-                })
-            })
-            //then hopefully, garbage collector gets the old array
-        }
-
-    };
-
-    setCurrentFormulation = (index, value)=>{
         let copyOfArray = (this.state.formulaValues).slice();
         copyOfArray[index] = value;
-        this.setState(oldState => {
-            return ({
+        this.setState(oldState =>{
+            return({
                 ...oldState,
                 formulaValues: copyOfArray
             })
         })
-        //then hopefully, garbage collector gets the old array
-
-    };
-
-    setAllFormulation = (values)=>{
-        copyOfArray = [values.formula0,values.formula1,values.formula2,values.formula3];
-        this.setState(oldState => {
-            return ({
-                ...oldState,
-                formulaValues: copyOfArray
-            })
-        })
-        //then hopefully, garbage collector gets the old array
-
+        //then hopeful, garbage collector gets the old array
     };
 
     setDoses = (index)=>{
+        console.log("FORMULA VALUES: "+JSON.stringify(this.state.formulaValues[index]));
         switch (this.state.formulaValues[index]) {
             case "Ritalin IR":
                 return ["10","20"];
@@ -179,19 +168,20 @@ class FormScreenInitial extends PureComponent{
         }
     };
 
-    _renderDotIndicator() {
-        return <PagerDotIndicator pageCount={3} />;
-    }
+    _togglePicker = () => {
+        if(Picker.isPickerShow())
+        {
+            Picker.toggle();
+        }
+    };
+
 
     render() {
-        drugList = ["Ritalin IR","Pms-Methylphenidate IR", "Concerta", "Pms-Methylphenidate ER"];
+        let drugList = ["Ritalin IR","Pms-Methylphenidate IR", "Concerta", "Pms-Methylphenidate ER"];
+        let picker = Picker;
         return(
             <View style={styles.container}>
-                <IndicatorViewPager
-                    style={{height:'90%', width:"100%"}}
-                    indicator={this._renderDotIndicator()}
-                    indicatorOnTop={true}
-                >
+                <Text>Page 1</Text>
                 <Formik
                     initialValues={
                         (this.props.data)
@@ -255,13 +245,15 @@ class FormScreenInitial extends PureComponent{
                              }) => (
                         <View>
                             <View style={[styles.twoPerRowContainer,{marginBottom:"5%"}]}>
-                                <DropDownList
+                                <DropDownListV2
                                     style={styles.inputContainer}
                                     value={values.gender}
                                     label={"Gender"}
                                     name="gender"
                                     onChange={setFieldValue}
-                                    itemList={["Male","Female"]}/>
+                                    itemList={["Male","Female"]}
+                                    Picker={picker}
+                                />
                                 <View style={[styles.inputContainer,styles.twoPerRowContainer, {width:"45%", justifyContent:"space-around"} ]}>
                                     <View style={{width:"80%", marginRight:0}}>
                                         <Input
@@ -296,8 +288,9 @@ class FormScreenInitial extends PureComponent{
                             </View>
                             <View>
                                 <View style={styles.drugContainer}>
+                                    <LinedLabel label={"Formulation 1"} textPosition={"center"}/>
                                     <View style={styles.twoPerRowContainer}>
-                                        <DropDownList
+                                        <DropDownListV2
                                             style={[styles.inputContainer, {width:"55%"}]}
                                             label={ "Drug Formulation" }
                                             value={values.formula0}
@@ -306,23 +299,29 @@ class FormScreenInitial extends PureComponent{
                                             {
                                                 this.setCurrentFormulation(0,value);  setFieldValue(name, value)
                                             }}
-                                            itemList={drugList}/>
-                                        <DropDownList
+                                            itemList={drugList}
+                                            Picker={picker}
+                                        />
+                                        <DropDownListV2
                                             style={[styles.inputContainer, {width:"35%"}]}
                                             label={"Food Intake"}
                                             value={values.food0}
                                             name="food0"
                                             onChange={setFieldValue}
-                                            itemList={["No","Yes"]}/>
+                                            itemList={["No","Yes"]}
+                                            Picker={picker}
+                                        />
                                     </View>
                                     <View style={styles.twoPerRowContainer}>
-                                        <DropDownList
+                                        <DropDownListV2
                                             style={styles.inputContainer}
                                             value={values.dose0}
                                             label={"Dosage"}
                                             name="dose0"
                                             onChange={setFieldValue}
-                                            itemList={this.setDoses(0)}/>
+                                            itemList={this.setDoses(0)}
+                                            Picker={picker}
+                                        />
                                         <View style={[styles.inputContainer, {width:"55%"}]}>
                                             <Input
                                                 label="Administration Time"
@@ -340,8 +339,9 @@ class FormScreenInitial extends PureComponent{
                                     this.state.amountOfPills >= 2
                                         ?
                                         <View style={styles.drugContainer}>
+                                            <LinedLabel label={"Formulation 2"} textPosition={"center"}/>
                                             <View style={styles.twoPerRowContainer}>
-                                                <DropDownList
+                                                <DropDownListV2
                                                     style={[styles.inputContainer, {width:"55%"}]}
                                                     label={ "Drug Formulation" }
                                                     value={values.formula1}
@@ -350,22 +350,29 @@ class FormScreenInitial extends PureComponent{
                                                     {
                                                         this.setCurrentFormulation(1,value);  setFieldValue(name, value)
                                                     }}
-                                                    itemList={drugList}/>
-                                                <DropDownList
+                                                    itemList={drugList}
+                                                    Picker={picker}
+                                                />
+                                                <DropDownListV2
                                                     style={[styles.inputContainer, {width:"35%"}]}
                                                     label={"Food Intake"}
                                                     value={values.food1}
-                                                    name="food1" onChange={setFieldValue}
-                                                    itemList={["No","Yes"]}/>
+                                                    name="food1"
+                                                    onChange={setFieldValue}
+                                                    itemList={["No","Yes"]}
+                                                    Picker={picker}
+                                                />
                                             </View>
                                             <View style={styles.twoPerRowContainer}>
-                                                <DropDownList
+                                                <DropDownListV2
                                                     style={styles.inputContainer}
                                                     value={values.dose1}
                                                     label={"Dosage"}
                                                     name="dose1"
                                                     onChange={setFieldValue}
-                                                    itemList={this.setDoses(1)}/>
+                                                    itemList={this.setDoses(1)}
+                                                    Picker={picker}
+                                                />
                                                 <View style={[styles.inputContainer, {width:"55%"}]}>
                                                     <Input
                                                         label="Administration Time"
@@ -385,8 +392,9 @@ class FormScreenInitial extends PureComponent{
                                     this.state.amountOfPills >= 3
                                         ?
                                         <View style={styles.drugContainer}>
+                                            <LinedLabel label={"Formulation 3"} textPosition={"center"}/>
                                             <View style={styles.twoPerRowContainer}>
-                                                <DropDownList
+                                                <DropDownListV2
                                                     style={[styles.inputContainer, {width:"55%"}]}
                                                     label={ "Drug Formulation" }
                                                     value={values.formula2}
@@ -394,22 +402,28 @@ class FormScreenInitial extends PureComponent{
                                                 {
                                                     this.setCurrentFormulation(2,value);  setFieldValue(name, value)
                                                 }}
-                                                    itemList={drugList}/>
-                                                <DropDownList
+                                                    itemList={drugList}
+                                                    Picker={picker}
+                                                />
+                                                <DropDownListV2
                                                     style={[styles.inputContainer, {width:"35%"}]}
                                                     label={"Food Intake"}
                                                     value={values.food2}
                                                     name="food2" onChange={setFieldValue}
-                                                    itemList={["No","Yes"]}/>
+                                                    itemList={["No","Yes"]}
+                                                    Picker={picker}
+                                                />
                                             </View>
                                             <View style={styles.twoPerRowContainer}>
-                                                <DropDownList
+                                                <DropDownListV2
                                                     style={styles.inputContainer}
                                                     value={values.dose2}
                                                     label={"Dosage"}
                                                     name="dose2"
                                                     onChange={setFieldValue}
-                                                    itemList={this.setDoses(2)}/>
+                                                    itemList={this.setDoses(2)}
+                                                    Picker={picker}
+                                                />
                                                 <View style={[styles.inputContainer, {width:"55%"}]}>
                                                     <Input
                                                         label="Administration Time"
@@ -429,8 +443,9 @@ class FormScreenInitial extends PureComponent{
                                     this.state.amountOfPills >= 4
                                         ?
                                         <View style={styles.drugContainer}>
+                                            <LinedLabel label={"Formulation 4"} textPosition={"center"}/>
                                             <View style={styles.twoPerRowContainer}>
-                                                <DropDownList
+                                                <DropDownListV2
                                                     style={[styles.inputContainer, {width:"55%"}]}
                                                     label={ "Drug Formulation" }
                                                     value={values.formula3}
@@ -442,22 +457,27 @@ class FormScreenInitial extends PureComponent{
                                                         }
                                                     }
                                                     itemList={drugList}
+                                                    Picker={picker}
                                                 />
-                                                <DropDownList
+                                                <DropDownListV2
                                                     style={[styles.inputContainer, {width:"35%"}]}
                                                     label={"Food Intake"}
                                                     value={values.food3}
                                                     name="food3" onChange={setFieldValue}
-                                                    itemList={["No","Yes"]}/>
+                                                    itemList={["No","Yes"]}
+                                                    Picker={picker}
+                                                />
                                             </View>
                                             <View style={styles.twoPerRowContainer}>
-                                                <DropDownList
+                                                <DropDownListV2
                                                     style={styles.inputContainer}
                                                     value={values.dose3}
                                                     label={"Dosage"}
                                                     name="dose3"
                                                     onChange={setFieldValue}
-                                                    itemList={this.setDoses(3)}/>
+                                                    itemList={this.setDoses(3)}
+                                                    Picker={picker}
+                                                />
                                                 <View style={[styles.inputContainer, {width:"55%"}]}>
                                                     <Input
                                                         label="Administration Time"
@@ -507,7 +527,6 @@ class FormScreenInitial extends PureComponent{
                         </View>
                     )}
                 />
-                </IndicatorViewPager>
             </View>
 
         );
