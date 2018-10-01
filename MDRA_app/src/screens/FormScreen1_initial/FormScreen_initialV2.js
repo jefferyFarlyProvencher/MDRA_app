@@ -82,34 +82,34 @@ class FormScreenInitial extends PureComponent{
                 return (
                     Yup.object().shape({
                         weight: this.state.switchValue?Yup.number().positive().lessThan(160).required(requiredMessage):Yup.number().positive().lessThan(80).required(requiredMessage),
-                        adminTime0: Yup.number().positive().lessThan(24).integer("Must be an integer").required(requiredMessage),
+                        adminTime0: Yup.number().positive().lessThan(24).required(requiredMessage),
                     })
                 );
             case 2:
                 return (
                     Yup.object().shape({
                         weight: this.state.switchValue?Yup.number().positive().lessThan(160).required():Yup.number().positive().lessThan(80).required(requiredMessage),
-                        adminTime0: Yup.number().positive().lessThan(24).integer("Must be an integer").required(requiredMessage),
-                        adminTime1: Yup.number().positive().lessThan(24).integer("Must be an integer").required(requiredMessage),
+                        adminTime0: Yup.number().positive().lessThan(24).required(requiredMessage),
+                        adminTime1: Yup.number().positive().lessThan(24).required(requiredMessage),
                     })
                 );
             case 3:
                 return (
                     Yup.object().shape({
                         weight: this.state.switchValue?Yup.number().positive().lessThan(160).required():Yup.number().positive().lessThan(80).required(requiredMessage),
-                        adminTime0: Yup.number().positive().lessThan(24).integer("Must be an integer").required(requiredMessage),
-                        adminTime1: Yup.number().positive().lessThan(24).integer("Must be an integer").required(requiredMessage),
-                        adminTime2: Yup.number().positive().lessThan(24).integer("Must be an integer").required(requiredMessage)
+                        adminTime0: Yup.number().positive().lessThan(24).required(requiredMessage),
+                        adminTime1: Yup.number().positive().lessThan(24).required(requiredMessage),
+                        adminTime2: Yup.number().positive().lessThan(24).required(requiredMessage)
                     })
                 );
             case 4:
                 return (
                     Yup.object().shape({
                         weight: this.state.switchValue?Yup.number().positive().lessThan(160).required():Yup.number().positive().lessThan(80).required(requiredMessage),
-                        adminTime0: Yup.number().positive().lessThan(24).integer("Must be an integer").required(requiredMessage),
-                        adminTime1: Yup.number().positive().lessThan(24).integer("Must be an integer").required(requiredMessage),
-                        adminTime2: Yup.number().positive().lessThan(24).integer("Must be an integer").required(requiredMessage),
-                        adminTime3: Yup.number().positive().lessThan(24).integer("Must be an integer").required(requiredMessage),
+                        adminTime0: Yup.number().positive().lessThan(24).required(requiredMessage),
+                        adminTime1: Yup.number().positive().lessThan(24).required(requiredMessage),
+                        adminTime2: Yup.number().positive().lessThan(24).required(requiredMessage),
+                        adminTime3: Yup.number().positive().lessThan(24).required(requiredMessage),
 
                     })
                 );
@@ -150,7 +150,7 @@ class FormScreenInitial extends PureComponent{
         //then hopeful, garbage collector gets the old array
     };
 
-    setDoses = (index)=>{
+    getDoses = (index)=>{
         console.log("FORMULA VALUES: "+JSON.stringify(this.state.formulaValues[index]));
         switch (this.state.formulaValues[index]) {
             case "Ritalin IR":
@@ -290,14 +290,15 @@ class FormScreenInitial extends PureComponent{
                                             onChange={(name, value) =>
                                             {
                                                 this.setCurrentFormulation(0,value);
-                                                setFieldValue(name, value)
+                                                setFieldValue(name, value);
+                                                setFieldValue("dose0", this.getDoses(0)[0] )
                                             }}
                                             itemList={drugList}
                                             Picker={picker}
                                         />
                                         <DropDownListV2
                                             style={[styles.inputContainer, {width:"35%"}]}
-                                            label={"Food Intake"}
+                                            label={"Food"}
                                             value={values.food0}
                                             name="food0"
                                             onChange={setFieldValue}
@@ -312,7 +313,7 @@ class FormScreenInitial extends PureComponent{
                                             label={"Dosage"}
                                             name="dose0"
                                             onChange={setFieldValue}
-                                            itemList={this.setDoses(0)}
+                                            itemList={this.getDoses(0)}
                                             Picker={picker}
                                         />
                                         <View style={[styles.inputContainer, {width:"55%"}]}>
@@ -341,14 +342,16 @@ class FormScreenInitial extends PureComponent{
                                                     name="formula1"
                                                     onChange={(name, value) =>
                                                     {
-                                                        this.setCurrentFormulation(1,value);  setFieldValue(name, value)
+                                                        this.setCurrentFormulation(1,value);
+                                                        setFieldValue(name, value);
+                                                        setFieldValue("dose1", this.getDoses(1)[0] )
                                                     }}
                                                     itemList={drugList}
                                                     Picker={picker}
                                                 />
                                                 <DropDownListV2
                                                     style={[styles.inputContainer, {width:"35%"}]}
-                                                    label={"Food Intake"}
+                                                    label={"Food"}
                                                     value={values.food1}
                                                     name="food1"
                                                     onChange={setFieldValue}
@@ -363,7 +366,7 @@ class FormScreenInitial extends PureComponent{
                                                     label={"Dosage"}
                                                     name="dose1"
                                                     onChange={setFieldValue}
-                                                    itemList={this.setDoses(1)}
+                                                    itemList={this.getDoses(1)}
                                                     Picker={picker}
                                                 />
                                                 <View style={[styles.inputContainer, {width:"55%"}]}>
@@ -393,14 +396,16 @@ class FormScreenInitial extends PureComponent{
                                                     value={values.formula2}
                                                     name="formula2" onChange={(name, value) =>
                                                 {
-                                                    this.setCurrentFormulation(2,value);  setFieldValue(name, value)
+                                                    this.setCurrentFormulation(2,value);
+                                                    setFieldValue(name, value);
+                                                    setFieldValue("dose2", this.getDoses(2)[0] )
                                                 }}
                                                     itemList={drugList}
                                                     Picker={picker}
                                                 />
                                                 <DropDownListV2
                                                     style={[styles.inputContainer, {width:"35%"}]}
-                                                    label={"Food Intake"}
+                                                    label={"Food"}
                                                     value={values.food2}
                                                     name="food2" onChange={setFieldValue}
                                                     itemList={["No","Yes"]}
@@ -414,7 +419,7 @@ class FormScreenInitial extends PureComponent{
                                                     label={"Dosage"}
                                                     name="dose2"
                                                     onChange={setFieldValue}
-                                                    itemList={this.setDoses(2)}
+                                                    itemList={this.getDoses(2)}
                                                     Picker={picker}
                                                 />
                                                 <View style={[styles.inputContainer, {width:"55%"}]}>
@@ -446,7 +451,9 @@ class FormScreenInitial extends PureComponent{
                                                     onChange={
                                                         (name, value) =>
                                                         {
-                                                            this.setCurrentFormulation(3,value);  setFieldValue(name, value)
+                                                            this.setCurrentFormulation(3,value);  
+                                                            setFieldValue(name, value);
+                                                            setFieldValue("dose3", this.getDoses(3)[0] )
                                                         }
                                                     }
                                                     itemList={drugList}
@@ -454,7 +461,7 @@ class FormScreenInitial extends PureComponent{
                                                 />
                                                 <DropDownListV2
                                                     style={[styles.inputContainer, {width:"35%"}]}
-                                                    label={"Food Intake"}
+                                                    label={"Food"}
                                                     value={values.food3}
                                                     name="food3" onChange={setFieldValue}
                                                     itemList={["No","Yes"]}
@@ -468,7 +475,7 @@ class FormScreenInitial extends PureComponent{
                                                     label={"Dosage"}
                                                     name="dose3"
                                                     onChange={setFieldValue}
-                                                    itemList={this.setDoses(3)}
+                                                    itemList={this.getDoses(3)}
                                                     Picker={picker}
                                                 />
                                                 <View style={[styles.inputContainer, {width:"55%"}]}>
@@ -530,8 +537,6 @@ const styles = StyleSheet.create({
     container: {
         flex:1,
         backgroundColor: "#fff",
-        alignItems: "center",
-        justifyContent: "center",
     },
     button: {
         marginTop: 20,
