@@ -15,6 +15,8 @@ import {
 import { Button } from 'react-native-elements';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+
 
 //function imports
 import FormatTime from '../../functions/FormatTime';
@@ -44,7 +46,12 @@ class FormScreenInitial extends PureComponent{
         //time values are there to set the dosage
         timeValues:
             this.props.data
-                ?[this.props.data.adminTime0,this.props.data.adminTime1,this.props.data.adminTime2,this.props.data.adminTime3]
+                ?[
+                    this.props.data.adminTime0,
+                    this.props.data.adminTime1,
+                    this.props.data.adminTime2,
+                    this.props.data.adminTime3,
+                ]
                 :["","","",""]
         ,
         //if there is data and an amountOfPills,
@@ -178,7 +185,7 @@ class FormScreenInitial extends PureComponent{
 
     handleFormatTime = (adminTimeNumber)=>{
         let copyOfArray = (this.state.timeValues).slice();
-        copyOfArray[1] = FormatTime(""+this.state.timeValues[adminTimeNumber],false);
+        copyOfArray[adminTimeNumber] = FormatTime(""+this.state.timeValues[adminTimeNumber],false);
         this.setState((oldState) => {
             return({
                 ...oldState,
@@ -200,376 +207,398 @@ class FormScreenInitial extends PureComponent{
         let picker = this.props.Picker;
         return(
             <View style={styles.container}>
-                <Text>Page 1</Text>
-                <Formik
-                    initialValues={
-                        (this.props.data)
-                            ?{
-                                gender: this.props.data.gender,
-                                weight: this.props.data.weight,
-                                dose0: this.props.data.dose0,
-                                adminTime0: this.props.data.adminTime0,
-                                formula0: this.props.data.formula0,
-                                food0: this.props.data.food0,
-                                dose1: this.props.data.dose1,
-                                adminTime1: this.props.data.adminTime1,
-                                formula1: this.props.data.formula1,
-                                food1: this.props.data.food1,
-                                dose2: this.props.data.dose2,
-                                adminTime2: this.props.data.adminTime2,
-                                formula2: this.props.data.formula2,
-                                food2: this.props.data.food2,
-                                dose3: this.props.data.dose3,
-                                adminTime3: this.props.data.adminTime3,
-                                formula3: this.props.data.formula3,
-                                food3: this.props.data.food3,
-                                amountOfPills: this.props.data.amountOfPills,
-                                switchWeightFormat: this.props.switchWeightFormat
-                            }
-                            :{
-                                gender: 'Male',
-                                weight: '40',
-                                dose0: '10',
-                                adminTime0: '',
-                                formula0: 'Ritalin IR',
-                                food0: 'No',
-                                dose1: '10',
-                                adminTime1: '',
-                                formula1: 'Ritalin IR',
-                                food1: 'No',
-                                dose2: '10',
-                                adminTime2: '',
-                                formula2: 'Ritalin IR',
-                                food2: 'No',
-                                dose3: '10',
-                                adminTime3: '',
-                                formula3: 'Ritalin IR',
-                                food3: 'No',
-                                amountOfPills: this.state.amountOfPills,
-                                switchWeightFormat: this.state.switchValue,
-                            }
-                    }
-                    onSubmit={this._handleSubmit}
-                    validationSchema={this._handleValidation()}
-                    validateOnBlur={true}
-                    render={({
-                                 values,
-                                 handleSubmit,
-                                 setFieldValue,
-                                 errors,
-                                 touched,
-                                 setFieldTouched,
-                                 isValid,
-                                 isSubmitting
-                             }) => (
+                <ScrollView
+                    ref={ref => this.scrollView = ref}
+                    onContentSizeChange={(contentWidth, contentHeight)=>{
+                        this.scrollView.scrollToEnd({animated: true});
+                    }}
+                >
+                    <KeyboardAwareScrollView>
                         <View>
-                            <View style={{margin:"5%"}}>
-                                <View style={[styles.twoPerRowContainer,{marginBottom:"0%"}]}>
-                                    <DropDownListV2
-                                        style={styles.inputContainer}
-                                        value={values.gender}
-                                        label={"Gender"}
-                                        name="gender"
-                                        onChange={setFieldValue}
-                                        itemList={["Male","Female"]}
-                                        Picker={picker}
-                                    />
-                                    <View style={[styles.inputContainer,styles.twoPerRowContainer, {width:"45%", justifyContent:"space-around"} ]}>
-                                        <View style={{width:"80%", marginRight:0}}>
-                                            <Input
-                                                label={"Weight"}
-                                                value={values.weight}
-                                                onChange={(name,value) =>{
-                                                    setFieldValue(name,value)
-                                                }}
-                                                onTouch={setFieldTouched}
-                                                name="weight"
-                                                error={touched.weight && errors.weight}
-                                                keyboardType="numeric"
-                                            />
-                                        </View>
-                                        <View style={{paddingTop:"20%", marginLeft:0, paddingRight:20, flexDirection:'row', justifyContent:'center'}}>
-                                            <View style={{paddingTop:"25%"}}>
-                                                <Text>{(this.state.switchValue?"lbs":"kg ")}</Text>
-                                            </View>
-                                            <Switch
-                                                value={this.state.switchValue}
-                                                onValueChange={(value) => {
-                                                    setFieldValue('switchWeightFormat', !this.state.switchValue);
-                                                    this._handleChangeSwitch(value);
-                                                }
-                                                }
-                                                tintColor={"#a8eebc"}
-                                                onTintColor={"#b1d6ee"}
-                                                thumbTintColor={(Platform==="ios"? undefined: 'white')}
-                                            />
-                                        </View>
-                                    </View>
-                                </View>
-                            </View>
-                            <View>
-                                <View style={styles.drugContainer}>
-                                    <LinedLabel label={"Formulation 1"} textPosition={"center"}/>
-                                    <View style={styles.twoPerRowContainer}>
-                                        <DropDownListV2
-                                            style={[styles.inputContainer, {width:"55%"}]}
-                                            label={ "Drug Formulation" }
-                                            value={values.formula0}
-                                            name="formula0"
-                                            onChange={(name, value) =>
-                                            {
-                                                this.setCurrentFormulation(0,value);
-                                                setFieldValue(name, value);
-                                                setFieldValue("dose0", this.getDoses(0)[0] )
-                                            }}
-                                            itemList={drugList}
-                                            Picker={picker}
-                                        />
-                                        <DropDownListV2
-                                            style={[styles.inputContainer, {width:"35%"}]}
-                                            label={"Food"}
-                                            value={values.food0}
-                                            name="food0"
-                                            onChange={setFieldValue}
-                                            itemList={["No","Yes"]}
-                                            Picker={picker}
-                                        />
-                                    </View>
-                                    <View style={styles.twoPerRowContainer}>
-                                        <DropDownListV2
-                                            style={styles.inputContainer}
-                                            value={values.dose0}
-                                            label={"Dosage"}
-                                            name="dose0"
-                                            onChange={setFieldValue}
-                                            itemList={this.getDoses(0)}
-                                            Picker={picker}
-                                        />
-                                        <View style={[styles.inputContainer, {width:"55%"}]}>
-                                            <Input
-                                                label="Administration Time"
-                                                value={values.adminTime0}
-                                                onChange={setFieldValue}
-                                                onTouch={setFieldTouched}
-                                                name="adminTime0"
-                                                error={touched.adminTime0 && errors.adminTime0}
-                                                keyboardType="numeric"
-                                            />
-                                        </View>
-                                    </View>
-                                </View>
-                                {
-                                    this.state.amountOfPills >= 2
-                                        ?
-                                        <View style={[styles.styleEvenFormulations,styles.drugContainer]}>
-                                            <LinedLabel label={"Formulation 2"} textPosition={"center"}/>
-                                            <View style={styles.twoPerRowContainer}>
-                                                <DropDownListV2
-                                                    style={[styles.inputContainer, {width:"55%"}]}
-                                                    label={ "Drug Formulation" }
-                                                    value={values.formula1}
-                                                    name="formula1"
-                                                    onChange={(name, value) =>
-                                                    {
-                                                        this.setCurrentFormulation(1,value);
-                                                        setFieldValue(name, value);
-                                                        setFieldValue("dose1", this.getDoses(1)[0] )
-                                                    }}
-                                                    itemList={drugList}
-                                                    Picker={picker}
-                                                />
-                                                <DropDownListV2
-                                                    style={[styles.inputContainer, {width:"35%"}]}
-                                                    label={"Food"}
-                                                    value={values.food1}
-                                                    name="food1"
-                                                    onChange={setFieldValue}
-                                                    itemList={["No","Yes"]}
-                                                    Picker={picker}
-                                                />
-                                            </View>
-                                            <View style={styles.twoPerRowContainer}>
+                            <Text>Page 1</Text>
+                            <Formik
+                                initialValues={
+                                    (this.props.data)
+                                        ?{
+                                            gender: this.props.data.gender,
+                                            weight: this.props.data.weight,
+                                            dose0: this.props.data.dose0,
+                                            adminTime0: this.props.data.adminTime0,
+                                            formula0: this.props.data.formula0,
+                                            food0: this.props.data.food0,
+                                            dose1: this.props.data.dose1,
+                                            adminTime1: this.props.data.adminTime1,
+                                            formula1: this.props.data.formula1,
+                                            food1: this.props.data.food1,
+                                            dose2: this.props.data.dose2,
+                                            adminTime2: this.props.data.adminTime2,
+                                            formula2: this.props.data.formula2,
+                                            food2: this.props.data.food2,
+                                            dose3: this.props.data.dose3,
+                                            adminTime3: this.props.data.adminTime3,
+                                            formula3: this.props.data.formula3,
+                                            food3: this.props.data.food3,
+                                            amountOfPills: this.props.data.amountOfPills,
+                                            switchWeightFormat: this.props.switchWeightFormat
+                                        }
+                                        :{
+                                            gender: 'Male',
+                                            weight: '40',
+                                            dose0: '10',
+                                            adminTime0: '',
+                                            formula0: 'Ritalin IR',
+                                            food0: 'No',
+                                            dose1: '10',
+                                            adminTime1: '',
+                                            formula1: 'Ritalin IR',
+                                            food1: 'No',
+                                            dose2: '10',
+                                            adminTime2: '',
+                                            formula2: 'Ritalin IR',
+                                            food2: 'No',
+                                            dose3: '10',
+                                            adminTime3: '',
+                                            formula3: 'Ritalin IR',
+                                            food3: 'No',
+                                            amountOfPills: this.state.amountOfPills,
+                                            switchWeightFormat: this.state.switchValue,
+                                        }
+                                }
+                                onSubmit={this._handleSubmit}
+                                validationSchema={this._handleValidation()}
+                                validateOnBlur={true}
+                                render={({
+                                             values,
+                                             handleSubmit,
+                                             setFieldValue,
+                                             errors,
+                                             touched,
+                                             setFieldTouched,
+                                             isValid,
+                                             isSubmitting
+                                         }) => (
+                                    <View>
+                                        <View style={{margin:"5%"}}>
+                                            <View style={[styles.twoPerRowContainer,{marginBottom:"0%"}]}>
                                                 <DropDownListV2
                                                     style={styles.inputContainer}
-                                                    value={values.dose1}
-                                                    label={"Dosage"}
-                                                    name="dose1"
+                                                    value={values.gender}
+                                                    label={"Gender"}
+                                                    name="gender"
                                                     onChange={setFieldValue}
-                                                    itemList={this.getDoses(1)}
+                                                    itemList={["Male","Female"]}
                                                     Picker={picker}
                                                 />
-                                                <View style={[styles.inputContainer, {width:"55%"}]}>
-                                                    <Input
-                                                        label="Administration Time"
-                                                        value={this.state.timeValues[1]}
-                                                        onChange={(name,value) => {
-                                                            console.log(name);
-                                                            let copyOfArray = (this.state.timeValues).slice();
-                                                            copyOfArray[1] = value;
-                                                            this.setState((oldState) => {
-                                                                return({
-                                                                    ...oldState,
-                                                                    timeValues: copyOfArray
-                                                                })
-                                                            });
-                                                        }}
-                                                        onBlur={() =>{
-                                                            this.handleFormatTime(1);
-                                                            setFieldValue("adminTime1", this.handleUnFormatTime(1));
-                                                        }}
-                                                        onTouch={setFieldTouched}
-                                                        name="adminTime1"
-                                                        error={this.state.amountOfPills>=1?(touched.adminTime1 && errors.adminTime1): null}
-                                                        keyboardType="numeric"
-                                                    />
+                                                <View style={[styles.inputContainer,styles.twoPerRowContainer, {width:"45%", justifyContent:"space-around"} ]}>
+                                                    <View style={{width:"80%", marginRight:0}}>
+                                                        <Input
+                                                            label={"Weight"}
+                                                            value={values.weight}
+                                                            onChange={(name,value) =>{
+                                                                setFieldValue(name,value)
+                                                            }}
+                                                            onTouch={setFieldTouched}
+                                                            name="weight"
+                                                            error={touched.weight && errors.weight}
+                                                            keyboardType="numeric"
+                                                        />
+                                                    </View>
+                                                    <View style={{paddingTop:"20%", marginLeft:0, paddingRight:20, flexDirection:'row', justifyContent:'center'}}>
+                                                        <View style={{paddingTop:"25%"}}>
+                                                            <Text>{(this.state.switchValue?"lbs":"kg ")}</Text>
+                                                        </View>
+                                                        <Switch
+                                                            value={this.state.switchValue}
+                                                            onValueChange={(value) => {
+                                                                setFieldValue('switchWeightFormat', !this.state.switchValue);
+                                                                this._handleChangeSwitch(value);
+                                                            }
+                                                            }
+                                                            tintColor={"#a8eebc"}
+                                                            onTintColor={"#b1d6ee"}
+                                                            thumbTintColor={(Platform==="ios"? undefined: 'white')}
+                                                        />
+                                                    </View>
                                                 </View>
                                             </View>
                                         </View>
-                                        :null
-                                }
-                                {
-                                    this.state.amountOfPills >= 3
-                                        ?
-                                        <View style={styles.drugContainer}>
-                                            <LinedLabel label={"Formulation 3"} textPosition={"center"}/>
-                                            <View style={styles.twoPerRowContainer}>
-                                                <DropDownListV2
-                                                    style={[styles.inputContainer, {width:"55%"}]}
-                                                    label={ "Drug Formulation" }
-                                                    value={values.formula2}
-                                                    name="formula2" onChange={(name, value) =>
-                                                {
-                                                    this.setCurrentFormulation(2,value);
-                                                    setFieldValue(name, value);
-                                                    setFieldValue("dose2", this.getDoses(2)[0] )
-                                                }}
-                                                    itemList={drugList}
-                                                    Picker={picker}
-                                                />
-                                                <DropDownListV2
-                                                    style={[styles.inputContainer, {width:"35%"}]}
-                                                    label={"Food"}
-                                                    value={values.food2}
-                                                    name="food2" onChange={setFieldValue}
-                                                    itemList={["No","Yes"]}
-                                                    Picker={picker}
-                                                />
-                                            </View>
-                                            <View style={styles.twoPerRowContainer}>
-                                                <DropDownListV2
-                                                    style={styles.inputContainer}
-                                                    value={values.dose2}
-                                                    label={"Dosage"}
-                                                    name="dose2"
-                                                    onChange={setFieldValue}
-                                                    itemList={this.getDoses(2)}
-                                                    Picker={picker}
-                                                />
-                                                <View style={[styles.inputContainer, {width:"55%"}]}>
-                                                    <Input
-                                                        label="Administration Time"
-                                                        value={values.adminTime2}
-                                                        onChange={setFieldValue}
-                                                        onTouch={setFieldTouched}
-                                                        name="adminTime2"
-                                                        error={this.state.amountOfPills>=2?(touched.adminTime2&& errors.adminTime2): null }
-                                                        keyboardType="numeric"
-                                                    />
-                                                </View>
-                                            </View>
-                                        </View>
-                                        :null
-                                }
-                                {
-                                    this.state.amountOfPills >= 4
-                                        ?
-                                        <View style={styles.drugContainer}>
-                                            <LinedLabel label={"Formulation 4"} textPosition={"center"}/>
-                                            <View style={styles.twoPerRowContainer}>
-                                                <DropDownListV2
-                                                    style={[styles.inputContainer, {width:"55%"}]}
-                                                    label={ "Drug Formulation" }
-                                                    value={values.formula3}
-                                                    name="formula3"
-                                                    onChange={
-                                                        (name, value) =>
+                                        <View>
+                                            <View style={styles.drugContainer}>
+                                                <LinedLabel label={"Formulation 1"} textPosition={"center"}/>
+                                                <View style={styles.twoPerRowContainer}>
+                                                    <DropDownListV2
+                                                        style={[styles.inputContainer, {width:"55%"}]}
+                                                        label={ "Drug Formulation" }
+                                                        value={values.formula0}
+                                                        name="formula0"
+                                                        onChange={(name, value) =>
                                                         {
-                                                            this.setCurrentFormulation(3,value);  
+                                                            this.setCurrentFormulation(0,value);
                                                             setFieldValue(name, value);
-                                                            setFieldValue("dose3", this.getDoses(3)[0] )
-                                                        }
-                                                    }
-                                                    itemList={drugList}
-                                                    Picker={picker}
-                                                />
-                                                <DropDownListV2
-                                                    style={[styles.inputContainer, {width:"35%"}]}
-                                                    label={"Food"}
-                                                    value={values.food3}
-                                                    name="food3" onChange={setFieldValue}
-                                                    itemList={["No","Yes"]}
-                                                    Picker={picker}
-                                                />
-                                            </View>
-                                            <View style={styles.twoPerRowContainer}>
-                                                <DropDownListV2
-                                                    style={styles.inputContainer}
-                                                    value={values.dose3}
-                                                    label={"Dosage"}
-                                                    name="dose3"
-                                                    onChange={setFieldValue}
-                                                    itemList={this.getDoses(3)}
-                                                    Picker={picker}
-                                                />
-                                                <View style={[styles.inputContainer, {width:"55%"}]}>
-                                                    <Input
-                                                        label="Administration Time"
-                                                        value={values.adminTime3}
+                                                            setFieldValue("dose0", this.getDoses(0)[0] )
+                                                        }}
+                                                        itemList={drugList}
+                                                        Picker={picker}
+                                                    />
+                                                    <DropDownListV2
+                                                        style={[styles.inputContainer, {width:"35%"}]}
+                                                        label={"Food"}
+                                                        value={values.food0}
+                                                        name="food0"
                                                         onChange={setFieldValue}
-                                                        onTouch={setFieldTouched}
-                                                        name="adminTime3"
-                                                        error={this.state.amountOfPills>=3?(touched.adminTime3 && errors.adminTime3): null}
-                                                        keyboardType="numeric"
+                                                        itemList={["No","Yes"]}
+                                                        Picker={picker}
                                                     />
                                                 </View>
+                                                <View style={styles.twoPerRowContainer}>
+                                                    <DropDownListV2
+                                                        style={styles.inputContainer}
+                                                        value={values.dose0}
+                                                        label={"Dosage"}
+                                                        name="dose0"
+                                                        onChange={setFieldValue}
+                                                        itemList={this.getDoses(0)}
+                                                        Picker={picker}
+                                                    />
+                                                    <View style={[styles.inputContainer, {width:"55%"}]}>
+                                                        <Input
+                                                            label="Administration Time"
+                                                            value={this.state.timeValues[0]}
+                                                            value={this.state.timeValues[0]}
+                                                            onChange={(name,value) => {
+                                                                this.state.timeValues[0] = value;
+                                                            }}
+                                                            onBlur={() =>{
+                                                                this.handleFormatTime(0);
+                                                                setFieldValue("adminTime0", this.handleUnFormatTime(0));
+                                                            }}
+                                                            name="adminTime0"
+                                                            error={touched.adminTime0 && errors.adminTime0}
+                                                            keyboardType="numeric"
+                                                        />
+                                                    </View>
+                                                </View>
                                             </View>
+                                            {
+                                                this.state.amountOfPills >= 2
+                                                    ?
+                                                    <View style={[styles.styleEvenFormulations,styles.drugContainer]}>
+                                                        <LinedLabel label={"Formulation 2"} textPosition={"center"}/>
+                                                        <View style={styles.twoPerRowContainer}>
+                                                            <DropDownListV2
+                                                                style={[styles.inputContainer, {width:"55%"}]}
+                                                                label={ "Drug Formulation" }
+                                                                value={values.formula1}
+                                                                name="formula1"
+                                                                onChange={(name, value) =>
+                                                                {
+                                                                    this.setCurrentFormulation(1,value);
+                                                                    setFieldValue(name, value);
+                                                                    setFieldValue("dose1", this.getDoses(1)[0] )
+                                                                }}
+                                                                itemList={drugList}
+                                                                Picker={picker}
+                                                            />
+                                                            <DropDownListV2
+                                                                style={[styles.inputContainer, {width:"35%"}]}
+                                                                label={"Food"}
+                                                                value={values.food1}
+                                                                name="food1"
+                                                                onChange={setFieldValue}
+                                                                itemList={["No","Yes"]}
+                                                                Picker={picker}
+                                                            />
+                                                        </View>
+                                                        <View style={styles.twoPerRowContainer}>
+                                                            <DropDownListV2
+                                                                style={styles.inputContainer}
+                                                                value={values.dose1}
+                                                                label={"Dosage"}
+                                                                name="dose1"
+                                                                onChange={setFieldValue}
+                                                                itemList={this.getDoses(1)}
+                                                                Picker={picker}
+                                                            />
+                                                            <View style={[styles.inputContainer, {width:"55%"}]}>
+                                                                <Input
+                                                                    label="Administration Time"
+                                                                    value={this.state.timeValues[1]}
+                                                                    onChange={(name,value) => {
+                                                                        this.state.timeValues[1] = value;
+                                                                    }}
+                                                                    onBlur={() =>{
+                                                                        this.handleFormatTime(1);
+                                                                        setFieldValue("adminTime1", this.handleUnFormatTime(1));
+                                                                    }}
+                                                                    onTouch={setFieldTouched}
+                                                                    name="adminTime1"
+                                                                    error={this.state.amountOfPills>=1?(touched.adminTime1 && errors.adminTime1): null}
+                                                                    keyboardType="numeric"
+                                                                />
+                                                            </View>
+                                                        </View>
+                                                    </View>
+                                                    :null
+                                            }
+                                            {
+                                                this.state.amountOfPills >= 3
+                                                    ?
+                                                    <View style={[styles.drugContainer]}>
+                                                        <LinedLabel label={"Formulation 3"} textPosition={"center"}/>
+                                                        <View style={styles.twoPerRowContainer}>
+                                                            <DropDownListV2
+                                                                style={[styles.inputContainer, {width:"55%"}]}
+                                                                label={ "Drug Formulation" }
+                                                                value={values.formula2}
+                                                                name="formula2" onChange={(name, value) =>
+                                                            {
+                                                                this.setCurrentFormulation(2,value);
+                                                                setFieldValue(name, value);
+                                                                setFieldValue("dose2", this.getDoses(2)[0] )
+                                                            }}
+                                                                itemList={drugList}
+                                                                Picker={picker}
+                                                            />
+                                                            <DropDownListV2
+                                                                style={[styles.inputContainer, {width:"35%"}]}
+                                                                label={"Food"}
+                                                                value={values.food2}
+                                                                name="food2" onChange={setFieldValue}
+                                                                itemList={["No","Yes"]}
+                                                                Picker={picker}
+                                                            />
+                                                        </View>
+                                                        <View style={styles.twoPerRowContainer}>
+                                                            <DropDownListV2
+                                                                style={styles.inputContainer}
+                                                                value={values.dose2}
+                                                                label={"Dosage"}
+                                                                name="dose2"
+                                                                onChange={setFieldValue}
+                                                                itemList={this.getDoses(2)}
+                                                                Picker={picker}
+                                                            />
+                                                            <View style={[styles.inputContainer, {width:"55%"}]}>
+                                                                <Input
+                                                                    label="Administration Time"
+                                                                    value={this.state.timeValues[2]}
+                                                                    onChange={(name,value) => {
+                                                                        this.state.timeValues[2] = value;
+                                                                    }}
+                                                                    onBlur={() =>{
+                                                                        this.handleFormatTime(2);
+                                                                        setFieldValue("adminTime2", this.handleUnFormatTime(2));
+                                                                    }}
+                                                                    onTouch={setFieldTouched}
+                                                                    name="adminTime2"
+                                                                    error={this.state.amountOfPills>=2?(touched.adminTime2&& errors.adminTime2): null }
+                                                                    keyboardType="numeric"
+                                                                />
+                                                            </View>
+                                                        </View>
+                                                    </View>
+                                                    :null
+                                            }
+                                            {
+                                                this.state.amountOfPills >= 4
+                                                    ?
+                                                    <View style={[styles.drugContainer,styles.styleEvenFormulations]}>
+                                                        <LinedLabel label={"Formulation 4"} textPosition={"center"}/>
+                                                        <View style={styles.twoPerRowContainer}>
+                                                            <DropDownListV2
+                                                                style={[styles.inputContainer, {width:"55%"}]}
+                                                                label={ "Drug Formulation" }
+                                                                value={values.formula3}
+                                                                name="formula3"
+                                                                onChange={
+                                                                    (name, value) =>
+                                                                    {
+                                                                        this.setCurrentFormulation(3,value);
+                                                                        setFieldValue(name, value);
+                                                                        setFieldValue("dose3", this.getDoses(3)[0] )
+                                                                    }
+                                                                }
+                                                                itemList={drugList}
+                                                                Picker={picker}
+                                                            />
+                                                            <DropDownListV2
+                                                                style={[styles.inputContainer, {width:"35%"}]}
+                                                                label={"Food"}
+                                                                value={values.food3}
+                                                                name="food3" onChange={setFieldValue}
+                                                                itemList={["No","Yes"]}
+                                                                Picker={picker}
+                                                            />
+                                                        </View>
+                                                        <View style={styles.twoPerRowContainer}>
+                                                            <DropDownListV2
+                                                                style={styles.inputContainer}
+                                                                value={values.dose3}
+                                                                label={"Dosage"}
+                                                                name="dose3"
+                                                                onChange={setFieldValue}
+                                                                itemList={this.getDoses(3)}
+                                                                Picker={picker}
+                                                            />
+                                                            <View style={[styles.inputContainer, {width:"55%"}]}>
+                                                                <Input
+                                                                    label="Administration Time"
+                                                                    value={this.state.timeValues[3]}
+                                                                    onChange={(name,value) => {
+                                                                        this.state.timeValues[3] = value;
+                                                                        console.log("HEHEHEHEH: "+ this.state.timeValues);
+                                                                    }}
+                                                                    onBlur={() =>{
+                                                                        this.handleFormatTime(3);
+                                                                        setFieldValue("adminTime3", this.handleUnFormatTime(3));
+                                                                    }}
+                                                                    onTouch={setFieldTouched}
+                                                                    name="adminTime3"
+                                                                    error={this.state.amountOfPills>=3?(touched.adminTime3 && errors.adminTime3): null}
+                                                                    keyboardType="numeric"
+                                                                />
+                                                            </View>
+                                                        </View>
+                                                    </View>
+                                                    :null
+                                            }
                                         </View>
-                                        :null
-                                }
-                            </View>
-                            <View style={styles.pillButtonsContainer}>
-                                <Button
-                                    icon={{ name: 'minus', type: 'font-awesome' }}
-                                    buttonStyle={styles.pillButton}
-                                    title="Remove a pill!"
-                                    onPress={() => {
-                                        setFieldValue("amountOfPills", this.state.amountOfPills-1);
-                                        this.removeDrugs();
-                                    }
-                                    }
-                                    disabled={this.state.amountOfPills<=1}
-                                />
-                                <Button
-                                    iconRight={{ name: 'plus', type: 'font-awesome'}}
-                                    buttonStyle={styles.pillButton}
-                                    title="Add a pill!"
-                                    onPress={() =>{
-                                        setFieldValue("amountOfPills", this.state.amountOfPills+1);
-                                        this.addDrugs();
-                                    }}
-                                    disabled={this.state.amountOfPills>=4}
-                                />
-                            </View>
-                            <Button
-                                buttonStyle={styles.button}
-                                title="Go to next step"
-                                onPress={handleSubmit}
-                                disabled={(!isValid || isSubmitting) && this.props.data==null}
-                                loading={isSubmitting}
+                                        <View style={styles.pillButtonsContainer}>
+                                            <Button
+                                                icon={{ name: 'minus', type: 'font-awesome' }}
+                                                buttonStyle={styles.pillButton}
+                                                title="Remove a pill!"
+                                                onPress={() => {
+                                                    setFieldValue("amountOfPills", this.state.amountOfPills-1);
+                                                    this.removeDrugs();
+                                                }
+                                                }
+                                                disabled={this.state.amountOfPills<=1}
+                                            />
+                                            <Button
+                                                iconRight={{ name: 'plus', type: 'font-awesome'}}
+                                                buttonStyle={styles.pillButton}
+                                                title="Add a pill!"
+                                                onPress={() =>{
+                                                    setFieldValue("amountOfPills", this.state.amountOfPills+1);
+                                                    this.addDrugs();
+                                                }}
+                                                disabled={this.state.amountOfPills>=4}
+                                            />
+                                        </View>
+                                        <Button
+                                            buttonStyle={styles.button}
+                                            title="Go to next step"
+                                            onPress={handleSubmit}
+                                            disabled={(!isValid || isSubmitting) && this.props.data==null}
+                                            loading={isSubmitting}
+                                        />
+                                    </View>
+                                )}
                             />
                         </View>
-                    )}
-                />
+                    </KeyboardAwareScrollView>
+                </ScrollView>
             </View>
 
         );
@@ -582,7 +611,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#fff",
     },
     button: {
-        marginTop: 20,
+        marginVertical: 20,
         width: '100%',
         justifyContent: "center",
         alignItems: "center"

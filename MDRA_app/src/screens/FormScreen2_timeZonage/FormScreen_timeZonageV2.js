@@ -10,7 +10,7 @@ import AwesomeIcon from 'react-native-vector-icons/FontAwesome'
 
 //component imports
 import Input from "../../components/Input/Input";
-import DropDownList from "../../components/dropDownList/DropDownListV2";
+import DropDownList from "../../components/dropDownList/DropDownList";
 import CustomMultiSlider from "../../components/CustomMultiSlider/CustomMultiSlider";
 import LinedLabel from "../../components/LinedLabel/LinedLabel";
 
@@ -18,6 +18,7 @@ import LinedLabel from "../../components/LinedLabel/LinedLabel";
 import {connect} from "react-redux";
 import {addData} from "../../store/actions/addData";
 import {changePosition} from "../../store/actions/changePosition";
+import DropDownListV2 from "../../components/dropDownList/DropDownListV2";
 
 //THIS CLASS REFERS TO THE BOX FOR PAGE
 // THERE IS A WEIRD BUG THAT PREVENTS ME FROM CHANGING the name
@@ -126,8 +127,8 @@ class FormScreenTimeZonage extends PureComponent{
                                  isSubmitting
                              }) => (
                         <View>
-                            <View>
-                                <DropDownList
+                            <View style={{backgroundColor:'red', flexDirection:"row"}}>
+                                <DropDownListV2
                                     onChange={(name,value) => {
                                         let onlyOneBox= value==="One therapeutic box (from AM to PM)";
                                         if(!onlyOneBox) { //if two boxes
@@ -151,9 +152,21 @@ class FormScreenTimeZonage extends PureComponent{
                                     }}
                                     name="nbTheraputicBoxes"
                                     value={values.nbTheraputicBoxes}
-                                    itemList={["One therapeutic box (from AM to PM)","Two therapeutic boxes (AM and PM)"]}/>
+                                    itemList={["One therapeutic box (from AM to PM)","Two therapeutic boxes (AM and PM)"]}
+                                    Picker={this.props.Picker}
+                                />
+                                <DropDownListV2
+                                    onChange={setFieldValue}
+                                    style={styles.inputContainer}
+                                    label={"Gender"}
+                                    name="nbTheraputicBoxes"
+                                    value={values.nbTheraputicBoxes}
+                                    itemList={["One therapeutic box (from AM to PM)","Two therapeutic boxes (AM and PM)"]}
+                                    Picker={this.props.Picker}
+
+                                />
                             </View>
-                            <View>
+                            <View style={{backgroundColor: "white"}}>
                                 <LinedLabel
                                     label={(this.state.nbOfBoxes===1)?"Day Time": "AM time" }
                                     textPosition="left"/>
@@ -377,10 +390,10 @@ const styles = StyleSheet.create({
         paddingHorizontal: "5%"
     },
     button: {
-        marginTop: 20,
+        marginVertical: 20,
         width: '100%',
         justifyContent: "center",
-        alignItems: "center"
+        alignItems: "center",
     },
     twoPerRowContainer: {
         flexDirection: "row",

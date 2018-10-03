@@ -330,7 +330,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
     },
     button: {
-        marginTop: 20,
+        marginVertical: 20,
         width: '100%',
         justifyContent: "center",
         alignItems: "center"

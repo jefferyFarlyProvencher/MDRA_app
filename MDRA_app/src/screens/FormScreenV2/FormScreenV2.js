@@ -15,12 +15,11 @@ import {connect} from 'react-redux';
 import {PagerDotIndicator, IndicatorViewPager} from 'rn-viewpager'
 //Package Imports
 import StepIndicator from 'react-native-step-indicator';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import Picker from 'react-native-picker';
 
 //Screen Imports
 import FormScreenInitial from '../FormScreen1_initial/FormScreen_initialV2';
-import FormScreenTimeZonage from '../FormScreen2_timeZonage/FormScreen_timeZonage';
+import FormScreenTimeZonage from '../FormScreen2_timeZonage/FormScreen_timeZonageV2';
 import FormScreenWeights from '../FormScreen3_weights/FormScreen_weights';
 import FormScreenAdvanced from '../FormScreen4_advanced/FormScreen_advanced';
 import SendFormScreen from '../SendFormScreen/SendFormScreen';
@@ -105,23 +104,23 @@ class FormScreen extends Component{
             currentStepIndicatorSize:25,
             separatorStrokeWidth: 2,
             currentStepStrokeWidth: 3,
-            stepStrokeCurrentColor: '#fe7013',
+            stepStrokeCurrentColor: '#cac6fe',
             stepStrokeWidth: 3,
-            stepStrokeFinishedColor: '#fe7013',
+            stepStrokeFinishedColor: '#cac6fe',
             stepStrokeUnFinishedColor: '#aaaaaa',
-            separatorFinishedColor: '#fe7013',
+            separatorFinishedColor: '#cac6fe',
             separatorUnFinishedColor: '#aaaaaa',
-            stepIndicatorFinishedColor: '#fe7013',
+            stepIndicatorFinishedColor: '#cac6fe',
             stepIndicatorUnFinishedColor: '#ffffff',
             stepIndicatorCurrentColor: '#ffffff',
             stepIndicatorLabelFontSize: 13,
             currentStepIndicatorLabelFontSize: 13,
-            stepIndicatorLabelCurrentColor: '#fe7013',
+            stepIndicatorLabelCurrentColor: '#cac6fe',
             stepIndicatorLabelFinishedColor: '#ffffff',
             stepIndicatorLabelUnFinishedColor: '#aaaaaa',
             labelColor: '#999999',
             labelSize: 13,
-            currentStepLabelColor: '#fe7013'
+            currentStepLabelColor: '#cac6fe'
         };
 
         const customStylesAdvancedOnly = {
@@ -129,23 +128,23 @@ class FormScreen extends Component{
             currentStepIndicatorSize:25,
             separatorStrokeWidth: 2,
             currentStepStrokeWidth: 3,
-            stepStrokeCurrentColor: '#fe7013',
+            stepStrokeCurrentColor: '#cac6fe',
             stepStrokeWidth: 3,
-            stepStrokeFinishedColor: '#fe7013',
+            stepStrokeFinishedColor: '#cac6fe',
             stepStrokeUnFinishedColor: '#aaaaaa',
-            separatorFinishedColor: '#fe7013',
+            separatorFinishedColor: '#cac6fe',
             separatorUnFinishedColor: '#aaaaaa',
-            stepIndicatorFinishedColor: '#fe7013',
+            stepIndicatorFinishedColor: '#cac6fe',
             stepIndicatorUnFinishedColor: '#ffffff',
             stepIndicatorCurrentColor: '#ffffff',
             stepIndicatorLabelFontSize: 0,
             currentStepIndicatorLabelFontSize: 0,
-            stepIndicatorLabelCurrentColor: '#fe7013',
+            stepIndicatorLabelCurrentColor: '#cac6fe',
             stepIndicatorLabelFinishedColor: '#ffffff',
             stepIndicatorLabelUnFinishedColor: '#aaaaaa',
             labelColor: '#999999',
             labelSize: 13,
-            currentStepLabelColor: '#fe7013'
+            currentStepLabelColor: '#cac6fe'
         };
 
         return(
@@ -160,11 +159,7 @@ class FormScreen extends Component{
                             ref={viewPager => { this.viewPager = viewPager; }}
                         >
                             <View>
-                                <ScrollView>
-                                    <KeyboardAwareScrollView>
-                                        <FormScreenInitial data={this.props.state.main.Page0Data} setPage={this.handleSetPage} Picker={Picker}/>
-                                    </KeyboardAwareScrollView>
-                                </ScrollView>
+                                <FormScreenInitial data={this.props.state.main.Page0Data} setPage={this.handleSetPage} Picker={Picker}/>
                             </View>
                             <View>
                                 <FormScreenTimeZonage data={this.props.state.main.Page1Data} setPage={this.handleSetPage} Picker={Picker}/>

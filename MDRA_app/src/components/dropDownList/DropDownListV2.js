@@ -14,8 +14,15 @@ import {
 } from 'react-native';
 
 import {FormLabel, FormValidationMessage} from "react-native-elements";
-import Picker from "react-native-picker";
 
+/**
+ * DropDownListV2 uses react-native-picker
+ * instead of react-native's own picker (because it is broken on IOS)
+ *
+ * **NOTE**
+ * A weird glitch makes it so that everything below this dropDownV2 is erase from existence
+ * to be used with a flexDirection: row in the style of the view surrounding it
+ */
 class DropDownListV2 extends Component {
 
     state= {
