@@ -3,8 +3,6 @@ import {View, Button, StyleSheet, Dimensions, Platform} from 'react-native';
 import 'react-native-svg';
 
 import {VictoryArea, VictoryChart, VictoryLine} from "victory-native";
-import Draggable from 'react-native-draggable';
-
 
 class GraphComponent extends PureComponent{
     state = {

@@ -9,7 +9,8 @@ import {
     Text,
     TextInput,
     TouchableOpacity,
-    Dimensions, StyleSheet, TouchableWithoutFeedback
+    Dimensions, StyleSheet,
+    Platform
 } from 'react-native';
 
 import {FormLabel, FormValidationMessage} from "react-native-elements";
@@ -38,7 +39,12 @@ class DropDownListV2 extends Component {
         Picker.init({
             pickerData: data,
             selectedValue: [this.props.value],
-            pickerFontColor: [255, 0 ,0, 1],
+            pickerFontColor: [0, 0 ,0, 1],
+            pickerFontSize: 17,
+            pickerBg:[255,255,255,1],
+            pickerCancelBtnText: "CANCEL",
+            pickerConfirmBtnText: "CONFIRM",
+            pickerTitleText: "Please select item",
             onPickerConfirm: (pickedValue, pickedIndex) => {
                 console.log('date', pickedValue, pickedIndex);
                 this.setState(oldState => {
@@ -75,7 +81,7 @@ class DropDownListV2 extends Component {
             </View>
         );
     }
-};
+}
 
 
 const styles = StyleSheet.create({
@@ -88,7 +94,7 @@ const styles = StyleSheet.create({
     pickerStyle:{
         height: 50,
         width: "100%",
-        backgroundColor: "red",
+        backgroundColor: "#c8e5f9",
         alignItems: "center",
         justifyContent:"center",
         borderRadius: 20

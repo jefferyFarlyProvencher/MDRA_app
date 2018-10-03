@@ -16,6 +16,9 @@ import { Button } from 'react-native-elements';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 
+//function imports
+import FormatTime from '../../functions/FormatTime';
+
 //component imports
 import Input from "../../components/Input/Input";
 import DropDownListV2 from "../../components/dropDownList/DropDownListV2";
@@ -37,6 +40,12 @@ class FormScreenInitial extends PureComponent{
             this.props.data
                 ?[this.props.data.formula0,this.props.data.formula1,this.props.data.formula2,this.props.data.formula3]
                 :["Ritalin IR","Ritalin IR","Ritalin IR","Ritalin IR"]
+        ,
+        //time values are there to set the dosage
+        timeValues:
+            this.props.data
+                ?[this.props.data.adminTime0,this.props.data.adminTime1,this.props.data.adminTime2,this.props.data.adminTime3]
+                :["","","",""]
         ,
         //if there is data and an amountOfPills,
         // Number of pill given (1 to 4)
@@ -151,7 +160,7 @@ class FormScreenInitial extends PureComponent{
     };
 
     getDoses = (index)=>{
-        console.log("FORMULA VALUES: "+JSON.stringify(this.state.formulaValues[index]));
+        //console.log("FORMULA VALUES: "+JSON.stringify(this.state.formulaValues[index]));
         switch (this.state.formulaValues[index]) {
             case "Ritalin IR":
                 return ["10","20"];
@@ -165,6 +174,24 @@ class FormScreenInitial extends PureComponent{
                 return ["5","10","15","20"];
             default:
         }
+    };
+
+    handleFormatTime = (adminTimeNumber)=>{
+        let copyOfArray = (this.state.timeValues).slice();
+        copyOfArray[1] = FormatTime(""+this.state.timeValues[adminTimeNumber],false);
+        this.setState((oldState) => {
+            return({
+                ...oldState,
+                timeValues: copyOfArray
+            })
+        });
+    };
+
+
+    //goes from HH:MM format to HH.M format
+
+    handleUnFormatTime = (adminTimeNumber) => {
+        return FormatTime(""+this.state.timeValues[adminTimeNumber],true);
     };
 
 
@@ -236,45 +263,47 @@ class FormScreenInitial extends PureComponent{
                                  isSubmitting
                              }) => (
                         <View>
-                            <View style={[styles.twoPerRowContainer,{marginBottom:"5%"}]}>
-                                <DropDownListV2
-                                    style={styles.inputContainer}
-                                    value={values.gender}
-                                    label={"Gender"}
-                                    name="gender"
-                                    onChange={setFieldValue}
-                                    itemList={["Male","Female"]}
-                                    Picker={picker}
-                                />
-                                <View style={[styles.inputContainer,styles.twoPerRowContainer, {width:"45%", justifyContent:"space-around"} ]}>
-                                    <View style={{width:"80%", marginRight:0}}>
-                                        <Input
-                                            label={"Weight"}
-                                            value={values.weight}
-                                            onChange={(name,value) =>{
-                                                setFieldValue(name,value)
-                                            }}
-                                            onTouch={setFieldTouched}
-                                            name="weight"
-                                            error={touched.weight && errors.weight}
-                                            keyboardType="numeric"
-                                        />
-                                    </View>
-                                    <View style={{paddingTop:"20%", marginLeft:0, paddingRight:20, flexDirection:'row', justifyContent:'center'}}>
-                                        <View style={{paddingTop:"25%"}}>
-                                            <Text>{(this.state.switchValue?"lbs":"kg ")}</Text>
+                            <View style={{margin:"5%"}}>
+                                <View style={[styles.twoPerRowContainer,{marginBottom:"0%"}]}>
+                                    <DropDownListV2
+                                        style={styles.inputContainer}
+                                        value={values.gender}
+                                        label={"Gender"}
+                                        name="gender"
+                                        onChange={setFieldValue}
+                                        itemList={["Male","Female"]}
+                                        Picker={picker}
+                                    />
+                                    <View style={[styles.inputContainer,styles.twoPerRowContainer, {width:"45%", justifyContent:"space-around"} ]}>
+                                        <View style={{width:"80%", marginRight:0}}>
+                                            <Input
+                                                label={"Weight"}
+                                                value={values.weight}
+                                                onChange={(name,value) =>{
+                                                    setFieldValue(name,value)
+                                                }}
+                                                onTouch={setFieldTouched}
+                                                name="weight"
+                                                error={touched.weight && errors.weight}
+                                                keyboardType="numeric"
+                                            />
                                         </View>
-                                        <Switch
-                                            value={this.state.switchValue}
-                                            onValueChange={(value) => {
-                                                setFieldValue('switchWeightFormat', !this.state.switchValue);
-                                                this._handleChangeSwitch(value);
-                                            }
-                                            }
-                                            tintColor={"#a8eebc"}
-                                            onTintColor={"#b1d6ee"}
-                                            thumbTintColor={(Platform==="ios"? undefined: 'white')}
-                                        />
+                                        <View style={{paddingTop:"20%", marginLeft:0, paddingRight:20, flexDirection:'row', justifyContent:'center'}}>
+                                            <View style={{paddingTop:"25%"}}>
+                                                <Text>{(this.state.switchValue?"lbs":"kg ")}</Text>
+                                            </View>
+                                            <Switch
+                                                value={this.state.switchValue}
+                                                onValueChange={(value) => {
+                                                    setFieldValue('switchWeightFormat', !this.state.switchValue);
+                                                    this._handleChangeSwitch(value);
+                                                }
+                                                }
+                                                tintColor={"#a8eebc"}
+                                                onTintColor={"#b1d6ee"}
+                                                thumbTintColor={(Platform==="ios"? undefined: 'white')}
+                                            />
+                                        </View>
                                     </View>
                                 </View>
                             </View>
@@ -372,8 +401,22 @@ class FormScreenInitial extends PureComponent{
                                                 <View style={[styles.inputContainer, {width:"55%"}]}>
                                                     <Input
                                                         label="Administration Time"
-                                                        value={values.adminTime1}
-                                                        onChange={setFieldValue}
+                                                        value={this.state.timeValues[1]}
+                                                        onChange={(name,value) => {
+                                                            console.log(name);
+                                                            let copyOfArray = (this.state.timeValues).slice();
+                                                            copyOfArray[1] = value;
+                                                            this.setState((oldState) => {
+                                                                return({
+                                                                    ...oldState,
+                                                                    timeValues: copyOfArray
+                                                                })
+                                                            });
+                                                        }}
+                                                        onBlur={() =>{
+                                                            this.handleFormatTime(1);
+                                                            setFieldValue("adminTime1", this.handleUnFormatTime(1));
+                                                        }}
                                                         onTouch={setFieldTouched}
                                                         name="adminTime1"
                                                         error={this.state.amountOfPills>=1?(touched.adminTime1 && errors.adminTime1): null}
@@ -585,9 +628,9 @@ const styles = StyleSheet.create({
 
     drugContainer:{
         borderColor:"#555",
-        borderWidth: 0.5,
-        borderRadius:20,
-        width: "95%",
+        borderWidth: 0,
+        borderRadius:0,
+        width: "100%",
         marginLeft: 0,
         marginBottom:3,
         padding: 10
