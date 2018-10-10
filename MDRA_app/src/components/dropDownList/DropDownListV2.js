@@ -42,7 +42,6 @@ class DropDownListV2 extends Component {
 
 
     _showPicker = (data, Picker) => {
-        console.log("here!!!!!!!!");
         Picker.init({
             pickerData: data,
             selectedValue: [this.props.value],
@@ -64,10 +63,12 @@ class DropDownListV2 extends Component {
                 this._handleChange(pickedValue);
             },
             onPickerCancel: (pickedValue, pickedIndex) => {
-                console.log('date', pickedValue, pickedIndex);
+                //do nothing
+                //console.log('date', pickedValue, pickedIndex);
             },
             onPickerSelect: (pickedValue, pickedIndex) => {
-                console.log('date', pickedValue, pickedIndex);
+                //do nothing
+                //console.log('date', pickedValue, pickedIndex);
             }
         });
         Picker.show();

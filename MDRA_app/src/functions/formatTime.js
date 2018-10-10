@@ -1,14 +1,17 @@
+import containsOnlyNumbers from './containsOnlyNumbers';
+
 /**
  * @param time
  * @param convertToHours
  * @return string
  */
-let FormatTime = (time, convertToHours) => {
-    //console.log("TIME: "+ time);
-    if(time) {
+let FormatTime = (time, convertToDecimal) => {
+    console.log("TIME: "+ time +" <- here");
+    if(time!==undefined && time!== "" && time!== null) {
+        console.log("This passed: "+ time +" <- here");
         let hours = 0;
         let minutes = 0;
-        if (convertToHours) {
+        if (convertToDecimal) {
             if (time.includes(':')) {
                 // Clock style to seconds conversion
                 const timeArray = time.split(':');
@@ -16,11 +19,11 @@ let FormatTime = (time, convertToHours) => {
                 minutes = parseInt(timeArray[1])/60;
             }
             else{
-                console.log("Output: " + time);
+                //console.log("convertToHours True, doesnt include :, Output: " + time);
                 return time;
             }
-            //console.log("Output: " + (hours+minutes));
-            return "" + hours+minutes;
+            //console.log("ConvertToHours True, includes \":\", Output: " + (hours+minutes));
+            return "" + (hours+minutes);
         }
 
         else {
@@ -42,10 +45,19 @@ let FormatTime = (time, convertToHours) => {
             }
         }
 
-        //console.log("ready to return: "+hours+":"+(minutes<10? "0":"")+minutes);
-        return ""+hours+":"+(minutes<10? "0":"")+minutes;
+        //if both parts are composed of only letters
+        if(containsOnlyNumbers(hours) && containsOnlyNumbers(minutes)) {
+            //console.log("ready to return: "+hours+":"+(minutes<10? minutes+"0":"" + minutes));
+            return "" + hours + ":" + (minutes < 10 ? minutes + "0" : ""+ minutes);
+        }
+        //else return erroneous
+        else{
+            //console.log("there is a mistake in one of these: hour: " + hours + "; minute: " + minutes);
+            return time
+        }
     }
     else{
+        //console.log("if failed");
         return time;
     }
 };

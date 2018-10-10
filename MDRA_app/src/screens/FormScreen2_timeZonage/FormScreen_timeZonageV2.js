@@ -83,296 +83,313 @@ class FormScreenTimeZonage extends PureComponent{
                 );
         }
     };
+
+    _handleGoToPreviousStep = () => {
+        this.props.onChangePosition(this.state.currentPosition-1);
+        this.props.setPage(this.state.currentPosition-1);
+    };
+
     render() {
         return(
-            <View style={styles.container}>
+            <View>
                 <KeyboardAvoidingView>
                 <ScrollView>
-                <Text>Page 2: THERAPEUTIC BOXES</Text>
-                <Formik
-                    initialValues={(this.props.data)
-                        ?{
-                            nbTheraputicBoxes:this.props.data.nbTheraputicBoxes,
-                            tsDay: this.props.data.tsDay,
-                            teDay:this.props.data.teDay,
-                            tsPM:this.props.data.tsPM,
-                            tePM:this.props.data.tePM,
-                            tsEvening:this.props.data.tsEvening,
-                            teEvening:this.props.data.teEvening,
-                            lunch:this.props.data.lunch,
-                            bed:this.props.data.bed,
-                        }
-                        :{
-                            nbTheraputicBoxes:"One therapeutic box (from AM to PM)",
-                            tsDay: '6',
-                            teDay:'15',
-                            tsPM:'12',
-                            tePM:'15',
-                            tsEvening:'17',
-                            teEvening:'19',
-                            lunch:'12',
-                            bed:'24',
-                        }
-                    }
-                    onSubmit={this._handleSubmit}
-                    validationSchema={this._handleValidation}
-                    render={({
-                                 values,
-                                 handleSubmit,
-                                 setFieldValue,
-                                 errors,
-                                 touched,
-                                 setFieldTouched,
-                                 isValid,
-                                 isSubmitting
-                             }) => (
-                        <View>
-                            <View style={{backgroundColor:'red', flexDirection:"row"}}>
-                                <DropDownListV2
-                                    onChange={(name,value) => {
-                                        let onlyOneBox= value==="One therapeutic box (from AM to PM)";
-                                        if(!onlyOneBox) { //if two boxes
-                                            if(parseFloat(values.teDay) > 12) {
-                                                setFieldValue('teDay', '12');
-                                            }
-                                        }
-                                        this.setState( (oldState) =>
-                                            {
-                                                return(
-                                                    {
-                                                        ...oldState,
-                                                        nbOfBoxes: (onlyOneBox)
-                                                            ?1
-                                                            :2
-                                                    }
-                                                )
-                                            }
-                                        );
-                                        setFieldValue(name,value)
-                                    }}
-                                    name="nbTheraputicBoxes"
-                                    value={values.nbTheraputicBoxes}
-                                    itemList={["One therapeutic box (from AM to PM)","Two therapeutic boxes (AM and PM)"]}
-                                    Picker={this.props.Picker}
-                                />
-                                <DropDownListV2
-                                    onChange={setFieldValue}
-                                    style={styles.inputContainer}
-                                    label={"Gender"}
-                                    name="nbTheraputicBoxes"
-                                    value={values.nbTheraputicBoxes}
-                                    itemList={["One therapeutic box (from AM to PM)","Two therapeutic boxes (AM and PM)"]}
-                                    Picker={this.props.Picker}
-
-                                />
-                            </View>
-                            <View style={{backgroundColor: "white"}}>
-                                <LinedLabel
-                                    label={(this.state.nbOfBoxes===1)?"Day Time": "AM time" }
-                                    textPosition="left"/>
-                                <View>
-                                    <View style={styles.twoPerRowContainer}>
-                                        <View style={styles.inputContainerForTwo}>
-                                            <Input
-                                                label="Ts"
-                                                value={values.tsDay}
-                                                onChange={(name,value) => {
-                                                    setFieldValue(name,value)
-                                                }}
-                                                onTouch={setFieldTouched}
-                                                name="tsDay"
-                                                error={touched.tsDay && errors.tsDay}
-                                                keyboardType="numeric"
-                                            />
-                                        </View>
-                                        <View style={styles.inputContainerForTwo}>
-                                            <Input
-                                                label="Te"
-                                                value={values.teDay}
-                                                onChange={(name,value) => {
-                                                    setFieldValue(name,value)
-                                                }}
-                                                onTouch={setFieldTouched}
-                                                name="teDay"
-                                                error={touched.teDay && errors.teDay}
-                                                keyboardType="numeric"
-                                            />
-                                        </View>
-                                    </View>
-                                </View>
-                                <View
-                                    style={{margin:20, flexDirection:'row', justifyContent:'space-around'}}
-                                >
-                                    <CustomMultiSlider
-                                        sliderLength={Dimensions.get("window").width*0.80}
-                                        min={0}
-                                        max={this.state.nbOfBoxes === 1?16: 12}
-                                        step={0.5}
-                                        values={[parseFloat(values.tsDay),(values.teDay>12&&this.state.nbOfBoxes===2)?12:parseFloat(values.teDay)]}
-                                        onValuesChange={
-                                            (values) => {
-                                                setFieldValue('tsDay', values[0].toString());
-                                                setFieldValue('teDay', values[1].toString());
-                                            }
-                                        }
-                                    />
-                                </View>
-                            </View>
-                            {(this.state.nbOfBoxes === 2)
-                                ?
-                                <View>
-                                    <LinedLabel
-                                        label={"PM time"}
-                                        textPosition="left"/>
-                                    <View style={styles.twoPerRowContainer}>
-                                        <View style={styles.inputContainerForTwo}>
-                                            < Input
-                                            label = "Ts"
-                                            value={values.tsPM}
-                                            onChange={(name,value) => {
-                                                setFieldValue(name,value)
-                                            }}
-                                            onTouch={setFieldTouched}
-                                            name="tsDay"
-                                            error={touched.tsPM && errors.tsPM}
-                                            keyboardType="numeric"
-                                            />
-                                        </View>
-                                        <View style={styles.inputContainerForTwo}>
-                                            <Input
-                                            label="Te"
-                                            value={values.tePM}
-                                            onChange={(name,value) => {
-                                                setFieldValue(name,value)
-                                            }}
-                                            onTouch={setFieldTouched}
-                                            name="teDay"
-                                            error={touched.tePM && errors.tePM}
-                                            keyboardType="numeric"
-                                            />
-                                        </View>
-                                    </View>
-                                    <View
-                                        style={{
-                                            margin:20,
-                                            flexDirection:'row',
-                                            justifyContent:'space-around'
-                                        }}
-                                    >
-                                        <CustomMultiSlider
-                                            sliderLength={Dimensions.get("window").width*0.80}
-                                            min={12}
-                                            max={16}
-                                            step={0.5}
-                                            values={[parseFloat(values.tsPM),parseFloat(values.tePM)]}
-                                            onValuesChange={
-                                                (values) => {
-                                                    setFieldValue('tsPM', values[0].toString());
-                                                    setFieldValue('tePM', values[1].toString());
-                                                }
-                                            }
-                                        />
-                                </View>
-                                </View>
-                                :<View/>
+                    <View style={styles.centerElements}>
+                        <Text>Page 2: THERAPEUTIC BOXES</Text>
+                    </View>
+                    <View style={{width: "50%"}}>
+                        <Button
+                            title="Go to previous step"
+                            onPress={this._handleGoToPreviousStep}
+                            icon={
+                                {
+                                    name: "chevron-left",
+                                    color: "black",
+                                    type: "ionicons"
+                                }
                             }
-                            <View>
-                                <LinedLabel
-                                    label={"Evening time"}
-                                    textPosition="left"/>
-                                <View style={styles.twoPerRowContainer}>
-                                    <View style={styles.inputContainerForTwo}>
-                                        <Input
-                                            label="Ts"
-                                            value={values.tsEvening}
-                                            onChange={setFieldValue}
-                                            onTouch={setFieldTouched}
-                                            name="tsEvening"
-                                            error={touched.tsEvening && errors.tsEvening}
-                                            keyboardType="numeric"
+                            color={"#000"}
+                            buttonStyle={{backgroundColor:"red", width: "50%"}}
+                        />
+                    </View>
+                    <View>
+                        <Formik
+                            initialValues={(this.props.data)
+                                ?{
+                                    nbTheraputicBoxes:this.props.data.nbTheraputicBoxes,
+                                    tsDay: this.props.data.tsDay,
+                                    teDay:this.props.data.teDay,
+                                    tsPM:this.props.data.tsPM,
+                                    tePM:this.props.data.tePM,
+                                    tsEvening:this.props.data.tsEvening,
+                                    teEvening:this.props.data.teEvening,
+                                    lunch:this.props.data.lunch,
+                                    bed:this.props.data.bed,
+                                }
+                                :{
+                                    nbTheraputicBoxes:"One therapeutic box (from AM to PM)",
+                                    tsDay: '6',
+                                    teDay:'15',
+                                    tsPM:'12',
+                                    tePM:'15',
+                                    tsEvening:'17',
+                                    teEvening:'19',
+                                    lunch:'12',
+                                    bed:'24',
+                                }
+                            }
+                            onSubmit={this._handleSubmit}
+                            validationSchema={this._handleValidation}
+                            render={({
+                                         values,
+                                         handleSubmit,
+                                         setFieldValue,
+                                         errors,
+                                         touched,
+                                         setFieldTouched,
+                                         isValid,
+                                         isSubmitting
+                                     }) => (
+                                <View>
+                                    <View style={{flexDirection:"row"}}>
+                                        <DropDownListV2
+                                            onChange={(name,value) => {
+                                                let onlyOneBox= value==="One therapeutic box (from AM to PM)";
+                                                if(!onlyOneBox) { //if two boxes
+                                                    if(parseFloat(values.teDay) > 12) {
+                                                        setFieldValue('teDay', '12');
+                                                    }
+                                                }
+                                                this.setState( (oldState) =>
+                                                    {
+                                                        return(
+                                                            {
+                                                                ...oldState,
+                                                                nbOfBoxes: (onlyOneBox)
+                                                                    ?1
+                                                                    :2
+                                                            }
+                                                        )
+                                                    }
+                                                );
+                                                setFieldValue(name,value)
+                                            }}
+                                            name="nbTheraputicBoxes"
+                                            value={values.nbTheraputicBoxes}
+                                            itemList={["One therapeutic box (from AM to PM)","Two therapeutic boxes (AM and PM)"]}
+                                            Picker={this.props.Picker}
                                         />
                                     </View>
-                                    <View style={styles.inputContainerForTwo}>
-                                        <Input
-                                            label="Te"
-                                            value={values.teEvening}
-                                            onChange={setFieldValue}
-                                            onTouch={setFieldTouched}
-                                            name="teEvening"
-                                            error={touched.teEvening && errors.teEvening}
-                                            keyboardType="numeric"
-                                        />
+                                    <View style={{backgroundColor: "white"}}>
+                                        <LinedLabel
+                                            label={(this.state.nbOfBoxes===1)?"Day Time": "AM time" }
+                                            textPosition="left"/>
+                                        <View>
+                                            <View style={styles.twoPerRowContainer}>
+                                                <View style={styles.inputContainerForTwo}>
+                                                    <Input
+                                                        label="Ts"
+                                                        value={values.tsDay}
+                                                        onChange={(name,value) => {
+                                                            setFieldValue(name,value)
+                                                        }}
+                                                        onTouch={setFieldTouched}
+                                                        name="tsDay"
+                                                        error={touched.tsDay && errors.tsDay}
+                                                        keyboardType="numeric"
+                                                    />
+                                                </View>
+                                                <View style={styles.inputContainerForTwo}>
+                                                    <Input
+                                                        label="Te"
+                                                        value={values.teDay}
+                                                        onChange={(name,value) => {
+                                                            setFieldValue(name,value)
+                                                        }}
+                                                        onTouch={setFieldTouched}
+                                                        name="teDay"
+                                                        error={touched.teDay && errors.teDay}
+                                                        keyboardType="numeric"
+                                                    />
+                                                </View>
+                                            </View>
+                                        </View>
+                                        <View
+                                            style={{margin:20, flexDirection:'row', justifyContent:'space-around'}}
+                                        >
+                                            <CustomMultiSlider
+                                                sliderLength={Dimensions.get("window").width*0.80}
+                                                min={0}
+                                                max={this.state.nbOfBoxes === 1?16: 12}
+                                                step={0.5}
+                                                values={[parseFloat(values.tsDay),(values.teDay>12&&this.state.nbOfBoxes===2)?12:parseFloat(values.teDay)]}
+                                                onValuesChange={
+                                                    (values) => {
+                                                        setFieldValue('tsDay', values[0].toString());
+                                                        setFieldValue('teDay', values[1].toString());
+                                                    }
+                                                }
+                                            />
+                                        </View>
                                     </View>
-                                </View>
-                                <View
-                                    style={{margin:20, flexDirection:'row', justifyContent:'space-around'}}
-                                >
-                                    <CustomMultiSlider
-                                        sliderLength={Dimensions.get("window").width*0.80}
-                                        min={16}
-                                        max={24}
-                                        step={0.5}
-                                        snapped={true}
-                                        values={[parseFloat(values.tsEvening),parseFloat(values.teEvening)]}
-                                        onValuesChange={
-                                            (valuesS) => {
-                                                setFieldValue('tsEvening', valuesS[0].toString());
-                                                setFieldValue('teEvening', valuesS[1].toString());
-                                            }
-                                        }
-                                    />
-                                </View>
-                            </View>
-                            <View style={styles.inputWithIconContainer}>
-                                <View  style={styles.inputWithIcon_Icon}>
-                                    <Ionicon
-                                        size={35}
-                                        name= {Platform.OS==='android'? "ios-nutrition" :"ios-log-out-outline"}
-                                        color="#52afff" style={styles.drawerItemIcon}
-                                    />
-                                </View>
-                                <View style={styles.inputWithIcon_Input}>
-                                    <Input
-                                        label="Lunch Time (o'clock)"
-                                        value={values.lunch}
-                                        onChange={setFieldValue}
-                                        onTouch={setFieldTouched}
-                                        name="lunch"
-                                        error={touched.lunch && errors.lunch}
-                                        keyboardType="numeric"
-                                    />
-                                </View>
+                                    {(this.state.nbOfBoxes === 2)
+                                        ?
+                                        <View>
+                                            <LinedLabel
+                                                label={"PM time"}
+                                                textPosition="left"/>
+                                            <View style={styles.twoPerRowContainer}>
+                                                <View style={styles.inputContainerForTwo}>
+                                                    < Input
+                                                    label = "Ts"
+                                                    value={values.tsPM}
+                                                    onChange={(name,value) => {
+                                                        setFieldValue(name,value)
+                                                    }}
+                                                    onTouch={setFieldTouched}
+                                                    name="tsDay"
+                                                    error={touched.tsPM && errors.tsPM}
+                                                    keyboardType="numeric"
+                                                    />
+                                                </View>
+                                                <View style={styles.inputContainerForTwo}>
+                                                    <Input
+                                                    label="Te"
+                                                    value={values.tePM}
+                                                    onChange={(name,value) => {
+                                                        setFieldValue(name,value)
+                                                    }}
+                                                    onTouch={setFieldTouched}
+                                                    name="teDay"
+                                                    error={touched.tePM && errors.tePM}
+                                                    keyboardType="numeric"
+                                                    />
+                                                </View>
+                                            </View>
+                                            <View
+                                                style={{
+                                                    margin:20,
+                                                    flexDirection:'row',
+                                                    justifyContent:'space-around'
+                                                }}
+                                            >
+                                                <CustomMultiSlider
+                                                    sliderLength={Dimensions.get("window").width*0.80}
+                                                    min={12}
+                                                    max={16}
+                                                    step={0.5}
+                                                    values={[parseFloat(values.tsPM),parseFloat(values.tePM)]}
+                                                    onValuesChange={
+                                                        (values) => {
+                                                            setFieldValue('tsPM', values[0].toString());
+                                                            setFieldValue('tePM', values[1].toString());
+                                                        }
+                                                    }
+                                                />
+                                        </View>
+                                        </View>
+                                        :<View/>
+                                    }
+                                    <View>
+                                        <LinedLabel
+                                            label={"Evening time"}
+                                            textPosition="left"/>
+                                        <View style={styles.twoPerRowContainer}>
+                                            <View style={styles.inputContainerForTwo}>
+                                                <Input
+                                                    label="Ts"
+                                                    value={values.tsEvening}
+                                                    onChange={setFieldValue}
+                                                    onTouch={setFieldTouched}
+                                                    name="tsEvening"
+                                                    error={touched.tsEvening && errors.tsEvening}
+                                                    keyboardType="numeric"
+                                                />
+                                            </View>
+                                            <View style={styles.inputContainerForTwo}>
+                                                <Input
+                                                    label="Te"
+                                                    value={values.teEvening}
+                                                    onChange={setFieldValue}
+                                                    onTouch={setFieldTouched}
+                                                    name="teEvening"
+                                                    error={touched.teEvening && errors.teEvening}
+                                                    keyboardType="numeric"
+                                                />
+                                            </View>
+                                        </View>
+                                        <View
+                                            style={{margin:20, flexDirection:'row', justifyContent:'space-around'}}
+                                        >
+                                            <CustomMultiSlider
+                                                sliderLength={Dimensions.get("window").width*0.80}
+                                                min={16}
+                                                max={24}
+                                                step={0.5}
+                                                snapped={true}
+                                                values={[parseFloat(values.tsEvening),parseFloat(values.teEvening)]}
+                                                onValuesChange={
+                                                    (valuesS) => {
+                                                        setFieldValue('tsEvening', valuesS[0].toString());
+                                                        setFieldValue('teEvening', valuesS[1].toString());
+                                                    }
+                                                }
+                                            />
+                                        </View>
+                                    </View>
+                                    <View style={styles.bedAndLunchContainer}>
+                                        <View style={styles.inputWithIconContainer}>
+                                            <View  style={styles.inputWithIcon_Icon}>
+                                                <Ionicon
+                                                    size={35}
+                                                    name= {Platform.OS==='android'? "md-restaurant" :"ios-restaurant"}
+                                                    color="#52afff" style={styles.drawerItemIcon}
+                                                />
+                                            </View>
+                                            <View style={styles.inputWithIcon_Input}>
+                                                <Input
+                                                    label="Lunch Time (o'clock)"
+                                                    value={values.lunch}
+                                                    onChange={setFieldValue}
+                                                    onTouch={setFieldTouched}
+                                                    name="lunch"
+                                                    error={touched.lunch && errors.lunch}
+                                                    keyboardType="numeric"
+                                                />
+                                            </View>
 
-                            </View>
-                            <View style={styles.inputWithIconContainer}>
-                                <View  style={styles.inputWithIcon_Icon}>
-                                    <AwesomeIcon
-                                        size={35}
-                                        name= {Platform.OS==='android'? "bed" :"bed"}
-                                        color="#52afff" style={styles.drawerItemIcon}
+                                        </View>
+                                        <View style={[styles.inputWithIconContainer]}>
+                                            <View  style={styles.inputWithIcon_Icon}>
+                                                <AwesomeIcon
+                                                    size={35}
+                                                    name= {Platform.OS==='android'? "bed" :"bed"}
+                                                    color="#52afff" style={styles.drawerItemIcon}
+                                                />
+                                            </View>
+                                            <View style={styles.inputWithIcon_Input}>
+                                                <Input
+                                                    label="Bed Time (o'clock)"
+                                                    value={values.bed}
+                                                    onChange={setFieldValue}
+                                                    onTouch={setFieldTouched}
+                                                    name="bed"
+                                                    error={touched.bed && errors.bed}
+                                                    keyboardType="numeric"
+                                                />
+                                            </View>
+                                        </View>
+                                    </View>
+                                    <Button
+                                        buttonStyle={styles.button}
+                                        title="Go to weights"
+                                        onPress={handleSubmit}
+                                        loading={isSubmitting}
                                     />
                                 </View>
-                                <View style={styles.inputWithIcon_Input}>
-                                    <Input
-                                        label="Bed Time (o'clock)"
-                                        value={values.bed}
-                                        onChange={setFieldValue}
-                                        onTouch={setFieldTouched}
-                                        name="bed"
-                                        error={touched.bed && errors.bed}
-                                        keyboardType="numeric"
-                                    />
-                                </View>
-                            </View>
-                            <Button
-                                buttonStyle={styles.button}
-                                title="Go to weights"
-                                onPress={handleSubmit}
-                                loading={isSubmitting}
-                            />
-                        </View>
-                    )}
-                />
+                            )}
+                        />
+                    </View>
                 </ScrollView>
                 </KeyboardAvoidingView>
             </View>
@@ -385,10 +402,14 @@ const styles = StyleSheet.create({
     container: {
         flex:1,
         backgroundColor: "#fff",
-        alignItems: "center",
-        justifyContent: "center",
         paddingHorizontal: "5%"
     },
+
+    centerElements:{
+        alignItems: "center",
+        justifyContent: "center",
+    },
+
     button: {
         marginVertical: 20,
         width: '100%',
@@ -408,6 +429,10 @@ const styles = StyleSheet.create({
         position: "absolute",
         bottom: 0,
         left: 0,
+    },
+
+    bedAndLunchContainer:{
+        paddingHorizontal: "5%",
     },
 
     inputWithIconContainer: {

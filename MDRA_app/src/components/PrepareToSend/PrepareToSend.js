@@ -23,7 +23,9 @@
 *
  */
 
-findFormulaNumber = (pillName) => {
+import FormatTime from "../../functions/FormatTime";
+
+let findFormulaNumber = (pillName) => {
   switch(pillName) {
       case "Ritalin IR":
           return 1;
@@ -36,8 +38,8 @@ findFormulaNumber = (pillName) => {
   }
 };
 
-handleMultiBoxes = (page1Data) => {
-    console.log("hey");
+let handleMultiBoxes = (page1Data) => {
+    console.log("where at handleMultiBoxes");
     let elementToReturn = "";
     if(page1Data.nbTheraputicBoxes === "One therapeutic box (from AM to PM)"){
         elementToReturn += '&zc=-1&zd=-1&zzc=-1&zzd=-1';
@@ -45,10 +47,11 @@ handleMultiBoxes = (page1Data) => {
     else if(page1Data.nbTheraputicBoxes === "Two therapeutic boxes (AM and PM)")
     {
         elementToReturn += (
-            '&zc=' + page1Data.tsDay +
-            '&zd=' + page1Data.teDay +
-            '&zzc=' + page1Data.tsPM +
-            '&zzd=' + page1Data.tePM);
+            '&zc=' + adjustTime(page1Data.tsDay) +
+            '&zd=' + adjustTime(page1Data.teDay) +
+            '&zzc=' + adjustTime(page1Data.tsPM) +
+            '&zzd=' + adjustTime(page1Data.tePM)
+        );
     }
     //console.log(elementToReturn);
     return elementToReturn
@@ -58,31 +61,32 @@ handleMultiBoxes = (page1Data) => {
     Sets the proper amount of pills by adding the corresponding 1,2,3,4
      texts to the overall request.
  */
-preparePills = (page0Data) => {
+let preparePills = (page0Data) => {
+    console.log("Preparing pills...");
     let elementToReturn = (
         '&formulation1='+findFormulaNumber(page0Data.formula0) +
         '&quantitedose1='+page0Data.dose0 +
-        '&momentdose1='+page0Data.adminTime0 +
+        '&momentdose1='+ adjustTime(page0Data.adminTime0) +
         '&Food1='+(page0Data.food0 ==='Yes'? '1':'0')+ //turns yes/no into bool vals
     ((page0Data.amountOfPills > 1)
         ?
         '&formulation2='+findFormulaNumber(page0Data.formula1) +
         '&quantitedose2='+page0Data.dose1 +
-        '&momentdose2='+page0Data.adminTime1 +
+        '&momentdose2='+ adjustTime(page0Data.adminTime1) +
         '&Food2='+(page0Data.food1 ==='Yes'? '1':'0')
         :'')+
     ((page0Data.amountOfPills > 2)
         ?
         '&formulation3='+findFormulaNumber(page0Data.formula2) +
         '&quantitedose3='+page0Data.dose2 +
-        '&momentdose3='+page0Data.adminTime2 +
+        '&momentdose3='+ adjustTime(page0Data.adminTime2) +
         '&Food3='+(page0Data.food2 ==='Yes'? '1':'0')
         :'')+
     ((page0Data.amountOfPills > 3)
         ?
         '&formulation4='+findFormulaNumber(page0Data.formula3) +
         '&quantitedose4='+page0Data.dose3 +
-        '&momentdose4='+page0Data.adminTime3 +
+        '&momentdose4='+ adjustTime(page0Data.adminTime3) +
         '&Food4='+(page0Data.food3 ==='Yes'? '1':'0')
         :'')
     );
@@ -91,14 +95,24 @@ preparePills = (page0Data) => {
     return elementToReturn;
 };
 
-verifyUnitConversion = (originalWeight, switchWeightFormat) => {
-    let allo = (switchWeightFormat  //turns lbs to kg
+let verifyUnitConversion = (originalWeight, switchWeightFormat) => {
+    return (switchWeightFormat  //turns lbs to kg
         ? (""+parseFloat(originalWeight)*0.45359237)
         :originalWeight);
-    return allo;
 };
 
-export default PrepareToSend= (data) => {
+//goes from HH:MM format to HH.M format if the hour has been formatted
+let adjustTime=(time)=>{
+    if(time.includes(':'))
+    {
+        return FormatTime(""+time , true);
+    }
+    else{
+        return time
+    }
+};
+
+let PrepareToSend = (data) => {
     //TODO: Add the necessary items to complete the preparation
     let page0Data = data.Page0Data;
     let page1Data = data.Page1Data;
@@ -141,17 +155,17 @@ export default PrepareToSend= (data) => {
             '&a=' + page3Data.cMinTheraputicDayPM +
             '&b=' + page3Data.cMaxTheraputicDayPM +
             '&c=' + ((doesItHaveTwoBoxes)
-                ? page1Data.tsPM
-                : page1Data.tsDay)
+                ? adjustTime(page1Data.tsPM)
+                : adjustTime(page1Data.tsDay))
                 +
             '&d=' + ((doesItHaveTwoBoxes)
-                ? page1Data.tePM
-                : page1Data.teDay)
+                ? adjustTime(page1Data.tePM)
+                : adjustTime(page1Data.teDay))
                 +
             '&e=' + page3Data.cMinTheraputicEvening  +
             '&f=' + page3Data.cMaxTheraputicEvening  +
-            '&g=' + page1Data.tsEvening  +
-            '&h=' + page1Data.teEvening  +
+            '&g=' + adjustTime(page1Data.tsEvening)  +
+            '&h=' + adjustTime(page1Data.teEvening) +
             '&WTI1=' + page2Data.weight1 +
             '&WTI2=' + page2Data.weight2 +
             '&WTI3=' + page2Data.weight3 +
@@ -163,8 +177,8 @@ export default PrepareToSend= (data) => {
             '&za=' + page3Data.cMinTheraputicHalfDayAM +
             '&zb=' + page3Data.cMaxTheraputicHalfDayAM +
             handleMultiBoxes(page1Data)+
-            '&heureducoucher=' + page1Data.bed +
-            '&startLunchTime=' + page1Data.lunch +
+            '&heureducoucher=' + adjustTime(page1Data.bed) +
+            '&startLunchTime=' + adjustTime(page1Data.lunch) +
             '&Morning='+ ((doesItHaveTwoBoxes)
                 ? 1 : 0)+
             preparePills(page0Data));
@@ -174,9 +188,11 @@ export default PrepareToSend= (data) => {
     console.log("DATA TO SEND: "+ dataToReturn);
 
     return dataToReturn;
-}
+};
 
 //TODO?
 let verifyData = (page0,page1,page2,page3) => {
     return true//We hope that formik's/yup's verification works properly....
 };
+
+export default PrepareToSend;

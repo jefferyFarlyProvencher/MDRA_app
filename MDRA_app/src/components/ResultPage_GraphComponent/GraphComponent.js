@@ -4,6 +4,9 @@ import 'react-native-svg';
 
 import {VictoryArea, VictoryChart, VictoryLine} from "victory-native";
 
+//function imports
+import FormatTime from "../../functions/FormatTime";
+
 class GraphComponent extends PureComponent{
     state = {
         animationTime:500

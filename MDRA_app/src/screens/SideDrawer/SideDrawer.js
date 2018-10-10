@@ -85,7 +85,7 @@ class SideDrawer extends Component{
                     <View  style={styles.drawerItem}>
                         <Icon
                             size={40}
-                            name= {Platform.OS==='android'? "ios-nutrition" :"ios-log-out-outline"}
+                            name= {Platform.OS==='android'? "md-add-circle" :"ios-add-circle"}
                             color="#52afff" style={styles.drawerItemIcon}
                         />
                         <Text>Advanced tab enabler</Text>

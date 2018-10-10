@@ -20,6 +20,7 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 //function imports
 import FormatTime from '../../functions/FormatTime';
+import containsOnlyNumbers from '../../functions/containsOnlyNumbers';
 
 //component imports
 import Input from "../../components/Input/Input";
@@ -68,6 +69,12 @@ class FormScreenInitial extends PureComponent{
 
     _handleSubmit =(async (values, bag) => {
         try {
+            //console.log(JSON.stringify(values));
+            //before adding data we need to change back the data to its hh.hh form
+            // values.adminTime0 = this.handleUnFormatTime(values.adminTime0);
+            // values.adminTime1 = this.handleUnFormatTime(values.adminTime1);
+            // values.adminTime2 = this.handleUnFormatTime(values.adminTime2);
+            // values.adminTime3 = this.handleUnFormatTime(values.adminTime3);
             this.props.onAddData(values, this.state.currentPosition);
             bag.setSubmitting(false);
             this.props.onChangePosition(this.state.currentPosition+1);
@@ -98,7 +105,13 @@ class FormScreenInitial extends PureComponent{
                 return (
                     Yup.object().shape({
                         weight: this.state.switchValue?Yup.number().positive().lessThan(160).required(requiredMessage):Yup.number().positive().lessThan(80).required(requiredMessage),
-                        adminTime0: Yup.number().positive().lessThan(24).required(requiredMessage),
+                        adminTime0: Yup.string()
+                            .test('test-name',"Time is does not contain solely numbers",
+                            function(value) {
+                                console.log("YUP admintime0: "+ value);
+                                return containsOnlyNumbers(value);
+                            })
+                            .required(requiredMessage),
                     })
                 );
             case 2:
@@ -183,24 +196,13 @@ class FormScreenInitial extends PureComponent{
         }
     };
 
-    handleFormatTime = (adminTimeNumber)=>{
-        let copyOfArray = (this.state.timeValues).slice();
-        copyOfArray[adminTimeNumber] = FormatTime(""+this.state.timeValues[adminTimeNumber],false);
-        this.setState((oldState) => {
-            return({
-                ...oldState,
-                timeValues: copyOfArray
-            })
-        });
+    handleFormatTime = (value)=>{
+        return FormatTime(""+value, false);
     };
 
-
-    //goes from HH:MM format to HH.M format
-
-    handleUnFormatTime = (adminTimeNumber) => {
-        return FormatTime(""+this.state.timeValues[adminTimeNumber],true);
+    handleUnFormatTime = (value) => {
+        return FormatTime(""+value, true)
     };
-
 
     render() {
         let drugList = ["Ritalin IR","Pms-Methylphenidate IR", "Concerta", "Pms-Methylphenidate ER"];
@@ -266,7 +268,7 @@ class FormScreenInitial extends PureComponent{
                                 }
                                 onSubmit={this._handleSubmit}
                                 validationSchema={this._handleValidation()}
-                                validateOnBlur={true}
+                                validateOnBlur={false}
                                 render={({
                                              values,
                                              handleSubmit,
@@ -316,7 +318,7 @@ class FormScreenInitial extends PureComponent{
                                                             }
                                                             tintColor={"#a8eebc"}
                                                             onTintColor={"#b1d6ee"}
-                                                            thumbTintColor={(Platform==="ios"? undefined: 'white')}
+                                                            thumbTintColor={(Platform==="ios"? "white": '#eee')}
                                                         />
                                                     </View>
                                                 </View>
@@ -363,14 +365,12 @@ class FormScreenInitial extends PureComponent{
                                                     <View style={[styles.inputContainer, {width:"55%"}]}>
                                                         <Input
                                                             label="Administration Time"
-                                                            value={this.state.timeValues[0]}
-                                                            value={this.state.timeValues[0]}
+                                                            value={values.adminTime0}
                                                             onChange={(name,value) => {
-                                                                this.state.timeValues[0] = value;
+                                                                setFieldValue("adminTime0", value);
                                                             }}
                                                             onBlur={() =>{
-                                                                this.handleFormatTime(0);
-                                                                setFieldValue("adminTime0", this.handleUnFormatTime(0));
+                                                                setFieldValue("adminTime0", this.handleFormatTime(values.adminTime0));
                                                             }}
                                                             name="adminTime0"
                                                             error={touched.adminTime0 && errors.adminTime0}
@@ -422,13 +422,12 @@ class FormScreenInitial extends PureComponent{
                                                             <View style={[styles.inputContainer, {width:"55%"}]}>
                                                                 <Input
                                                                     label="Administration Time"
-                                                                    value={this.state.timeValues[1]}
+                                                                    value={values.adminTime1}
                                                                     onChange={(name,value) => {
-                                                                        this.state.timeValues[1] = value;
+                                                                        setFieldValue("adminTime1", value);
                                                                     }}
                                                                     onBlur={() =>{
-                                                                        this.handleFormatTime(1);
-                                                                        setFieldValue("adminTime1", this.handleUnFormatTime(1));
+                                                                        setFieldValue("adminTime1", this.handleFormatTime(values.adminTime1));
                                                                     }}
                                                                     onTouch={setFieldTouched}
                                                                     name="adminTime1"
@@ -481,13 +480,12 @@ class FormScreenInitial extends PureComponent{
                                                             <View style={[styles.inputContainer, {width:"55%"}]}>
                                                                 <Input
                                                                     label="Administration Time"
-                                                                    value={this.state.timeValues[2]}
+                                                                    value={values.adminTime2}
                                                                     onChange={(name,value) => {
-                                                                        this.state.timeValues[2] = value;
+                                                                        setFieldValue("adminTime2", value);
                                                                     }}
                                                                     onBlur={() =>{
-                                                                        this.handleFormatTime(2);
-                                                                        setFieldValue("adminTime2", this.handleUnFormatTime(2));
+                                                                        setFieldValue("adminTime2", this.handleFormatTime(values.adminTime2));
                                                                     }}
                                                                     onTouch={setFieldTouched}
                                                                     name="adminTime2"
@@ -543,14 +541,12 @@ class FormScreenInitial extends PureComponent{
                                                             <View style={[styles.inputContainer, {width:"55%"}]}>
                                                                 <Input
                                                                     label="Administration Time"
-                                                                    value={this.state.timeValues[3]}
+                                                                    value={values.adminTime3}
                                                                     onChange={(name,value) => {
-                                                                        this.state.timeValues[3] = value;
-                                                                        console.log("HEHEHEHEH: "+ this.state.timeValues);
+                                                                        setFieldValue("adminTime3", value);
                                                                     }}
                                                                     onBlur={() =>{
-                                                                        this.handleFormatTime(3);
-                                                                        setFieldValue("adminTime3", this.handleUnFormatTime(3));
+                                                                        setFieldValue("adminTime3", this.handleFormatTime(values.adminTime3));
                                                                     }}
                                                                     onTouch={setFieldTouched}
                                                                     name="adminTime3"
