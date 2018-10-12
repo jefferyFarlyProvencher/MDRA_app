@@ -95,25 +95,30 @@ class SendFormScreen extends PureComponent{
     render() {
         return(
             <View style={styles.container}>
-                <View><Text>{this.state.textToDisplay}</Text></View>
                 <TouchableOpacity onPress={this._handlerOnPress}>
-                    <View>
-                    {
-                        !this.state.dataReceived
-                        ?<ActivityIndicator size={Platform.OS==='android'?100:0} color="red" />
-                        :<Icon
-                            size={150}
-                            name={this.state.iconName}
-                            color="purple"
-                            />
-                    }
-                    {
-                        !this.state.dataReceived
-                            ?<Text>Sending Data to server...</Text>
-                            :(
-                                <Text>{"    Redo Form?"}</Text>
-                            )
-                    }
+                    <View style={{alignItems: 'center', paddingTop: 10}}>
+                        <Text>{this.state.textToDisplay}</Text>
+                    </View>
+                    <View style={{
+                        height: '100%',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                    }}>
+                        {!this.state.dataReceived
+                            ?<ActivityIndicator size={Platform.OS==='android'?100:0} color="#4169e1" />
+                            :<Icon
+                                size={150}
+                                name={this.state.iconName}
+                                color="#4169e1"
+                                />
+                        }
+                        {
+                            !this.state.dataReceived
+                                ?<Text style={{padding: 20}}>Sending Data to server...</Text>
+                                :(
+                                    <Text style={{padding: 20}}>{"    Redo Form?"}</Text>
+                                )
+                        }
                     </View>
                 </TouchableOpacity>
             </View>
@@ -125,8 +130,6 @@ class SendFormScreen extends PureComponent{
 const styles = StyleSheet.create({
     container: {
         flex:1,
-        alignItems: 'center',
-        justifyContent: 'center',
         height: '100%'
     }
 });

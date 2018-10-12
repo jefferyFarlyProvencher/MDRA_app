@@ -2,7 +2,7 @@ import React, {PureComponent} from 'react';
 import {View, Button, StyleSheet, Dimensions, Platform} from 'react-native';
 import 'react-native-svg';
 
-import {VictoryArea, VictoryChart, VictoryLine} from "victory-native";
+import {VictoryArea, VictoryChart, VictoryLine, VictoryLabel} from "victory-native";
 
 //function imports
 import FormatTime from "../../functions/FormatTime";
@@ -181,7 +181,9 @@ class GraphComponent extends PureComponent{
                 <VictoryChart
                     animate={Platform.OS==="ios"?{ duration: this.state.animationTime}:null}
                     domain={{x:[0,30],y: [0,25]}}
+                    la
                 >
+
                     <VictoryArea
                         style={{data: {fill: '#cbe3f3'}}}
                         data={this.generateDataDouble(this.props.data.percentile10, this.props.data.percentile90)}
@@ -229,6 +231,10 @@ class GraphComponent extends PureComponent{
                         style={{data:{stroke:this.therapeuticBoxFormatter(eveningBoxPercentage)}}}
                         data={this.generateSquareBottomRight(eveningBoxX,eveningBoxY,eveningBoxHeight,eveningBoxWidth)}
                     />
+                    <VictoryLabel text={firstBoxPercentage+"%"} datum={{x:firstBoxX,y:firstBoxY+firstBoxHeight+1}}/>
+                    <VictoryLabel text={(secondBoxPercentage !== null)?secondBoxPercentage+"%":""} datum={{x:secondBoxX,y:secondBoxY+secondBoxHeight+1
+                    }}/>
+                    <VictoryLabel text={eveningBoxPercentage+"%"} datum={{x:eveningBoxX,y:eveningBoxY+eveningBoxHeight+1}}/>
                </VictoryChart>
             </View>
         )

@@ -1,0 +1,7 @@
+royalBlue1: #4169e1
+royalBlue4: #27408b
+royalBlue2: #111e6c
+royalBlue3: #000080
+
+black: #000
+white: #FFF

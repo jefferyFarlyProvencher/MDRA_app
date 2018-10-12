@@ -6,6 +6,7 @@ import FormatTime from './FormatTime';
  * @return boolean
  * adapted to be used with a number having an hour type format
  * ** in other words (hh:mm)
+ *  is time1 later than time2
  */
 let isLaterThan = (time1, time2) => {
     if (time1.includes(':') && time2.includes(':')){

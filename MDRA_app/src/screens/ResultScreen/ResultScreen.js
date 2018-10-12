@@ -1,6 +1,6 @@
 //system
 import React, {Component} from 'react';
-import {View, Text, TouchableWithoutFeedback, Animated, Modal, StyleSheet} from 'react-native';
+import {View, Text, TouchableWithoutFeedback, Animated, Modal, StyleSheet, StatusBar} from 'react-native';
 import {Formik} from "formik";
 import {Button} from 'react-native-elements';
 import {connect} from "react-redux";
@@ -34,7 +34,15 @@ class ResultScreen extends Component{
             navBarTransparent: true,
             navBarNoBorder: true,
             topBarElevationShadowEnabled: false,
-            drawUnderNavBar: true
+            drawUnderNavBar: true,
+            navBarBackgroundColor: '#262626',
+            navBarTextColor: '#ffffff',
+            statusBarTextColorSchemeSingleScreen: 'dark',
+        });
+
+        this.props.navigator.setStyle({
+
+
         });
     }
 
@@ -61,7 +69,7 @@ class ResultScreen extends Component{
         //console.log(key);
         this.props.navigator.push({
             screen: "MDRA_app.resultPage",
-            title: selResult.date,
+            title: selResult.title,
             passProps: {
                 selectedPosition: selPosition
             }

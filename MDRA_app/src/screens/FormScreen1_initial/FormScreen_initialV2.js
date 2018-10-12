@@ -19,14 +19,14 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 
 //function imports
-import FormatTime from '../../functions/FormatTime';
+import {convertTimeToHourFormat} from '../../functions/FormatTime';
 import containsOnlyNumbers from '../../functions/containsOnlyNumbers';
 
 //component imports
 import Input from "../../components/Input/Input";
 import DropDownListV2 from "../../components/dropDownList/DropDownListV2";
 import LinedLabel from "../../components/LinedLabel/LinedLabel";
-
+import NewYupString from '../../components/NewYupString/NewYupString';
 //actions imports
 import {connect}  from "react-redux";
 import {addData} from "../../store/actions/addData";
@@ -70,11 +70,6 @@ class FormScreenInitial extends PureComponent{
     _handleSubmit =(async (values, bag) => {
         try {
             //console.log(JSON.stringify(values));
-            //before adding data we need to change back the data to its hh.hh form
-            // values.adminTime0 = this.handleUnFormatTime(values.adminTime0);
-            // values.adminTime1 = this.handleUnFormatTime(values.adminTime1);
-            // values.adminTime2 = this.handleUnFormatTime(values.adminTime2);
-            // values.adminTime3 = this.handleUnFormatTime(values.adminTime3);
             this.props.onAddData(values, this.state.currentPosition);
             bag.setSubmitting(false);
             this.props.onChangePosition(this.state.currentPosition+1);
@@ -105,40 +100,34 @@ class FormScreenInitial extends PureComponent{
                 return (
                     Yup.object().shape({
                         weight: this.state.switchValue?Yup.number().positive().lessThan(160).required(requiredMessage):Yup.number().positive().lessThan(80).required(requiredMessage),
-                        adminTime0: Yup.string()
-                            .test('test-name',"Time is does not contain solely numbers",
-                            function(value) {
-                                console.log("YUP admintime0: "+ value);
-                                return containsOnlyNumbers(value);
-                            })
-                            .required(requiredMessage),
+                        adminTime0: NewYupString().containsOnlyNumbers().required(requiredMessage),
                     })
                 );
             case 2:
                 return (
                     Yup.object().shape({
                         weight: this.state.switchValue?Yup.number().positive().lessThan(160).required():Yup.number().positive().lessThan(80).required(requiredMessage),
-                        adminTime0: Yup.number().positive().lessThan(24).required(requiredMessage),
-                        adminTime1: Yup.number().positive().lessThan(24).required(requiredMessage),
+                        adminTime0: NewYupString().containsOnlyNumbers().required(requiredMessage),
+                        adminTime1: NewYupString().containsOnlyNumbers().required(requiredMessage),
                     })
                 );
             case 3:
                 return (
                     Yup.object().shape({
                         weight: this.state.switchValue?Yup.number().positive().lessThan(160).required():Yup.number().positive().lessThan(80).required(requiredMessage),
-                        adminTime0: Yup.number().positive().lessThan(24).required(requiredMessage),
-                        adminTime1: Yup.number().positive().lessThan(24).required(requiredMessage),
-                        adminTime2: Yup.number().positive().lessThan(24).required(requiredMessage)
+                        adminTime0: NewYupString().containsOnlyNumbers().required(requiredMessage),
+                        adminTime1: NewYupString().containsOnlyNumbers().required(requiredMessage),
+                        adminTime2: NewYupString().containsOnlyNumbers().required(requiredMessage)
                     })
                 );
             case 4:
                 return (
                     Yup.object().shape({
                         weight: this.state.switchValue?Yup.number().positive().lessThan(160).required():Yup.number().positive().lessThan(80).required(requiredMessage),
-                        adminTime0: Yup.number().positive().lessThan(24).required(requiredMessage),
-                        adminTime1: Yup.number().positive().lessThan(24).required(requiredMessage),
-                        adminTime2: Yup.number().positive().lessThan(24).required(requiredMessage),
-                        adminTime3: Yup.number().positive().lessThan(24).required(requiredMessage),
+                        adminTime0: NewYupString().containsOnlyNumbers().required(requiredMessage),
+                        adminTime1: NewYupString().containsOnlyNumbers().required(requiredMessage),
+                        adminTime2: NewYupString().containsOnlyNumbers().required(requiredMessage),
+                        adminTime3: NewYupString().containsOnlyNumbers().required(requiredMessage),
 
                     })
                 );
@@ -197,11 +186,7 @@ class FormScreenInitial extends PureComponent{
     };
 
     handleFormatTime = (value)=>{
-        return FormatTime(""+value, false);
-    };
-
-    handleUnFormatTime = (value) => {
-        return FormatTime(""+value, true)
+        return convertTimeToHourFormat(""+value);
     };
 
     render() {
@@ -217,7 +202,9 @@ class FormScreenInitial extends PureComponent{
                 >
                     <KeyboardAwareScrollView>
                         <View>
-                            <Text>Page 1</Text>
+                            <View style={styles.centerElements}>
+                                <Text>Initialization</Text>
+                            </View>
                             <Formik
                                 initialValues={
                                     (this.props.data)
@@ -606,6 +593,13 @@ const styles = StyleSheet.create({
         flex:1,
         backgroundColor: "#fff",
     },
+
+
+    centerElements:{
+        alignItems: "center",
+        justifyContent: "center",
+    },
+
     button: {
         marginVertical: 20,
         width: '100%',
@@ -615,6 +609,7 @@ const styles = StyleSheet.create({
 
     pillButton: {
         borderRadius:100,
+        backgroundColor: "#262626"
     },
 
     pillButtonsContainer: {

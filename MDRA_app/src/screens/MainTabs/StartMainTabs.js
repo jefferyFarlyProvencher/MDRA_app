@@ -23,6 +23,11 @@ const startTabs = () => {
                                 id: "sideDrawerToggle",
                             }
                         ]
+                    },
+                    topBar: {
+                        background: {
+                            color: 'red'
+                        }
                     }
                 },
                 {

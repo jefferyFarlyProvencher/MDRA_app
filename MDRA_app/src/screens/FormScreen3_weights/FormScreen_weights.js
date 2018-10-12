@@ -40,6 +40,9 @@ class FormScreenWeights extends PureComponent{
     render() {
         return(
             <View style={styles.container}>
+                <View style={[styles.centerElements, {padding:10}]}>
+                    <Text>Weights</Text>
+                </View>
                 <ScrollView>
                 <Formik
                     initialValues={(this.props.data)
@@ -187,7 +190,7 @@ class FormScreenWeights extends PureComponent{
                                         sliderLength={Dimensions.get('window').width * 0.80}
                                         min={0}
                                         max={100}
-                                        step={1}
+                                        step={0.1}
                                         values={[parseFloat(values.weight2)]}
                                         onValuesChange={
                                             (someValues) => {
@@ -329,6 +332,12 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
     },
+
+    centerElements:{
+        alignItems: "center",
+        justifyContent: "center",
+    },
+
     button: {
         marginVertical: 20,
         width: '100%',

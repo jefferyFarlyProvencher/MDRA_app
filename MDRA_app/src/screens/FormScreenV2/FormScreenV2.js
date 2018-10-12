@@ -9,10 +9,12 @@ import {
     Modal,
     Button,
     BackHandler,
-    Alert} from 'react-native';
+    Alert,
+    StatusBar
+} from 'react-native';
 import {connect} from 'react-redux';
 
-import {PagerDotIndicator, IndicatorViewPager} from 'rn-viewpager'
+import {IndicatorViewPager} from 'rn-viewpager'
 //Package Imports
 import StepIndicator from 'react-native-step-indicator';
 import Picker from 'react-native-picker';
@@ -50,6 +52,12 @@ class FormScreen extends Component{
 
     componentDidMount() {
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+        this.props.navigator.setStyle({
+            navBarBackgroundColor: '#262626',
+            navBarTextColor: '#ffffff',
+            statusBarTextColorSchemeSingleScreen: 'light',
+
+        });
     };
 
     componentWillUnmount() {
@@ -104,23 +112,23 @@ class FormScreen extends Component{
             currentStepIndicatorSize:25,
             separatorStrokeWidth: 2,
             currentStepStrokeWidth: 3,
-            stepStrokeCurrentColor: '#cac6fe',
+            stepStrokeCurrentColor: '#4169e1',
             stepStrokeWidth: 3,
-            stepStrokeFinishedColor: '#cac6fe',
+            stepStrokeFinishedColor: '#4169e1',
             stepStrokeUnFinishedColor: '#aaaaaa',
-            separatorFinishedColor: '#cac6fe',
+            separatorFinishedColor: '#4169e1',
             separatorUnFinishedColor: '#aaaaaa',
-            stepIndicatorFinishedColor: '#cac6fe',
+            stepIndicatorFinishedColor: '#4169e1',
             stepIndicatorUnFinishedColor: '#ffffff',
             stepIndicatorCurrentColor: '#ffffff',
             stepIndicatorLabelFontSize: 13,
             currentStepIndicatorLabelFontSize: 13,
-            stepIndicatorLabelCurrentColor: '#cac6fe',
+            stepIndicatorLabelCurrentColor: '#4169e1',
             stepIndicatorLabelFinishedColor: '#ffffff',
             stepIndicatorLabelUnFinishedColor: '#aaaaaa',
             labelColor: '#999999',
             labelSize: 13,
-            currentStepLabelColor: '#cac6fe'
+            currentStepLabelColor: '#4169e1'
         };
 
         const customStylesAdvancedOnly = {
@@ -128,27 +136,31 @@ class FormScreen extends Component{
             currentStepIndicatorSize:25,
             separatorStrokeWidth: 2,
             currentStepStrokeWidth: 3,
-            stepStrokeCurrentColor: '#cac6fe',
+            stepStrokeCurrentColor: '#4169e1',
             stepStrokeWidth: 3,
-            stepStrokeFinishedColor: '#cac6fe',
+            stepStrokeFinishedColor: '#4169e1',
             stepStrokeUnFinishedColor: '#aaaaaa',
-            separatorFinishedColor: '#cac6fe',
+            separatorFinishedColor: '#4169e1',
             separatorUnFinishedColor: '#aaaaaa',
-            stepIndicatorFinishedColor: '#cac6fe',
+            stepIndicatorFinishedColor: '#4169e1',
             stepIndicatorUnFinishedColor: '#ffffff',
             stepIndicatorCurrentColor: '#ffffff',
             stepIndicatorLabelFontSize: 0,
             currentStepIndicatorLabelFontSize: 0,
-            stepIndicatorLabelCurrentColor: '#cac6fe',
-            stepIndicatorLabelFinishedColor: '#ffffff',
-            stepIndicatorLabelUnFinishedColor: '#aaaaaa',
-            labelColor: '#999999',
+            stepIndicatorLabelCurrentColor: 'transparent',
+            stepIndicatorLabelFinishedColor: 'transparent',
+            stepIndicatorLabelUnFinishedColor: 'transparent',
+            labelColor: 'transparent',
             labelSize: 13,
-            currentStepLabelColor: '#cac6fe'
+            currentStepLabelColor: 'transparent'
         };
 
         return(
             <View style={styles.overTheIndicatorContainer}>
+                <StatusBar
+                    backgroundColor="#262626"
+                    barStyle="light-content"
+                />
                 {this.props.state.main.position < 4 || this.props.state.main.position === undefined || this.props.state.main.position === null?
                     <View style={{flex:1}}>
                         <IndicatorViewPager

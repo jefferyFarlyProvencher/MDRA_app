@@ -48,7 +48,8 @@ class Input extends PureComponent{
     };
 
     render() {
-        const {label, error, ...rest } = this.props;
+        const {label, error, backgroundColor, ...rest } = this.props;
+        if(error) console.log("THERE IS AN ERROR, AND HERE IT IS: "+ error);
         return(
             <View style={[styles.root,this.props.style]}>
                 <FormLabel>{label}</FormLabel>
@@ -57,7 +58,14 @@ class Input extends PureComponent{
                     placeholder={label}
                     onChangeText={this._handleChangeText}
                     onBlur={this._handleTouch}
-                    containerStyle={[{justifyContent:'flex-start'}, error?{backgroundColor:"#ffb8c3"}:{backgroundColor:"white"}]}
+                    containerStyle={[
+                        {justifyContent:'flex-start'},
+                        error
+                            ?{backgroundColor:"#ffb8c3"}
+                            :backgroundColor
+                                ?{backgroundColor:backgroundColor}
+                                :{backgroundColor:"transparent"}
+                    ]}
                     {...rest}
                 />
                 {error && <FormValidationMessage>{error}</FormValidationMessage>}

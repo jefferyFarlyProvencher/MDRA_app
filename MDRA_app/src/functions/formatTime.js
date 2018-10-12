@@ -1,17 +1,29 @@
 import containsOnlyNumbers from './containsOnlyNumbers';
 
+
+export let convertTimeToHourFormat = (time) =>
+{
+    return FormatTime(time,false)
+}
+;
+
+export let convertTimeToDecimal = (time) =>
+{
+    return FormatTime(time,true)
+};
+
 /**
  * @param time
  * @param convertToHours
  * @return string
  */
-let FormatTime = (time, convertToDecimal) => {
+let FormatTime = (time, convertToDecimalFlag) => {
     console.log("TIME: "+ time +" <- here");
     if(time!==undefined && time!== "" && time!== null) {
         console.log("This passed: "+ time +" <- here");
         let hours = 0;
         let minutes = 0;
-        if (convertToDecimal) {
+        if (convertToDecimalFlag) {
             if (time.includes(':')) {
                 // Clock style to seconds conversion
                 const timeArray = time.split(':');
@@ -61,5 +73,3 @@ let FormatTime = (time, convertToDecimal) => {
         return time;
     }
 };
-
-export default FormatTime;

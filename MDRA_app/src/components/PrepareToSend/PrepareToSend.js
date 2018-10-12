@@ -23,7 +23,7 @@
 *
  */
 
-import FormatTime from "../../functions/FormatTime";
+import {convertTimeToDecimal} from "../../functions/FormatTime";
 
 let findFormulaNumber = (pillName) => {
   switch(pillName) {
@@ -105,7 +105,7 @@ let verifyUnitConversion = (originalWeight, switchWeightFormat) => {
 let adjustTime=(time)=>{
     if(time.includes(':'))
     {
-        return FormatTime(""+time , true);
+        return convertTimeToDecimal(""+time);
     }
     else{
         return time

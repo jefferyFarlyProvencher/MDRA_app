@@ -49,7 +49,7 @@ class LinedLabel extends PureComponent{
                     style={[styles.lineStyle, { width: (this.giveLineWidth(1)),}]}
                 />
                 <View style={styles.textStyle}>
-                    <Text>
+                    <Text style={{        color: "#FFF"}}>
                         {this.props.label}
                     </Text>
                 </View>
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
         paddingTop: "5%",
     },
     lineStyle: {
-        backgroundColor: 'grey',
+        backgroundColor: '#4169e1',
         height: 1,
         marginTop:'3%'
     },
@@ -79,9 +79,9 @@ const styles = StyleSheet.create({
         width: "40%",
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor:"transparent",
+        backgroundColor:"#4169e1",
         borderWidth: 1,
-        borderColor: '#919191'
+        borderColor: '#4169e1',
 
     }
 

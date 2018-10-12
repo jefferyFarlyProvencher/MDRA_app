@@ -8,11 +8,16 @@ import MultiSlider from '@ptomasroos/react-native-multi-slider'
 import Ionicon from 'react-native-vector-icons/Ionicons'
 import AwesomeIcon from 'react-native-vector-icons/FontAwesome'
 
+//functions imports
+import {convertTimeToHourFormat, convertTimeToDecimal} from '../../functions/FormatTime';
+
+
 //component imports
 import Input from "../../components/Input/Input";
 import DropDownList from "../../components/dropDownList/DropDownList";
 import CustomMultiSlider from "../../components/CustomMultiSlider/CustomMultiSlider";
 import LinedLabel from "../../components/LinedLabel/LinedLabel";
+import NewYupString from "../../components/NewYupString/NewYupString";
 
 //redux imports
 import {connect} from "react-redux";
@@ -20,10 +25,11 @@ import {addData} from "../../store/actions/addData";
 import {changePosition} from "../../store/actions/changePosition";
 import DropDownListV2 from "../../components/dropDownList/DropDownListV2";
 
-//THIS CLASS REFERS TO THE BOX FOR PAGE
+//THIS CLASS REFERS TO THE BOXES FOR RESULT PAGE
 // THERE IS A WEIRD BUG THAT PREVENTS ME FROM CHANGING the name
-// Look, we all know time zonage is a weird name, but I didn't know what the
-//page was going to look like so leave it as it is, CUZ IT'S FUNNY!
+// Look, we all know timeZonage is a weird name, but I didn't know what the
+//page was going to look like so leave it as it is instead of trying to deal with the bug
+// AND LETS BE HONEST, IT'S A FUNNY NAME!
 class FormScreenTimeZonage extends PureComponent{
     state = {
         ViewMode: Dimensions.get('window').height > 500 ? "portrait" : "landscape",
@@ -89,6 +95,14 @@ class FormScreenTimeZonage extends PureComponent{
         this.props.setPage(this.state.currentPosition-1);
     };
 
+    handleFormatTime= (value) => {
+        return convertTimeToHourFormat(""+value)
+    };
+
+    handleUnFormatTime = (value) => {
+        return convertTimeToDecimal(""+value)
+    };
+
     render() {
         return(
             <View>
@@ -97,7 +111,7 @@ class FormScreenTimeZonage extends PureComponent{
                     <View style={styles.centerElements}>
                         <Text>Page 2: THERAPEUTIC BOXES</Text>
                     </View>
-                    <View style={{width: "50%"}}>
+                    <View style={{width: "100%"}}>
                         <Button
                             title="Go to previous step"
                             onPress={this._handleGoToPreviousStep}
@@ -128,14 +142,14 @@ class FormScreenTimeZonage extends PureComponent{
                                 }
                                 :{
                                     nbTheraputicBoxes:"One therapeutic box (from AM to PM)",
-                                    tsDay: '6',
-                                    teDay:'15',
-                                    tsPM:'12',
-                                    tePM:'15',
-                                    tsEvening:'17',
-                                    teEvening:'19',
-                                    lunch:'12',
-                                    bed:'24',
+                                    tsDay: '6:00',
+                                    teDay:'15:00',
+                                    tsPM:'12:00',
+                                    tePM:'15:00',
+                                    tsEvening:'17:00',
+                                    teEvening:'19:00',
+                                    lunch:'12:00',
+                                    bed:'24:00',
                                 }
                             }
                             onSubmit={this._handleSubmit}
@@ -188,10 +202,13 @@ class FormScreenTimeZonage extends PureComponent{
                                             <View style={styles.twoPerRowContainer}>
                                                 <View style={styles.inputContainerForTwo}>
                                                     <Input
-                                                        label="Ts"
+                                                        label="Start Time"
                                                         value={values.tsDay}
                                                         onChange={(name,value) => {
                                                             setFieldValue(name,value)
+                                                        }}
+                                                        onBlur={() =>{
+                                                            setFieldValue("tsDay", this.handleFormatTime(values.tsDay));
                                                         }}
                                                         onTouch={setFieldTouched}
                                                         name="tsDay"
@@ -201,10 +218,13 @@ class FormScreenTimeZonage extends PureComponent{
                                                 </View>
                                                 <View style={styles.inputContainerForTwo}>
                                                     <Input
-                                                        label="Te"
+                                                        label="End Time"
                                                         value={values.teDay}
                                                         onChange={(name,value) => {
                                                             setFieldValue(name,value)
+                                                        }}
+                                                        onBlur={() =>{
+                                                            setFieldValue("tsDay", this.handleFormatTime(values.tsDay));
                                                         }}
                                                         onTouch={setFieldTouched}
                                                         name="teDay"
@@ -222,11 +242,11 @@ class FormScreenTimeZonage extends PureComponent{
                                                 min={0}
                                                 max={this.state.nbOfBoxes === 1?16: 12}
                                                 step={0.5}
-                                                values={[parseFloat(values.tsDay),(values.teDay>12&&this.state.nbOfBoxes===2)?12:parseFloat(values.teDay)]}
+                                                values={[parseFloat(this.handleUnFormatTime(values.tsDay)),(this.handleUnFormatTime(values.teDay)>12&&this.state.nbOfBoxes===2)?"12:00":parseFloat(this.handleUnFormatTime(values.teDay))]}
                                                 onValuesChange={
                                                     (values) => {
-                                                        setFieldValue('tsDay', values[0].toString());
-                                                        setFieldValue('teDay', values[1].toString());
+                                                        setFieldValue('tsDay', this.handleFormatTime(values[0].toString()));
+                                                        setFieldValue('teDay', this.handleFormatTime(values[1].toString()));
                                                     }
                                                 }
                                             />
@@ -241,26 +261,26 @@ class FormScreenTimeZonage extends PureComponent{
                                             <View style={styles.twoPerRowContainer}>
                                                 <View style={styles.inputContainerForTwo}>
                                                     < Input
-                                                    label = "Ts"
+                                                    label = "Start Time"
                                                     value={values.tsPM}
                                                     onChange={(name,value) => {
                                                         setFieldValue(name,value)
                                                     }}
                                                     onTouch={setFieldTouched}
-                                                    name="tsDay"
+                                                    name="tsPM"
                                                     error={touched.tsPM && errors.tsPM}
                                                     keyboardType="numeric"
                                                     />
                                                 </View>
                                                 <View style={styles.inputContainerForTwo}>
                                                     <Input
-                                                    label="Te"
+                                                    label="End Time"
                                                     value={values.tePM}
                                                     onChange={(name,value) => {
                                                         setFieldValue(name,value)
                                                     }}
                                                     onTouch={setFieldTouched}
-                                                    name="teDay"
+                                                    name="tePM"
                                                     error={touched.tePM && errors.tePM}
                                                     keyboardType="numeric"
                                                     />
@@ -297,7 +317,7 @@ class FormScreenTimeZonage extends PureComponent{
                                         <View style={styles.twoPerRowContainer}>
                                             <View style={styles.inputContainerForTwo}>
                                                 <Input
-                                                    label="Ts"
+                                                    label="Start Time"
                                                     value={values.tsEvening}
                                                     onChange={setFieldValue}
                                                     onTouch={setFieldTouched}
@@ -308,7 +328,7 @@ class FormScreenTimeZonage extends PureComponent{
                                             </View>
                                             <View style={styles.inputContainerForTwo}>
                                                 <Input
-                                                    label="Te"
+                                                    label="End Time"
                                                     value={values.teEvening}
                                                     onChange={setFieldValue}
                                                     onTouch={setFieldTouched}

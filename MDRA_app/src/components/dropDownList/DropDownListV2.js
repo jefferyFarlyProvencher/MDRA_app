@@ -50,6 +50,10 @@ class DropDownListV2 extends Component {
             pickerBg:[255,255,255,1],
             pickerCancelBtnText: "CANCEL",
             pickerConfirmBtnText: "CONFIRM",
+            pickerCancelBtnColor:[65,105,225,1],
+            pickerConfirmBtnColor:[65,105,225,1],
+            pickerTitleColor: [255, 255, 255, 1],
+            pickerToolBarBg: [38,38,38,1],
             pickerTitleText: "Please select item",
             onPickerConfirm: (pickedValue, pickedIndex) => {
                 console.log('date', pickedValue, pickedIndex);
