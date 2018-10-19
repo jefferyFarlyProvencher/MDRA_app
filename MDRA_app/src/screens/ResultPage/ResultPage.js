@@ -1,9 +1,20 @@
 import React, {PureComponent} from 'react';
-import {View, StyleSheet, Text, ScrollView, Dimensions, Platform, TouchableOpacity, BackHandler} from 'react-native';
+import {
+    View,
+    StyleSheet,
+    Text,
+    ScrollView,
+    Dimensions,
+    Platform,
+    TouchableOpacity,
+    BackHandler,
+    Alert
+} from 'react-native';
 import {Button} from 'react-native-elements';
 import 'react-native-svg';
 import { IndicatorViewPager, PagerTitleIndicator, PagerTabIndicator } from 'rn-viewpager'
 import Ionicon from 'react-native-vector-icons/Ionicons';
+import Spinner from "react-native-loading-spinner-overlay";
 
 //What is this?
 import Draggable from 'react-native-draggable';
@@ -18,13 +29,16 @@ import {connect} from 'react-redux';
 //component imports
 import GraphComponent from '../../components/ResultPage_GraphComponent/GraphComponent';
 import PieChartComponent from '../../components/ResultPage_PieChartsComponent/PieChartsComponent';
+import {addData, changePosition} from "../../store/actions";
+import TitleComponent from "../../components/TitleComponent/TitleComponent";
 
 class ResultPage extends PureComponent {
     state = {
         listLength: this.props.state.main.resultsList.length,
         currentPosition: this.props.selectedPosition,
         orientation: true, //portrait true, landscape false
-        modalVisible: false
+        modalVisible: false,
+        visible: true
     };
 
     handleBackButton = () => {
@@ -62,11 +76,22 @@ class ResultPage extends PureComponent {
         )
     };
 
-    
-    _renderTitleIndicator = () => {
-        return <PagerTabIndicator titles={['Area', 'Pie']}/>
+    _handleOnStartUp = () => {
+        setTimeout(
+            ()=>{
+                this.setState((oldState) =>{
+                    return({
+                        ...oldState,
+                        //remove spinner
+                        visible:false
+                    })
+                })
+            },
+            2000
+        )
     };
-    _handleOnPress2 = () => {
+
+    _handleOnPressBack = () => {
         if(this.state.currentPosition!==0) {
             console.log("changing pos back");
             this.setState((oldState)=>{
@@ -82,7 +107,7 @@ class ResultPage extends PureComponent {
         }
     };
 
-    _handleOnPress = () => {
+    _handleOnPressNext = () => {
         if(this.state.currentPosition<this.state.listLength-1) {
             console.log("changing pos");
             this.setState((oldState)=>{
@@ -98,10 +123,65 @@ class ResultPage extends PureComponent {
         }
     };
 
+    setFormValues = () => {
+        //collect current result's formData
+        let formData = this.props.state.main.resultsList[this.state.currentPosition].formData
+        // console.log("FORM BEFORE: "+
+        //     JSON.stringify(this.props.state.main.Page0Data) + ";"+
+        //     JSON.stringify(this.props.state.main.Page1Data) + ";"+
+        //     JSON.stringify(this.props.state.main.Page2Data) + ";"+
+        //     JSON.stringify(this.props.state.main.Page3Data) + ";"
+        // );
+        // console.log("FORMDATA: " + JSON.stringify(formData));
+        //set It to each page
+        this.props.onAddData(formData[0],0);
+        this.props.onAddData(formData[1],1);
+        this.props.onAddData(formData[2],2);
+        this.props.onAddData(formData[3],3);
 
+        // console.log("FORM AFTER: "+
+        //     JSON.stringify(this.props.state.main.Page0Data) + ";"+
+        //     JSON.stringify(this.props.state.main.Page1Data) + ";"+
+        //     JSON.stringify(this.props.state.main.Page2Data) + ";"+
+        //     JSON.stringify(this.props.state.main.Page3Data) + ";"
+        // );
+
+        //Changes here to reset form
+        //go to send, then, back to 1, will cause promise rejection
+        this.props.onChangePosition(5);
+        this.props.onChangePosition(0);
+
+        //close modal
+        this.props.navigator.pop({
+            animated: false,
+        });
+        //change screen
+        this.props.navigator.switchToTab({
+            tabIndex: 0 // (optional) if missing, this screen's tab will become selected
+        });
+    };
+
+    _handleOnPressReuse = () => {
+        Alert.alert(
+            'Confirmation',
+            'Restore values and go to form?', [
+                {
+                    text: 'Cancel',
+                    onPress: (() => console.log('Cancel Pressed')),
+                    style: 'cancel'
+                }, {
+                    text: 'Okay',
+                    onPress: () => this.setFormValues()
+                }
+            ],
+            {
+                cancelable: false
+            }
+        );
+    };
 
     render() {
-
+        if(this.state.visible)this._handleOnStartUp();
         return (
             <View style={{backgroundColor:"#FFF", flex: 1}}>
                 <IndicatorViewPager
@@ -117,7 +197,7 @@ class ResultPage extends PureComponent {
                             }}
                         >
                             <View style={{alignItems:'center',justifyContent:"center"}} pointerEvents="none">
-                                <Text>Area Charts</Text>
+                                <TitleComponent text={"Area Chart"}/>
                                 <GraphComponent
                                     data={this.props.state.main.resultsList[this.state.currentPosition].data}
                                     formData = {this.props.state.main.resultsList[this.state.currentPosition].formData}
@@ -129,7 +209,7 @@ class ResultPage extends PureComponent {
                     <View>
                         <ScrollView>
                             <View style={this.state.orientation?styles.pieChartStylesPortrait:styles.pieChartStylesLandscape}>
-                                <Text>Pie Charts</Text>
+                                <TitleComponent text={"Pie Charts"}/>
                                 <PieChartComponent
                                     data={this.props.state.main.resultsList[this.state.currentPosition].data}
                                     formData = {this.props.state.main.resultsList[this.state.currentPosition].formData}
@@ -139,10 +219,10 @@ class ResultPage extends PureComponent {
                         </ScrollView>
                     </View>
                 </IndicatorViewPager>
-                <View style={{flexDirection:"row", justifyContent:'center', height:"10%"}}>
+                <View style={[styles.buttonsContainer]}>
                     <Button
                         title="Go back"
-                        onPress={this._handleOnPress2}
+                        onPress={this._handleOnPressBack}
                         disabled={
                             this.state.listLength<1 ||
                             this.state.currentPosition === 0
@@ -160,8 +240,13 @@ class ResultPage extends PureComponent {
                         }
                     />
                     <Button
+                        title="Reuse Data"
+                        onPress={this._handleOnPressReuse}
+                        buttonStyle={{backgroundColor:"#27408b"}}
+                    />
+                    <Button
                         title="Go next"
-                        onPress={this._handleOnPress}
+                        onPress={this._handleOnPressNext}
                         iconRight={
                             {
                                 name:"chevron-right"
@@ -176,6 +261,9 @@ class ResultPage extends PureComponent {
                             this.state.currentPosition > this.state.listLength-2
                         }
                     />
+                </View>
+                <View>
+                    <Spinner visible={this.state.visible} textContent={"Loading..."} textStyle={{color: '#FFF'}} />
                 </View>
             </View>
         )
@@ -199,7 +287,20 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
     },
+
+    buttonsContainer: {
+        flexDirection:"row",
+        justifyContent:'center',
+        height:"10%",
+    }
 });
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onAddData: (data, position) => dispatch(addData(data, position)),
+        onChangePosition: (position) => dispatch(changePosition(position))
+    }
+};
 
 const mapStateToProps = (state) => {
     return {
@@ -207,4 +308,4 @@ const mapStateToProps = (state) => {
     };
 };
 
-export default connect(mapStateToProps,null)(ResultPage);
+export default connect(mapStateToProps,mapDispatchToProps)(ResultPage);

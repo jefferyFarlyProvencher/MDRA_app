@@ -17,7 +17,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import {addToResultList, allowAdvancedOptions, emptyResultList} from "../../store/actions";
 import SendForm from '../../components/SendForm/SendForm'
 
-class SideDrawer extends Component{
+class OptionsDrawer extends Component{
     logOutHandler = () => {
         Navigation.startSingleScreenApp({
             screen: {
@@ -69,7 +69,7 @@ class SideDrawer extends Component{
         return(
             <View style = {[{width: Dimensions.get("window").width *0.7}, styles.container]}>
                 <View>
-                    <Text style={styles.titleStyle}>Menu</Text>
+                    <Text style={styles.titleStyle}>Options</Text>
                 </View>
                 <TouchableOpacity onPress={this.logOutHandler}>
                     <View  style={styles.drawerItem}>
@@ -128,31 +128,31 @@ class SideDrawer extends Component{
 }
 
 const styles = StyleSheet.create({
-   container: {
-       flex: 1,
-       paddingTop: 22,
-       backgroundColor: "white",
-   },
-    drawerTitle: {
-      marginBottom: 10
+    container: {
+        flex: 1,
+        paddingTop: 22,
+        backgroundColor: "white",
     },
-   drawerItem: {
-       flexDirection: "row",
+    drawerTitle: {
+        marginBottom: 10
+    },
+    drawerItem: {
+        flexDirection: "row",
         alignItems: "center",
-       padding:10,
-       backgroundColor: "#fff",
-       borderTopWidth: 1,
-   },
+        padding:10,
+        backgroundColor: "#fff",
+        borderTopWidth: 1,
+    },
 
     titleStyle:{
-       marginVertical:10,
+        marginVertical:10,
         textAlign: "center",
         fontSize: 30
     },
 
-   drawerItemIcon: {
-       marginRight: 10
-   }
+    drawerItemIcon: {
+        marginRight: 10
+    }
 });
 
 const mapDispatchToProps = dispatch => {
@@ -164,7 +164,7 @@ const mapDispatchToProps = dispatch => {
 };
 
 const mapStateToProps = state => {
-  return {state}
+    return {state}
 };
 
-export default connect(mapStateToProps,mapDispatchToProps)(SideDrawer);
+export default connect(mapStateToProps,mapDispatchToProps)(OptionsDrawer);

@@ -19,22 +19,22 @@ class LinedLabel extends PureComponent{
           case ("left"):{
               if(line === 1)
               {
-                  return "15%"
+                  return "10%"
               }
               else if( line ===2)
               {
-                  return "35%"
+                  return "40%"
               }
               break;
           }
           case ("right"):{
               if(line === 1)
               {
-                  return "35%"
+                  return "40%"
               }
               else if( line === 2)
               {
-                  return "15%"
+                  return "10%"
               }
               break;
           }
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     },
 
     textStyle: {
-        width: "40%",
+        width: "50%",
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor:"#4169e1",

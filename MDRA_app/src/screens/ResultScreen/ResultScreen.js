@@ -1,6 +1,6 @@
 //system
 import React, {Component} from 'react';
-import {View, Text, TouchableWithoutFeedback, Animated, Modal, StyleSheet, StatusBar} from 'react-native';
+import {View, Text, TouchableWithoutFeedback, Animated, Modal, StyleSheet, StatusBar, Alert} from 'react-native';
 import {Formik} from "formik";
 import {Button} from 'react-native-elements';
 import {connect} from "react-redux";
@@ -99,6 +99,26 @@ class ResultScreen extends Component{
         );
     };
 
+    handleRemoveResult = (key) => {
+        Alert.alert(
+            'Confirmation',
+            'Do you really want to remove this Result?', [
+                {
+                    text: 'Nevermind, no',
+                    onPress: (() => console.log('Cancel Pressed')),
+                    style: 'cancel'
+                }, {
+                    text: 'Yes, erase it',
+                    onPress: () => this.props.onRemoveData(key)
+                }
+            ],
+            {
+                cancelable: false
+            }
+        );
+
+    };
+
     _handleSubmit =(async (values, bag) => {
         try {
             this.props.onRenameData(this.state.renameTarget,values.newName);
@@ -120,7 +140,7 @@ class ResultScreen extends Component{
                 <ResultsList
                     list ={this.props.state.main.resultsList}
                     onItemSelected={this.itemSelectedHandler}
-                    onRemoveData={this.props.onRemoveData}
+                    onRemoveData={this.handleRemoveResult}
                     onRenameData={this.handleOnRenamePressed}
                     extraData={this.state}
                 />

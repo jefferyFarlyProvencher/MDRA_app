@@ -1,10 +1,9 @@
 //system imports
 import React, {PureComponent} from 'react';
-import {StyleSheet, View,ScrollView, Alert, Dimensions, Text, KeyboardAvoidingView, Platform} from 'react-native';
+import {StyleSheet, View,ScrollView, Alert, Dimensions, Text, KeyboardAvoidingView, Platform, TouchableOpacity} from 'react-native';
 import { Button } from 'react-native-elements';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-import MultiSlider from '@ptomasroos/react-native-multi-slider'
 import Ionicon from 'react-native-vector-icons/Ionicons'
 import AwesomeIcon from 'react-native-vector-icons/FontAwesome'
 
@@ -24,6 +23,7 @@ import {connect} from "react-redux";
 import {addData} from "../../store/actions/addData";
 import {changePosition} from "../../store/actions/changePosition";
 import DropDownListV2 from "../../components/dropDownList/DropDownListV2";
+import TitleComponent from "../../components/TitleComponent/TitleComponent";
 
 //THIS CLASS REFERS TO THE BOXES FOR RESULT PAGE
 // THERE IS A WEIRD BUG THAT PREVENTS ME FROM CHANGING the name
@@ -62,29 +62,30 @@ class FormScreenTimeZonage extends PureComponent{
      */
     _handleValidation = () => {
         let requiredMessage = "This is required";
+        let thisTimeShouldBe = "This time should be ";
         switch (this.state.nbOfBoxes) {
             case 1:
                 return (
                     Yup.object().shape({
-                        tsDay: Yup.number().positive().lessThan(Yup.ref('teDay', null)).required(requiredMessage),
-                        teDay: Yup.number().positive().moreThan(Yup.ref('tsDay', null)).required(requiredMessage),
-                        tsEvening: Yup.number().positive().moreThan(Yup.ref('teDay'), null).required(requiredMessage),
-                        teEvening: Yup.number().positive().moreThan(Yup.ref('tsEvening', null)).required(requiredMessage),
-                        lunch: Yup.number().positive().lessThan(Yup.ref('tsEvening', null)).moreThan(10).required(requiredMessage),
-                        bed: Yup.number().positive().lessThan(24.00001,"Cannot exceed 24").moreThan(18.99999,"Cannot be less than 19").required(requiredMessage)
+                        tsDay: NewYupString().containsOnlyNumbers().required(requiredMessage),
+                        teDay: NewYupString().containsOnlyNumbers().isLaterThan(Yup.ref('tsDay', null)).isEarlierThan(16, thisTimeShouldBe + "earlier than 16:00").required(requiredMessage),
+                        tsEvening: NewYupString().containsOnlyNumbers().isLaterThan(Yup.ref('teDay', null)).required(requiredMessage),
+                        teEvening: NewYupString().containsOnlyNumbers().isLaterThan(Yup.ref('tsEvening', null)).required(requiredMessage),
+                        lunch: NewYupString().containsOnlyNumbers().isEarlierThan(Yup.ref('tsEvening', null)).required(requiredMessage),//Yup.number().positive().lessThan(Yup.ref('tsEvening', null)).moreThan(10).required(requiredMessage),
+                        bed: NewYupString().containsOnlyNumbers().isLaterThan(Yup.ref('teEvening', null)).required(requiredMessage),//Yup.number().positive().lessThan(24.00001,"Cannot exceed 24").moreThan(18.99999,"Cannot be less than 19").required(requiredMessage)
                     })
                 );
             case 2:
                 return (
                     Yup.object().shape({
-                        tsDay: Yup.number().positive().lessThan(Yup.ref('teDay', null)).required(requiredMessage),
-                        teDay: Yup.number().positive().moreThan(Yup.ref('tsDay', null)).lessThan(12.0001).required(requiredMessage),
-                        tsPM: Yup.number().positive().moreThan(11.999999).required(requiredMessage),
-                        tePM: Yup.number().positive().moreThan(Yup.ref('tsPM', null)).required(requiredMessage),
-                        tsEvening: Yup.number().positive().moreThan(Yup.ref('teDay'), null).required(requiredMessage),
-                        teEvening: Yup.number().positive().moreThan(Yup.ref('tsEvening', null)).required(requiredMessage),
-                        lunch: Yup.number().positive().lessThan(Yup.ref('tsEvening', null)).required(requiredMessage),
-                        bed: Yup.number().positive().lessThan((24.00001)).moreThan(Yup.ref('teEvening', null)).required(requiredMessage)
+                        tsDay: NewYupString().containsOnlyNumbers().required(requiredMessage),//Yup.number().positive().lessThan(Yup.ref('teDay', null)).required(requiredMessage),
+                        teDay: NewYupString().containsOnlyNumbers().isLaterThan(Yup.ref('tsDay', null)).isEarlierThan(12, thisTimeShouldBe + "earlier than 12:01").required(requiredMessage),//Yup.number().positive().moreThan(Yup.ref('tsDay', null)).lessThan(12.0001).required(requiredMessage),
+                        tsPM:  NewYupString().containsOnlyNumbers().isLaterThan('12:00', thisTimeShouldBe + "later than 11:59").required(requiredMessage),//Yup.number().positive().moreThan(11.999999).required(requiredMessage),
+                        tePM: NewYupString().containsOnlyNumbers().isLaterThan(Yup.ref('tsPM', null)).required(requiredMessage),//Yup.number().positive().moreThan(Yup.ref('tsPM', null)).required(requiredMessage),
+                        tsEvening: NewYupString().containsOnlyNumbers().isLaterThan(Yup.ref('tePM', null)).required(requiredMessage),//Yup.number().positive().moreThan(Yup.ref('teDay'), null).required(requiredMessage),
+                        teEvening: NewYupString().containsOnlyNumbers().isLaterThan(Yup.ref('tsEvening', null)).required(requiredMessage),//Yup.number().positive().moreThan(Yup.ref('tsEvening', null)).required(requiredMessage),
+                        lunch: NewYupString().containsOnlyNumbers().isEarlierThan(Yup.ref('tsEvening', null)).required(requiredMessage),//Yup.number().positive().lessThan(Yup.ref('tsEvening', null)).required(requiredMessage),
+                        bed: NewYupString().containsOnlyNumbers().isLaterThan(Yup.ref('teEvening', null)).required(requiredMessage),//Yup.number().positive().lessThan((24.00001)).moreThan(Yup.ref('teEvening', null)).required(requiredMessage)
                     })
                 );
         }
@@ -107,310 +108,325 @@ class FormScreenTimeZonage extends PureComponent{
         return(
             <View>
                 <KeyboardAvoidingView>
-                <ScrollView>
-                    <View style={styles.centerElements}>
-                        <Text>Page 2: THERAPEUTIC BOXES</Text>
-                    </View>
-                    <View style={{width: "100%"}}>
-                        <Button
-                            title="Go to previous step"
-                            onPress={this._handleGoToPreviousStep}
-                            icon={
-                                {
-                                    name: "chevron-left",
-                                    color: "black",
-                                    type: "ionicons"
+                    <ScrollView>
+                        <View style={styles.centerElements}>
+                            <TitleComponent text={"Therapeutic Boxes"}/>
+                        </View>
+                        <View style={{backgroundColor: "#27408b"}}>
+                            <Button
+                                title="Go back"
+                                onPress={this._handleGoToPreviousStep}
+                                icon={
+                                    {
+                                        name: "chevron-left",
+                                        color: "#FFF",
+                                        type: "ionicons"
+                                    }
                                 }
-                            }
-                            color={"#000"}
-                            buttonStyle={{backgroundColor:"red", width: "50%"}}
-                        />
-                    </View>
-                    <View>
-                        <Formik
-                            initialValues={(this.props.data)
-                                ?{
-                                    nbTheraputicBoxes:this.props.data.nbTheraputicBoxes,
-                                    tsDay: this.props.data.tsDay,
-                                    teDay:this.props.data.teDay,
-                                    tsPM:this.props.data.tsPM,
-                                    tePM:this.props.data.tePM,
-                                    tsEvening:this.props.data.tsEvening,
-                                    teEvening:this.props.data.teEvening,
-                                    lunch:this.props.data.lunch,
-                                    bed:this.props.data.bed,
+                                color={"#FFF"}
+                                buttonStyle={{backgroundColor:"#27408b", width: "50%"}}
+                            />
+                        </View>
+                        <View>
+                            <Formik
+                                initialValues={(this.props.data)
+                                    ?{
+                                        nbTheraputicBoxes:this.props.data.nbTheraputicBoxes,
+                                        tsDay: this.props.data.tsDay,
+                                        teDay:this.props.data.teDay,
+                                        tsPM:this.props.data.tsPM,
+                                        tePM:this.props.data.tePM,
+                                        tsEvening:this.props.data.tsEvening,
+                                        teEvening:this.props.data.teEvening,
+                                        lunch:this.props.data.lunch,
+                                        bed:this.props.data.bed,
+                                    }
+                                    :{
+                                        nbTheraputicBoxes:"One therapeutic box (from AM to PM)",
+                                        tsDay: '6:00',
+                                        teDay:'15:00',
+                                        tsPM:'12:00',
+                                        tePM:'15:00',
+                                        tsEvening:'17:00',
+                                        teEvening:'19:00',
+                                        lunch:'12:00',
+                                        bed:'24:00',
+                                    }
                                 }
-                                :{
-                                    nbTheraputicBoxes:"One therapeutic box (from AM to PM)",
-                                    tsDay: '6:00',
-                                    teDay:'15:00',
-                                    tsPM:'12:00',
-                                    tePM:'15:00',
-                                    tsEvening:'17:00',
-                                    teEvening:'19:00',
-                                    lunch:'12:00',
-                                    bed:'24:00',
-                                }
-                            }
-                            onSubmit={this._handleSubmit}
-                            validationSchema={this._handleValidation}
-                            render={({
-                                         values,
-                                         handleSubmit,
-                                         setFieldValue,
-                                         errors,
-                                         touched,
-                                         setFieldTouched,
-                                         isValid,
-                                         isSubmitting
-                                     }) => (
-                                <View>
-                                    <View style={{flexDirection:"row"}}>
-                                        <DropDownListV2
-                                            onChange={(name,value) => {
-                                                let onlyOneBox= value==="One therapeutic box (from AM to PM)";
-                                                if(!onlyOneBox) { //if two boxes
-                                                    if(parseFloat(values.teDay) > 12) {
-                                                        setFieldValue('teDay', '12');
+                                onSubmit={this._handleSubmit}
+                                validationSchema={this._handleValidation}
+                                render={({
+                                             values,
+                                             handleSubmit,
+                                             setFieldValue,
+                                             errors,
+                                             touched,
+                                             setFieldTouched,
+                                             isValid,
+                                             isSubmitting,
+                                         }) => (
+                                    <View>
+                                        <View style={{flexDirection:"row"}}>
+                                            <DropDownListV2
+                                                onChange={(name,value) => {
+                                                    let onlyOneBox= value==="One therapeutic box (from AM to PM)";
+                                                    if(!onlyOneBox) { //if two boxes
+                                                        if(parseFloat(values.teDay) > 12) {
+                                                            setFieldValue('teDay', '12:00');
+                                                        }
                                                     }
-                                                }
-                                                this.setState( (oldState) =>
-                                                    {
-                                                        return(
-                                                            {
-                                                                ...oldState,
-                                                                nbOfBoxes: (onlyOneBox)
-                                                                    ?1
-                                                                    :2
-                                                            }
-                                                        )
+                                                    this.setState( (oldState) =>
+                                                        {
+                                                            return(
+                                                                {
+                                                                    ...oldState,
+                                                                    nbOfBoxes: (onlyOneBox)
+                                                                        ?1
+                                                                        :2
+                                                                }
+                                                            )
+                                                        }
+                                                    );
+                                                    setFieldValue(name,value)
+                                                }}
+                                                name="nbTheraputicBoxes"
+                                                label={"Select how many Therapeutic boxes"}
+                                                value={values.nbTheraputicBoxes}
+                                                itemList={["One therapeutic box (from AM to PM)","Two therapeutic boxes (AM and PM)"]}
+                                                Picker={this.props.Picker}
+                                            />
+                                        </View>
+                                        <View style={{backgroundColor: "white"}}>
+                                            <LinedLabel
+                                                label={(this.state.nbOfBoxes===1)?"Day Box": "AM Box" }
+                                                textPosition="left"/>
+                                            <View>
+                                                <View style={styles.twoPerRowContainer}>
+                                                    <View style={styles.inputContainerForTwo}>
+                                                        <Input
+                                                            label="Start Time"
+                                                            value={values.tsDay}
+                                                            onChange={(name,value) => {
+                                                                setFieldValue(name,value)
+                                                            }}
+                                                            onBlur={() =>{
+                                                                setFieldValue("tsDay", this.handleFormatTime(values.tsDay));
+                                                            }}
+                                                            onTouch={setFieldTouched}
+                                                            name="tsDay"
+                                                            error={touched.tsDay && errors.tsDay}
+                                                            keyboardType="numeric"
+                                                        />
+                                                    </View>
+                                                    <View style={styles.inputContainerForTwo}>
+                                                        <Input
+                                                            label="End Time"
+                                                            value={values.teDay}
+                                                            onChange={(name,value) => {
+                                                                setFieldValue(name,value)
+                                                            }}
+                                                            onBlur={() =>{
+                                                                setFieldValue("teDay", this.handleFormatTime(values.teDay));
+                                                            }}
+                                                            onTouch={setFieldTouched}
+                                                            name="teDay"
+                                                            error={touched.teDay && errors.teDay}
+                                                            keyboardType="numeric"
+                                                        />
+                                                    </View>
+                                                </View>
+                                            </View>
+                                            <View
+                                                style={{margin:20, flexDirection:'row', justifyContent:'space-around'}}
+                                            >
+                                                <CustomMultiSlider
+                                                    sliderLength={Dimensions.get("window").width*0.80}
+                                                    min={0}
+                                                    max={this.state.nbOfBoxes === 1?16: 12}
+                                                    step={0.5}
+                                                    values={[parseFloat(this.handleUnFormatTime(values.tsDay)),(parseFloat(this.handleUnFormatTime(values.teDay))>12&&this.state.nbOfBoxes===2)?12:parseFloat(this.handleUnFormatTime(values.teDay))]}
+                                                    onValuesChange={
+                                                        (values) => {
+                                                            setFieldValue('tsDay', this.handleFormatTime(values[0].toString()));
+                                                            setFieldValue('teDay', this.handleFormatTime(values[1].toString()));
+                                                        }
                                                     }
-                                                );
-                                                setFieldValue(name,value)
-                                            }}
-                                            name="nbTheraputicBoxes"
-                                            value={values.nbTheraputicBoxes}
-                                            itemList={["One therapeutic box (from AM to PM)","Two therapeutic boxes (AM and PM)"]}
-                                            Picker={this.props.Picker}
-                                        />
-                                    </View>
-                                    <View style={{backgroundColor: "white"}}>
-                                        <LinedLabel
-                                            label={(this.state.nbOfBoxes===1)?"Day Time": "AM time" }
-                                            textPosition="left"/>
-                                        <View>
-                                            <View style={styles.twoPerRowContainer}>
-                                                <View style={styles.inputContainerForTwo}>
-                                                    <Input
-                                                        label="Start Time"
-                                                        value={values.tsDay}
+                                                />
+                                            </View>
+                                        </View>
+                                        {(this.state.nbOfBoxes === 2)
+                                            ?
+                                            <View>
+                                                <LinedLabel
+                                                    label={"PM Box"}
+                                                    textPosition="center"/>
+                                                <View style={styles.twoPerRowContainer}>
+                                                    <View style={styles.inputContainerForTwo}>
+                                                        < Input
+                                                        label = "Start Time"
+                                                        value={values.tsPM}
                                                         onChange={(name,value) => {
                                                             setFieldValue(name,value)
                                                         }}
                                                         onBlur={() =>{
-                                                            setFieldValue("tsDay", this.handleFormatTime(values.tsDay));
+                                                            setFieldValue("tsPM", this.handleFormatTime(values.tsPM));
                                                         }}
                                                         onTouch={setFieldTouched}
-                                                        name="tsDay"
-                                                        error={touched.tsDay && errors.tsDay}
+                                                        name="tsPM"
+                                                        error={touched.tsPM && errors.tsPM}
+                                                        keyboardType="numeric"
+                                                        />
+                                                    </View>
+                                                    <View style={styles.inputContainerForTwo}>
+                                                        <Input
+                                                        label="End Time"
+                                                        value={values.tePM}
+                                                        onChange={(name,value) => {
+                                                            setFieldValue(name,value)
+                                                        }}
+                                                        onBlur={() =>{
+                                                            setFieldValue("tePM", this.handleFormatTime(values.tePM));
+                                                        }}
+                                                        onTouch={setFieldTouched}
+                                                        name="tePM"
+                                                        error={touched.tePM && errors.tePM}
+                                                        keyboardType="numeric"
+                                                        />
+                                                    </View>
+                                                </View>
+                                                <View
+                                                    style={{
+                                                        margin:20,
+                                                        flexDirection:'row',
+                                                        justifyContent:'space-around'
+                                                    }}
+                                                >
+                                                    <CustomMultiSlider
+                                                        sliderLength={Dimensions.get("window").width*0.80}
+                                                        min={12}
+                                                        max={16}
+                                                        step={0.5}
+                                                        values={[parseFloat(values.tsPM),parseFloat(values.tePM)]}
+                                                        onValuesChange={
+                                                            (values) => {
+                                                                setFieldValue('tsPM', this.handleFormatTime(values[0].toString()));
+                                                                setFieldValue('tePM', this.handleFormatTime(values[1].toString()));
+                                                            }
+                                                        }
+                                                    />
+                                            </View>
+                                            </View>
+                                            :<View/>
+                                        }
+                                        <View>
+                                            <LinedLabel
+                                                label={"Evening Box"}
+                                                textPosition="right"/>
+                                            <View style={styles.twoPerRowContainer}>
+                                                <View style={styles.inputContainerForTwo}>
+                                                    <Input
+                                                        label="Start Time"
+                                                        value={values.tsEvening}
+                                                        onChange={setFieldValue}
+                                                        onTouch={setFieldTouched}
+                                                        name="tsEvening"
+                                                        error={touched.tsEvening && errors.tsEvening}
                                                         keyboardType="numeric"
                                                     />
                                                 </View>
                                                 <View style={styles.inputContainerForTwo}>
                                                     <Input
                                                         label="End Time"
-                                                        value={values.teDay}
-                                                        onChange={(name,value) => {
-                                                            setFieldValue(name,value)
-                                                        }}
+                                                        value={values.teEvening}
+                                                        onChange={setFieldValue}
+                                                        onTouch={setFieldTouched}
+                                                        name="teEvening"
+                                                        error={touched.teEvening && errors.teEvening}
+                                                        keyboardType="numeric"
+                                                    />
+                                                </View>
+                                            </View>
+                                            <View
+                                                style={{margin:20, flexDirection:'row', justifyContent:'space-around'}}
+                                            >
+                                                <CustomMultiSlider
+                                                    sliderLength={Dimensions.get("window").width*0.80}
+                                                    min={16}
+                                                    max={24}
+                                                    step={0.5}
+                                                    snapped={true}
+                                                    values={[parseFloat(values.tsEvening),parseFloat(values.teEvening)]}
+                                                    onValuesChange={
+                                                        (valuesS) => {
+                                                            setFieldValue('tsEvening', this.handleFormatTime(valuesS[0].toString()));
+                                                            setFieldValue('teEvening', this.handleFormatTime(valuesS[1].toString()));
+                                                        }
+                                                    }
+                                                />
+                                            </View>
+                                        </View>
+                                        <View style={styles.bedAndLunchContainer}>
+                                            <View style={styles.inputWithIconContainer}>
+                                                <View  style={styles.inputWithIcon_Icon}>
+                                                    <Ionicon
+                                                        size={35}
+                                                        name= {Platform.OS==='android'? "md-restaurant" :"ios-restaurant"}
+                                                        color="#52afff" style={styles.drawerItemIcon}
+                                                    />
+                                                </View>
+                                                <View style={styles.inputWithIcon_Input}>
+                                                    <Input
+                                                        label="Lunch Time (o'clock)"
+                                                        value={values.lunch}
+                                                        onChange={setFieldValue}
                                                         onBlur={() =>{
-                                                            setFieldValue("tsDay", this.handleFormatTime(values.tsDay));
+                                                            setFieldValue("lunch", this.handleFormatTime(values.lunch));
                                                         }}
                                                         onTouch={setFieldTouched}
-                                                        name="teDay"
-                                                        error={touched.teDay && errors.teDay}
+                                                        name="lunch"
+                                                        error={touched.lunch && errors.lunch}
+                                                        keyboardType="numeric"
+                                                    />
+                                                </View>
+
+                                            </View>
+                                            <View style={[styles.inputWithIconContainer]}>
+                                                <View  style={styles.inputWithIcon_Icon}>
+                                                    <AwesomeIcon
+                                                        size={35}
+                                                        name= {Platform.OS==='android'? "bed" :"bed"}
+                                                        color="#52afff" style={styles.drawerItemIcon}
+                                                    />
+                                                </View>
+                                                <View style={styles.inputWithIcon_Input}>
+                                                    <Input
+                                                        label="Bed Time (o'clock)"
+                                                        value={values.bed}
+                                                        onChange={setFieldValue}
+                                                        onBlur={() =>{
+                                                            setFieldValue("bed", this.handleFormatTime(values.bed));
+                                                        }}
+                                                        onTouch={setFieldTouched}
+                                                        name="bed"
+                                                        error={touched.bed && errors.bed}
                                                         keyboardType="numeric"
                                                     />
                                                 </View>
                                             </View>
                                         </View>
-                                        <View
-                                            style={{margin:20, flexDirection:'row', justifyContent:'space-around'}}
-                                        >
-                                            <CustomMultiSlider
-                                                sliderLength={Dimensions.get("window").width*0.80}
-                                                min={0}
-                                                max={this.state.nbOfBoxes === 1?16: 12}
-                                                step={0.5}
-                                                values={[parseFloat(this.handleUnFormatTime(values.tsDay)),(this.handleUnFormatTime(values.teDay)>12&&this.state.nbOfBoxes===2)?"12:00":parseFloat(this.handleUnFormatTime(values.teDay))]}
-                                                onValuesChange={
-                                                    (values) => {
-                                                        setFieldValue('tsDay', this.handleFormatTime(values[0].toString()));
-                                                        setFieldValue('teDay', this.handleFormatTime(values[1].toString()));
-                                                    }
-                                                }
+                                        <View style={styles.buttonContainer}>
+                                            <Button
+                                                buttonStyle={styles.button}
+                                                title="Go to weights"
+                                                onPress={handleSubmit}
+                                                loading={isSubmitting}
                                             />
                                         </View>
                                     </View>
-                                    {(this.state.nbOfBoxes === 2)
-                                        ?
-                                        <View>
-                                            <LinedLabel
-                                                label={"PM time"}
-                                                textPosition="left"/>
-                                            <View style={styles.twoPerRowContainer}>
-                                                <View style={styles.inputContainerForTwo}>
-                                                    < Input
-                                                    label = "Start Time"
-                                                    value={values.tsPM}
-                                                    onChange={(name,value) => {
-                                                        setFieldValue(name,value)
-                                                    }}
-                                                    onTouch={setFieldTouched}
-                                                    name="tsPM"
-                                                    error={touched.tsPM && errors.tsPM}
-                                                    keyboardType="numeric"
-                                                    />
-                                                </View>
-                                                <View style={styles.inputContainerForTwo}>
-                                                    <Input
-                                                    label="End Time"
-                                                    value={values.tePM}
-                                                    onChange={(name,value) => {
-                                                        setFieldValue(name,value)
-                                                    }}
-                                                    onTouch={setFieldTouched}
-                                                    name="tePM"
-                                                    error={touched.tePM && errors.tePM}
-                                                    keyboardType="numeric"
-                                                    />
-                                                </View>
-                                            </View>
-                                            <View
-                                                style={{
-                                                    margin:20,
-                                                    flexDirection:'row',
-                                                    justifyContent:'space-around'
-                                                }}
-                                            >
-                                                <CustomMultiSlider
-                                                    sliderLength={Dimensions.get("window").width*0.80}
-                                                    min={12}
-                                                    max={16}
-                                                    step={0.5}
-                                                    values={[parseFloat(values.tsPM),parseFloat(values.tePM)]}
-                                                    onValuesChange={
-                                                        (values) => {
-                                                            setFieldValue('tsPM', values[0].toString());
-                                                            setFieldValue('tePM', values[1].toString());
-                                                        }
-                                                    }
-                                                />
-                                        </View>
-                                        </View>
-                                        :<View/>
-                                    }
-                                    <View>
-                                        <LinedLabel
-                                            label={"Evening time"}
-                                            textPosition="left"/>
-                                        <View style={styles.twoPerRowContainer}>
-                                            <View style={styles.inputContainerForTwo}>
-                                                <Input
-                                                    label="Start Time"
-                                                    value={values.tsEvening}
-                                                    onChange={setFieldValue}
-                                                    onTouch={setFieldTouched}
-                                                    name="tsEvening"
-                                                    error={touched.tsEvening && errors.tsEvening}
-                                                    keyboardType="numeric"
-                                                />
-                                            </View>
-                                            <View style={styles.inputContainerForTwo}>
-                                                <Input
-                                                    label="End Time"
-                                                    value={values.teEvening}
-                                                    onChange={setFieldValue}
-                                                    onTouch={setFieldTouched}
-                                                    name="teEvening"
-                                                    error={touched.teEvening && errors.teEvening}
-                                                    keyboardType="numeric"
-                                                />
-                                            </View>
-                                        </View>
-                                        <View
-                                            style={{margin:20, flexDirection:'row', justifyContent:'space-around'}}
-                                        >
-                                            <CustomMultiSlider
-                                                sliderLength={Dimensions.get("window").width*0.80}
-                                                min={16}
-                                                max={24}
-                                                step={0.5}
-                                                snapped={true}
-                                                values={[parseFloat(values.tsEvening),parseFloat(values.teEvening)]}
-                                                onValuesChange={
-                                                    (valuesS) => {
-                                                        setFieldValue('tsEvening', valuesS[0].toString());
-                                                        setFieldValue('teEvening', valuesS[1].toString());
-                                                    }
-                                                }
-                                            />
-                                        </View>
-                                    </View>
-                                    <View style={styles.bedAndLunchContainer}>
-                                        <View style={styles.inputWithIconContainer}>
-                                            <View  style={styles.inputWithIcon_Icon}>
-                                                <Ionicon
-                                                    size={35}
-                                                    name= {Platform.OS==='android'? "md-restaurant" :"ios-restaurant"}
-                                                    color="#52afff" style={styles.drawerItemIcon}
-                                                />
-                                            </View>
-                                            <View style={styles.inputWithIcon_Input}>
-                                                <Input
-                                                    label="Lunch Time (o'clock)"
-                                                    value={values.lunch}
-                                                    onChange={setFieldValue}
-                                                    onTouch={setFieldTouched}
-                                                    name="lunch"
-                                                    error={touched.lunch && errors.lunch}
-                                                    keyboardType="numeric"
-                                                />
-                                            </View>
-
-                                        </View>
-                                        <View style={[styles.inputWithIconContainer]}>
-                                            <View  style={styles.inputWithIcon_Icon}>
-                                                <AwesomeIcon
-                                                    size={35}
-                                                    name= {Platform.OS==='android'? "bed" :"bed"}
-                                                    color="#52afff" style={styles.drawerItemIcon}
-                                                />
-                                            </View>
-                                            <View style={styles.inputWithIcon_Input}>
-                                                <Input
-                                                    label="Bed Time (o'clock)"
-                                                    value={values.bed}
-                                                    onChange={setFieldValue}
-                                                    onTouch={setFieldTouched}
-                                                    name="bed"
-                                                    error={touched.bed && errors.bed}
-                                                    keyboardType="numeric"
-                                                />
-                                            </View>
-                                        </View>
-                                    </View>
-                                    <Button
-                                        buttonStyle={styles.button}
-                                        title="Go to weights"
-                                        onPress={handleSubmit}
-                                        loading={isSubmitting}
-                                    />
-                                </View>
-                            )}
-                        />
-                    </View>
-                </ScrollView>
+                                )}
+                            />
+                        </View>
+                    </ScrollView>
                 </KeyboardAvoidingView>
             </View>
 
@@ -431,11 +447,18 @@ const styles = StyleSheet.create({
     },
 
     button: {
-        marginVertical: 20,
         width: '100%',
         justifyContent: "center",
         alignItems: "center",
+        backgroundColor:"#27408b",
     },
+
+    buttonContainer:{
+        width:"100%",
+        marginTop: 20,
+        marginBottom: 10
+    },
+
     twoPerRowContainer: {
         flexDirection: "row",
         justifyContent: "space-between"

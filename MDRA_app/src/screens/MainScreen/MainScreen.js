@@ -11,7 +11,7 @@ import {
     Platform
 } from 'react-native';
 
-import startMainTabs from '../MainTabs/StartMainTabs'
+import startMainTabs from '../StartMainTabs/StartMainTabs'
 
 import backgroundImage from '../../assets/pills-glasses-stethoscope-text-diagnosis-adhd-pills-glasses-stethoscope-text-diagnosis-adhd-paper-103337569.jpg'
 class MainScreen extends Component{
@@ -92,7 +92,7 @@ class MainScreen extends Component{
 
                         <TouchableWithoutFeedback onPress={this._handlerOnPress}>
                                 {this.state.loading
-                                    ?<ActivityIndicator size={Platform.OS==='android'?100:0} color="red" />
+                                    ?<ActivityIndicator size={Platform.OS==='android'?100:0} color="#111e6c" />
                                     :<View style={[styles.textContainer,]}>
                                         <Text style={[
                                             styles.textStyle,
@@ -115,7 +115,7 @@ class MainScreen extends Component{
 const styles= StyleSheet.create({
     mainContainer:{
 
-        height: '30%',
+        height: 200,
         opacity: 0.9,
         backgroundColor: '#111e6c',
         borderRadius:80,

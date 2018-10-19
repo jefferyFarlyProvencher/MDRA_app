@@ -11,11 +11,11 @@ let containsOnlyNumbers = (text) => {
         //console.log("HEYHEYHEY ITS FAAAAT ALBERT 2: " + text);
         if (text.includes(':')) {
             let hourAndMinutes = text.split(':');
-            console.log("containsOnlyNumbers, if passed (contains :), result: " + ((/^([0-9]+)$/.test(hourAndMinutes[0])) && ((/^([0-9]+)$/.test(hourAndMinutes[1])))));
+            //console.log("containsOnlyNumbers, if passed (contains :), result: " + ((/^([0-9]+)$/.test(hourAndMinutes[0])) && ((/^([0-9]+)$/.test(hourAndMinutes[1])))));
             return ((/^([0-9]+)$/.test(hourAndMinutes[0])) && ((/^([0-9]+)$/.test(hourAndMinutes[1]))))
         }
         //else
-        console.log("containsOnlyNumbers, else (no :), result: " + (/^([0-9]+)$/.test(text)));
+        //console.log("containsOnlyNumbers, else (no :), result: " + (/^([0-9]+)$/.test(text)));
         return (/^([0-9]+)$/.test(text));
     }
 };

@@ -14,6 +14,7 @@ import {
 } from 'react-native';
 
 import {FormLabel, FormValidationMessage} from "react-native-elements";
+import AwesomeIcon from "react-native-vector-icons/FontAwesome";
 
 /**
  * DropDownListV2 uses react-native-picker
@@ -84,8 +85,17 @@ class DropDownListV2 extends Component {
             <View style={[styles.root, this.props.style]}>
                 <FormLabel>{label}</FormLabel>
                 <TouchableOpacity style={[{alignItems: 'center', width: "100%"}, ]} onPress={() => this._showPicker(this.props.itemList, this.props.Picker)}>
-                    <View style={styles.pickerStyle}>
-                    {<Text>{this.props.value}</Text>}
+                    <View style={styles.twoPerRowContainer}>
+                        <View style={styles.pickerStyle}>
+                            {<Text>{this.props.value}</Text>}
+                        </View>
+                        <View style={styles.angleDownContainer}>
+                            <AwesomeIcon
+                                size={20}
+                                name= {"angle-down"}
+                                color="#000"
+                            />
+                        </View>
                     </View>
                 </TouchableOpacity>
                 {error && <FormValidationMessage>{error}</FormValidationMessage>}
@@ -95,6 +105,7 @@ class DropDownListV2 extends Component {
     }
 }
 
+let borderRadius = 20;
 
 const styles = StyleSheet.create({
     root: {
@@ -105,12 +116,24 @@ const styles = StyleSheet.create({
     },
     pickerStyle:{
         height: 50,
-        width: "100%",
+        width: "85%",
         backgroundColor: "#c8e5f9",
         alignItems: "center",
         justifyContent:"center",
-        borderRadius: 20
+        borderTopLeftRadius: borderRadius,
+        borderBottomLeftRadius: borderRadius,
+        paddingLeft: "10%"
     },
+
+    angleDownContainer:{
+        height: 50,
+        width: "15%",
+        backgroundColor: "#c8e5f9",
+        justifyContent:"center",
+        borderTopRightRadius: borderRadius,
+        borderBottomRightRadius: borderRadius
+    },
+
     pickerContainer:{
         borderRadius: 90,
         backgroundColor: '#e7daff',
@@ -121,6 +144,10 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         justifyContent: 'center',
         alignItems:'center'
+    },
+
+    twoPerRowContainer: {
+        flexDirection:"row"
     }
 });
 

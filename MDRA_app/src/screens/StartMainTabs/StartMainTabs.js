@@ -6,7 +6,8 @@ const startTabs = () => {
     Promise.all([
         Icon.getImageSource(Platform.OS==='android'? "md-paper":"ios-paper", 30),
         Icon.getImageSource(Platform.OS==='android'? "md-podium": "ios-podium", 30),
-        Icon.getImageSource(Platform.OS==='android'? "md-menu" :"ios-menu", 30)
+        Icon.getImageSource(Platform.OS==='android'? "ios-menu" :"ios-menu", 30),
+        Icon.getImageSource("md-more",30),
     ]).then(sources => {
         Navigation.startTabBasedApp({
             tabs: [
@@ -16,11 +17,18 @@ const startTabs = () => {
                     title: "Form",
                     icon: sources[0],
                     navigatorButtons: {
-                        rightButtons: [
+                        leftButtons: [
                             {
                                 icon: sources[2], //Sources comes from the array up from here, [2] for the 3rd item sp ios-menu
                                 title: "Menu",
-                                id: "sideDrawerToggle",
+                                id: "sideDrawerToggle"
+                            }
+                        ],
+                        rightButtons: [
+                            {
+                                icon: sources[3],
+                                title: "Options",
+                                id: "sideOptionsToggle"
                             }
                         ]
                     },
@@ -36,11 +44,18 @@ const startTabs = () => {
                     title: "Results",
                     icon: sources[1],
                     navigatorButtons: {
-                        rightButtons: [
+                        leftButtons: [
                             {
                                 icon: sources[2], //Sources comes from the array up from here, [2] for the 3rd item sp ios-menu
                                 title: "Menu",
                                 id: "sideDrawerToggle"
+                            }
+                        ],
+                        rightButtons: [
+                            {
+                                icon: sources[3],
+                                title: "Options",
+                                id: "sideOptionsToggle"
                             }
                         ]
                     }
@@ -50,8 +65,11 @@ const startTabs = () => {
                 tabBarSelectedButtonColor: "#222"
             },
             drawer: {
-                right: {
+                left: {
                     screen: "MDRA_app.sideDrawerScreen"
+                },
+                right: {
+                    screen: "MDRA_app.optionsDrawerScreen"
                 },
                 disableOpenGesture: true
             },

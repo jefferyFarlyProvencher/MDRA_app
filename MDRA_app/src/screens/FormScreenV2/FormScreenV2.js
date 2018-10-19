@@ -71,10 +71,12 @@ class FormScreen extends Component{
 
     onNavigatorEvent = event => {
         if(event.type === "NavBarButtonPress") {
-            if(event.id === "sideDrawerToggle"){
+            if(event.id === "sideDrawerToggle") {
                 this.props.navigator.toggleDrawer({
-                    side: "right"
+                    side: "left"
                 });
+            }
+            else if(event.id==="optionsDrawerToggle"){
             }
         }
     };

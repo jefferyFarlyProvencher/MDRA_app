@@ -6,6 +6,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 //component imports
 import PrepareToSend from '../../components/PrepareToSend/PrepareToSend';
 import SendForm from '../../components/SendForm/SendForm';
+import TitleComponent from '../../components/TitleComponent/TitleComponent';
 
 //redux imports
 import {connect} from "react-redux";
@@ -89,20 +90,22 @@ class SendFormScreen extends PureComponent{
     _handlerOnPress = async () => {
         let message = (!this.state.dataReceived)? "Not Received Yet": "Received!";
         //ToastAndroid.showWithGravity("GOING BACK TO PAGE 1!!!", 1, ToastAndroid.TOP);
-        this.props.onChangePosition(0);
+        if(this.state.dataReceived)
+            this.props.onChangePosition(0);
     };
 
     render() {
         return(
             <View style={styles.container}>
                 <TouchableOpacity onPress={this._handlerOnPress}>
-                    <View style={{alignItems: 'center', paddingTop: 10}}>
-                        <Text>{this.state.textToDisplay}</Text>
+                    <View style={{alignItems: 'center', paddingTop: 10, position: "absolute", width:"100%"}}>
+                        <TitleComponent text={this.state.textToDisplay}/>
                     </View>
                     <View style={{
                         height: '100%',
                         alignItems: 'center',
-                        justifyContent: 'center'
+                        justifyContent: 'center',
+                        paddingTop: 10
                     }}>
                         {!this.state.dataReceived
                             ?<ActivityIndicator size={Platform.OS==='android'?100:0} color="#4169e1" />

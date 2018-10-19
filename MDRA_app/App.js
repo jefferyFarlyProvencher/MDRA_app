@@ -12,6 +12,7 @@ import FormScreenV2 from './src/screens/FormScreenV2/FormScreenV2';
 import MainScreen from './src/screens/MainScreen/MainScreen';
 import ResultScreen from './src/screens/ResultScreen/ResultScreen';
 import SideDrawer from './src/screens/SideDrawer/SideDrawer';
+import OptionsDrawer  from './src/screens/OptionsDrawer/OptionsDrawer';
 import FormScreenInitial from './src/screens/FormScreen1_initial/FormScreen_initial';
 import FormScreenInitialV2 from './src/screens/FormScreen1_initial/FormScreen_initialV2';
 import FormScreenTimeZonage from './src/screens/FormScreen2_timeZonage/FormScreen_timeZonage';
@@ -36,6 +37,7 @@ Navigation.registerComponent('MDRA_app.mainScreenTest', () => mainScreenTest);
 Navigation.registerComponent('MDRA_app.mainScreen', ()=>MainScreen);
 Navigation.registerComponent('MDRA_app.resultScreen',()=>ResultScreen,store, Provider, persistor);
 Navigation.registerComponent('MDRA_app.sideDrawerScreen', () => SideDrawer, store, Provider, persistor);
+Navigation.registerComponent('MDRA_app.optionsDrawerScreen', () => OptionsDrawer, store, Provider, persistor);
 Navigation.registerComponent('MDRA_app.formScreen', ()=> FormScreen, store, Provider, persistor);
 Navigation.registerComponent('MDRA_app.formScreenV2', ()=> FormScreenV2, store, Provider, persistor);
 Navigation.registerComponent('MDRA_app.formScreenInitial', () => FormScreenInitial, store, Provider, persistor);
@@ -44,7 +46,7 @@ Navigation.registerComponent('MDRA_app.formScreenTimeZonage', () => FormScreenTi
 Navigation.registerComponent('MDRA_app.formScreenWeights', () => FormScreenWeights, store, Provider, persistor);
 Navigation.registerComponent('MDRA_app.formScreenAdvanced', () => FormScreenAdvanced, store, Provider, persistor);
 Navigation.registerComponent('MDRA_app.resultTest', () => ResultTest, store, Provider, persistor);
-Navigation.registerComponent('MDRA_app.sendForm',() => SendForm, store, Provider, persistor);
+Navigation.registerComponent('MDRA_app.sendFormScreen',() => SendFormScreen, store, Provider, persistor);
 Navigation.registerComponent('MDRA_app.resultPage',() => ResultPage, store, Provider, persistor);
 Navigation.registerComponent('MDRA_app.pickerTest',() => PickerTest);
 
@@ -53,5 +55,6 @@ Navigation.startSingleScreenApp({
     screen: {
         screen: "MDRA_app.mainScreen",
         title: "mainScreen",
-    }
+    },
+    navBarHidden: false,
 });

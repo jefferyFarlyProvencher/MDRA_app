@@ -27,6 +27,7 @@ import Input from "../../components/Input/Input";
 import DropDownListV2 from "../../components/dropDownList/DropDownListV2";
 import LinedLabel from "../../components/LinedLabel/LinedLabel";
 import NewYupString from '../../components/NewYupString/NewYupString';
+import TitleComponent from '../../components/TitleComponent/TitleComponent';
 //actions imports
 import {connect}  from "react-redux";
 import {addData} from "../../store/actions/addData";
@@ -93,6 +94,7 @@ class FormScreenInitial extends PureComponent{
 
     _handleValidation = () => {
         let requiredMessage = "This is required";
+        let timeMessage = "Time Format is incorrect";
         switch (this.state.amountOfPills)
         {
 
@@ -100,34 +102,34 @@ class FormScreenInitial extends PureComponent{
                 return (
                     Yup.object().shape({
                         weight: this.state.switchValue?Yup.number().positive().lessThan(160).required(requiredMessage):Yup.number().positive().lessThan(80).required(requiredMessage),
-                        adminTime0: NewYupString().containsOnlyNumbers().required(requiredMessage),
+                        adminTime0: NewYupString(timeMessage).containsOnlyNumbers().required(requiredMessage),
                     })
                 );
             case 2:
                 return (
                     Yup.object().shape({
                         weight: this.state.switchValue?Yup.number().positive().lessThan(160).required():Yup.number().positive().lessThan(80).required(requiredMessage),
-                        adminTime0: NewYupString().containsOnlyNumbers().required(requiredMessage),
-                        adminTime1: NewYupString().containsOnlyNumbers().required(requiredMessage),
+                        adminTime0: NewYupString(timeMessage).containsOnlyNumbers().required(requiredMessage),
+                        adminTime1: NewYupString(timeMessage).containsOnlyNumbers().required(requiredMessage),
                     })
                 );
             case 3:
                 return (
                     Yup.object().shape({
                         weight: this.state.switchValue?Yup.number().positive().lessThan(160).required():Yup.number().positive().lessThan(80).required(requiredMessage),
-                        adminTime0: NewYupString().containsOnlyNumbers().required(requiredMessage),
-                        adminTime1: NewYupString().containsOnlyNumbers().required(requiredMessage),
-                        adminTime2: NewYupString().containsOnlyNumbers().required(requiredMessage)
+                        adminTime0: NewYupString(timeMessage).containsOnlyNumbers().required(requiredMessage),
+                        adminTime1: NewYupString(timeMessage).containsOnlyNumbers().required(requiredMessage),
+                        adminTime2: NewYupString(timeMessage).containsOnlyNumbers().required(requiredMessage)
                     })
                 );
             case 4:
                 return (
                     Yup.object().shape({
                         weight: this.state.switchValue?Yup.number().positive().lessThan(160).required():Yup.number().positive().lessThan(80).required(requiredMessage),
-                        adminTime0: NewYupString().containsOnlyNumbers().required(requiredMessage),
-                        adminTime1: NewYupString().containsOnlyNumbers().required(requiredMessage),
-                        adminTime2: NewYupString().containsOnlyNumbers().required(requiredMessage),
-                        adminTime3: NewYupString().containsOnlyNumbers().required(requiredMessage),
+                        adminTime0: NewYupString(timeMessage).containsOnlyNumbers().required(requiredMessage),
+                        adminTime1: NewYupString(timeMessage).containsOnlyNumbers().required(requiredMessage),
+                        adminTime2: NewYupString(timeMessage).containsOnlyNumbers().required(requiredMessage),
+                        adminTime3: NewYupString(timeMessage).containsOnlyNumbers().required(requiredMessage),
 
                     })
                 );
@@ -203,7 +205,7 @@ class FormScreenInitial extends PureComponent{
                     <KeyboardAwareScrollView>
                         <View>
                             <View style={styles.centerElements}>
-                                <Text>Initialization</Text>
+                                <TitleComponent text={"Initialization"} style={{top:0,left:0, position: "absolute"}}/>
                             </View>
                             <Formik
                                 initialValues={
@@ -264,10 +266,10 @@ class FormScreenInitial extends PureComponent{
                                              touched,
                                              setFieldTouched,
                                              isValid,
-                                             isSubmitting
+                                             isSubmitting,
                                          }) => (
                                     <View>
-                                        <View style={{margin:"5%"}}>
+                                        <View style={styles.genderWeightContainerContainer}>
                                             <View style={[styles.twoPerRowContainer,{marginBottom:"0%"}]}>
                                                 <DropDownListV2
                                                     style={styles.inputContainer}
@@ -303,7 +305,7 @@ class FormScreenInitial extends PureComponent{
                                                                 this._handleChangeSwitch(value);
                                                             }
                                                             }
-                                                            tintColor={"#a8eebc"}
+                                                            tintColor={"#4169e1"}
                                                             onTintColor={"#b1d6ee"}
                                                             thumbTintColor={(Platform==="ios"? "white": '#eee')}
                                                         />
@@ -569,13 +571,15 @@ class FormScreenInitial extends PureComponent{
                                                 disabled={this.state.amountOfPills>=4}
                                             />
                                         </View>
-                                        <Button
-                                            buttonStyle={styles.button}
-                                            title="Go to next step"
-                                            onPress={handleSubmit}
-                                            disabled={(!isValid || isSubmitting) && this.props.data==null}
-                                            loading={isSubmitting}
-                                        />
+                                        <View style={styles.buttonContainer}>
+                                            <Button
+                                                buttonStyle={styles.button}
+                                                title="Go to next step"
+                                                onPress={handleSubmit}
+                                                disabled={(!isValid || isSubmitting) && this.props.data==null}
+                                                loading={isSubmitting}
+                                            />
+                                        </View>
                                     </View>
                                 )}
                             />
@@ -594,6 +598,10 @@ const styles = StyleSheet.create({
         backgroundColor: "#fff",
     },
 
+    genderWeightContainerContainer: {
+        marginHorizontal: Dimensions.get('window').width*0.05,
+        marginTop: Dimensions.get('window').height*0.12,
+    },
 
     centerElements:{
         alignItems: "center",
@@ -601,10 +609,16 @@ const styles = StyleSheet.create({
     },
 
     button: {
-        marginVertical: 20,
+
         width: '100%',
         justifyContent: "center",
-        alignItems: "center"
+        alignItems: "center",
+        backgroundColor: "#27408b"
+
+    },
+
+    buttonContainer:{
+        marginVertical: 15,
     },
 
     pillButton: {
@@ -653,7 +667,8 @@ const styles = StyleSheet.create({
         width: "100%",
         marginLeft: 0,
         marginBottom:3,
-        padding: 10
+        padding: 10,
+        paddingTop:0
     },
 
 });
