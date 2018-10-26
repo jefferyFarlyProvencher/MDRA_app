@@ -8,7 +8,7 @@ import {
     Platform,
     TouchableOpacity,
     BackHandler,
-    Alert
+    Alert, Animated
 } from 'react-native';
 import {Button} from 'react-native-elements';
 import 'react-native-svg';
@@ -38,7 +38,8 @@ class ResultPage extends PureComponent {
         currentPosition: this.props.selectedPosition,
         orientation: true, //portrait true, landscape false
         modalVisible: false,
-        visible: true
+        visible: Platform.OS==="ios",
+
     };
 
     handleBackButton = () => {
@@ -125,7 +126,7 @@ class ResultPage extends PureComponent {
 
     setFormValues = () => {
         //collect current result's formData
-        let formData = this.props.state.main.resultsList[this.state.currentPosition].formData
+        let formData = this.props.state.main.resultsList[this.state.currentPosition].formData;
         // console.log("FORM BEFORE: "+
         //     JSON.stringify(this.props.state.main.Page0Data) + ";"+
         //     JSON.stringify(this.props.state.main.Page1Data) + ";"+
@@ -180,8 +181,10 @@ class ResultPage extends PureComponent {
         );
     };
 
+//    Animated.sequence([
+
     render() {
-        if(this.state.visible)this._handleOnStartUp();
+        if(this.state.visible  && Platform.OS === "ios")this._handleOnStartUp();
         return (
             <View style={{backgroundColor:"#FFF", flex: 1}}>
                 <IndicatorViewPager

@@ -56,5 +56,5 @@ Navigation.startSingleScreenApp({
         screen: "MDRA_app.mainScreen",
         title: "mainScreen",
     },
-    navBarHidden: false,
+    navBarHidden: true,
 });

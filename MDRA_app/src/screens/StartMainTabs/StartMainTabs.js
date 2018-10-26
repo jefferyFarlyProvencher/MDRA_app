@@ -24,13 +24,6 @@ const startTabs = () => {
                                 id: "sideDrawerToggle"
                             }
                         ],
-                        rightButtons: [
-                            {
-                                icon: sources[3],
-                                title: "Options",
-                                id: "sideOptionsToggle"
-                            }
-                        ]
                     },
                     topBar: {
                         background: {
@@ -51,13 +44,6 @@ const startTabs = () => {
                                 id: "sideDrawerToggle"
                             }
                         ],
-                        rightButtons: [
-                            {
-                                icon: sources[3],
-                                title: "Options",
-                                id: "sideOptionsToggle"
-                            }
-                        ]
                     }
                 },
             ],
@@ -67,9 +53,6 @@ const startTabs = () => {
             drawer: {
                 left: {
                     screen: "MDRA_app.sideDrawerScreen"
-                },
-                right: {
-                    screen: "MDRA_app.optionsDrawerScreen"
                 },
                 disableOpenGesture: true
             },

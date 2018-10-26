@@ -199,13 +199,13 @@ class FormScreenInitial extends PureComponent{
                 <ScrollView
                     ref={ref => this.scrollView = ref}
                     onContentSizeChange={(contentWidth, contentHeight)=>{
-                        this.scrollView.scrollToEnd({animated: true});
+                        if(this.state.amountOfPills>1)this.scrollView.scrollToEnd({animated: true});
                     }}
                 >
                     <KeyboardAwareScrollView>
                         <View>
                             <View style={styles.centerElements}>
-                                <TitleComponent text={"Initialization"} style={{top:0,left:0, position: "absolute"}}/>
+                                <TitleComponent text={"Initialization"} containerStyle={{top:0,left:0, position: "absolute"}}/>
                             </View>
                             <Formik
                                 initialValues={

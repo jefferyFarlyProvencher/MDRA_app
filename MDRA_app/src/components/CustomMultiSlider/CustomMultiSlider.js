@@ -8,7 +8,6 @@ class CustomMultiSlider extends PureComponent{
     state= {
         numberOfDots: 1,
         showScreen: false,
-        valuesArray:this.props.values.slice(),
         selectedDot: 1,
         screenOpacityAnimation: new Animated.Value(0.3),
         secondScreenVisible: !!this.props.values[1]
@@ -32,11 +31,12 @@ class CustomMultiSlider extends PureComponent{
 
     render(){
         //console.log(this.generateDataSingle(this.props.data.percentile10));
+        let valuesArray = this.props.values;
         return(
             <View style={[this.props.style, styles.containerStyle]}>
                 <MultiSlider
-                    containerStyle={{padding:0, marginBottom:0}}
-                    trackStyle={{padding:0, marginBottom:0}}
+                    containerStyle={{padding:0, height:40,marginBottom:0}}
+                    trackStyle={{padding:0,marginBottom:0}}
                     sliderLength={this.props.sliderLength}
                     min={this.props.min}
                     max={this.props.max}
@@ -45,31 +45,26 @@ class CustomMultiSlider extends PureComponent{
                     onValuesChangeStart={this._handlesOnValueChangeStart}
                     onValuesChange={
                         (values) => {
-                            clearTimeout(this.sliderTimeoutId);
-                            this.sliderTimeoutId = setTimeout(() =>
-                                this.setState((oldState) =>
-                                {
-                                    return (
-                                        {
-                                            ...oldState,
-                                            valuesArray: values,
-                                        }
-                                    );
-                                }),
-                                0
-                            )
+                            valuesArray = values;
                         }
                     }
                     onValuesChangeFinish={
                         (values) => {
                             console.log(values);
                             this._handlesOnValueChangeFinish();
-                            this.props.onValuesChange(this.state.valuesArray);
+                            this.props.onValuesChange(valuesArray);
 
                         }
                     }
                     allowOverlap={false}
                     snapped={true}
+                    touchDimensions={{
+                        height: 40,
+                        width: 40,
+                        borderRadius: 20,
+                        slipDisplacement: 40,
+                    }}
+
                 />
                 <View style={styles.rulerStyle}>
                     <Text>{this.props.min}</Text>
@@ -98,13 +93,13 @@ class CustomMultiSlider extends PureComponent{
                                 >
                                     <View style={[
                                         styles.rulerPercentContainer,
-                                        this.state.valuesArray[1]?{width:"50%",borderRightWidth:1}:{width:"100%"},
+                                        valuesArray[1]?{width:"50%",borderRightWidth:1, alignItems:"center"}:{width:"100%", alignItems:"center"},
                                         ]}>
-                                        <Text>{this.state.valuesArray[0]}</Text>
+                                        <Text>{valuesArray[0]?valuesArray[0]:0}</Text>
                                     </View>
                                     {this.state.secondScreenVisible
-                                        ? <View style={[styles.rulerPercentContainer,{width:"50%"}]}>
-                                            <Text>{this.state.valuesArray[1]}</Text>
+                                        ? <View style={[styles.rulerPercentContainer,{width:"50%", alignItems:"center"}]}>
+                                            <Text>{valuesArray[1]?valuesArray[1]:0}</Text>
                                         </View>
                                         : <View/>
                                     }

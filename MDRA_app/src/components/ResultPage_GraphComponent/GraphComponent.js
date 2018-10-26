@@ -1,15 +1,75 @@
 import React, {PureComponent} from 'react';
-import {View, Button, StyleSheet, Dimensions, Platform} from 'react-native';
+import {View, StyleSheet, Dimensions, Platform, Animated,Text} from 'react-native';
 import 'react-native-svg';
 
 import {VictoryArea, VictoryChart, VictoryLine, VictoryLabel} from "victory-native";
 
-//function imports
-import FormatTime from "../../functions/FormatTime";
-
 class GraphComponent extends PureComponent{
     state = {
-        animationTime:500
+        animationTime:500,
+        textColor: ["red","blue"],
+        fadeAnim: new Animated.Value(1),
+        fadeInAnimDuration: 1000 ,
+        fadeOutAnimDuration: 4000,
+        currentTextTurn: 0
+    };
+
+    hasNotUnMounted = true;
+
+    componentDidMount(){
+        this.handleChangeText();
+    }
+
+    componentWillUnmount(){
+        this.hasNotUnMounted = false;
+    }
+
+    animationFadeOut = () => {
+        Animated.timing(
+            this.state.fadeAnim,
+            {
+                toValue: 0,
+                duration: this.state.fadeOutAnimDuration,
+                useNativeDriver: true,
+            }
+        ).start();
+        //console.log("CurrentTextTurn: " + this.state.currentTextTurn);
+    };
+
+    animationFadeIn = () => {
+        this.setState((oldState)=>{
+            return{
+                ...oldState,
+                currentTextTurn: (oldState.currentTextTurn+1)%2
+            }
+        });
+        Animated.timing(
+            this.state.fadeAnim,
+            {
+                toValue: 1,
+                duration: this.state.fadeInAnimDuration,
+                useNativeDriver: true,
+            }
+        ).start();
+    };
+
+    //changes the text turn from zero to 1
+    handleChangeText = () =>{
+        this.animationFadeIn();
+        setTimeout(
+            ()=>
+            {
+                this.animationFadeOut();
+                setTimeout(
+                    ()=> {
+                        if(this.hasNotUnMounted){
+                            this.handleChangeText();
+                        }
+                    },
+                    this.state.fadeOutAnimDuration)
+            }
+            ,this.state.fadeInAnimDuration
+        )
     };
 
     therapeuticBoxFormatter = (score) => {
@@ -175,6 +235,7 @@ class GraphComponent extends PureComponent{
             firstBoxPercentage = parseFloat(this.props.data.TIEffD2.substr(0,this.props.data.TIEffD2.length-1));
         }
 
+        let displayText = ["Total Score: "+ this.props.data.TotalScore,"Roller Coaster Effect: "+this.props.data.rce];
         ///ACTUAL RENDERING STARTS HERE
         return(
             <View style={[this.props.style]} pointerEvents="none">
@@ -236,6 +297,24 @@ class GraphComponent extends PureComponent{
                     }}/>
                     <VictoryLabel text={eveningBoxPercentage+"%"} datum={{x:eveningBoxX,y:eveningBoxY+eveningBoxHeight+1}}/>
                </VictoryChart>
+                <Animated.View
+                    style={[
+                        {
+                            opacity: this.state.fadeAnim.interpolate({
+                                    inputRange: [1,1.1],
+                                    outputRange: [1,1.1]
+                            })
+
+                        },
+                        {
+                            alignItems:'center',
+                        }
+                    ]}
+                >
+                    <View>
+                        <Text style={{color:this.state.textColor[this.state.currentTextTurn]}}>{displayText[this.state.currentTextTurn]}</Text>
+                    </View>
+                </Animated.View>
             </View>
         )
     }

@@ -76,8 +76,6 @@ class FormScreen extends Component{
                     side: "left"
                 });
             }
-            else if(event.id==="optionsDrawerToggle"){
-            }
         }
     };
 
@@ -182,7 +180,7 @@ class FormScreen extends Component{
                                 <FormScreenWeights data={this.props.state.main.Page2Data} advancedAllowed={this.props.state.main.advanceTabAccessible} setPage={this.handleSetPage} Picker={Picker}/>
                             </View>
                             {this.props.state.main.advanceTabAccessible ?
-                                <View style={{flex:1}}>
+                                <View>
                                     <FormScreenAdvanced data={this.props.state.main.Page3Data} setPage={this.handleSetPage}/>
                                 </View>
                                 :null

@@ -11,9 +11,14 @@ import {
     Platform
 } from 'react-native';
 
+//Navigation
 import startMainTabs from '../StartMainTabs/StartMainTabs'
-
+//Image
 import backgroundImage from '../../assets/pills-glasses-stethoscope-text-diagnosis-adhd-pills-glasses-stethoscope-text-diagnosis-adhd-paper-103337569.jpg'
+
+//functions
+import testNetWorkConnection from '../../functions/testNetworkConnection';
+
 class MainScreen extends Component{
 
     state={
@@ -68,11 +73,22 @@ class MainScreen extends Component{
         });
     }
 
+    displayConnectionError = () =>{
+
+    };
+
+
+    //attempts to load the app, basically does a verification of network status and waits .5 secs before launching
     _handlerOnPress = () => {
-        this.setState({
-           loading:true,
+        this.setState((oldState)=>{
+            return{
+                ...oldState,
+                loading:true,
+                attempt: oldState.attempt+1
+            }
         });
-        setTimeout(()=>{console.log("cool");startMainTabs();},1000);
+
+        setTimeout(()=>{console.log("main tabs starting");startMainTabs();},500);
     };
 
     render(){

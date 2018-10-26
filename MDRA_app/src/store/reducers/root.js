@@ -65,13 +65,14 @@ const reducer = (state = initialState, action) => {
         case(ADD_LIST):
             return{
                 ...state,
-                resultsList: state.resultsList.concat({
-                    key: Math.random().toString(),
-                    data: action.data,
-                    formData: action.formData,
-                    name: action.name,
-                    id: action.name
-                }),
+                resultsList:
+                    [{
+                        key: Math.random().toString(),
+                        data: action.data,
+                        formData: action.formData,
+                        name: action.name,
+                        id: action.name
+                    }].concat(state.resultsList),
             };
         case(REMOVE_LIST):
             return{

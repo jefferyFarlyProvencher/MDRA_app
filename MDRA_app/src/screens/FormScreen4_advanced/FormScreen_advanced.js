@@ -11,6 +11,8 @@ import Input from "../../components/Input/Input";
 import DropDownListV2 from "../../components/dropDownList/DropDownListV2";
 import {addData} from "../../store/actions/addData";
 import {changePosition} from "../../store/actions";
+import TitleComponent from "../../components/TitleComponent/TitleComponent";
+import LinedLabel from "../../components/LinedLabel/LinedLabel";
 
 class FormScreenAdvanced extends PureComponent{
     state = {
@@ -32,36 +34,11 @@ class FormScreenAdvanced extends PureComponent{
     });
 
     render() {
-        const labels = ["Initial","Time Zonage","Weights"];
-        const customStyles = {
-            stepIndicatorSize: 19,
-            currentStepIndicatorSize:25,
-            separatorStrokeWidth: 2,
-            currentStepStrokeWidth: 3,
-            stepStrokeCurrentColor: '#fe7013',
-            stepStrokeWidth: 3,
-            stepStrokeFinishedColor: '#fe7013',
-            stepStrokeUnFinishedColor: '#aaaaaa',
-            separatorFinishedColor: '#fe7013',
-            separatorUnFinishedColor: '#aaaaaa',
-            stepIndicatorFinishedColor: '#fe7013',
-            stepIndicatorUnFinishedColor: '#ffffff',
-            stepIndicatorCurrentColor: '#ffffff',
-            stepIndicatorLabelFontSize: 13,
-            currentStepIndicatorLabelFontSize: 13,
-            stepIndicatorLabelCurrentColor: '#fe7013',
-            stepIndicatorLabelFinishedColor: '#ffffff',
-            stepIndicatorLabelUnFinishedColor: '#aaaaaa',
-            labelColor: '#999999',
-            labelSize: 13,
-            currentStepLabelColor: '#fe7013'
-        };
         return(
             <View style={styles.container}>
                 <ScrollView>
-                    <View>
                         <View>
-                            <Text>Advanced Parameters</Text>
+                            <TitleComponent text={"Advanced Parameters"}/>
                         </View>
                         <Formik
                             initialValues={(this.props.data)
@@ -120,19 +97,25 @@ class FormScreenAdvanced extends PureComponent{
                                          isSubmitting
                                      }) => (
                                 <View>
-                                    <Input
-                                        label="Number of Simulations"
-                                        autoCapitalize="none"
-                                        value={values.numberOfSimulations}
-                                        onChange={setFieldValue}
-                                        onTouch={setFieldTouched}
-                                        name="numberOfSimulations"
-                                        error={errors.numberOfSimulations}
-                                        keyboardType="numeric"
+                                    <LinedLabel
+                                        label={"Number of Simulations"}
                                     />
+                                    <View style={styles.inputContainer}>
+                                        <Input
+                                            autoCapitalize="none"
+                                            value={values.numberOfSimulations}
+                                            onChange={setFieldValue}
+                                            onTouch={setFieldTouched}
+                                            name="numberOfSimulations"
+                                            error={errors.numberOfSimulations}
+                                            keyboardType="numeric"
+                                        />
+                                    </View>
                                     <View>
-                                        <Text> Half Day (AM) </Text>
-                                        <View>
+                                        <LinedLabel
+                                            label={"Half Day (AM)"}
+                                        />
+                                        <View style={styles.inputContainer}>
                                             <Input
                                                 label="Cmin"
                                                 value={values.cMinTherapeuticHalfDayAM}
@@ -153,8 +136,10 @@ class FormScreenAdvanced extends PureComponent{
                                                 keyboardType="numeric"
                                             />
                                         </View>
-                                        <Text> Half Day (PM) or Day </Text>
-                                        <View>
+                                        <LinedLabel
+                                            label={"Half Day (PM) or Day"}
+                                        />
+                                        <View style={styles.inputContainer}>
                                             <Input
                                                 label="Cmin"
                                                 value={values.cMinTherapeuticDayPM}
@@ -175,8 +160,10 @@ class FormScreenAdvanced extends PureComponent{
                                                 keyboardType="numeric"
                                             />
                                         </View>
-                                        <Text> Evening</Text>
-                                        <View>
+                                        <LinedLabel
+                                            label={"Evening"}
+                                        />
+                                        <View style={styles.inputContainer}>
                                             <Input
                                                 label="Cmin"
                                                 value={values.cMinTherapeuticEvening}
@@ -197,15 +184,19 @@ class FormScreenAdvanced extends PureComponent{
                                                 keyboardType="numeric"
                                             />
                                         </View>
-                                        <Text> Threshold </Text>
-                                        <Input
-                                            value={values.threshold}
-                                            onChange={setFieldValue}
-                                            onTouch={setFieldTouched}
-                                            name="threshold"
-                                            error={errors.threshold}
-                                            keyboardType="numeric"
+                                        <LinedLabel
+                                            label={"Threshold"}
                                         />
+                                        <View style={styles.inputContainer}>
+                                            <Input
+                                                value={values.threshold}
+                                                onChange={setFieldValue}
+                                                onTouch={setFieldTouched}
+                                                name="threshold"
+                                                error={errors.threshold}
+                                                keyboardType="numeric"
+                                            />
+                                        </View>
                                         <Button
                                             buttonStyle={styles.button}
                                             title="Send Form"
@@ -216,7 +207,6 @@ class FormScreenAdvanced extends PureComponent{
                                 </View>
                             )}
                         />
-                    </View>
                 </ScrollView>
             </View>
 
@@ -233,7 +223,7 @@ const styles = StyleSheet.create({
     },
     button: {
         marginTop: 20,
-        width: '100%',
+        width: "100%",
         justifyContent: "center",
         alignItems: "center"
     },
@@ -244,13 +234,7 @@ const styles = StyleSheet.create({
     inputContainer:{
         width: '50%',
     },
-    indicatorContainer:{
-        flex:1,flexDirection: "row",
-        justifyContent:"space-between",
-        position: "absolute",
-        bottom: 0,
-        left: 0,
-    }
+
 
 });
 

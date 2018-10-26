@@ -5,7 +5,6 @@ import {Formik} from "formik";
 import {Button} from 'react-native-elements';
 import {connect} from "react-redux";
 import * as Yup from "yup";
-import Spinner from "react-native-loading-spinner-overlay";
 //actions
 import {removeData, renameData} from '../../store/actions/index';
 
@@ -31,18 +30,12 @@ class ResultScreen extends Component{
 
     componentWillMount() {
         this.props.navigator.setStyle({
-            navBarTransparent: true,
-            navBarNoBorder: true,
+            navBarNoBorder: false,
             topBarElevationShadowEnabled: false,
-            drawUnderNavBar: true,
+            drawUnderNavBar: false,
             navBarBackgroundColor: '#262626',
             navBarTextColor: '#ffffff',
-            statusBarTextColorSchemeSingleScreen: 'dark',
-        });
-
-        this.props.navigator.setStyle({
-
-
+            statusBarTextColorSchemeSingleScreen: 'light',
         });
     }
 
@@ -50,7 +43,7 @@ class ResultScreen extends Component{
         if(event.type === "NavBarButtonPress") {
             if(event.id === "sideDrawerToggle"){
                 this.props.navigator.toggleDrawer({
-                    side: "right"
+                    side: "left"
                 });
             }
         }
@@ -136,7 +129,6 @@ class ResultScreen extends Component{
 
     render(){
         let content = (
-            <View>
                 <ResultsList
                     list ={this.props.state.main.resultsList}
                     onItemSelected={this.itemSelectedHandler}
@@ -144,19 +136,15 @@ class ResultScreen extends Component{
                     onRenameData={this.handleOnRenamePressed}
                     extraData={this.state}
                 />
-            </View>
         );
 //        console.log(this.props.state.main.resultsList);
         return(
             <View>
-                <View>
+                <View style={{margin:0, paddingBottom:0, height:"92%"}}>
                     {this.props.state.main.resultsList.length > 0
                         ? content
                         : <Text style={{justifyContent:'center', alignItems:'center'}}>This doesn't have any results yet</Text>
                     }
-                </View>
-                <View>
-                    <Spinner visible={this.state.visible} textContent={"Loading..."} textStyle={{color: '#FFF'}} />
                 </View>
                 <View>
                     <Modal

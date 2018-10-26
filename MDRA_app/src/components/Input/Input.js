@@ -1,5 +1,5 @@
 import React, {PureComponent} from 'react';
-import {StyleSheet, Text, View, Switch} from 'react-native';
+import {StyleSheet, View, Platform} from 'react-native';
 
 import {
     FormInput,
@@ -49,23 +49,25 @@ class Input extends PureComponent{
 
     render() {
         const {label, error, backgroundColor, ...rest } = this.props;
-        if(error) console.log("THERE IS AN ERROR, AND HERE IT IS: "+ error);
         return(
             <View style={[styles.root,this.props.style]}>
                 <FormLabel>{label}</FormLabel>
                 <FormInput
-                    center
+                    center={true}
                     placeholder={label}
                     onChangeText={this._handleChangeText}
                     onBlur={this._handleTouch}
                     containerStyle={[
-                        {justifyContent:'flex-start'},
+                        {
+                            justifyContent:'flex-start',
+                        },
                         error
                             ?{backgroundColor:"#ffb8c3"}
                             :backgroundColor
                                 ?{backgroundColor:backgroundColor}
-                                :{backgroundColor:"transparent"}
+                                :{backgroundColor:"transparent"},
                     ]}
+                    underlineColorAndroid={"#636363"}
                     {...rest}
                 />
                 {error && <FormValidationMessage>{error}</FormValidationMessage>}

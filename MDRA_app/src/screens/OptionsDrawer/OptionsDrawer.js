@@ -130,7 +130,7 @@ class OptionsDrawer extends Component{
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingTop: 22,
+        paddingTop: Platform.OS === "android"?0: 22,
         backgroundColor: "white",
     },
     drawerTitle: {

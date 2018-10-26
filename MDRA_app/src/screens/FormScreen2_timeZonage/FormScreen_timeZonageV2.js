@@ -306,7 +306,7 @@ class FormScreenTimeZonage extends PureComponent{
                                                         min={12}
                                                         max={16}
                                                         step={0.5}
-                                                        values={[parseFloat(values.tsPM),parseFloat(values.tePM)]}
+                                                        values={[parseFloat(this.handleUnFormatTime(values.tsPM)),parseFloat(this.handleUnFormatTime(values.tePM))]}
                                                         onValuesChange={
                                                             (values) => {
                                                                 setFieldValue('tsPM', this.handleFormatTime(values[0].toString()));
@@ -329,6 +329,9 @@ class FormScreenTimeZonage extends PureComponent{
                                                         value={values.tsEvening}
                                                         onChange={setFieldValue}
                                                         onTouch={setFieldTouched}
+                                                        onBlur={() =>{
+                                                            setFieldValue("tsEvening", this.handleFormatTime(values.tsEvening));
+                                                        }}
                                                         name="tsEvening"
                                                         error={touched.tsEvening && errors.tsEvening}
                                                         keyboardType="numeric"
@@ -339,6 +342,9 @@ class FormScreenTimeZonage extends PureComponent{
                                                         label="End Time"
                                                         value={values.teEvening}
                                                         onChange={setFieldValue}
+                                                        onBlur={() =>{
+                                                            setFieldValue("teEvening", this.handleFormatTime(values.teEvening));
+                                                        }}
                                                         onTouch={setFieldTouched}
                                                         name="teEvening"
                                                         error={touched.teEvening && errors.teEvening}
@@ -355,7 +361,7 @@ class FormScreenTimeZonage extends PureComponent{
                                                     max={24}
                                                     step={0.5}
                                                     snapped={true}
-                                                    values={[parseFloat(values.tsEvening),parseFloat(values.teEvening)]}
+                                                    values={[parseFloat(this.handleUnFormatTime(values.tsEvening)),parseFloat(this.handleUnFormatTime(values.teEvening))]}
                                                     onValuesChange={
                                                         (valuesS) => {
                                                             setFieldValue('tsEvening', this.handleFormatTime(valuesS[0].toString()));

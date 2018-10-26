@@ -17,7 +17,7 @@ class SendFormScreen extends PureComponent{
     state = {
         dataReceived: false,
         textToDisplay: 'Data Sending?!',
-        iconName: "md-refresh"
+        iconName: "md-refresh-circle"
 
     };
 
@@ -32,6 +32,11 @@ class SendFormScreen extends PureComponent{
                 textToDisplay: "DATA RECEIVED!!!"
             }));
         }
+    }
+// This section serves to stop the setStates that happen after item has unmounted
+    hasNotUnMounted = true;
+    componentWillUnmount(){
+        this.hasNotUnMounted = false;
     }
 
     generateName = () => {
@@ -59,31 +64,37 @@ class SendFormScreen extends PureComponent{
     }
 
     sendRequest = async () => {
-        this.setState((oldState) =>({
-            ...oldState,
-            dataReceived: false,
-        }));
+        if(this.hasNotUnMounted) {
+            this.setState((oldState) => ({
+                ...oldState,
+                dataReceived: false,
+            }));
+        }
         let preparedData = PrepareToSend(this.props.state.main);
         let data = await SendForm(preparedData);
         //console.log(JSON.stringify(data));
         if(data !== -1) {
             this.prepareToStoreData(data);
-            this.setState((oldState) =>({
-                ...oldState,
-                dataReceived: true,
-                textToDisplay: "DATA RECEIVED!!!"
-            }));
-            if (this.state.dataReceived) {
-                if(Platform.OS==="android")ToastAndroid.showWithGravity("Data added to List", 1, ToastAndroid.BOTTOM);
+            if(this.hasNotUnMounted) {
+                this.setState((oldState) => ({
+                    ...oldState,
+                    dataReceived: true,
+                    textToDisplay: "DATA RECEIVED!"
+                }));
+                if (this.state.dataReceived) {
+                    if (Platform.OS === "android") ToastAndroid.showWithGravity("Data added to List", 1, ToastAndroid.BOTTOM + 15);
+                }
             }
         }
         else{
-            this.setState((oldState) =>({
-                ...oldState,
-                dataReceived: true,
-                textToDisplay: "*****CONNECTION ERROR*****",
-                iconName: "ios-warning-outline"
-            }));
+            if(this.hasNotUnMounted) {
+                this.setState((oldState) => ({
+                    ...oldState,
+                    dataReceived: true,
+                    textToDisplay: "*****CONNECTION ERROR*****",
+                    iconName: "ios-warning-outline"
+                }));
+            }
         }
     };
 
@@ -119,7 +130,7 @@ class SendFormScreen extends PureComponent{
                             !this.state.dataReceived
                                 ?<Text style={{padding: 20}}>Sending Data to server...</Text>
                                 :(
-                                    <Text style={{padding: 20}}>{"    Redo Form?"}</Text>
+                                    <Text style={{padding: 20}}>{"Redo Form?"}</Text>
                                 )
                         }
                     </View>

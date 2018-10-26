@@ -1,5 +1,15 @@
 import React, {PureComponent} from 'react';
-import {View, Button, StyleSheet, Text,TouchableWithoutFeedback, TouchableOpacity, TouchableHighlight ,Modal } from 'react-native';
+import {
+    View,
+    Button,
+    StyleSheet,
+    Text,
+    TouchableWithoutFeedback,
+    TouchableOpacity,
+    TouchableHighlight,
+    Modal,
+    Dimensions,
+} from 'react-native';
 
 import {VictoryPie} from 'victory-native';
 
@@ -70,57 +80,24 @@ class ResultTest extends PureComponent{
 
     render() {
         let firstPieData = [this.props.data.characNR, this.props.data.characNRR, this.props.data.characR, this.props.data.characRAR, this.props.data.characAR, this.props.data.characNRRAR];
-        let secondPieData =[this.props.data.characNRNuit, this.props.data.characNRRNuit, this.props.data.characRNuit, this.props.data.characRARNuit, this.props.data.characARNuit, this.props.data.characNRRARNuit];
-        /*
-        if (isNaN(characNRAM)) {
-          pieDataset.D1 = [0, 0, 0, 0, 0, 0];
-         } else {
-          pieDataset.D1 = [characNRAM, characNRRAM, characRAM, characRARAM, characARAM, characNRRARAM];
-         }
+        let secondPieData = [0,0,0,0,0,0];
+        let EveningPieData =[this.props.data.characNRNuit, this.props.data.characNRRNuit, this.props.data.characRNuit, this.props.data.characRARNuit, this.props.data.characARNuit, this.props.data.characNRRARNuit];
 
-         if (isNaN(characNR)) {
-           pieDataset.D2 = [0, 0, 0, 0, 0, 0];
-         } else {
-           if (drawPieD2) {
-              pieDataset.D2 = [characNR, characNRR, characR, characRAR, characAR, characNRRAR];
-           } else {
-              pieDataset.D1 = [characNR, characNRR, characR, characRAR, characAR, characNRRAR];
-              pieDataset.D2 = [0, 0, 0, 0, 0, 0];
-           }
-         }
-
-         if (isNaN(characNRNuit)) {
-          pieDataset.E = [0, 0, 0, 0, 0, 0];
-         } else {
-          pieDataset.E  = [characNRNuit, characNRRNuit, characRNuit, characRARNuit, characARNuit, characNRRARNuit];
-         }
-         */
-
+        //switching because the returned data is f*cked up
+        // as in, it switches pie1 and pie2 data for no reason
+        if((this.props.formData[1].nbTheraputicBoxes === "Two therapeutic boxes (AM and PM)"))
+        {
+            secondPieData = firstPieData;
+            firstPieData = [this.props.data.characNRAM, this.props.data.characNRRAM, this.props.data.characRAM, this.props.data.characRARAM, this.props.data.characARAM, this.props.data.characNRRARAM]
+        }
 
         return(
             <View>
-                <Text>
-                    Pie 1
-                </Text>
-                <TouchableHighlight
-                    onPress={()=>{
-                        console.log("This first pie has been pressed");
-                        this.handlePieClick(!this.state.modalVisible,firstPieData);
-                    }}>
-                    <View style={this.props.style} pointerEvents="none">
-                        <VictoryPie
-                            radius={100}
-                            data={this.generateDataObjects(firstPieData)}
-                            colorScale={['#1b3e70', '#62c9e4', '#c2c822', '#f8c82c', '#ed5f6d','#f6922d']}
-                            animate={{duration: 500}}
-                            innerRadius={50}
-                        />
+                    <View style={styles.pieTitleStyle}>
+                        <Text style={{color:"#FFF", fontSize:20}}>
+                            First Pie Graph
+                        </Text>
                     </View>
-                </TouchableHighlight>
-
-                {//TODO
-                    (this.props.formData[2].nbTheraputicBoxes === "Two therapeutic boxes (AM and PM)")
-                    ?
                     <TouchableHighlight
                         onPress={()=>{
                             console.log("This first pie has been pressed");
@@ -136,28 +113,56 @@ class ResultTest extends PureComponent{
                             />
                         </View>
                     </TouchableHighlight>
+                {//TODO
+                    (this.props.formData[1].nbTheraputicBoxes === "Two therapeutic boxes (AM and PM)")
+                    ?
+                        <View>
+                            <View style={styles.pieTitleStyle}>
+                                <Text style={{color:"#FFF", fontSize:20}}>
+                                    Second Pie Graph
+                                </Text>
+                            </View>
+                            <TouchableHighlight
+                                onPress={()=>{
+                                    console.log("This first pie has been pressed");
+                                    this.handlePieClick(!this.state.modalVisible,secondPieData);
+                                }}>
+                                <View style={this.props.style} pointerEvents="none">
+                                    <VictoryPie
+                                        radius={100}
+                                        data={this.generateDataObjects(secondPieData)}
+                                        colorScale={['#1b3e70', '#62c9e4', '#c2c822', '#f8c82c', '#ed5f6d','#f6922d']}
+                                        animate={{duration: 500}}
+                                        innerRadius={50}
+                                    />
+                                </View>
+                            </TouchableHighlight>
+                        </View>
                     :<View/>
                 }
-                <Text>
-                    Pie Evening
-                </Text>
-                <TouchableHighlight
-                    onPress={()=>{
-                        console.log("This evening pie has been pressed");
-                        this.handlePieClick(!this.state.modalVisible,secondPieData);
-                    }}
-                >
-                    <View style={[this.props.style]} pointerEvents="none">
-                        <VictoryPie
-                            radius={100}
-                            data={this.generateDataObjects(secondPieData)}
-                            colorScale={['#1b3e70', '#62c9e4', '#c2c822', '#f8c82c', '#ed5f6d','#f6922d']}
-                            labels={this.handleLabels(secondPieData)}
-                            animate={{duration: 500}}
-                            innerRadius={50}
-                        />
+
+                    <View style={styles.pieTitleStyle}>
+                        <Text style={{color:"#FFF", fontSize:20}}>
+                            Evening Pie Graph
+                        </Text>
                     </View>
-                </TouchableHighlight>
+                    <TouchableHighlight
+                        onPress={()=>{
+                            console.log("This evening pie has been pressed");
+                            this.handlePieClick(!this.state.modalVisible,EveningPieData);
+                        }}
+                    >
+                        <View style={[this.props.style]} pointerEvents="none">
+                            <VictoryPie
+                                radius={100}
+                                data={this.generateDataObjects(EveningPieData)}
+                                colorScale={['#1b3e70', '#62c9e4', '#c2c822', '#f8c82c', '#ed5f6d','#f6922d']}
+                                labels={this.handleLabels(EveningPieData)}
+                                animate={{duration: 500}}
+                                innerRadius={50}
+                            />
+                        </View>
+                    </TouchableHighlight>
                 <View>
                     <Modal
                         animationType="fade"
@@ -200,30 +205,48 @@ class ResultTest extends PureComponent{
                                     <View>
                                         <View style={[{backgroundColor:'#1b3e70'},styles.modalColors]}>
                                             <Text style={styles.ColorTextStyle}>
+                                                Non Responder :
+                                            </Text>
+                                            <Text style={styles.ColorTextStyle}>
                                                 {this.state.modalPieData?this.state.modalPieData[0]:"0"}
-                                                </Text>
+                                            </Text>
                                         </View>
                                         <View style={[{backgroundColor:'#62c9e4'},styles.modalColors]}>
+                                            <Text style={styles.ColorTextStyle}>
+                                                Non Responder / Responder :
+                                            </Text>
                                             <Text style={styles.ColorTextStyle}>
                                                 {this.state.modalPieData?this.state.modalPieData[1]:"1"}
                                                 </Text>
                                         </View>
                                         <View style={[{backgroundColor:'#c2c822'},styles.modalColors]}>
                                             <Text style={styles.ColorTextStyle}>
+                                                Responder :
+                                            </Text>
+                                            <Text style={styles.ColorTextStyle}>
                                                 {this.state.modalPieData?this.state.modalPieData[2]:"2"}
                                                 </Text>
                                         </View>
                                         <View style={[{backgroundColor: '#f8c82c',},styles.modalColors]}>
+                                            <Text style={styles.ColorTextStyle}>
+                                                Responder / Adverse Responder :
+                                            </Text>
                                             <Text style={styles.ColorTextStyle}>
                                                 {this.state.modalPieData?this.state.modalPieData[3]:"3"}
                                                 </Text>
                                         </View>
                                         <View style={[{backgroundColor:'#ed5f6d'},styles.modalColors]}>
                                             <Text style={styles.ColorTextStyle}>
+                                                Adverse Responder :
+                                            </Text>
+                                            <Text style={styles.ColorTextStyle}>
                                                 {this.state.modalPieData?this.state.modalPieData[4]:"4"}
                                                 </Text>
                                         </View>
                                         <View style={[{backgroundColor:'#f6922d'},styles.modalColors]}>
+                                            <Text style={[styles.ColorTextStyle,{paddingBottom:0}]}>
+                                                Non Responder / Responder / Adverse Responder :
+                                            </Text>
                                             <Text style={styles.ColorTextStyle}>
                                                 {this.state.modalPieData?this.state.modalPieData[5]:"5"}
                                                 </Text>
@@ -260,9 +283,15 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
     },
-
+    pieTitleStyle:{
+        alignItems:'center',
+        backgroundColor:"#4169e1",
+        height:(Dimensions.get('window').height)*0.05,
+        justifyContent: "center"
+    },
     ColorTextStyle: {
         color: "#FFF",
+        paddingBottom: 10,
     }
 });
 
