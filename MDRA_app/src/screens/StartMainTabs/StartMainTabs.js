@@ -26,9 +26,7 @@ const startTabs = () => {
                         ],
                     },
                     topBar: {
-                        background: {
-                            color: 'red'
-                        }
+                        buttonColor: "blue"
                     }
                 },
                 {
@@ -44,7 +42,11 @@ const startTabs = () => {
                                 id: "sideDrawerToggle"
                             }
                         ],
+                    },
+                    topBar: {
+                        buttonColor: 'blue'
                     }
+
                 },
             ],
             tabsStyle:{

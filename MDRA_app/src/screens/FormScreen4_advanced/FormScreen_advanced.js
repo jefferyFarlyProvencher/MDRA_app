@@ -1,6 +1,6 @@
 //system imports
 import React, {PureComponent} from 'react';
-import {StyleSheet, View,ScrollView ,Alert, Dimensions, Text} from 'react-native';
+import {StyleSheet, View,ScrollView ,Alert, Dimensions, Text, KeyboardAvoidingView} from 'react-native';
 import {connect} from 'react-redux';
 import { Button } from 'react-native-elements';
 import { Formik } from 'formik';
@@ -9,10 +9,11 @@ import * as Yup from 'yup';
 //component imports
 import Input from "../../components/Input/Input";
 import DropDownListV2 from "../../components/dropDownList/DropDownListV2";
-import {addData} from "../../store/actions/addData";
-import {changePosition} from "../../store/actions";
+import {changePosition, addData} from "../../store/actions";
 import TitleComponent from "../../components/TitleComponent/TitleComponent";
 import LinedLabel from "../../components/LinedLabel/LinedLabel";
+import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
+import FormBackButton from "../../components/FormBackButton/FormBackButton";
 
 class FormScreenAdvanced extends PureComponent{
     state = {
@@ -21,9 +22,14 @@ class FormScreenAdvanced extends PureComponent{
         currentPosition: 3,
     };
 
+    _handleGoToPreviousStep = () => {
+        this.props.onChangePosition(this.state.currentPosition-1);
+        this.props.setPage(this.state.currentPosition-1);
+    };
+
     _handleSubmit =(async (values, bag) => {
         try {
-            console.log("sending data!\n");
+            console.log("sending data!\n and values is: "+ JSON.stringify(values));
             this.props.onAddData(values,this.state.currentPosition);
             this.props.onChangePosition(4)
 
@@ -34,12 +40,16 @@ class FormScreenAdvanced extends PureComponent{
     });
 
     render() {
+        console.log("Fuck this shit");
         return(
-            <View style={styles.container}>
-                <ScrollView>
+                <KeyboardAwareScrollView>
+                    <View style={styles.container}>
                         <View>
                             <TitleComponent text={"Advanced Parameters"}/>
                         </View>
+                        <FormBackButton
+                            onPress={this._handleGoToPreviousStep}
+                        />
                         <Formik
                             initialValues={(this.props.data)
                                 ?{
@@ -97,97 +107,135 @@ class FormScreenAdvanced extends PureComponent{
                                          isSubmitting
                                      }) => (
                                 <View>
-                                    <LinedLabel
-                                        label={"Number of Simulations"}
-                                    />
-                                    <View style={styles.inputContainer}>
-                                        <Input
-                                            autoCapitalize="none"
-                                            value={values.numberOfSimulations}
-                                            onChange={setFieldValue}
-                                            onTouch={setFieldTouched}
-                                            name="numberOfSimulations"
-                                            error={errors.numberOfSimulations}
-                                            keyboardType="numeric"
-                                        />
+                                    <View>
+                                        <View>
+                                            <LinedLabel
+                                                label={"Number of Simulations"}
+                                            />
+                                        </View>
+                                        <View style={[styles.inputContainer, {width:"100%"}]}>
+                                            <Input
+                                                autoCapitalize="none"
+                                                value={values.numberOfSimulations}
+                                                onChange={setFieldValue}
+                                                onTouch={setFieldTouched}
+                                                name="numberOfSimulations"
+                                                error={errors.numberOfSimulations}
+                                                keyboardType="numeric"
+                                                style={{width:"80%"}}
+                                            />
+                                        </View>
+                                    </View>
+                                    {this.props.state.main.Page1Data?
+                                        (this.props.state.main.Page1Data.nbTherapeuticBoxes === "Two therapeutic boxes (AM and PM)")
+                                            ?<View>
+                                                <View>
+                                                    <LinedLabel
+                                                        label={"Half Day (AM)"}
+                                                    />
+                                                </View>
+                                                <View style={styles.twoPerRowContainer}>
+                                                    <View style={styles.inputContainer}>
+                                                        <Input
+                                                            label="Cmin"
+                                                            value={values.cMinTherapeuticHalfDayAM}
+                                                            onChange={setFieldValue}
+                                                            onTouch={setFieldTouched}
+                                                            name="cMinTherapeuticHalfDayAM"
+                                                            error={errors.cMinTherapeuticHalfDayAM}
+                                                            keyboardType="numeric"
+                                                        />
+                                                    </View>
+                                                    <View style={styles.inputContainer}>
+                                                        <Input
+                                                            label="Cmax"
+                                                            value={values.cMaxTherapeuticHalfDayAM}
+                                                            onChange={setFieldValue}
+                                                            onTouch={setFieldTouched}
+                                                            name="cMaxTherapeuticHalfDayAM"
+                                                            error={errors.cMaxTherapeuticHalfDayAM}
+                                                            keyboardType="numeric"
+                                                        />
+                                                    </View>
+                                                </View>
+                                             </View>
+                                            :<View/>
+                                        :<View/>
+                                    }
+                                    <View>
+                                        <View>
+                                            <LinedLabel
+                                                label={
+
+                                                        this.props.state.main.Page1Data?
+                                                        this.props.state.main.Page1Data.nbTherapeuticBoxes === "Two therapeutic boxes (AM and PM)"
+                                                        ?"Half Day (PM)": "Day": "Day"
+                                                }
+                                            />
+                                        </View>
+                                        <View style={styles.twoPerRowContainer}>
+                                            <View style={styles.inputContainer}>
+                                                <Input
+                                                    label="Cmin"
+                                                    value={values.cMinTherapeuticDayPM}
+                                                    onChange={setFieldValue}
+                                                    onTouch={setFieldTouched}
+                                                    name="cMinTherapeuticDayPM"
+                                                    error={errors.cMinTherapeuticDayPM}
+                                                    keyboardType="numeric"
+                                                />
+                                            </View>
+                                            <View style={styles.inputContainer}>
+                                                <Input
+                                                    label="Cmax"
+                                                    value={values.cMaxTherapeuticDayPM}
+                                                    onChange={setFieldValue}
+                                                    onTouch={setFieldTouched}
+                                                    name="cMaxTherapeuticDayPM"
+                                                    error={errors.cMaxTherapeuticDayPM}
+                                                    keyboardType="numeric"
+                                                />
+                                            </View>
+                                         </View>
                                     </View>
                                     <View>
-                                        <LinedLabel
-                                            label={"Half Day (AM)"}
-                                        />
-                                        <View style={styles.inputContainer}>
-                                            <Input
-                                                label="Cmin"
-                                                value={values.cMinTherapeuticHalfDayAM}
-                                                onChange={setFieldValue}
-                                                onTouch={setFieldTouched}
-                                                name="cMinTherapeuticHalfDayAM"
-                                                error={errors.cMinTherapeuticHalfDayAM}
-                                                keyboardType="numeric"
-                                            />
-
-                                            <Input
-                                                label="Cmax"
-                                                value={values.cMaxTherapeuticHalfDayAM}
-                                                onChange={setFieldValue}
-                                                onTouch={setFieldTouched}
-                                                name="cMaxTherapeuticHalfDayAM"
-                                                error={errors.cMaxTherapeuticHalfDayAM}
-                                                keyboardType="numeric"
+                                        <View>
+                                            <LinedLabel
+                                                label={"Evening"}
                                             />
                                         </View>
-                                        <LinedLabel
-                                            label={"Half Day (PM) or Day"}
-                                        />
-                                        <View style={styles.inputContainer}>
-                                            <Input
-                                                label="Cmin"
-                                                value={values.cMinTherapeuticDayPM}
-                                                onChange={setFieldValue}
-                                                onTouch={setFieldTouched}
-                                                name="cMinTherapeuticDayPM"
-                                                error={errors.cMinTherapeuticDayPM}
-                                                keyboardType="numeric"
-                                            />
-
-                                            <Input
-                                                label="Cmax"
-                                                value={values.cMaxTherapeuticDayPM}
-                                                onChange={setFieldValue}
-                                                onTouch={setFieldTouched}
-                                                name="cMaxTherapeuticDayPM"
-                                                error={errors.cMaxTherapeuticDayPM}
-                                                keyboardType="numeric"
+                                        <View style={styles.twoPerRowContainer}>
+                                            <View style={styles.inputContainer}>
+                                                <Input
+                                                    label="Cmin"
+                                                    value={values.cMinTherapeuticEvening}
+                                                    onChange={setFieldValue}
+                                                    onTouch={setFieldTouched}
+                                                    name="cMinTherapeuticEvening"
+                                                    error={errors.cMinTherapeuticEvening}
+                                                    keyboardType="numeric"
+                                                />
+                                            </View>
+                                            <View style={styles.inputContainer}>
+                                                <Input
+                                                    label="Cmax"
+                                                    value={values.cMaxTherapeuticEvening}
+                                                    onChange={setFieldValue}
+                                                    onTouch={setFieldTouched}
+                                                    name="cMaxTherapeuticEvening"
+                                                    error={errors.cMaxTherapeuticEvening}
+                                                    keyboardType="numeric"
+                                                />
+                                            </View>
+                                        </View>
+                                    </View>
+                                    <View>
+                                        <View>
+                                            <LinedLabel
+                                                label={"Threshold"}
                                             />
                                         </View>
-                                        <LinedLabel
-                                            label={"Evening"}
-                                        />
-                                        <View style={styles.inputContainer}>
-                                            <Input
-                                                label="Cmin"
-                                                value={values.cMinTherapeuticEvening}
-                                                onChange={setFieldValue}
-                                                onTouch={setFieldTouched}
-                                                name="cMinTherapeuticEvening"
-                                                error={errors.cMinTherapeuticEvening}
-                                                keyboardType="numeric"
-                                            />
-
-                                            <Input
-                                                label="Cmax"
-                                                value={values.cMaxTherapeuticEvening}
-                                                onChange={setFieldValue}
-                                                onTouch={setFieldTouched}
-                                                name="cMaxTherapeuticEvening"
-                                                error={errors.cMaxTherapeuticEvening}
-                                                keyboardType="numeric"
-                                            />
-                                        </View>
-                                        <LinedLabel
-                                            label={"Threshold"}
-                                        />
-                                        <View style={styles.inputContainer}>
+                                        <View style={[styles.inputContainer, {width:"100%"}]}>
                                             <Input
                                                 value={values.threshold}
                                                 onChange={setFieldValue}
@@ -195,11 +243,14 @@ class FormScreenAdvanced extends PureComponent{
                                                 name="threshold"
                                                 error={errors.threshold}
                                                 keyboardType="numeric"
+                                                style={{width:"80%"}}
                                             />
                                         </View>
+                                    </View>
+                                    <View style={styles.buttonsContainer}>
                                         <Button
                                             buttonStyle={styles.button}
-                                            title="Send Form"
+                                            title="Calculate dosages"
                                             onPress={handleSubmit}
                                             loading={isSubmitting}
                                         />
@@ -207,32 +258,42 @@ class FormScreenAdvanced extends PureComponent{
                                 </View>
                             )}
                         />
-                </ScrollView>
-            </View>
-
+                    </View>
+                </KeyboardAwareScrollView>
         );
     }
 }
 
 const styles = StyleSheet.create({
     container: {
-        flex:1,
-        backgroundColor: "#fff",
-        alignItems: "center",
+        backgroundColor: "#FFF",
         justifyContent: "center",
+        width: "100%",
+        height: "100%"
     },
     button: {
-        marginTop: 20,
         width: "100%",
         justifyContent: "center",
-        alignItems: "center"
+        alignItems: "center",
+        backgroundColor:"#27408b"
     },
+
+    buttonsContainer: {
+        backgroundColor:"#27408b",
+        marginTop: 20,
+    },
+
     twoPerRowContainer: {
         flexDirection: "row",
         justifyContent: "space-between"
     },
+
     inputContainer:{
         width: '50%',
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: "transparent",
+        marginVertical: 20
     },
 
 
@@ -245,4 +306,10 @@ const mapDispatchToProps = dispatch => {
     };
 };
 
-export default connect(null,mapDispatchToProps)(FormScreenAdvanced);
+const mapStateToProps = (state) => {
+    return {
+        state
+    }
+};
+
+export default connect(mapStateToProps,mapDispatchToProps)(FormScreenAdvanced);

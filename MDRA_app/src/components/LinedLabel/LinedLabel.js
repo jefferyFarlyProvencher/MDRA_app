@@ -1,6 +1,8 @@
 import React, {PureComponent} from 'react';
 import {StyleSheet, View, Dimensions, Text} from 'react-native';
 
+import * as colors from "../../assets/colors"
+
 class LinedLabel extends PureComponent{
 
     //props that it takes:
@@ -70,7 +72,7 @@ const styles = StyleSheet.create({
         paddingTop: "5%",
     },
     lineStyle: {
-        backgroundColor: '#4169e1',
+        backgroundColor: colors.royalBlue1,
         height: 1,
         marginTop:'3%'
     },
@@ -79,9 +81,9 @@ const styles = StyleSheet.create({
         width: "50%",
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor:"#4169e1",
+        backgroundColor:colors.royalBlue1,
         borderWidth: 1,
-        borderColor: '#4169e1',
+        borderColor: colors.royalBlue1,
 
     }
 

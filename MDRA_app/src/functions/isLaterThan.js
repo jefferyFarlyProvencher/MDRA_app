@@ -13,7 +13,7 @@ let isLaterThan = (time1, time2) => {
     console.log("///isLaterThanFunction is starting////");
     console.log("Time1: "+time1);
     console.log("Time2: "+time2);
-    if ((typeof time1 === 'number' || time1.includes(':') ) && (typeof  time2 === 'number')|| time2.includes(':')){
+    if ((typeof time1 === 'number' || time1.includes(':') ) && ((typeof  time2 === 'number')|| time2.includes(':'))){
         //console.log("isLaterThan; if passed; this passed: " + time1+" "+time2 + "; result of include \":\" : "+ (time1.includes(':') && time2.includes(':')));
         let formatedTime1 = parseFloat(convertTimeToDecimal(time1));
         let formatedTime2 = parseFloat(convertTimeToDecimal(time2));

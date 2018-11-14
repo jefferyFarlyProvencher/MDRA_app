@@ -39,13 +39,16 @@ let findFormulaNumber = (pillName) => {
 };
 
 let handleMultiBoxes = (page1Data) => {
-    console.log("where at handleMultiBoxes");
+    console.log("we're at handleMultiBoxes");
+    console.log(JSON.stringify(page1Data));
     let elementToReturn = "";
-    if(page1Data.nbTheraputicBoxes === "One therapeutic box (from AM to PM)"){
+    if(page1Data.nbTherapeuticBoxes === "One therapeutic box (from AM to PM)"){
+        console.log("passed first if");
         elementToReturn += '&zc=-1&zd=-1&zzc=-1&zzd=-1';
     }
-    else if(page1Data.nbTheraputicBoxes === "Two therapeutic boxes (AM and PM)")
+    else if(page1Data.nbTherapeuticBoxes === "Two therapeutic boxes (AM and PM)")
     {
+        console.log("passed second if");
         elementToReturn += (
             '&zc=' + adjustTime(page1Data.tsDay) +
             '&zd=' + adjustTime(page1Data.teDay) +
@@ -53,7 +56,7 @@ let handleMultiBoxes = (page1Data) => {
             '&zzd=' + adjustTime(page1Data.tePM)
         );
     }
-    //console.log(elementToReturn);
+    console.log("handleMultiBoxes result: "+ elementToReturn);
     return elementToReturn
 };
 
@@ -127,33 +130,49 @@ let PrepareToSend = (data) => {
             weight6: "100",
             weight7: "100",
         };
-    let page3Data = data.Page3Data //? : continues bellow
-        ? data.Page3Data
-        : {
-            numberOfSimulations: '1000',
-            tsTimeHalfDayAM: '8',
-            teTimeHalfDayAM: '12',
-            tsTimeHalfDayPM: '12',
-            teTimeHalfDayPM: '16',
-            cMinTheraputicHalfDayAM: '6',
-            cMaxTheraputicHalfDayAM: '20',
-            cMinTheraputicDayPM: '6',
-            cMaxTheraputicDayPM: '20',
-            cMinTheraputicEvening: '0',
-            cMaxTheraputicEvening: '6',
-            threshold: '80'
-        };
+    let page3Data =
+        data.advanceTabAccessible
+            ? data.Page3Data //? : continues bellow
+                ? data.Page3Data
+                : {
+                    numberOfSimulations: '1000',
+                    tsTimeHalfDayAM: '8',
+                    teTimeHalfDayAM: '12',
+                    tsTimeHalfDayPM: '12',
+                    teTimeHalfDayPM: '16',
+                    cMinTherapeuticHalfDayAM: '6',
+                    cMaxTherapeuticHalfDayAM: '20',
+                    cMinTherapeuticDayPM: '6',
+                    cMaxTherapeuticDayPM: '20',
+                    cMinTherapeuticEvening: '0',
+                    cMaxTherapeuticEvening: '6',
+                    threshold: '80'}
+            : {
+                numberOfSimulations: '1000',
+                tsTimeHalfDayAM: '8',
+                teTimeHalfDayAM: '12',
+                tsTimeHalfDayPM: '12',
+                teTimeHalfDayPM: '16',
+                cMinTherapeuticHalfDayAM: '6',
+                cMaxTherapeuticHalfDayAM: '20',
+                cMinTherapeuticDayPM: '6',
+                cMaxTherapeuticDayPM: '20',
+                cMinTherapeuticEvening: '0',
+                cMaxTherapeuticEvening: '6',
+                threshold: '80'
+            };
 
     let dataToReturn = '-1';
 
     if (verifyData(page0Data, page1Data, page2Data, page3Data)){
-        let doesItHaveTwoBoxes = page1Data.nbTheraputicBoxes === "Two therapeutic boxes (AM and PM)";
+        let doesItHaveTwoBoxes = page1Data.nbTherapeuticBoxes === "Two therapeutic boxes (AM and PM)";
+        console.log("DOES IT HAVE TWO BOXES: "+ doesItHaveTwoBoxes);
         dataToReturn = (
             'nInd=' + page3Data.numberOfSimulations +
             '&Gender=' + (page0Data.gender==='Male'?'1': '0') +
             '&weight=' + verifyUnitConversion(page0Data.weight, page0Data.switchWeightFormat) +
-            '&a=' + page3Data.cMinTheraputicDayPM +
-            '&b=' + page3Data.cMaxTheraputicDayPM +
+            '&a=' + page3Data.cMinTherapeuticDayPM +
+            '&b=' + page3Data.cMaxTherapeuticDayPM +
             '&c=' + ((doesItHaveTwoBoxes)
                 ? adjustTime(page1Data.tsPM)
                 : adjustTime(page1Data.tsDay))
@@ -162,8 +181,8 @@ let PrepareToSend = (data) => {
                 ? adjustTime(page1Data.tePM)
                 : adjustTime(page1Data.teDay))
                 +
-            '&e=' + page3Data.cMinTheraputicEvening  +
-            '&f=' + page3Data.cMaxTheraputicEvening  +
+            '&e=' + page3Data.cMinTherapeuticEvening  +
+            '&f=' + page3Data.cMaxTherapeuticEvening  +
             '&g=' + adjustTime(page1Data.tsEvening)  +
             '&h=' + adjustTime(page1Data.teEvening) +
             '&WTI1=' + page2Data.weight1 +
@@ -174,8 +193,8 @@ let PrepareToSend = (data) => {
             '&WTI6=' + page2Data.weight6 +
             '&WTI7=' + page2Data.weight7 +
             '&palier=' + page3Data.threshold +
-            '&za=' + page3Data.cMinTheraputicHalfDayAM +
-            '&zb=' + page3Data.cMaxTheraputicHalfDayAM +
+            '&za=' + page3Data.cMinTherapeuticHalfDayAM +
+            '&zb=' + page3Data.cMaxTherapeuticHalfDayAM +
             handleMultiBoxes(page1Data)+
             '&heureducoucher=' + adjustTime(page1Data.bed) +
             '&startLunchTime=' + adjustTime(page1Data.lunch) +

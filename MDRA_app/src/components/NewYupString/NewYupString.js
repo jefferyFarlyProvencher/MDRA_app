@@ -50,13 +50,13 @@ class NewYupString extends yup.string {
             test: function(value) {
                 if(value) {
                     let valueToCompare = this.resolve(ref);
-                    console.log("later ref: "+ ref);
-                    console.log("is it a number? "+ (typeof ref ==='number'&& (ref > 24 && ref < 0)) );
-                    console.log("RESOLVED;  "+ valueToCompare);
-                    console.log("laterThan||| PRINTING VALUETOCOMPARE: "+ valueToCompare +" <-if empty supposed to be here");
+                    //console.log("later ref: "+ ref);
+                    //console.log("is it a number? "+ (typeof ref ==='number'&& (ref > 24 && ref < 0)) );
+                    //console.log("RESOLVED;  "+ valueToCompare);
+                    //console.log("laterThan||| PRINTING VALUETOCOMPARE: "+ valueToCompare +" <-if empty supposed to be here");
                     let result = isLaterThanFunction(""+value, ""+valueToCompare);
-                    console.log("ISLATERTHAN FINISHED");
-                    console.log("isLaterThan result: "+ result);
+                    //console.log("ISLATERTHAN FINISHED");
+                    //console.log("isLaterThan result: "+ result);
                     return result
                 }
                 return true
@@ -75,13 +75,13 @@ class NewYupString extends yup.string {
             test: function(value) {
                 if(value) {
                     let valueToCompare = this.resolve(ref);
-                    console.log("earlier ref: "+ ref);
-                    console.log("is it a number? "+ (typeof ref ==='number'&& (ref > 24 && ref < 0)));
-                    console.log("RESOLVED;  "+ valueToCompare);
-                    console.log("earlier than ||| PRINTING VALUETOCOMPARE: "+ valueToCompare +" <-if empty supposed to be here");
+                    //console.log("earlier ref: "+ ref);
+                    //console.log("is it a number? "+ (typeof ref ==='number'&& (ref > 24 && ref < 0)));
+                    //console.log("RESOLVED;  "+ valueToCompare);
+                    //console.log("earlier than ||| PRINTING VALUETOCOMPARE: "+ valueToCompare +" <-if empty supposed to be here");
                     let result = isLaterThanFunction(""+valueToCompare, ""+value);
-                    console.log("ISEARLIERTHAN FINISHED");
-                    console.log("isEarlierThan result: "+ result);
+                    //console.log("ISEARLIERTHAN FINISHED");
+                    //console.log("isEarlierThan result: "+ result);
                     return result;
                 }
                 return true

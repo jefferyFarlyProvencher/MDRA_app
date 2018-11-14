@@ -1,7 +1,8 @@
 import React, {PureComponent} from 'react';
-import {View, Button, StyleSheet, Dimensions, Text, Animated, TouchableWithoutFeedback} from 'react-native';
+import {View, Button, StyleSheet, Dimensions, Text, Animated, TouchableWithoutFeedback, Platform} from 'react-native';
 
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
+import CustomMarker from '../../components/CustomMarker/CustomMarker';
 
 class CustomMultiSlider extends PureComponent{
 
@@ -10,8 +11,20 @@ class CustomMultiSlider extends PureComponent{
         showScreen: false,
         selectedDot: 1,
         screenOpacityAnimation: new Animated.Value(0.3),
-        secondScreenVisible: !!this.props.values[1]
+        secondScreenVisible: !!this.props.values[1],
+        valuesArray: this.props.values
     };
+
+    componentWillReceiveProps(nextProps) {
+        this.setState(
+            (oldState) =>{
+                return {
+                    ...oldState,
+                    valuesArray: nextProps.values
+                }
+            }
+        );
+    }
 
     _handlesOnValueChangeStart = () => {
         Animated.timing(this.state.screenOpacityAnimation,{
@@ -31,12 +44,13 @@ class CustomMultiSlider extends PureComponent{
 
     render(){
         //console.log(this.generateDataSingle(this.props.data.percentile10));
-        let valuesArray = this.props.values;
+        let isAndroid = Platform.OS === 'android';
         return(
             <View style={[this.props.style, styles.containerStyle]}>
                 <MultiSlider
                     containerStyle={{padding:0, height:40,marginBottom:0}}
                     trackStyle={{padding:0,marginBottom:0}}
+                    selectedStyle={{backgroundColor:"blue"}}
                     sliderLength={this.props.sliderLength}
                     min={this.props.min}
                     max={this.props.max}
@@ -45,14 +59,22 @@ class CustomMultiSlider extends PureComponent{
                     onValuesChangeStart={this._handlesOnValueChangeStart}
                     onValuesChange={
                         (values) => {
-                            valuesArray = values;
+                            this.setState(
+                                (oldState)=>{
+                                    return {
+                                        ...oldState,
+                                        valuesArray: values,
+                                    }
+
+                                }
+                            )
                         }
                     }
                     onValuesChangeFinish={
                         (values) => {
                             console.log(values);
                             this._handlesOnValueChangeFinish();
-                            this.props.onValuesChange(valuesArray);
+                            this.props.onValuesChange(this.state.valuesArray);
 
                         }
                     }
@@ -65,6 +87,24 @@ class CustomMultiSlider extends PureComponent{
                         slipDisplacement: 40,
                     }}
 
+                    isMarkersSeparated={isAndroid}
+
+                    customMarkerLeft={(e) => {
+                        if(isAndroid)
+                            return (<CustomMarker
+                                currentValue={e.currentValue}/>);
+                        else
+                            return null;
+                    }}
+
+                    customMarkerRight={(e) => {
+                        if(isAndroid)
+                            return (<CustomMarker
+                                currentValue={e.currentValue}/>);
+                        else
+                            return null;
+
+                    }}
                 />
                 <View style={styles.rulerStyle}>
                     <Text>{this.props.min}</Text>
@@ -93,13 +133,13 @@ class CustomMultiSlider extends PureComponent{
                                 >
                                     <View style={[
                                         styles.rulerPercentContainer,
-                                        valuesArray[1]?{width:"50%",borderRightWidth:1, alignItems:"center"}:{width:"100%", alignItems:"center"},
+                                        this.state.valuesArray[1]?{width:"50%",borderRightWidth:1, alignItems:"center"}:{width:"100%", alignItems:"center"},
                                         ]}>
-                                        <Text>{valuesArray[0]?valuesArray[0]:0}</Text>
+                                        <Text>{this.state.valuesArray[0]?parseFloat(this.state.valuesArray[0]).toPrecision(3):0}</Text>
                                     </View>
                                     {this.state.secondScreenVisible
                                         ? <View style={[styles.rulerPercentContainer,{width:"50%", alignItems:"center"}]}>
-                                            <Text>{valuesArray[1]?valuesArray[1]:0}</Text>
+                                            <Text>{this.state.valuesArray[1]?parseFloat(this.state.valuesArray[1]).toPrecision(3):0}</Text>
                                         </View>
                                         : <View/>
                                     }

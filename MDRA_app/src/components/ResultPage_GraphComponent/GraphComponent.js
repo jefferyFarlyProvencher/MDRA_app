@@ -1,5 +1,5 @@
 import React, {PureComponent} from 'react';
-import {View, StyleSheet, Dimensions, Platform, Animated,Text} from 'react-native';
+import {View, StyleSheet, Dimensions, Platform, Animated,Text, TouchableHighlight} from 'react-native';
 import 'react-native-svg';
 
 import {VictoryArea, VictoryChart, VictoryLine, VictoryLabel} from "victory-native";
@@ -72,7 +72,8 @@ class GraphComponent extends PureComponent{
         )
     };
 
-    therapeuticBoxFormatter = (score) => {
+    scoreColorIdentification = (score) => {
+        //console.log("score: "+ score);
         if (parseFloat(score) >= 80) {
             return('#C2C822');
         } else if (parseFloat(score) >= 65){
@@ -184,12 +185,12 @@ class GraphComponent extends PureComponent{
                 teTimeHalfDayAM: '12',
                 tsTimeHalfDayPM: '12',
                 teTimeHalfDayPM: '16',
-                cMinTheraputicHalfDayAM: '6',
-                cMaxTheraputicHalfDayAM: '20',
-                cMinTheraputicDayPM: '6',
-                cMaxTheraputicDayPM: '20',
-                cMinTheraputicEvening: '0',
-                cMaxTheraputicEvening: '6',
+                cMinTherapeuticHalfDayAM: '6',
+                cMaxTherapeuticHalfDayAM: '20',
+                cMinTherapeuticDayPM: '6',
+                cMaxTherapeuticDayPM: '20',
+                cMinTherapeuticEvening: '0',
+                cMaxTherapeuticEvening: '6',
                 threshold: '80'
             };
         //PREPERATION
@@ -206,43 +207,48 @@ class GraphComponent extends PureComponent{
         let secondBoxHeight = null;
         //eveningBox
         let eveningBoxX = parseFloat(this.props.formData[1].tsEvening);
-        let eveningBoxY = parseFloat(advancedPageData.cMinTheraputicEvening);
+        let eveningBoxY = parseFloat(advancedPageData.cMinTherapeuticEvening);
         let eveningBoxWidth = parseFloat(this.props.formData[1].teEvening)-parseFloat(this.props.formData[1].tsEvening);
-        let eveningBoxHeight = parseFloat(advancedPageData.cMaxTheraputicEvening)-parseFloat(advancedPageData.cMinTheraputicEvening);
+        let eveningBoxHeight = parseFloat(advancedPageData.cMaxTherapeuticEvening)-parseFloat(advancedPageData.cMinTherapeuticEvening);
 
-        if(this.props.formData[1].nbTheraputicBoxes === "Two therapeutic boxes (AM and PM)") {
-            firstBoxY = parseFloat(advancedPageData.cMinTheraputicHalfDayAM);
-            firstBoxHeight = parseFloat(advancedPageData.cMaxTheraputicHalfDayAM)-parseFloat(advancedPageData.cMinTheraputicHalfDayAM);
-            secondBoxY = parseFloat(advancedPageData.cMinTheraputicDayPM);
-            secondBoxHeight = parseFloat(advancedPageData.cMaxTheraputicDayPM)-parseFloat(advancedPageData.cMinTheraputicDayPM);
+        if(this.props.formData[1].nbTherapeuticBoxes === "Two therapeutic boxes (AM and PM)") {
+            //console.log("Passed if in graphComponent");
+            firstBoxY = parseFloat(advancedPageData.cMinTherapeuticHalfDayAM);
+            firstBoxHeight = parseFloat(advancedPageData.cMaxTherapeuticHalfDayAM)-parseFloat(advancedPageData.cMinTherapeuticHalfDayAM);
+            secondBoxY = parseFloat(advancedPageData.cMinTherapeuticDayPM);
+            secondBoxHeight = parseFloat(advancedPageData.cMaxTherapeuticDayPM)-parseFloat(advancedPageData.cMinTherapeuticDayPM);
         }
         else{
-            firstBoxY = parseFloat(advancedPageData.cMinTheraputicDayPM);
-            firstBoxHeight = parseFloat(advancedPageData.cMaxTheraputicDayPM)-parseFloat(advancedPageData.cMinTheraputicDayPM);
+            //console.log("are in else in graphComponent");
+            firstBoxY = parseFloat(advancedPageData.cMinTherapeuticDayPM);
+            firstBoxHeight = parseFloat(advancedPageData.cMaxTherapeuticDayPM)-parseFloat(advancedPageData.cMinTherapeuticDayPM);
         }
 
         //percentages
         let firstBoxPercentage = null;
         let secondBoxPercentage = null;
         //substr removes the %
-        let eveningBoxPercentage = parseFloat(this.props.data.TIEffE.substr(0,this.props.data.TIEffE.length-1));
-        if(this.props.formData[1].nbTheraputicBoxes === "Two therapeutic boxes (AM and PM)")
+        let eveningBoxPercentage = parseFloat(this.props.data.TIEffE);
+        if(this.props.formData[1].nbTherapeuticBoxes === "Two therapeutic boxes (AM and PM)")
         {
-            firstBoxPercentage = parseFloat(this.props.data.TIEffD1s.substr(0,this.props.data.TIEffD1s.length-1));
-            secondBoxPercentage = parseFloat(this.props.data.TIEffD2.substr(0,this.props.data.TIEffD2.length-1));
+            firstBoxPercentage = parseFloat(this.props.data.TIEffD1s);
+            secondBoxPercentage = parseFloat(this.props.data.TIEffD2);
         }
         else{
-            firstBoxPercentage = parseFloat(this.props.data.TIEffD2.substr(0,this.props.data.TIEffD2.length-1));
+            firstBoxPercentage = parseFloat(this.props.data.TIEffD2);
         }
 
+        //these are the texts versions
         let displayText = ["Total Score: "+ this.props.data.TotalScore,"Roller Coaster Effect: "+this.props.data.rce];
+        //these are only the values
+        let totalScoreAndRce = [this.props.data.TotalScore, this.props.data.rce];
         ///ACTUAL RENDERING STARTS HERE
         return(
             <View style={[this.props.style]} pointerEvents="none">
                 <VictoryChart
                     animate={Platform.OS==="ios"?{ duration: this.state.animationTime}:null}
                     domain={{x:[0,30],y: [0,25]}}
-                    la
+                    label ={{x:"A",y:"B"}}
                 >
 
                     <VictoryArea
@@ -267,54 +273,62 @@ class GraphComponent extends PureComponent{
                     />
 
                     <VictoryLine
-                        style={{data:{stroke:this.therapeuticBoxFormatter(firstBoxPercentage)}}}
+                        style={{data:{stroke:this.scoreColorIdentification(firstBoxPercentage)}}}
                         data={this.generateSquareTopLeft(firstBoxX,firstBoxY,firstBoxHeight,firstBoxWidth)}
                     />
                     <VictoryLine
-                        style={{data:{stroke:this.therapeuticBoxFormatter(firstBoxPercentage)}}}
+                        style={{data:{stroke:this.scoreColorIdentification(firstBoxPercentage)}}}
                         data={this.generateSquareBottomRight(firstBoxX,firstBoxY,firstBoxHeight,firstBoxWidth)}
                     />
 
                     <VictoryLine
-                        style={{data:{stroke:(secondBoxPercentage !== null)? this. therapeuticBoxFormatter(secondBoxPercentage):"transparent"}}}
+                        style={{data:{stroke:(secondBoxPercentage !== null)? this. scoreColorIdentification(secondBoxPercentage):"transparent"}}}
                         data={this.generateSquareTopLeft(secondBoxX,secondBoxY,secondBoxHeight,secondBoxWidth)}
                     />
                     <VictoryLine
-                        style={{data:{stroke:(secondBoxPercentage !== null)? this. therapeuticBoxFormatter(secondBoxPercentage):"transparent"}}}
+                        style={{data:{stroke:(secondBoxPercentage !== null)? this. scoreColorIdentification(secondBoxPercentage):"transparent"}}}
                         data={this.generateSquareBottomRight(secondBoxX,secondBoxY,secondBoxHeight,secondBoxWidth)} //(x,y,height,width)
                     />
 
                     <VictoryLine
-                        style={{data:{stroke:this.therapeuticBoxFormatter(eveningBoxPercentage)}}}
+                        style={{data:{stroke:this.scoreColorIdentification(eveningBoxPercentage)}}}
                         data={this.generateSquareTopLeft(eveningBoxX,eveningBoxY,eveningBoxHeight,eveningBoxWidth)}
                     />
                     <VictoryLine
-                        style={{data:{stroke:this.therapeuticBoxFormatter(eveningBoxPercentage)}}}
+                        style={{data:{stroke:this.scoreColorIdentification(eveningBoxPercentage)}}}
                         data={this.generateSquareBottomRight(eveningBoxX,eveningBoxY,eveningBoxHeight,eveningBoxWidth)}
                     />
-                    <VictoryLabel text={firstBoxPercentage+"%"} datum={{x:firstBoxX,y:firstBoxY+firstBoxHeight+1}}/>
+                    <VictoryLabel text={(firstBoxPercentage !== null)?firstBoxPercentage+"%": "There was an error because this is null"} datum={{x:firstBoxX,y:firstBoxY+firstBoxHeight+1}}/>
                     <VictoryLabel text={(secondBoxPercentage !== null)?secondBoxPercentage+"%":""} datum={{x:secondBoxX,y:secondBoxY+secondBoxHeight+1
                     }}/>
                     <VictoryLabel text={eveningBoxPercentage+"%"} datum={{x:eveningBoxX,y:eveningBoxY+eveningBoxHeight+1}}/>
+                    <VictoryLabel text={"Time (h)"} datum={{x:29,y:1}}/>
+                    <VictoryLabel text={"Concentration (ng/mL)"} datum={{x:0,y:26}}/>
                </VictoryChart>
-                <Animated.View
-                    style={[
-                        {
-                            opacity: this.state.fadeAnim.interpolate({
-                                    inputRange: [1,1.1],
-                                    outputRange: [1,1.1]
-                            })
-
-                        },
-                        {
-                            alignItems:'center',
-                        }
-                    ]}
+                <TouchableHighlight
+                    onPress={()=>{console.log("this was pressed right now"); alert("RollerCoaster Effect: " + displayText[1] +"\n Total Score: " + displayText[0]+"%")}}
                 >
-                    <View>
-                        <Text style={{color:this.state.textColor[this.state.currentTextTurn]}}>{displayText[this.state.currentTextTurn]}</Text>
+                    <View pointerEvents='none'>
+                        <Animated.View
+                            style={[
+                                {
+                                    opacity: this.state.fadeAnim.interpolate({
+                                            inputRange: [1,1.1],
+                                            outputRange: [1,1.1]
+                                    })
+
+                                },
+                                {
+                                    alignItems:'center',
+                                }
+                            ]}
+                        >
+                            <View>
+                                <Text style={{color:this.scoreColorIdentification(parseFloat(totalScoreAndRce[this.state.currentTextTurn]))}}>{displayText[this.state.currentTextTurn] + "%"}</Text>
+                            </View>
+                        </Animated.View>
                     </View>
-                </Animated.View>
+                </TouchableHighlight>
             </View>
         )
     }

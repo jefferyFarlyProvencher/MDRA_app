@@ -10,7 +10,8 @@ import {
     Button,
     BackHandler,
     Alert,
-    StatusBar
+    StatusBar,
+    Platform
 } from 'react-native';
 import {connect} from 'react-redux';
 
@@ -56,7 +57,7 @@ class FormScreen extends Component{
             navBarBackgroundColor: '#262626',
             navBarTextColor: '#ffffff',
             statusBarTextColorSchemeSingleScreen: 'light',
-
+            navBarButtonColor: Platform.OS === 'android'?'#3057e1': null
         });
     };
 
@@ -86,16 +87,21 @@ class FormScreen extends Component{
 
 
     indicatorPressedHandler = (pageNumber) => {
+        console.log("HEY HEY HEY!");
         //if the page selected is different from current page
         if(pageNumber !== this.props.state.main.position) {
+            //verifies if previous step has been completed
             let isDataNotNull = 0;
             if (pageNumber === 0) {
                 isDataNotNull = this.props.state.main.Page0Data
             }
             if (pageNumber === 1) {
-                isDataNotNull = this.props.state.main.Page1Data;
+                isDataNotNull = this.props.state.main.Page0Data;
             }
             if (pageNumber === 2) {
+                isDataNotNull = this.props.state.main.Page1Data
+            }
+            if (pageNumber === 3) {
                 isDataNotNull = this.props.state.main.Page2Data
             }
             if (isDataNotNull) {
@@ -183,7 +189,10 @@ class FormScreen extends Component{
                                 <View>
                                     <FormScreenAdvanced data={this.props.state.main.Page3Data} setPage={this.handleSetPage}/>
                                 </View>
-                                :null
+                                :<View>
+                                    <Text>//empty page in case of errors when switch from results
+                                    </Text>
+                                </View>
                             }
                         </IndicatorViewPager>
                         <View style={styles.indicatorContainer}>
@@ -206,7 +215,10 @@ class FormScreen extends Component{
                                             currentPosition={this.props.state.main.position-3}
                                             labels={["Advanced"]}
                                             hidden={true}
-                                            onPress={()=>{console.log("Dang")}}
+                                            onPress={()=>{
+                                                console.log("Dang");
+                                                this.indicatorPressedHandler(3)
+                                            }}
                                         />
                                     </View>
                                     :null
@@ -215,7 +227,15 @@ class FormScreen extends Component{
                         </View>
                     </View>
                     :<View style={{flex:1}}>
+                        {this.props.state.main.position === 4?
                             <SendFormScreen/>
+                            :
+                            <View>
+                                <Text>//empty page in case of errors when switch from results
+                                </Text>
+                            </View>
+                        }
+
                      </View>
                 }
 

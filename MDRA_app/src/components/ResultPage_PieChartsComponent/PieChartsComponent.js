@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 
 import {VictoryPie} from 'victory-native';
+import TitleComponent from "../TitleComponent/TitleComponent";
 
 class ResultTest extends PureComponent{
     state = {
@@ -48,7 +49,7 @@ class ResultTest extends PureComponent{
               labels.push("");
             }
         }
-        console.log(JSON.stringify(labels));
+        //console.log(JSON.stringify(labels));
         return labels
     };
 
@@ -200,53 +201,67 @@ class ResultTest extends PureComponent{
                             <View style={{marginTop: 22, height: "80%", width:"80%", backgroundColor: '#FFF'}}>
                                 <View>
                                     <View style={styles.modalColors}>
-                                        <Text>Percentages</Text>
+                                        <TitleComponent
+                                            text={"Percentages"}
+                                        />
                                     </View>
                                     <View>
                                         <View style={[{backgroundColor:'#1b3e70'},styles.modalColors]}>
-                                            <Text style={styles.ColorTextStyle}>
-                                                Non Responder :
-                                            </Text>
+                                            <TitleComponent
+                                                containerStyle={{marginBottom: 10, paddingBottom:0}}
+                                                textStyle={[styles.ColorTextStyle,{fontSize:15, paddingBottom:0}]}
+                                                text={'Non Responder :'}
+                                            />
                                             <Text style={styles.ColorTextStyle}>
                                                 {this.state.modalPieData?this.state.modalPieData[0]:"0"}
                                             </Text>
                                         </View>
                                         <View style={[{backgroundColor:'#62c9e4'},styles.modalColors]}>
-                                            <Text style={styles.ColorTextStyle}>
-                                                Non Responder / Responder :
-                                            </Text>
+                                            <TitleComponent
+                                                containerStyle={{marginBottom: 10, paddingBottom:0}}
+                                                textStyle={[styles.ColorTextStyle,{fontSize:15, paddingBottom:0}]}
+                                                text={'Non Responder / Responder :'}
+                                            />
                                             <Text style={styles.ColorTextStyle}>
                                                 {this.state.modalPieData?this.state.modalPieData[1]:"1"}
                                                 </Text>
                                         </View>
                                         <View style={[{backgroundColor:'#c2c822'},styles.modalColors]}>
-                                            <Text style={styles.ColorTextStyle}>
-                                                Responder :
-                                            </Text>
+                                            <TitleComponent
+                                                containerStyle={{marginBottom: 10, paddingBottom:0}}
+                                                textStyle={[styles.ColorTextStyle,{fontSize:15, paddingBottom:0}]}
+                                                text={'Responder :'}
+                                            />
                                             <Text style={styles.ColorTextStyle}>
                                                 {this.state.modalPieData?this.state.modalPieData[2]:"2"}
                                                 </Text>
                                         </View>
                                         <View style={[{backgroundColor: '#f8c82c',},styles.modalColors]}>
-                                            <Text style={styles.ColorTextStyle}>
-                                                Responder / Adverse Responder :
-                                            </Text>
+                                            <TitleComponent
+                                                containerStyle={{marginBottom: 10, paddingBottom:0}}
+                                                textStyle={[styles.ColorTextStyle,{fontSize:15, paddingBottom:0}]}
+                                                text={'Responder / Adverse Responder :'}
+                                            />
                                             <Text style={styles.ColorTextStyle}>
                                                 {this.state.modalPieData?this.state.modalPieData[3]:"3"}
                                                 </Text>
                                         </View>
                                         <View style={[{backgroundColor:'#ed5f6d'},styles.modalColors]}>
-                                            <Text style={styles.ColorTextStyle}>
-                                                Adverse Responder :
-                                            </Text>
+                                            <TitleComponent
+                                                containerStyle={{marginBottom: 10, paddingBottom:0}}
+                                                textStyle={[styles.ColorTextStyle,{fontSize:15, paddingBottom:0}]}
+                                                text={'Adverse Responder :'}
+                                            />
                                             <Text style={styles.ColorTextStyle}>
                                                 {this.state.modalPieData?this.state.modalPieData[4]:"4"}
                                                 </Text>
                                         </View>
                                         <View style={[{backgroundColor:'#f6922d'},styles.modalColors]}>
-                                            <Text style={[styles.ColorTextStyle,{paddingBottom:0}]}>
-                                                Non Responder / Responder / Adverse Responder :
-                                            </Text>
+                                            <TitleComponent
+                                                containerStyle={{marginBottom: 10, paddingBottom:0}}
+                                                textStyle={[styles.ColorTextStyle,{fontSize:13, paddingBottom:0}]}
+                                                text={'Non Responder / Responder / Adverse Responder :'}
+                                            />
                                             <Text style={styles.ColorTextStyle}>
                                                 {this.state.modalPieData?this.state.modalPieData[5]:"5"}
                                                 </Text>
@@ -257,7 +272,9 @@ class ResultTest extends PureComponent{
 
                                             >
                                                 <View style={{width:'100%', height:"100%",justifyContent: "center", alignItems: "center",backgroundColor:"#aaa"}}>
-                                                    <Text>Close</Text>
+                                                    <TitleComponent
+                                                        text={"Close"}
+                                                    />
                                                 </View>
                                             </TouchableOpacity>
                                         </View>

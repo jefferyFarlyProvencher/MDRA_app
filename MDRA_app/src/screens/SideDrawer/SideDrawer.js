@@ -15,7 +15,9 @@ import {connect} from 'react-redux';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 import {addToResultList, allowAdvancedOptions, emptyResultList} from "../../store/actions";
-import SendForm from '../../components/SendForm/SendForm'
+import testNetWorkConnection from '../../functions/testNetworkConnection';
+
+
 
 class SideDrawer extends Component{
     logOutHandler = () => {
@@ -28,21 +30,15 @@ class SideDrawer extends Component{
     };
 
     handleConnectionTest = async()=>{
-        console.log("commencing");
-        console.log(await SendForm());
-        console.log("RETURNED");
-    };
-
-    handleCreatorTest = async () => {
-        /*let data = await SendForm();
-        if(data !== -1) {
-            //console.log(JSON.stringify(data));
-            this.props.onAddToResultList(data);
-            //console.log(JSON.stringify(FormatReceivedData(data)));
-            //this.props.onAddToResultList(FormatReceivedData(data));
-            ToastAndroid.showWithGravity("Data added to List", 1, ToastAndroid.BOTTOM);
+        console.log("commencing connection test");
+        if(await testNetWorkConnection())
+        {
+            console.log("connected")
         }
-        */
+        else{
+            console.log("not connected")
+        }
+        console.log("RETURNING from connection test");
     };
 
     handleEmptyResultList = async() => {
@@ -88,7 +84,7 @@ class SideDrawer extends Component{
                             name= {Platform.OS==='android'? "md-add-circle" :"ios-add-circle"}
                             color="#52afff" style={styles.drawerItemIcon}
                         />
-                        <Text>Advanced tab enabler</Text>
+                        <Text>{this.props.state.main.advanceTabAccessible?"Disable Advanced tab":"Enable Advanced tab"}</Text>
                     </View>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={this.handleConnectionTest}>
@@ -99,16 +95,6 @@ class SideDrawer extends Component{
                             color="#52afff" style={styles.drawerItemIcon}
                         />
                         <Text>Connect test</Text>
-                    </View>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={this.handleCreatorTest}>
-                    <View  style={styles.drawerItem}>
-                        <Icon
-                            size={40}
-                            name= {Platform.OS==='android'? "md-bowtie" :"ios-bowtie"}
-                            color="#52afff" style={styles.drawerItemIcon}
-                        />
-                        <Text>Create test</Text>
                     </View>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={this.handleEmptyResultList}>

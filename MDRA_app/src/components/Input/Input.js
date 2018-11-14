@@ -48,13 +48,13 @@ class Input extends PureComponent{
     };
 
     render() {
-        const {label, error, backgroundColor, ...rest } = this.props;
+        const {label, error, backgroundColor, name, ...rest } = this.props;
         return(
             <View style={[styles.root,this.props.style]}>
                 <FormLabel>{label}</FormLabel>
                 <FormInput
                     center={true}
-                    placeholder={label}
+                    placeholder={label? label: name}
                     onChangeText={this._handleChangeText}
                     onBlur={this._handleTouch}
                     containerStyle={[

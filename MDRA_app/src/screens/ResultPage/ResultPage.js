@@ -25,12 +25,13 @@ import pieImage from '../../assets/pie_small.png';
 
 //redux imports
 import {connect} from 'react-redux';
-
+import {addData, changePosition, allowAdvancedOptions} from "../../store/actions";
 //component imports
 import GraphComponent from '../../components/ResultPage_GraphComponent/GraphComponent';
 import PieChartComponent from '../../components/ResultPage_PieChartsComponent/PieChartsComponent';
-import {addData, changePosition} from "../../store/actions";
 import TitleComponent from "../../components/TitleComponent/TitleComponent";
+
+import {udemDark} from "../../assets/colors";
 
 class ResultPage extends PureComponent {
     state = {
@@ -101,8 +102,9 @@ class ResultPage extends PureComponent {
                     ///update position
                     currentPosition: oldState.currentPosition - 1,
                 })
-            })
-
+            });
+            //update title
+            //this.setTitleOnChange();
         }else{
             console.log("next should be disabled")
         }
@@ -117,11 +119,19 @@ class ResultPage extends PureComponent {
                     ///update position
                     currentPosition: oldState.currentPosition + 1,
                 })
-            })
-
+            });
+            //update title
+            //this.setTitleOnChange();
         }else{
             console.log("next should be disabled")
         }
+    };
+
+    setTitleOnChange = () => {
+        console.log("Changing title");
+        this.props.navigator.setTitle({
+            title: this.props.state.main.resultsList[this.state.currentPosition].name
+        });
     };
 
     setFormValues = () => {
@@ -133,12 +143,18 @@ class ResultPage extends PureComponent {
         //     JSON.stringify(this.props.state.main.Page2Data) + ";"+
         //     JSON.stringify(this.props.state.main.Page3Data) + ";"
         // );
-        // console.log("FORMDATA: " + JSON.stringify(formData));
+         console.log("FORMDATA: " + JSON.stringify(formData));
         //set It to each page
         this.props.onAddData(formData[0],0);
         this.props.onAddData(formData[1],1);
         this.props.onAddData(formData[2],2);
         this.props.onAddData(formData[3],3);
+        if(this.props.state.main.advanceTabAccessible !== formData[4])
+        {
+            this.props.allowAdvancedOptions();
+        }
+
+
 
         // console.log("FORM AFTER: "+
         //     JSON.stringify(this.props.state.main.Page0Data) + ";"+
@@ -148,8 +164,9 @@ class ResultPage extends PureComponent {
         // );
 
         //Changes here to reset form
-        //go to send, then, back to 1, will cause promise rejection
-        this.props.onChangePosition(5);
+        //go to empty screen, then, back to 1,
+        // in order to reset form to new values
+        this.props.onChangePosition(6);
         this.props.onChangePosition(0);
 
         //close modal
@@ -184,6 +201,7 @@ class ResultPage extends PureComponent {
 //    Animated.sequence([
 
     render() {
+        this.setTitleOnChange();
         if(this.state.visible  && Platform.OS === "ios")this._handleOnStartUp();
         return (
             <View style={{backgroundColor:"#FFF", flex: 1}}>
@@ -301,7 +319,9 @@ const styles = StyleSheet.create({
 const mapDispatchToProps = dispatch => {
     return {
         onAddData: (data, position) => dispatch(addData(data, position)),
-        onChangePosition: (position) => dispatch(changePosition(position))
+        onChangePosition: (position) => dispatch(changePosition(position)),
+        allowAdvancedOptions: () => dispatch(allowAdvancedOptions()),
+
     }
 };
 

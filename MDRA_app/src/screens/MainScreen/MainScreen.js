@@ -8,7 +8,8 @@ import {
     Animated,
     StyleSheet,
     Dimensions,
-    Platform
+    Platform,
+    Alert
 } from 'react-native';
 
 //Navigation
@@ -23,7 +24,8 @@ class MainScreen extends Component{
 
     state={
         loading:false,
-        startAnim: new Animated.Value(1)
+        startAnim: new Animated.Value(1),
+        attempt: -1
     };
 
     _handleWaitingOnStart_grow = () => {
@@ -75,11 +77,39 @@ class MainScreen extends Component{
 
     displayConnectionError = () =>{
 
+        Alert.alert(
+            'Warning: The application cannot connect to server',
+            'Do you still want to continue?', [
+                {
+                    text: 'Cancel',
+                    onPress: (() => {
+                        console.log('Cancel Pressed');
+                        this.setState((oldState) => {
+                            return {
+                                ...oldState,
+                                loading: false,
+                                attempt: -1
+                            }
+                        });
+                    }),
+                    style: 'cancel'
+                }, {
+                    text: 'Continue',
+                    onPress: () => {this.launchNewScreen()}
+                }
+            ],
+            {
+                cancelable: true
+            }
+        );
     };
 
+    launchNewScreen = () => {
+        setTimeout(()=>{console.log("main tabs starting");startMainTabs();},500);
+    };
 
     //attempts to load the app, basically does a verification of network status and waits .5 secs before launching
-    _handlerOnPress = () => {
+    _handlerOnPress = async () => {
         this.setState((oldState)=>{
             return{
                 ...oldState,
@@ -87,8 +117,17 @@ class MainScreen extends Component{
                 attempt: oldState.attempt+1
             }
         });
-
-        setTimeout(()=>{console.log("main tabs starting");startMainTabs();},500);
+        let connectionResult =  await testNetWorkConnection();
+        console.log("Connection Result: "+ JSON.stringify(connectionResult));
+        if(connectionResult)
+            this.launchNewScreen();
+        else {
+            if (this.state.attempt < 100)
+                this._handlerOnPress();
+            else {
+                this.displayConnectionError()
+            }
+        }
     };
 
     render(){
@@ -119,9 +158,14 @@ class MainScreen extends Component{
                                     </View>
                                 }
                         </TouchableWithoutFeedback>
-
                 </View>
                 </Animated.View>
+                {this.state.loading && this.state.attempt > 0?
+                    <View>
+                        <Text>{"Connection Attempt # " + this.state.attempt}</Text>
+                    </View>
+                    :<View/>
+                }
             </ImageBackground>
 
         )

@@ -53,7 +53,22 @@ class SendFormScreen extends PureComponent{
             this.props.state.main.Page0Data,
             this.props.state.main.Page1Data,
             this.props.state.main.Page2Data,
-            this.props.state.main.Page3Data
+            this.props.state.main.advanceTabAccessible
+                ?this.props.state.main.Page3Data
+                :{
+                    numberOfSimulations: '1000',
+                    tsTimeHalfDayAM: '8',
+                    teTimeHalfDayAM: '12',
+                    tsTimeHalfDayPM: '12',
+                    teTimeHalfDayPM: '16',
+                    cMinTherapeuticHalfDayAM: '6',
+                    cMaxTherapeuticHalfDayAM: '20',
+                    cMinTherapeuticDayPM: '6',
+                    cMaxTherapeuticDayPM: '20',
+                    cMinTherapeuticEvening: '0',
+                    cMaxTherapeuticEvening: '6',
+                    threshold: '80'},
+            this.props.state.main.advanceTabAccessible
         ];
 
         console.log(formData);

@@ -57,7 +57,7 @@ let SendForm = async(preparedData) => {
             })
         });*/
         let responseJson = await response.json();
-        console.log("RESULT:"+JSON.stringify(responseJson));
+        //console.log("RESULT:"+JSON.stringify(responseJson));
         if(responseJson)
             console.log("----FETCHING OVER-----\n");
             return HandleReceivedData(responseJson['data']);

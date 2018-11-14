@@ -1,6 +1,17 @@
 //system
 import React, {Component} from 'react';
-import {View, Text, TouchableWithoutFeedback, Animated, Modal, StyleSheet, StatusBar, Alert} from 'react-native';
+import {
+    View,
+    Text,
+    TouchableHighlight,
+    TouchableWithoutFeedback,
+    Animated,
+    Modal,
+    StyleSheet,
+    StatusBar,
+    Alert,
+    Platform
+} from 'react-native';
 import {Formik} from "formik";
 import {Button} from 'react-native-elements';
 import {connect} from "react-redux";
@@ -11,6 +22,8 @@ import {removeData, renameData} from '../../store/actions/index';
 //components
 import ResultsList from "../../components/ResultsList/ResultsList";
 import Input from "../../components/Input/Input";
+import TitleComponent from "../../components/TitleComponent/TitleComponent";
+import {udemDark} from "../../assets/colors";
 
 
 class ResultScreen extends Component{
@@ -36,6 +49,7 @@ class ResultScreen extends Component{
             navBarBackgroundColor: '#262626',
             navBarTextColor: '#ffffff',
             statusBarTextColorSchemeSingleScreen: 'light',
+            navBarButtonColor: Platform.OS === 'android'?'#3057e1': null
         });
     }
 
@@ -62,7 +76,7 @@ class ResultScreen extends Component{
         //console.log(key);
         this.props.navigator.push({
             screen: "MDRA_app.resultPage",
-            title: selResult.title,
+            title: this.props.state.main.resultsList[selPosition].name,
             passProps: {
                 selectedPosition: selPosition
             }
@@ -90,6 +104,23 @@ class ResultScreen extends Component{
                 })
             }
         );
+
+        // Alert.alert(
+        //     'Rename',
+        //     'Please enter new name?', [
+        //         {
+        //             text: 'Cancel',
+        //             onPress: (() => console.log('Cancel Pressed')),
+        //             style: 'cancel'
+        //         }, {
+        //             text: 'Rename',
+        //             onPress: () => this.props.onRenameData(key,values.newName);
+        //         }
+        //     ],
+        //     {
+        //         cancelable: false
+        //     }
+        // );
     };
 
     handleRemoveResult = (key) => {
@@ -143,7 +174,7 @@ class ResultScreen extends Component{
                 <View style={{margin:0, paddingBottom:0, height:"92%"}}>
                     {this.props.state.main.resultsList.length > 0
                         ? content
-                        : <Text style={{justifyContent:'center', alignItems:'center'}}>This doesn't have any results yet</Text>
+                        : <View style={{flex:1, alignItems:"center", justifyContent:"center"}}><Text style={{justifyContent:'center', alignItems:'center'}}>This doesn't have any results yet</Text></View>
                     }
                 </View>
                 <View>
@@ -180,6 +211,13 @@ class ResultScreen extends Component{
                                 />
                             </TouchableWithoutFeedback>
                             <View style={styles.modalStyle}>
+                                <View>
+                                    <TitleComponent
+                                        text={'Please enter new name'}
+                                        textStyle={{fontSize:20}}
+                                        containerStyle={{backgroundColor:"transparent"}}
+                                    />
+                                </View>
                                 <Formik
                                     initialValues={{ newName: JSON.stringify(this.props.state.main.data)}}
                                     onSubmit={this._handleSubmit}
@@ -197,23 +235,37 @@ class ResultScreen extends Component{
                                                  isSubmitting
                                              }) => (
                                         <View>
-                                            <Input
-                                                label="New Name"
-                                                autoCapitalize="none"
-                                                value={values.newName}
-                                                onChange={setFieldValue}
-                                                onTouch={setFieldTouched}
-                                                name="newName"
-                                                error={touched.newName && errors.newName}
-                                            />
-                                            <Button
-                                                title={"Cancel"}
+                                            <View style={{marginBottom: 10, marginTop: 0, paddingTop:0}}>
+                                                <Input
+                                                    autoCapitalize="none"
+                                                    style={[styles.buttonStyles]}
+                                                    value={values.newName}
+                                                    onChange={setFieldValue}
+                                                    onTouch={setFieldTouched}
+                                                    name="newName"
+                                                    error={touched.newName && errors.newName}
+                                                />
+                                            </View>
+                                            <TouchableHighlight
                                                 onPress={() =>{this.setModalVisible(false)}}
-                                            />
-                                            <Button
-                                                title="OK"
+                                                style={[styles.buttonStyles, {backgroundColor:"transparent"}]}
+                                            >
+                                                <TitleComponent
+                                                    text={'Cancel'}
+                                                    textStyle={{fontSize:15}}
+                                                    containerStyle={styles.buttonTitleComponentStyle}
+                                                />
+                                            </TouchableHighlight>
+                                            <TouchableHighlight
                                                 onPress={handleSubmit}
-                                            />
+                                                style={[styles.buttonStyles, {backgroundColor:"#EEE", borderRadius: 15}]}
+                                            >
+                                                <TitleComponent
+                                                    text={'Rename'}
+                                                    textStyle={{fontSize:15}}
+                                                    containerStyle={styles.buttonTitleComponentStyle}
+                                                />
+                                            </TouchableHighlight>
                                         </View>
                                     )}
                                 />
@@ -229,10 +281,20 @@ class ResultScreen extends Component{
 const styles = StyleSheet.create({
     modalStyle:{
         marginTop: 22,
-        height: "50%",
-        width:"80%",
+        width: (4/6*100)+"%",
         backgroundColor: '#EEE',
-        paddingTop: "20%",
+        borderRadius: 15,
+    },
+
+    buttonStyle:{
+        width: "100%",
+        height: "10%"
+    },
+
+    buttonTitleComponentStyle: {
+        borderBottomWidth: 0,
+        borderTopWidth: 0.5,
+        backgroundColor:"transparent"
     }
 });
 

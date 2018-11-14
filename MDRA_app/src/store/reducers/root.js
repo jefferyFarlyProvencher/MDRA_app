@@ -87,7 +87,6 @@ const reducer = (state = initialState, action) => {
             for (let i = 0; i < state.resultsList.length; i++) {
                 console.log(i);
                 if (state.resultsList[i].key === action.key) {
-
                     target = i;
                     break;
                 }

@@ -17,6 +17,7 @@ import DropDownList from "../../components/dropDownList/DropDownList";
 import CustomMultiSlider from "../../components/CustomMultiSlider/CustomMultiSlider";
 import LinedLabel from "../../components/LinedLabel/LinedLabel";
 import NewYupString from "../../components/NewYupString/NewYupString";
+import FormBackButton from "../../components/FormBackButton/FormBackButton";
 
 //redux imports
 import {connect} from "react-redux";
@@ -24,6 +25,10 @@ import {addData} from "../../store/actions/addData";
 import {changePosition} from "../../store/actions/changePosition";
 import DropDownListV2 from "../../components/dropDownList/DropDownListV2";
 import TitleComponent from "../../components/TitleComponent/TitleComponent";
+import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
+
+//assets imports
+import * as colors from "../../assets/colors"
 
 //THIS CLASS REFERS TO THE BOXES FOR RESULT PAGE
 // THERE IS A WEIRD BUG THAT PREVENTS ME FROM CHANGING the name
@@ -35,7 +40,7 @@ class FormScreenTimeZonage extends PureComponent{
         ViewMode: Dimensions.get('window').height > 500 ? "portrait" : "landscape",
         currentPosition: 1,
         nbOfBoxes: this.props.data
-            ?this.props.data.nbTheraputicBoxes==="One therapeutic box (from AM to PM)"
+            ?this.props.data.nbTherapeuticBoxes==="One therapeutic box (from AM to PM)"
                 ?1:2
             :1,
     };
@@ -68,10 +73,10 @@ class FormScreenTimeZonage extends PureComponent{
                 return (
                     Yup.object().shape({
                         tsDay: NewYupString().containsOnlyNumbers().required(requiredMessage),
-                        teDay: NewYupString().containsOnlyNumbers().isLaterThan(Yup.ref('tsDay', null)).isEarlierThan(16, thisTimeShouldBe + "earlier than 16:00").required(requiredMessage),
+                        teDay: NewYupString().containsOnlyNumbers().isLaterThan(Yup.ref('tsDay', null)).isEarlierThan('16:00', thisTimeShouldBe + "earlier than 16:00").required(requiredMessage),
                         tsEvening: NewYupString().containsOnlyNumbers().isLaterThan(Yup.ref('teDay', null)).required(requiredMessage),
                         teEvening: NewYupString().containsOnlyNumbers().isLaterThan(Yup.ref('tsEvening', null)).required(requiredMessage),
-                        lunch: NewYupString().containsOnlyNumbers().isEarlierThan(Yup.ref('tsEvening', null)).required(requiredMessage),//Yup.number().positive().lessThan(Yup.ref('tsEvening', null)).moreThan(10).required(requiredMessage),
+                        lunch: NewYupString().containsOnlyNumbers().isLaterThan('11:00', thisTimeShouldBe + "later than 11:00").isEarlierThan(Yup.ref('tsEvening', null)).required(requiredMessage),//Yup.number().positive().lessThan(Yup.ref('tsEvening', null)).moreThan(10).required(requiredMessage),
                         bed: NewYupString().containsOnlyNumbers().isLaterThan(Yup.ref('teEvening', null)).required(requiredMessage),//Yup.number().positive().lessThan(24.00001,"Cannot exceed 24").moreThan(18.99999,"Cannot be less than 19").required(requiredMessage)
                     })
                 );
@@ -79,12 +84,12 @@ class FormScreenTimeZonage extends PureComponent{
                 return (
                     Yup.object().shape({
                         tsDay: NewYupString().containsOnlyNumbers().required(requiredMessage),//Yup.number().positive().lessThan(Yup.ref('teDay', null)).required(requiredMessage),
-                        teDay: NewYupString().containsOnlyNumbers().isLaterThan(Yup.ref('tsDay', null)).isEarlierThan(12, thisTimeShouldBe + "earlier than 12:01").required(requiredMessage),//Yup.number().positive().moreThan(Yup.ref('tsDay', null)).lessThan(12.0001).required(requiredMessage),
+                        teDay: NewYupString().containsOnlyNumbers().isLaterThan(Yup.ref('tsDay', null)).isEarlierThan('12:00', thisTimeShouldBe + "earlier than 12:01").required(requiredMessage),//Yup.number().positive().moreThan(Yup.ref('tsDay', null)).lessThan(12.0001).required(requiredMessage),
                         tsPM:  NewYupString().containsOnlyNumbers().isLaterThan('12:00', thisTimeShouldBe + "later than 11:59").required(requiredMessage),//Yup.number().positive().moreThan(11.999999).required(requiredMessage),
                         tePM: NewYupString().containsOnlyNumbers().isLaterThan(Yup.ref('tsPM', null)).required(requiredMessage),//Yup.number().positive().moreThan(Yup.ref('tsPM', null)).required(requiredMessage),
                         tsEvening: NewYupString().containsOnlyNumbers().isLaterThan(Yup.ref('tePM', null)).required(requiredMessage),//Yup.number().positive().moreThan(Yup.ref('teDay'), null).required(requiredMessage),
                         teEvening: NewYupString().containsOnlyNumbers().isLaterThan(Yup.ref('tsEvening', null)).required(requiredMessage),//Yup.number().positive().moreThan(Yup.ref('tsEvening', null)).required(requiredMessage),
-                        lunch: NewYupString().containsOnlyNumbers().isEarlierThan(Yup.ref('tsEvening', null)).required(requiredMessage),//Yup.number().positive().lessThan(Yup.ref('tsEvening', null)).required(requiredMessage),
+                        lunch: NewYupString().containsOnlyNumbers().isLaterThan('11:00', thisTimeShouldBe + "later than 11:00").isEarlierThan(Yup.ref('tsEvening', null)).required(requiredMessage),//Yup.number().positive().lessThan(Yup.ref('tsEvening', null)).required(requiredMessage),
                         bed: NewYupString().containsOnlyNumbers().isLaterThan(Yup.ref('teEvening', null)).required(requiredMessage),//Yup.number().positive().lessThan((24.00001)).moreThan(Yup.ref('teEvening', null)).required(requiredMessage)
                     })
                 );
@@ -107,31 +112,18 @@ class FormScreenTimeZonage extends PureComponent{
     render() {
         return(
             <View>
-                <KeyboardAvoidingView>
-                    <ScrollView>
+                <KeyboardAwareScrollView>
                         <View style={styles.centerElements}>
                             <TitleComponent text={"Therapeutic Boxes"}/>
                         </View>
-                        <View style={{backgroundColor: "#27408b"}}>
-                            <Button
-                                title="Go back"
-                                onPress={this._handleGoToPreviousStep}
-                                icon={
-                                    {
-                                        name: "chevron-left",
-                                        color: "#FFF",
-                                        type: "ionicons"
-                                    }
-                                }
-                                color={"#FFF"}
-                                buttonStyle={{backgroundColor:"#27408b", width: "50%"}}
-                            />
-                        </View>
+                        <FormBackButton
+                            onPress={this._handleGoToPreviousStep}
+                        />
                         <View>
                             <Formik
                                 initialValues={(this.props.data)
                                     ?{
-                                        nbTheraputicBoxes:this.props.data.nbTheraputicBoxes,
+                                        nbTherapeuticBoxes:this.props.data.nbTherapeuticBoxes,
                                         tsDay: this.props.data.tsDay,
                                         teDay:this.props.data.teDay,
                                         tsPM:this.props.data.tsPM,
@@ -142,7 +134,7 @@ class FormScreenTimeZonage extends PureComponent{
                                         bed:this.props.data.bed,
                                     }
                                     :{
-                                        nbTheraputicBoxes:"One therapeutic box (from AM to PM)",
+                                        nbTherapeuticBoxes:"One therapeutic box (from AM to PM)",
                                         tsDay: '6:00',
                                         teDay:'15:00',
                                         tsPM:'12:00',
@@ -189,9 +181,9 @@ class FormScreenTimeZonage extends PureComponent{
                                                     );
                                                     setFieldValue(name,value)
                                                 }}
-                                                name="nbTheraputicBoxes"
+                                                name="nbTherapeuticBoxes"
                                                 label={"Select how many Therapeutic boxes"}
-                                                value={values.nbTheraputicBoxes}
+                                                value={values.nbTherapeuticBoxes}
                                                 itemList={["One therapeutic box (from AM to PM)","Two therapeutic boxes (AM and PM)"]}
                                                 Picker={this.props.Picker}
                                             />
@@ -256,7 +248,7 @@ class FormScreenTimeZonage extends PureComponent{
                                         </View>
                                         {(this.state.nbOfBoxes === 2)
                                             ?
-                                            <View>
+                                            <View style={{backgroundColor: "white"}}>
                                                 <LinedLabel
                                                     label={"PM Box"}
                                                     textPosition="center"/>
@@ -318,7 +310,7 @@ class FormScreenTimeZonage extends PureComponent{
                                             </View>
                                             :<View/>
                                         }
-                                        <View>
+                                        <View style={{backgroundColor: "white"}}>
                                             <LinedLabel
                                                 label={"Evening Box"}
                                                 textPosition="right"/>
@@ -432,8 +424,7 @@ class FormScreenTimeZonage extends PureComponent{
                                 )}
                             />
                         </View>
-                    </ScrollView>
-                </KeyboardAvoidingView>
+                </KeyboardAwareScrollView>
             </View>
 
         );
@@ -443,7 +434,7 @@ class FormScreenTimeZonage extends PureComponent{
 const styles = StyleSheet.create({
     container: {
         flex:1,
-        backgroundColor: "#fff",
+        backgroundColor: "white",
         paddingHorizontal: "5%"
     },
 
@@ -456,7 +447,7 @@ const styles = StyleSheet.create({
         width: '100%',
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor:"#27408b",
+        backgroundColor:colors.royalBlue2,
     },
 
     buttonContainer:{

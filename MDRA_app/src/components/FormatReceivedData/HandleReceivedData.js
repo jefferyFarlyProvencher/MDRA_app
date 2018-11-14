@@ -22,16 +22,17 @@ let formatReceivedData = (fullData) => {
   return fullData;
 };
 
-export default HandleReceivedData = (data) => {
-    console.log("Received data: "+data);
+let HandleReceivedData = (data) => {
+    //console.log("Received data: "+data);
     if(data && data.length && typeof data ==='string'){
         //removing all useless chars
         data = data.replace(/\n/g, '');
         data = data.replace(/\r/g, '');
         data = data.replace(/ /g, '');
-
+        //console.log("Received data spaces removed: "+data);
         //creating an appropriate
         let allResults = data.split(";");
+        console.log(JSON.stringify(allResults.slice(9,32)));
         let receivedData = {
 
             allResults: allResults,
@@ -54,15 +55,17 @@ export default HandleReceivedData = (data) => {
 
             percentile90: formatReceivedData(allResults[8].split(",")),
 
+            TIEffD1: parseFloat(allResults[9]),
+
             TIEffD1s: parseFloat(allResults[9]) !== -1 ?
-                parseFloat(allResults[9]).toFixed(0) + '%'
-                : null,
+                parseFloat(allResults[9]).toFixed(0) + ''
+                :null,
 
-            TIEffD2: (parseFloat(allResults[10])).toFixed(0) + '%',
+            TIEffD2: (parseFloat(allResults[10])).toFixed(0) + '',
 
-            TIEffE: (parseFloat(allResults[11])).toFixed(0) + '%',
+            TIEffE: (parseFloat(allResults[11])).toFixed(0) + '',
 
-            TotalScore: (parseFloat(allResults[12])).toFixed(0) + '%',
+            TotalScore: (parseFloat(allResults[12])).toFixed(0) + '',
 
             characNRAM: parseFloat(allResults[13]).toPrecision(2),
             characNRRAM: parseFloat(allResults[14]).toPrecision(2),
@@ -87,7 +90,7 @@ export default HandleReceivedData = (data) => {
 
             maxPercentile: parseFloat(allResults[31]),
 
-            rce: 100.0 - (parseFloat(allResults[32])).toFixed(0) + '%'
+            rce: 100.0 - (parseFloat(allResults[32])).toFixed(0) + ''
         };
         //console.log("RECEIVED DATA: " + JSON.stringify(receivedData));
         return receivedData;
@@ -98,3 +101,5 @@ export default HandleReceivedData = (data) => {
         return -1;
     }
 };
+
+export default HandleReceivedData;
