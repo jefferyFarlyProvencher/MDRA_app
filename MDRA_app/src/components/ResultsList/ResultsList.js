@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {View, Text,StyleSheet, FlatList} from 'react-native'
+import {View, Text,StyleSheet, FlatList, TouchableWithoutFeedback} from 'react-native'
 import {List, ListItem, SearchBar} from 'react-native-elements'
 import Swipeout  from 'react-native-swipeout'
 
@@ -11,7 +11,8 @@ class ResultsList extends Component{
     state = {
         //list that will be manipulated for the search bar
         modifiedList : this.props.list,
-        searchText : ""
+        searchText : "",
+        date: new Date()
     };
 
 
@@ -19,10 +20,29 @@ class ResultsList extends Component{
         if (nextProps.list !== this.props.list) {
             this.setState({
                 modifiedList : this.props.list,
-                searchText : ""
+                searchText : "",
+                selectedList: this.props.selectedList
             })
         }
     }
+    //
+    // handlePressIn = () => {
+    //     this.setState(oldState => {
+    //         return {
+    //             ...oldState,
+    //             pressedInTime: oldState.date.getSeconds()
+    //         };
+    //     })
+    // };
+    //
+    // handlePressOut= () => {
+    //     this.setState(oldState => {
+    //         return {
+    //             ...oldState,
+    //             pressedOutTime: oldState.date.getSeconds()
+    //         };
+    //     })
+    // };
 
     handleOnPressDelete = (key) => {
         this.props.onRemoveData(key);
@@ -42,14 +62,14 @@ class ResultsList extends Component{
 
             return itemData.indexOf(textData) > -1;
         });
-        console.log(JSON.stringify("modList 1: "+ this.state.modifiedList));
-        console.log(JSON.stringify("size modList 1: "+ this.state.modifiedList.length));
+        // console.log(JSON.stringify("modList 1: "+ this.state.modifiedList));
+        // console.log(JSON.stringify("size modList 1: "+ this.state.modifiedList.length));
         this.setState({
             modifiedList: newData,
             searchText: text
         });
-        console.log(JSON.stringify("modList 2: "+ this.state.modifiedList));
-        console.log(JSON.stringify("size modList 2: "+ this.state.modifiedList.length));
+        // console.log(JSON.stringify("modList 2: "+ this.state.modifiedList));
+        // console.log(JSON.stringify("size modList 2: "+ this.state.modifiedList.length));
     };
 
     renderHeader = () => {
@@ -104,9 +124,16 @@ class ResultsList extends Component{
                                     title={"Test Result: " + info.item.id}
                                     subtitle={info.item.name}
                                     key={info.item.key}
-                                    onPress={() => {
-                                        this.props.onItemSelected(info.item.key);
+                                    onLongPress={() => {
+                                        this.props.onToggleSelectorList(info.item.key);
                                         console.log('Item selected: ' + info.item.key);
+                                        console.log('pressed longly');
+                                    }
+                                    }
+                                    onPress={() => {
+                                            this.props.onItemSelected(info.item.key);
+                                            console.log('Item accessed: ' + info.item.key);
+                                            console.log('pressed quickly');
                                     }
                                     }
                                 />

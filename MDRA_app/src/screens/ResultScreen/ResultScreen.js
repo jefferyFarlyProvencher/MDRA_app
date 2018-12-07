@@ -24,6 +24,8 @@ import ResultsList from "../../components/ResultsList/ResultsList";
 import Input from "../../components/Input/Input";
 import TitleComponent from "../../components/TitleComponent/TitleComponent";
 import {udemDark} from "../../assets/colors";
+import Spinner from "react-native-loading-spinner-overlay";
+import SelectionList from "../../components/SelectionList/SelectionList";
 
 
 class ResultScreen extends Component{
@@ -36,9 +38,13 @@ class ResultScreen extends Component{
         modalVisible: false,
         renameTarget: null,
         currentNewName: null,
-        //selected is linked to extraData in the list and not the actual selection
+        //selected is linked to rename in the list and not the actual selection
         selected: false,
-        visible: false
+        spinnerIsVisible: false,
+        //amountOfPush is there to limit the amount of pushed screen done
+        amountOfPushes: 0,
+        selectorListAvailable: false,
+        currentlySelectedItem: 0,
     };
 
     componentWillMount() {
@@ -53,6 +59,23 @@ class ResultScreen extends Component{
         });
     }
 
+    componentDidMount() {
+        //create new list of possible selection
+        let newSelectedMap = {};
+        //add new objects to list
+        for (let i = 0; i < this.props.state.main.resultsList.length; i++) {
+            newSelectedMap[this.props.state.main.resultsList[i].key] = false;
+        }
+        this.setState((oldState) => {
+            return {
+                ...oldState,
+                selectedList: newSelectedMap
+            }
+        });
+
+        console.log("New selected dictionary"+JSON.stringify(newSelectedMap))
+    }
+
     onNavigatorEvent = event => {
         if(event.type === "NavBarButtonPress") {
             if(event.id === "sideDrawerToggle"){
@@ -63,24 +86,94 @@ class ResultScreen extends Component{
         }
     };
 
-    itemSelectedHandler = key => {
-        let selResult = null;
-        let selPosition = 0;
-        for(let i = 0; i < this.props.state.main.resultsList.length; i++){
-            if(this.props.state.main.resultsList[i].key === key)
-            {
-                selResult=this.props.state.main.resultsList[i];
-                selPosition = i;
-            }
-        }
-        //console.log(key);
-        this.props.navigator.push({
-            screen: "MDRA_app.resultPage",
-            title: this.props.state.main.resultsList[selPosition].name,
-            passProps: {
-                selectedPosition: selPosition
+    spinnerToggler = () => {
+        this.setState((oldState)=>{
+            return {
+                ...oldState,
+                spinnerIsVisible: !oldState.spinnerIsVisible,
+                amountOfPushes: 1
             }
         });
+    };
+
+    handleItemAccessed = key => {
+        //blocker's purpose is to stop multi pushes on android
+        let activateBlocker = Platform.OS === "android";
+        if(this.state.amountOfPushes === 0) {
+            if(activateBlocker) {
+                this.spinnerToggler();
+            }
+            let selResult = null;
+            let selPosition = 0;
+            for (let i = 0; i < this.props.state.main.resultsList.length; i++) {
+                if (this.props.state.main.resultsList[i].key === key) {
+                    selResult = this.props.state.main.resultsList[i];
+                    selPosition = i;
+                }
+            }
+            //console.log(key);
+            //this.props.navigator.popToRoot();
+            this.props.navigator.push({
+                screen: "MDRA_app.resultPage",
+                title: this.props.state.main.resultsList[selPosition].name,
+                passProps: {
+                    selectedPosition: selPosition
+                }
+            });
+
+
+            if(activateBlocker) {
+                //remove spinner
+                setTimeout(
+                    () => {
+                        this.spinnerToggler();
+                    },
+                    1000)
+            }
+        }
+        else{
+            setTimeout(
+                () => {
+                    this.setState((oldState)=>{
+                        return {
+                            ...oldState,
+                            amountOfPushes: 0
+                        }
+                    });
+                },
+                500)
+        }
+    };
+
+    toggleSelectorList = () => {
+        this.setState((oldState) => {
+            return({
+              ...oldState,
+              selectorListAvailable: !oldState.selectorListAvailable,
+            })
+        })
+    };
+
+    handleOnEnablingSelection = (key) => {
+        this.toggleSelectorList();
+        this.handleItemSelected(key)
+    };
+
+    handleItemSelected = (key) => {
+        console.log("selectedList before:"+JSON.stringify(this.state.currentlySelectedItem));
+        //update key
+        // let newSelectedList = {};
+        // for (let i in this.state.selectedList)
+        //     newSelectedList[i] = this.state.selectedList[i];
+        // newSelectedList[key] = !this.state.selectedList[key];
+        this.setState((oldState) => {
+            return({
+                ...oldState,
+                currentlySelectedItem: key
+            })
+        });
+        //reload screen
+        console.log("selectedList after:"+JSON.stringify(this.state.currentlySelectedItem));
     };
 
     setModalVisible = (visible) => {
@@ -160,9 +253,19 @@ class ResultScreen extends Component{
 
     render(){
         let content = (
-                <ResultsList
+            (this.state.selectorListAvailable)
+                ?<View>
+                    <Button title={"Now in selection mode"} onPress={this.toggleSelectorList}/>
+                    <SelectionList
+                        list ={this.props.state.main.resultsList}
+                        onItemSelected={this.handleItemSelected}
+                        selectedList={this.state.selectedList}
+                    />
+                </View>
+                : <ResultsList
                     list ={this.props.state.main.resultsList}
-                    onItemSelected={this.itemSelectedHandler}
+                    onToggleSelectorList={this.handleOnEnablingSelection}
+                    onItemSelected={this.handleItemAccessed}
                     onRemoveData={this.handleRemoveResult}
                     onRenameData={this.handleOnRenamePressed}
                     extraData={this.state}
@@ -247,21 +350,21 @@ class ResultScreen extends Component{
                                                 />
                                             </View>
                                             <TouchableHighlight
-                                                onPress={() =>{this.setModalVisible(false)}}
-                                                style={[styles.buttonStyles, {backgroundColor:"transparent"}]}
-                                            >
-                                                <TitleComponent
-                                                    text={'Cancel'}
-                                                    textStyle={{fontSize:15}}
-                                                    containerStyle={styles.buttonTitleComponentStyle}
-                                                />
-                                            </TouchableHighlight>
-                                            <TouchableHighlight
                                                 onPress={handleSubmit}
                                                 style={[styles.buttonStyles, {backgroundColor:"#EEE", borderRadius: 15}]}
                                             >
                                                 <TitleComponent
                                                     text={'Rename'}
+                                                    textStyle={{fontSize:15}}
+                                                    containerStyle={styles.buttonTitleComponentStyle}
+                                                />
+                                            </TouchableHighlight>
+                                            <TouchableHighlight
+                                                onPress={() =>{this.setModalVisible(false)}}
+                                                style={[styles.buttonStyles, {backgroundColor:"transparent"}]}
+                                            >
+                                                <TitleComponent
+                                                    text={'Cancel'}
                                                     textStyle={{fontSize:15}}
                                                     containerStyle={styles.buttonTitleComponentStyle}
                                                 />
@@ -272,6 +375,9 @@ class ResultScreen extends Component{
                             </View>
                         </View>
                     </Modal>
+                </View>
+                <View>
+                    <Spinner visible={this.state.spinnerIsVisible} textContent={"Loading..."} textStyle={{color: '#FFF'}} />
                 </View>
             </View>
         )

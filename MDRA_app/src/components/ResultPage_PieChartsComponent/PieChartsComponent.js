@@ -80,13 +80,14 @@ class ResultTest extends PureComponent{
     }
 
     render() {
+        console.log(JSON.stringify(this.props.formData[1]));
         let firstPieData = [this.props.data.characNR, this.props.data.characNRR, this.props.data.characR, this.props.data.characRAR, this.props.data.characAR, this.props.data.characNRRAR];
         let secondPieData = [0,0,0,0,0,0];
         let EveningPieData =[this.props.data.characNRNuit, this.props.data.characNRRNuit, this.props.data.characRNuit, this.props.data.characRARNuit, this.props.data.characARNuit, this.props.data.characNRRARNuit];
 
         //switching because the returned data is f*cked up
         // as in, it switches pie1 and pie2 data for no reason
-        if((this.props.formData[1].nbTheraputicBoxes === "Two therapeutic boxes (AM and PM)"))
+        if((this.props.formData[1].nbTherapeuticBoxes === "Two therapeutic boxes (AM and PM)"))
         {
             secondPieData = firstPieData;
             firstPieData = [this.props.data.characNRAM, this.props.data.characNRRAM, this.props.data.characRAM, this.props.data.characRARAM, this.props.data.characARAM, this.props.data.characNRRARAM]
@@ -94,16 +95,20 @@ class ResultTest extends PureComponent{
 
         return(
             <View>
-                    <View style={styles.pieTitleStyle}>
-                        <Text style={{color:"#FFF", fontSize:20}}>
-                            First Pie Graph
-                        </Text>
-                    </View>
-                    <TouchableHighlight
-                        onPress={()=>{
-                            console.log("This first pie has been pressed");
-                            this.handlePieClick(!this.state.modalVisible,firstPieData);
-                        }}>
+                <TouchableHighlight
+                onPress={()=>{
+                    console.log("This first pie has been pressed");
+                    this.handlePieClick(!this.state.modalVisible,firstPieData);
+                }}>
+                    <View>
+                        <View style={styles.pieTitleStyle}>
+                            <Text style={{color:"#FFF", fontSize:20}}>
+                                {(this.props.formData[1].nbTheraputicBoxes === "Two therapeutic boxes (AM and PM)")
+                                    ? "AM Pie Graph"
+                                    : "Day Pie Graph"
+                                }
+                            </Text>
+                        </View>
                         <View style={this.props.style} pointerEvents="none">
                             <VictoryPie
                                 radius={100}
@@ -113,46 +118,49 @@ class ResultTest extends PureComponent{
                                 innerRadius={50}
                             />
                         </View>
-                    </TouchableHighlight>
-                {//TODO
-                    (this.props.formData[1].nbTheraputicBoxes === "Two therapeutic boxes (AM and PM)")
+                    </View>
+                </TouchableHighlight>
+                {
+                    (this.props.formData[1].nbTherapeuticBoxes === "Two therapeutic boxes (AM and PM)")
                     ?
                         <View>
-                            <View style={styles.pieTitleStyle}>
-                                <Text style={{color:"#FFF", fontSize:20}}>
-                                    Second Pie Graph
-                                </Text>
-                            </View>
                             <TouchableHighlight
                                 onPress={()=>{
                                     console.log("This first pie has been pressed");
                                     this.handlePieClick(!this.state.modalVisible,secondPieData);
                                 }}>
-                                <View style={this.props.style} pointerEvents="none">
-                                    <VictoryPie
-                                        radius={100}
-                                        data={this.generateDataObjects(secondPieData)}
-                                        colorScale={['#1b3e70', '#62c9e4', '#c2c822', '#f8c82c', '#ed5f6d','#f6922d']}
-                                        animate={{duration: 500}}
-                                        innerRadius={50}
-                                    />
+                                <View>
+                                    <View style={styles.pieTitleStyle}>
+                                        <Text style={{color:"#FFF", fontSize:20}}>
+                                            PM Pie Graph
+                                        </Text>
+                                    </View>
+                                    <View style={this.props.style} pointerEvents="none">
+                                        <VictoryPie
+                                            radius={100}
+                                            data={this.generateDataObjects(secondPieData)}
+                                            colorScale={['#1b3e70', '#62c9e4', '#c2c822', '#f8c82c', '#ed5f6d','#f6922d']}
+                                            animate={{duration: 500}}
+                                            innerRadius={50}
+                                        />
+                                    </View>
                                 </View>
                             </TouchableHighlight>
                         </View>
+
                     :<View/>
                 }
-
-                    <View style={styles.pieTitleStyle}>
-                        <Text style={{color:"#FFF", fontSize:20}}>
-                            Evening Pie Graph
-                        </Text>
-                    </View>
-                    <TouchableHighlight
-                        onPress={()=>{
-                            console.log("This evening pie has been pressed");
-                            this.handlePieClick(!this.state.modalVisible,EveningPieData);
-                        }}
-                    >
+                <TouchableHighlight   onPress={()=>{
+                    console.log("This evening pie has been pressed");
+                    this.handlePieClick(!this.state.modalVisible,EveningPieData);
+                }}
+                >
+                    <View>
+                        <View style={styles.pieTitleStyle}>
+                            <Text style={{color:"#FFF", fontSize:20}}>
+                                Evening Pie Graph
+                            </Text>
+                        </View>
                         <View style={[this.props.style]} pointerEvents="none">
                             <VictoryPie
                                 radius={100}
@@ -163,7 +171,8 @@ class ResultTest extends PureComponent{
                                 innerRadius={50}
                             />
                         </View>
-                    </TouchableHighlight>
+                    </View>
+                </TouchableHighlight>
                 <View>
                     <Modal
                         animationType="fade"
@@ -203,6 +212,7 @@ class ResultTest extends PureComponent{
                                     <View style={styles.modalColors}>
                                         <TitleComponent
                                             text={"Percentages"}
+                                            containerStyle={{borderBottomWidth:0}}
                                         />
                                     </View>
                                     <View>

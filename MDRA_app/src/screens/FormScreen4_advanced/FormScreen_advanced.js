@@ -31,7 +31,8 @@ class FormScreenAdvanced extends PureComponent{
         try {
             console.log("sending data!\n and values is: "+ JSON.stringify(values));
             this.props.onAddData(values,this.state.currentPosition);
-            this.props.onChangePosition(4)
+            bag.setSubmitting(false);
+            this.props.onChangePosition(4);
 
         }catch (e) {
             bag.setSubmitting(false);

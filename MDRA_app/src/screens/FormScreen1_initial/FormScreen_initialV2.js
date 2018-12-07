@@ -74,12 +74,17 @@ class FormScreenInitial extends PureComponent{
         try {
             //console.log(JSON.stringify(values));
             this.props.onAddData(values, this.state.currentPosition);
-            bag.setSubmitting(false);
-            this.props.onChangePosition(this.state.currentPosition+1);
+            this.props.onChangePosition(this.state.currentPosition + 1);
             console.log("doing setPage");
-            this.props.setPage(this.state.currentPosition+1);
-
-        }catch (e) {
+            this.props.setPage(this.state.currentPosition + 1);
+            setTimeout(
+                () => {
+                    bag.setSubmitting(false);
+                },
+                1000
+            )
+        }
+        catch (e) {
             bag.setSubmitting(false);
             bag.setErrors(e);
         }

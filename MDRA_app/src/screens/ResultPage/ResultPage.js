@@ -61,12 +61,12 @@ class ResultPage extends PureComponent {
                 tabs={
                     [
                         {
-                            text: 'Area',
+                            text: 'Pk Profile',
                             iconSource: areaImage,
                             selectedIconSource: areaImage
                         },
                         {
-                            text: 'Pie',
+                            text: 'Performance',
                             iconSource: pieImage,
                             selectedIconSource: pieImage
                         }
@@ -182,7 +182,7 @@ class ResultPage extends PureComponent {
     _handleOnPressReuse = () => {
         Alert.alert(
             'Confirmation',
-            'Restore values and go to form?', [
+            'Restore these values and go to form?', [
                 {
                     text: 'Cancel',
                     onPress: (() => console.log('Cancel Pressed')),
@@ -218,7 +218,7 @@ class ResultPage extends PureComponent {
                             }}
                         >
                             <View style={{alignItems:'center',justifyContent:"center"}} pointerEvents="none">
-                                <TitleComponent text={"Area Chart"}/>
+                                <TitleComponent text={"PK Profile"}/>
                                 <GraphComponent
                                     data={this.props.state.main.resultsList[this.state.currentPosition].data}
                                     formData = {this.props.state.main.resultsList[this.state.currentPosition].formData}
@@ -230,7 +230,7 @@ class ResultPage extends PureComponent {
                     <View>
                         <ScrollView>
                             <View style={this.state.orientation?styles.pieChartStylesPortrait:styles.pieChartStylesLandscape}>
-                                <TitleComponent text={"Pie Charts"}/>
+                                <TitleComponent text={"Performance"}/>
                                 <PieChartComponent
                                     data={this.props.state.main.resultsList[this.state.currentPosition].data}
                                     formData = {this.props.state.main.resultsList[this.state.currentPosition].formData}
@@ -261,7 +261,7 @@ class ResultPage extends PureComponent {
                         }
                     />
                     <Button
-                        title="Reuse Data"
+                        title="Restore Data"
                         onPress={this._handleOnPressReuse}
                         buttonStyle={{backgroundColor:"#27408b"}}
                     />

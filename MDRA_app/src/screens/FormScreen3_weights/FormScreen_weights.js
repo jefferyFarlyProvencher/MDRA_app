@@ -40,10 +40,14 @@ class FormScreenWeights extends PureComponent{
     _handleSubmit =(async (values, bag) => {
         let target = this.props.advancedAllowed? 3: 4;
         try {
-            bag.setSubmitting(false);
             this.props.onAddData(values, this.state.currentPosition);
             this.props.setPage(target);
             this.props.onChangePosition(target);
+            // setTimeout(
+            //     () => {
+            //         bag.setSubmitting(false);
+            //     },
+            //     1000)
         }catch (e) {
             bag.setSubmitting(false);
             bag.setErrors(e);
@@ -224,7 +228,7 @@ class FormScreenWeights extends PureComponent{
                                 <View>
                                     <View>
                                         <LinedLabel
-                                            label={"Weight of threshold "}
+                                            label={"Roller Coaster Effect "}
                                         />
                                     </View>
                                     <View

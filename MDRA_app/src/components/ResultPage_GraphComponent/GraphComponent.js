@@ -17,7 +17,7 @@ class GraphComponent extends PureComponent{
     hasNotUnMounted = true;
 
     componentDidMount(){
-        this.handleChangeText();
+        //this.handleChangeText(); enable if we want animation+ add currentTextTurn as
     }
 
     componentWillUnmount(){
@@ -308,14 +308,14 @@ class GraphComponent extends PureComponent{
                 <TouchableHighlight
                     onPress={()=>{console.log("this was pressed right now"); alert("RollerCoaster Effect: " + displayText[1] +"\n Total Score: " + displayText[0]+"%")}}
                 >
-                    <View pointerEvents='none'>
+                    <View style={styles.scoreContainerStyle}>
                         <Animated.View
                             style={[
                                 {
-                                    opacity: this.state.fadeAnim.interpolate({
-                                            inputRange: [1,1.1],
-                                            outputRange: [1,1.1]
-                                    })
+                                    // opacity: this.state.fadeAnim.interpolate({
+                                    //         inputRange: [1,1.1],
+                                    //         outputRange: [1,1.1]
+                                    // })
 
                                 },
                                 {
@@ -323,8 +323,11 @@ class GraphComponent extends PureComponent{
                                 }
                             ]}
                         >
-                            <View>
-                                <Text style={{color:this.scoreColorIdentification(parseFloat(totalScoreAndRce[this.state.currentTextTurn]))}}>{displayText[this.state.currentTextTurn] + "%"}</Text>
+                            <View style={styles.scoresStyle}>
+                                <Text style={{color:this.scoreColorIdentification(parseFloat(totalScoreAndRce[0]))}}>{displayText[0] + "%"}</Text>
+                            </View>
+                            <View style={styles.scoresStyle}>
+                                <Text style={{color:this.scoreColorIdentification(parseFloat(totalScoreAndRce[1]))}}>{displayText[1] + "%"}</Text>
                             </View>
                         </Animated.View>
                     </View>
@@ -339,6 +342,21 @@ class GraphComponent extends PureComponent{
 const styles = StyleSheet.create({
     buttonStyle: {
         width: 300
+    },
+
+    scoreContainerStyle: {
+        padding : 1,
+        borderWidth: 0.5,
+        borderColor: "black"
+    },
+
+    scoresStyle: {
+        padding :10,
+        borderWidth: 0.5,
+        borderColor: "black",
+        width: "100%",
+        alignItems: 'center'
+
     }
 });
 

@@ -43,6 +43,7 @@ class FormScreenTimeZonage extends PureComponent{
             ?this.props.data.nbTherapeuticBoxes==="One therapeutic box (from AM to PM)"
                 ?1:2
             :1,
+
     };
 
     /*
@@ -52,9 +53,14 @@ class FormScreenTimeZonage extends PureComponent{
     _handleSubmit =(async (values, bag) => {
         try {
             this.props.onAddData(values, this.state.currentPosition);
-            bag.setSubmitting(false);
+
             this.props.setPage(this.state.currentPosition+1);
             this.props.onChangePosition(this.state.currentPosition+1);
+            setTimeout(
+                () => {
+                    bag.setSubmitting(false);
+                },
+                1000)
         }catch (e) {
             bag.setSubmitting(false);
             bag.setErrors(e);
@@ -84,7 +90,7 @@ class FormScreenTimeZonage extends PureComponent{
                 return (
                     Yup.object().shape({
                         tsDay: NewYupString().containsOnlyNumbers().required(requiredMessage),//Yup.number().positive().lessThan(Yup.ref('teDay', null)).required(requiredMessage),
-                        teDay: NewYupString().containsOnlyNumbers().isLaterThan(Yup.ref('tsDay', null)).isEarlierThan('12:00', thisTimeShouldBe + "earlier than 12:01").required(requiredMessage),//Yup.number().positive().moreThan(Yup.ref('tsDay', null)).lessThan(12.0001).required(requiredMessage),
+                        teDay: NewYupString().containsOnlyNumbers().isLaterThan(Yup.ref('tsDay', null)).required(requiredMessage),//Yup.number().positive().moreThan(Yup.ref('tsDay', null)).lessThan(12.0001).required(requiredMessage),
                         tsPM:  NewYupString().containsOnlyNumbers().isLaterThan('12:00', thisTimeShouldBe + "later than 11:59").required(requiredMessage),//Yup.number().positive().moreThan(11.999999).required(requiredMessage),
                         tePM: NewYupString().containsOnlyNumbers().isLaterThan(Yup.ref('tsPM', null)).required(requiredMessage),//Yup.number().positive().moreThan(Yup.ref('tsPM', null)).required(requiredMessage),
                         tsEvening: NewYupString().containsOnlyNumbers().isLaterThan(Yup.ref('tePM', null)).required(requiredMessage),//Yup.number().positive().moreThan(Yup.ref('teDay'), null).required(requiredMessage),
@@ -105,8 +111,12 @@ class FormScreenTimeZonage extends PureComponent{
         return convertTimeToHourFormat(""+value)
     };
 
+    /*
+        takes HH:MM value
+        returns float
+     */
     handleUnFormatTime = (value) => {
-        return convertTimeToDecimal(""+value)
+        return parseFloat(convertTimeToDecimal(""+value))
     };
 
     render() {
@@ -137,8 +147,8 @@ class FormScreenTimeZonage extends PureComponent{
                                         nbTherapeuticBoxes:"One therapeutic box (from AM to PM)",
                                         tsDay: '6:00',
                                         teDay:'15:00',
-                                        tsPM:'12:00',
-                                        tePM:'15:00',
+                                        tsPM:'15:00',
+                                        tePM:'18:00',
                                         tsEvening:'17:00',
                                         teEvening:'19:00',
                                         lunch:'12:00',
@@ -234,9 +244,9 @@ class FormScreenTimeZonage extends PureComponent{
                                                 <CustomMultiSlider
                                                     sliderLength={Dimensions.get("window").width*0.80}
                                                     min={0}
-                                                    max={this.state.nbOfBoxes === 1?16: 12}
+                                                    max={17}
                                                     step={0.5}
-                                                    values={[parseFloat(this.handleUnFormatTime(values.tsDay)),(parseFloat(this.handleUnFormatTime(values.teDay))>12&&this.state.nbOfBoxes===2)?12:parseFloat(this.handleUnFormatTime(values.teDay))]}
+                                                    values={[this.handleUnFormatTime(values.tsDay),this.handleUnFormatTime(values.teDay)]}
                                                     onValuesChange={
                                                         (values) => {
                                                             setFieldValue('tsDay', this.handleFormatTime(values[0].toString()));
@@ -295,10 +305,10 @@ class FormScreenTimeZonage extends PureComponent{
                                                 >
                                                     <CustomMultiSlider
                                                         sliderLength={Dimensions.get("window").width*0.80}
-                                                        min={12}
-                                                        max={16}
+                                                        min={this.handleUnFormatTime(values.teDay)}
+                                                        max={18}
                                                         step={0.5}
-                                                        values={[parseFloat(this.handleUnFormatTime(values.tsPM)),parseFloat(this.handleUnFormatTime(values.tePM))]}
+                                                        values={[this.handleUnFormatTime(values.tsPM),this.handleUnFormatTime(values.tePM)]}
                                                         onValuesChange={
                                                             (values) => {
                                                                 setFieldValue('tsPM', this.handleFormatTime(values[0].toString()));
@@ -318,7 +328,9 @@ class FormScreenTimeZonage extends PureComponent{
                                                 <View style={styles.inputContainerForTwo}>
                                                     <Input
                                                         label="Start Time"
-                                                        value={values.tsEvening}
+                                                        value={
+                                                            values.tsEvening
+                                                        }
                                                         onChange={setFieldValue}
                                                         onTouch={setFieldTouched}
                                                         onBlur={() =>{
@@ -332,7 +344,12 @@ class FormScreenTimeZonage extends PureComponent{
                                                 <View style={styles.inputContainerForTwo}>
                                                     <Input
                                                         label="End Time"
-                                                        value={values.teEvening}
+                                                        value={
+                                                            this.handleFormatTime(values.teEvening)<this.handleFormatTime(values.tsEvening)
+                                                                ?setFieldValue('teEvening', values.tsEvening)+0.5
+                                                                :values.teEvening
+
+                                                        }
                                                         onChange={setFieldValue}
                                                         onBlur={() =>{
                                                             setFieldValue("teEvening", this.handleFormatTime(values.teEvening));
@@ -349,11 +366,19 @@ class FormScreenTimeZonage extends PureComponent{
                                             >
                                                 <CustomMultiSlider
                                                     sliderLength={Dimensions.get("window").width*0.80}
-                                                    min={16}
+                                                    min={this.state.nbOfBoxes === 2
+                                                        ?this.handleUnFormatTime(values.tePM)
+                                                        :this.handleUnFormatTime(values.teDay)
+                                                    }
                                                     max={24}
                                                     step={0.5}
                                                     snapped={true}
-                                                    values={[parseFloat(this.handleUnFormatTime(values.tsEvening)),parseFloat(this.handleUnFormatTime(values.teEvening))]}
+                                                    values={
+                                                        [
+                                                            this.handleUnFormatTime(values.tsEvening),
+                                                            this.handleUnFormatTime(values.teEvening)
+                                                        ]
+                                                    }
                                                     onValuesChange={
                                                         (valuesS) => {
                                                             setFieldValue('tsEvening', this.handleFormatTime(valuesS[0].toString()));
