@@ -1,6 +1,6 @@
 import {
     ADD_DATA, ADD_LIST, ALLOW_ADV,
-    POS_CHNG, REMOVE_LIST, RENAME_LIST, EMPTY_LIST
+    POS_CHNG, REMOVE_LIST, RENAME_LIST, EMPTY_LIST, BACKUP_LIST, RESTORE_BACKUP
 } from '../actions/actionTypes'
 
 const initialState = {
@@ -16,7 +16,8 @@ const initialState = {
     Page3Data: null,
     advanceTabAccessible: false,
     receivedData: null,
-    resultsList: []//{key:'1',data:[data],formData:[], name:name, id: id}}],
+    resultsList: [],//{key:'1',data:[data],formData:[], name:name, id: id}}],
+    backUpResultList: []//backup for when doing a full deletion (NOTE: could be done for partial deletion as well)
 };
 
 const reducer = (state = initialState, action) => {
@@ -115,6 +116,26 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 resultsList: []
+            }
+        }
+        case(BACKUP_LIST):
+        {
+            let backUp = state.resultsList.slice();
+            return{
+                ...state,
+                backUpResultList: backUp
+
+            }
+        }
+
+        case(RESTORE_BACKUP):
+        {
+            let restoredBackUp = state.backUpResultList.slice();
+            return{
+                ...state,
+                resultsList: restoredBackUp,
+                backUpResultList: []
+
             }
         }
         default:

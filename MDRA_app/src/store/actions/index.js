@@ -11,3 +11,7 @@ export {removeData} from './removeData';
 export {renameData} from './renameData';
 
 export { emptyResultList } from './emptyResultList';
+
+export { restoreBackUp } from './restoreBackUp';
+
+export {backUpBeforeDeletion} from './backUpBeforeDeletion';

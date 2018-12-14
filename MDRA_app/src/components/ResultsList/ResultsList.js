@@ -131,7 +131,7 @@ class ResultsList extends Component{
                                     }
                                     }
                                     onPress={() => {
-                                            this.props.onItemSelected(info.item.key);
+                                            this.props.onItemAccessed(info.item.key);
                                             console.log('Item accessed: ' + info.item.key);
                                             console.log('pressed quickly');
                                     }

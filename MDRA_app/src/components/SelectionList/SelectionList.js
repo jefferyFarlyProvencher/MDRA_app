@@ -1,7 +1,11 @@
 import React, {Component} from 'react'
-import {View, Text,StyleSheet, FlatList, TouchableWithoutFeedback} from 'react-native'
-import {List, ListItem, SearchBar, CheckBox} from 'react-native-elements'
+import {View, Text,StyleSheet, FlatList, TouchableWithoutFeedback, Button} from 'react-native'
+import {List, ListItem, SearchBar} from 'react-native-elements'
 import Swipeout  from 'react-native-swipeout'
+
+//components
+import CheckBox from '../../components/CheckBox/CheckBox'
+import * as colors from '../../assets/colors'
 
 //credits to vikrant negi which helped with the search bar
 class SelectionList extends Component{
@@ -12,7 +16,7 @@ class SelectionList extends Component{
         //list that will be manipulated for the search bar
         modifiedList : this.props.list,
         searchText : "",
-        selectedList: []
+        selectedList: [this.props.selectedValue],
     };
 
 
@@ -21,7 +25,6 @@ class SelectionList extends Component{
             this.setState({
                 modifiedList : this.props.list,
                 searchText : "",
-                selectedList: [this.props.selectedList]
             })
         }
     }
@@ -36,14 +39,11 @@ class SelectionList extends Component{
 
             return itemData.indexOf(textData) > -1;
         });
-        // console.log(JSON.stringify("modList 1: "+ this.state.modifiedList));
-        // console.log(JSON.stringify("size modList 1: "+ this.state.modifiedList.length));
         this.setState({
             modifiedList: newData,
             searchText: text
         });
-        // console.log(JSON.stringify("modList 2: "+ this.state.modifiedList));
-        // console.log(JSON.stringify("size modList 2: "+ this.state.modifiedList.length));
+
     };
 
     //adds or removes key from list of selected elements
@@ -70,14 +70,15 @@ class SelectionList extends Component{
         this.setState((oldState)=>{
             return {
                 ...oldState,
-                selectedList:newList
+                selectedList:newList,
             }
         });
-        console.log("selectedList after:"+JSON.stringify(this.state.selectedList));
+       // console.log("selectedList after:"+JSON.stringify(this.state.selectedList));
         //reload screen?
     };
 
-    handleIsItemChecked = (key) =>{
+    handleIsItemChecked = (key, selectedList) =>{
+        let localList = selectedList?selectedList: this.state.selectedList;
         let isInList = false;
         let i = 0;
         for(i; i < this.state.selectedList.length; i++)
@@ -105,29 +106,60 @@ class SelectionList extends Component{
     };
 
     render() {
-        console.log(JSON.stringify(this.state.selectedList));
         return (
             <View style={{alignContent:"center",backgroundColor:"#262626"}}>
                 {this.renderHeader()}
+                <View style={styles.buttonContainer}>
+                    <Button
+                        title={"Cancel"}
+                        onPress={this.props.cancelSelection}
+                        color={colors.royalBlue1}
+                        style={styles.buttonStyle}
+                    />
+                    <Button
+                        title={"Delete"}
+                        onPress={() => this.props.deleteSelection(this.state.selectedList)}
+                        disabled={this.state.selectedList.length < 1}
+                        color={'red'}
+                        style={styles.buttonStyle}
+                    />
+                </View>
                 <List containerStyle={{margin:0, padding:0, borderTopWidth:0, borderBottomWidth:0}}>
                     <FlatList
                         style={styles.listContainer}
                         data={this.state.searchText !== ""?this.state.modifiedList:this.props.list}
-                        extraData={this.props.extraData}
+                        extraData={this.state}
                         renderItem={(info) => {
-                            console.log(this.handleIsItemChecked(info.item.key));
                             return (
-                                <View>
+                                <View style={{flexDirection: "row"}}>
                                     <CheckBox
-                                        checked={
-                                            this.handleIsItemChecked(info.item.key)
-                                        }
-                                        title={info.item.name}
+                                        checked={this.handleIsItemChecked(info.item.key)}
                                         onPress={() => {
                                             console.log("selecting: " + info.item.key);
                                             this.handleItemSelected(info.item.key)
                                         }}
-                                        containerStyle={{margin: 0}}
+                                        containerStyle={{
+                                            margin: 0,
+                                            paddingHorizontal: 0,
+                                            borderWidth: 0,
+                                            borderBottomWidth:0.5,
+                                            borderBottomColor: "grey",
+                                            backgroundColor: "transparent",
+                                            width:"10%",
+                                            alignItems: 'center',
+                                            justifyContent: "center"
+                                        }}
+                                    />
+                                    <ListItem
+                                        title={"Test Result: " + info.item.id}
+                                        subtitle={info.item.name}
+                                        key={info.item.key}
+                                        onPress={() => {
+                                            console.log("selecting: " + info.item.key);
+                                            this.handleItemSelected(info.item.key)
+                                        }
+                                        }
+                                        containerStyle={{width:"90%", paddingLeft:0, marginLeft:0}}
                                     />
                                 </View>
                             )
@@ -145,6 +177,16 @@ const styles = StyleSheet.create({
         width: "100%",
         height:"100%"
     },
+
+    buttonContainer:{
+        //flexDirection: "row"
+    },
+
+    buttonStyle:{
+        width: '50%',
+        marginBottom: 0,
+        paddingBottom: 0
+    }
 });
 
 export default SelectionList;

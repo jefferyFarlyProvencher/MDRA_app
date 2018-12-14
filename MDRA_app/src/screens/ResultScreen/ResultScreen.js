@@ -47,6 +47,25 @@ class ResultScreen extends Component{
         currentlySelectedItem: 0,
     };
 
+    static navigatorButtons = {
+        rightButtons: [
+            {
+                title: 'Rename', // for a textual button, provide the button title (label)
+                id: 'rename', // id for this button, given in onNavigatorEvent(event) to help understand which button was clicked
+                disabled: true, // optional, used to disable the button (appears faded and doesn't interact)
+                disableIconTint: true, // optional, by default the image colors are overridden and tinted to navBarButtonColor, set to true to keep the original image colors
+                showAsAction: 'ifRoom', // optional, Android only. Control how the button is displayed in the Toolbar. Accepted valued: 'ifRoom' (default) - Show this item as a button in an Action Bar if the system decides there is room for it. 'always' - Always show this item as a button in an Action Bar. 'withText' - When this item is in the action bar, always show it with a text label even if it also has an icon specified. 'never' - Never show this item as a button in an Action Bar.
+                buttonColor: 'blue', // Optional, iOS only. Set color for the button (can also be used in setButtons function to set different button style programatically)
+                buttonFontSize: 14, // Set font size for the button (can also be used in setButtons function to set different button style programatically)
+                buttonFontWeight: '600', // Set font weight for the button (can also be used in setButtons function to set different button style programatically)
+            },
+            {
+                //icon: require('../../img/navicon_add.png'), // for icon button, provide the local image asset name
+                id: 'add' // id for this button, given in onNavigatorEvent(event) to help understand which button was clicked
+            }
+        ]
+    };
+
     componentWillMount() {
         this.props.navigator.setStyle({
             navBarNoBorder: false,
@@ -155,8 +174,8 @@ class ResultScreen extends Component{
     };
 
     handleOnEnablingSelection = (key) => {
+        this.handleItemSelected(key);
         this.toggleSelectorList();
-        this.handleItemSelected(key)
     };
 
     handleItemSelected = (key) => {
@@ -236,6 +255,29 @@ class ResultScreen extends Component{
 
     };
 
+    handleSelectionDeletion = (selectedList)=>{
+        console.log("selectedList: "+ selectedList);
+        Alert.alert(
+            'Confirmation',
+            'Do you really want to remove the selected results?', [
+                {
+                    text: 'Nevermind, no',
+                    onPress: (() => console.log('Cancel Pressed')),
+                    style: 'cancel'
+                }, {
+                    text: 'Yes, erase them',
+                    onPress: () => {
+                        for(let i = 0; i < selectedList.length;i++)
+                            this.props.onRemoveData(selectedList[i])
+                    }
+                }
+            ],
+            {
+                cancelable: false
+            }
+        );
+    };
+
     _handleSubmit =(async (values, bag) => {
         try {
             this.props.onRenameData(this.state.renameTarget,values.newName);
@@ -255,17 +297,18 @@ class ResultScreen extends Component{
         let content = (
             (this.state.selectorListAvailable)
                 ?<View>
-                    <Button title={"Now in selection mode"} onPress={this.toggleSelectorList}/>
                     <SelectionList
                         list ={this.props.state.main.resultsList}
                         onItemSelected={this.handleItemSelected}
-                        selectedList={this.state.selectedList}
+                        selectedValue={this.state.currentlySelectedItem}
+                        cancelSelection={this.toggleSelectorList}
+                        deleteSelection={this.handleSelectionDeletion}
                     />
                 </View>
                 : <ResultsList
                     list ={this.props.state.main.resultsList}
                     onToggleSelectorList={this.handleOnEnablingSelection}
-                    onItemSelected={this.handleItemAccessed}
+                    onItemAccessed={this.handleItemAccessed}
                     onRemoveData={this.handleRemoveResult}
                     onRenameData={this.handleOnRenamePressed}
                     extraData={this.state}
