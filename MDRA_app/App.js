@@ -24,6 +24,7 @@ import mainScreenTest from './src/screens/FormTest/mainScreenTest';
 import ResultTest from './src/screens/ResultTest/ResultTest';
 import ResultPage from './src/screens/ResultPage/ResultPage';
 import PickerTest from './src/screens/PickerTest/PickerTest';
+import TestCapturePDF from './src/screens/TestCapturePDF/TestCapturePDF';
 
 import SendForm from './src/components/SendForm/SendForm';
 
@@ -49,6 +50,7 @@ Navigation.registerComponent('MDRA_app.resultTest', () => ResultTest, store, Pro
 Navigation.registerComponent('MDRA_app.sendFormScreen',() => SendFormScreen, store, Provider, persistor);
 Navigation.registerComponent('MDRA_app.resultPage',() => ResultPage, store, Provider, persistor);
 Navigation.registerComponent('MDRA_app.pickerTest',() => PickerTest);
+Navigation.registerComponent('MDRA_app.testCapturePDF',() => TestCapturePDF, store, Provider, persistor)
 
 //start App
 Navigation.startSingleScreenApp({

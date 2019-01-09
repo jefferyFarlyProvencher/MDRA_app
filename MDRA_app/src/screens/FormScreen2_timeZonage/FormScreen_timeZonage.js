@@ -28,7 +28,7 @@ class FormScreenTimeZonage extends PureComponent{
         ViewMode: Dimensions.get('window').height > 500 ? "portrait" : "landscape",
         currentPosition: 1,
         nbOfBoxes: this.props.data
-            ?this.props.data.nbTheraputicBoxes==="One therapeutic box (from AM to PM)"
+            ?this.props.data.nbTherapeuticBoxes==="One therapeutic box (from AM to PM)"
                 ?1:2
             :1,
     };
@@ -91,7 +91,7 @@ class FormScreenTimeZonage extends PureComponent{
                 <Formik
                     initialValues={(this.props.data)
                         ?{
-                            nbTheraputicBoxes:this.props.data.nbTheraputicBoxes,
+                            nbTherapeuticBoxes:this.props.data.nbTherapeuticBoxes,
                             tsDay: this.props.data.tsDay,
                             teDay:this.props.data.teDay,
                             tsPM:this.props.data.tsPM,
@@ -102,7 +102,7 @@ class FormScreenTimeZonage extends PureComponent{
                             bed:this.props.data.bed,
                         }
                         :{
-                            nbTheraputicBoxes:"One therapeutic box (from AM to PM)",
+                            nbTherapeuticBoxes:"One therapeutic box (from AM to PM)",
                             tsDay: '6',
                             teDay:'15',
                             tsPM:'12',
@@ -149,8 +149,8 @@ class FormScreenTimeZonage extends PureComponent{
                                         );
                                         setFieldValue(name,value)
                                     }}
-                                    name="nbTheraputicBoxes"
-                                    value={values.nbTheraputicBoxes}
+                                    name="nbTherapeuticBoxes"
+                                    value={values.nbTherapeuticBoxes}
                                     itemList={["One therapeutic box (from AM to PM)","Two therapeutic boxes (AM and PM)"]}/>
                             </View>
                             <View>

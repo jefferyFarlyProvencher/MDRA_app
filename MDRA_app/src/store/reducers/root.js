@@ -16,7 +16,7 @@ const initialState = {
     Page3Data: null,
     advanceTabAccessible: false,
     receivedData: null,
-    resultsList: [],//{key:'1',data:[data],formData:[], name:name, id: id}}],
+    resultsList: [],//{key:'1',data:[data],formData:[], name:name, id: id, date}}],
     backUpResultList: []//backup for when doing a full deletion (NOTE: could be done for partial deletion as well)
 };
 
@@ -72,7 +72,8 @@ const reducer = (state = initialState, action) => {
                         data: action.data,
                         formData: action.formData,
                         name: action.name,
-                        id: action.name
+                        id: action.name,
+                        date:action.date
                     }].concat(state.resultsList),
             };
         case(REMOVE_LIST):

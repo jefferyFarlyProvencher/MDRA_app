@@ -4,6 +4,8 @@ import 'react-native-svg';
 
 import {VictoryArea, VictoryChart, VictoryLine, VictoryLabel} from "victory-native";
 
+
+//TODO bedtime vertical line and lunch vertical line
 class GraphComponent extends PureComponent{
     state = {
         animationTime:500,

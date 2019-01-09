@@ -39,16 +39,16 @@ class SendFormScreen extends PureComponent{
         this.hasNotUnMounted = false;
     }
 
-    generateName = () => {
-        let d = new Date();
+    generateName = (d) => {
         return (//this.props.state.main.userId
-            d.getDate()+"/"+(d.getMonth()+1)+"/"+d.getFullYear()+"///"+(Math.random()*100+1)
+            d.getDate()+"_"+(d.getMonth()+1)+"_"+d.getFullYear()+"___"+parseInt(Math.random()*1000000+1)
         );
     };
 
     prepareToStoreData (data) {
         //console.log(JSON.stringify(data));
         //current data in redux will be copied to be stored with the result
+        let d = new Date();
         let formData = [
             this.props.state.main.Page0Data,
             this.props.state.main.Page1Data,
@@ -74,7 +74,7 @@ class SendFormScreen extends PureComponent{
         console.log(formData);
 
         //everything is added to the resultsList
-        this.props.onAddToResultList(data, this.generateName(), formData);
+        this.props.onAddToResultList(data, this.generateName(d), formData, d);
 
     }
 
@@ -172,7 +172,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onAddToResultList: (data,name, formData)=>dispatch(addToResultList(data, name, formData)),
+        onAddToResultList: (data,name, formData, date)=>dispatch(addToResultList(data, name, formData, date)),
         onChangePosition:   (pos) => dispatch(changePosition(pos))
     };
 };
