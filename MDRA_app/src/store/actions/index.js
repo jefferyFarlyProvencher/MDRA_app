@@ -15,3 +15,7 @@ export { emptyResultList } from './emptyResultList';
 export { restoreBackUp } from './restoreBackUp';
 
 export {backUpBeforeDeletion} from './backUpBeforeDeletion';
+
+export {addPDFToResult} from './addPDFToResult';
+
+export {toggleIndicatorVisibility} from './toggleIndicatorVisibility';

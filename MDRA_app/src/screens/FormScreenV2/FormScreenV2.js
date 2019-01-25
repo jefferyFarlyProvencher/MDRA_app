@@ -168,9 +168,9 @@ class FormScreen extends Component{
                     barStyle="light-content"
                 />
                 {this.props.state.main.position < 4 || this.props.state.main.position === undefined || this.props.state.main.position === null?
-                    <View style={{flex:1}}>
+                    <View style={[{flex:1, opacity: this.props.state.main.indicatorVisibility}]}>
                         <IndicatorViewPager
-                            style={{height:'90%', width:"100%"}}
+                            style={{height:'90%', width:"100%", bottom:0, left:0}}
                             indicatorOnTop={true}
                             horizontalScroll={false}
                             scrollEnabled={false}

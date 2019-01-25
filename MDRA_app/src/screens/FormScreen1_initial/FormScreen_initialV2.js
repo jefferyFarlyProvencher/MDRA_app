@@ -30,8 +30,7 @@ import NewYupString from '../../components/NewYupString/NewYupString';
 import TitleComponent from '../../components/TitleComponent/TitleComponent';
 //actions imports
 import {connect}  from "react-redux";
-import {addData} from "../../store/actions/addData";
-import {changePosition} from "../../store/actions/changePosition";
+import {addData, changePosition, toggleIndicatorVisibility} from "../../store/actions";
 
 //asset imports
 import * as colors from "../../assets/colors";
@@ -424,7 +423,7 @@ class FormScreenInitial extends PureComponent{
                                                                 onBlur={() =>{
                                                                     setFieldValue("adminTime1", this.handleFormatTime(values.adminTime1));
                                                                 }}
-                                                                onTouch={setFieldTouched}
+                                                                onTouch={(name) =>{ setFieldTouched(name); this.props.onToggleIndicator()}}
                                                                 name="adminTime1"
                                                                 error={this.state.amountOfPills>=1?(touched.adminTime1 && errors.adminTime1): null}
                                                                 keyboardType="numeric"
@@ -681,7 +680,8 @@ const styles = StyleSheet.create({
 const mapDispatchToProps = dispatch => {
     return {
         onAddData: (data, position) => dispatch(addData(data, position)),
-        onChangePosition: (pos) => dispatch(changePosition(pos))
+        onChangePosition: (pos) => dispatch(changePosition(pos)),
+        onToggleIndicator: () => dispatch(toggleIndicatorVisibility())
     };
 };
 

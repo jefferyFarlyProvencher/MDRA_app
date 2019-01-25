@@ -149,8 +149,8 @@ class FormScreenTimeZonage extends PureComponent{
                                         teDay:'15:00',
                                         tsPM:'15:00',
                                         tePM:'18:00',
-                                        tsEvening:'17:00',
-                                        teEvening:'19:00',
+                                        tsEvening:'18:00',
+                                        teEvening:'20:00',
                                         lunch:'12:00',
                                         bed:'24:00',
                                     }

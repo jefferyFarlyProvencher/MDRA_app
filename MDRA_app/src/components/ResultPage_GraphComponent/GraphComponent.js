@@ -4,8 +4,10 @@ import 'react-native-svg';
 
 import {VictoryArea, VictoryChart, VictoryLine, VictoryLabel} from "victory-native";
 
+import {convertTimeToDecimal} from '../../functions/FormatTime'
 
-//TODO bedtime vertical line and lunch vertical line
+
+
 class GraphComponent extends PureComponent{
     state = {
         animationTime:500,
@@ -72,6 +74,17 @@ class GraphComponent extends PureComponent{
             }
             ,this.state.fadeInAnimDuration
         )
+    };
+
+    generateVerticalLine = (startTime) => {
+        let startTimeParsed = parseFloat(startTime);
+        let lines = [{x:startTimeParsed,y:0}];
+        //lunch time line
+        for(let i = 0.5; i < 25; i=i+0.5)
+        {
+            lines.push({x:startTimeParsed,y:i})
+        }
+        return lines;
     };
 
     scoreColorIdentification = (score) => {
@@ -244,6 +257,9 @@ class GraphComponent extends PureComponent{
         let displayText = ["Total Score: "+ this.props.data.TotalScore,"Roller Coaster Effect: "+this.props.data.rce];
         //these are only the values
         let totalScoreAndRce = [this.props.data.TotalScore, this.props.data.rce];
+        //configuring bed and lunch times
+        let lunchTime = convertTimeToDecimal(this.props.formData[1].lunch);
+        let bedTime = convertTimeToDecimal(this.props.formData[1].bed);
         ///ACTUAL RENDERING STARTS HERE
         return(
             <View style={[this.props.style]} pointerEvents="none">
@@ -252,7 +268,6 @@ class GraphComponent extends PureComponent{
                     domain={{x:[0,30],y: [0,25]}}
                     label ={{x:"A",y:"B"}}
                 >
-
                     <VictoryArea
                         style={{data: {fill: '#cbe3f3'}}}
                         data={this.generateDataDouble(this.props.data.percentile10, this.props.data.percentile90)}
@@ -300,12 +315,23 @@ class GraphComponent extends PureComponent{
                         style={{data:{stroke:this.scoreColorIdentification(eveningBoxPercentage)}}}
                         data={this.generateSquareBottomRight(eveningBoxX,eveningBoxY,eveningBoxHeight,eveningBoxWidth)}
                     />
+                    <VictoryLine
+                        style={{data:{stroke:"#00d9e2"}}}
+                        data={this.generateVerticalLine(lunchTime)}
+                    />
+                    <VictoryLine
+                        style={{data:{stroke:"#0700a6"}}}
+                        data={this.generateVerticalLine(bedTime)}
+                    />
+
                     <VictoryLabel text={(firstBoxPercentage !== null)?firstBoxPercentage+"%": "There was an error because this is null"} datum={{x:firstBoxX,y:firstBoxY+firstBoxHeight+1}}/>
                     <VictoryLabel text={(secondBoxPercentage !== null)?secondBoxPercentage+"%":""} datum={{x:secondBoxX,y:secondBoxY+secondBoxHeight+1
                     }}/>
                     <VictoryLabel text={eveningBoxPercentage+"%"} datum={{x:eveningBoxX,y:eveningBoxY+eveningBoxHeight+1}}/>
                     <VictoryLabel text={"Time (h)"} datum={{x:29,y:1}}/>
                     <VictoryLabel text={"Concentration (ng/mL)"} datum={{x:0,y:26}}/>
+                    <VictoryLabel text={"Lunch Time"} datum={{x:lunchTime-2,y:24}}/>
+                    <VictoryLabel text={"Bed Time"} datum={{x:bedTime-2.5,y:24}}/>
                </VictoryChart>
                 <TouchableHighlight
                     onPress={()=>{console.log("this was pressed right now"); alert("RollerCoaster Effect: " + displayText[1] +"\n Total Score: " + displayText[0]+"%")}}

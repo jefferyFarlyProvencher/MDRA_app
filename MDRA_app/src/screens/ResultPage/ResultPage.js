@@ -8,14 +8,18 @@ import {
     Platform,
     TouchableOpacity,
     BackHandler,
-    Alert, Animated
+    Alert, Animated,
+    PermissionsAndroid,
+    Button
 } from 'react-native';
-import {Button} from 'react-native-elements';
+//import {Button} from 'react-native-elements';
 import 'react-native-svg';
 import { IndicatorViewPager, PagerTitleIndicator, PagerTabIndicator } from 'rn-viewpager'
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import Spinner from "react-native-loading-spinner-overlay";
-
+import RNHTMLtoPDF from "react-native-html-to-pdf";
+import ViewShot, {captureRef} from "react-native-view-shot";
+import RNFetchBlob from 'rn-fetch-blob';
 //What is this?
 import Draggable from 'react-native-draggable';
 
@@ -23,16 +27,15 @@ import Draggable from 'react-native-draggable';
 import areaImage from '../../assets/area_small.png';
 import pieImage from '../../assets/pie_small.png';
 import pdfImage from '../../assets/pdf-2.png';
-import udemLogo from '../../assets/UdeM-officiel-RVB.png';
+import udemLogo from '../../assets/UdeMLogo.png';
 
 //redux imports
 import {connect} from 'react-redux';
-import {addData, changePosition, allowAdvancedOptions} from "../../store/actions";
+import {addData, changePosition, allowAdvancedOptions, addPDFToResult} from "../../store/actions";
 //component imports
 import GraphComponent from '../../components/ResultPage_GraphComponent/GraphComponent';
 import TitleComponent from "../../components/TitleComponent/TitleComponent";
-import RNHTMLtoPDF from "react-native-html-to-pdf";
-import ViewShot, {captureRef} from "react-native-view-shot";
+
 import SinglePieChartComponent from "../../components/ResultPage_PieChartsComponent/SinglePieChartComponent";
 import {udemDark} from "../../assets/colors";
 
@@ -44,6 +47,7 @@ class ResultPage extends PureComponent {
         orientation: true, //portrait true, landscape false
         modalVisible: false,
         visible: Platform.OS==="ios",
+        creatingPDF: false,
 
     };
 
@@ -58,6 +62,42 @@ class ResultPage extends PureComponent {
     componentWillUnmount() {
         BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
     };
+
+    async requestExternalStoreageRead() {
+        try {
+            const granted = await PermissionsAndroid.request(
+                PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+                {
+                    'title': 'Cool App ...',
+                    'message': 'App needs access to external storage'
+                }
+            );
+
+            return granted == PermissionsAndroid.RESULTS.GRANTED
+        }
+        catch (err) {
+            //Handle this error
+            return false;
+        }
+    }
+
+    async requestExternalStoreageWrite() {
+        try {
+            const granted = await PermissionsAndroid.request(
+                PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+                {
+                    'title': 'Cool App ...',
+                    'message': 'App needs access to external storage'
+                }
+            );
+
+            return granted == PermissionsAndroid.RESULTS.GRANTED
+        }
+        catch (err) {
+            //Handle this error
+            return false;
+        }
+    }
 
     _renderTabIndicator = () => {
         return (
@@ -152,7 +192,7 @@ class ResultPage extends PureComponent {
         //     JSON.stringify(this.props.state.main.Page2Data) + ";"+
         //     JSON.stringify(this.props.state.main.Page3Data) + ";"
         // );
-         console.log("FORMDATA: " + JSON.stringify(formData));
+        //console.log("FORMDATA: " + JSON.stringify(formData));
         //set It to each page
         this.props.onAddData(formData[0],0);
         this.props.onAddData(formData[1],1);
@@ -207,26 +247,57 @@ class ResultPage extends PureComponent {
         );
     };
 
+    toggleSpinner = ()=> {
+        this.setState((oldState) =>{
+            return({
+                ...oldState,
+                //remove spinner
+                visible: !oldState.visible
+            })
+        })
+    };
+
     //////
     //generate html sets up the html for the html to pdf conversion
-    generateHTML = (pkProfilePath, performanceDayPath, performancePMPath, performanceEveningPath) =>{
+    generateHTML = (pkProfileBase64Data, performanceDayBase64Data, performancePMBase64Data, performanceEveningBase64Data) =>{
         //this is a copy of what we find on the render place, because I can't, as of now, think of a way to get the appropriate
         let allPieData= this.props.state.main.resultsList[this.state.currentPosition].data;
-        let firstPieData = parseInt([allPieData.characNR*100, allPieData.characNRR*100, allPieData.characR*100, allPieData.characRAR*100, allPieData.characAR*100, allPieData.characNRRAR*100]);
+        let firstPieData = [
+            (allPieData.characNR*100).toFixed(1),
+            (allPieData.characNRR*100).toFixed(1),
+            (allPieData.characR*100).toFixed(1),
+            (allPieData.characRAR*100).toFixed(1),
+            (allPieData.characAR*100).toFixed(1),
+            (allPieData.characNRRAR*100).toFixed(1)
+        ];
         let secondPieData = [0,0,0,0,0,0];
-        let eveningPieData =parseInt([allPieData.characNRNuit*100, allPieData.characNRRNuit*100, allPieData.characRNuit*100, allPieData.characRARNuit*100, allPieData.characARNuit*100, allPieData.characNRRARNuit*100]);
+        let eveningPieData =[
+            (allPieData.characNRNuit*100).toFixed(1),
+            (allPieData.characNRRNuit*100).toFixed(1),
+            (allPieData.characRNuit*100).toFixed(1),
+            (allPieData.characRARNuit*100).toFixed(1),
+            (allPieData.characARNuit*100).toFixed(1),
+            (allPieData.characNRRARNuit*100).toFixed(1)
+        ];
         let nbTherapeuticBoxes = this.props.state.main.resultsList[this.state.currentPosition].formData[1].nbTherapeuticBoxes === "Two therapeutic boxes (AM and PM)";
         //switching because the returned data is f*cked up
         // as in, it switches pie1 and pie2 data for no reason
         if(nbTherapeuticBoxes)
         {
             secondPieData = firstPieData;
-            firstPieData = parse[allPieData.characNRAM*100, allPieData.characNRRAM*100, allPieData.characRAM*100, allPieData.characRARAM*100, allPieData.characARAM*100, allPieData.characNRRARAM*100]
+            firstPieData = [
+                (allPieData.characNRAM*100).toFixed(1),
+                (allPieData.characNRRAM*100).toFixed(1),
+                (allPieData.characRAM*100).toFixed(1),
+                (allPieData.characRARAM*100).toFixed(1),
+                (allPieData.characARAM*100).toFixed(1),
+                (allPieData.characNRRARAM*100).toFixed(1)
+            ]
         }
         let PMhtml = (
-            performancePMPath
+            performancePMBase64Data
                 ?"<div style=\"position:relative\">"+
-                "<div> <img src=\""+ performancePMPath+"\" alt=\"PerformanceDay_image\" style=\"width:38%;\"/> <div class=\"row\">"+
+                "<div> <img src=\"data:image/jpeg;base64,"+ performancePMBase64Data+"\" alt=\"PerformanceDay_image\" style=\"width:38%;\"/> <div class=\"row\">"+
                 "<div class=\"col-sm-8\" style=\"position:absolute;right:0; width:50%; top:100px\">"+
                 "<table class=\"table table-bordered table-condensed\"> <tbody style=\"background-color:white;\">"+
                 "<TR><td style=\"background-color:#1b3e70;\"></td><td>Non Responder:</td><td>"+secondPieData[0]  +"%</td><td></td> <td style=\"background-color:#62c9e4;\"></td><td>Non Responder / Responder:</td><td>"+secondPieData[1]  +"%</td><td></td></TR>"+
@@ -242,7 +313,7 @@ class ResultPage extends PureComponent {
             "<h2>Results were calculated on the "+this.props.state.main.resultsList[this.state.currentPosition].date+"</h3>"+
             //pk profile graph
             "<div style=\"background-color:lightgrey\"><h3>PK Profile<h3></div>"+
-            "<div> <img src=\""+ pkProfilePath +"\" alt=\"PK_Profile_image\" style=\"height:70%; display: block;margin-left: auto;margin-right: auto;\"/>"+
+            "<div> <img src=\"data:image/jpeg;base64,"+ pkProfileBase64Data +"\" alt=\"PK_Profile_image\" style=\""+(Platform.OS==="ios"?"height:70%":"height:40%")+"; display: block;margin-left: auto;margin-right: auto;\"/>"+
             //there should be percentages here
             //here we start the pie graphs
             //performance
@@ -252,7 +323,7 @@ class ResultPage extends PureComponent {
             "<div style=\"background-color:lightgrey; margin-top: 10em\"><h3>Performance<h3></div>"+
             //day
             "<div style=\"position:relative\">"+
-            "<div> <img src=\""+ performanceDayPath+"\" alt=\"PerformanceDay_image\" style=\"width:38%;\"/> <div class=\"row\">"+
+            "<div> <img src=\"data:image/jpeg;base64,"+ performanceDayBase64Data+"\" alt=\"PerformanceDay_image\" style=\"width:38%;\"/> <div class=\"row\">"+
             "<div class=\"col-sm-8\" style=\"position:absolute;right:0; width:50%; top:100px\">"+
             "<table class=\"table table-bordered table-condensed\"> <tbody style=\"background-color:white;\">"+
             "<TR><td style=\"background-color:#1b3e70;\"></td><td>Non Responder:</td><td>"+ firstPieData[0] +"%</td><td></td> <td style=\"background-color:#62c9e4;\"></td><td>Non Responder / Responder:</td><td>"+ firstPieData[1] +"%</td><td></td></TR>"+
@@ -264,7 +335,7 @@ class ResultPage extends PureComponent {
             PMhtml +
             //evening
             "<div style=\"position:relative\">"+
-            "<div> <img src=\""+ performanceEveningPath+"\" alt=\"PerformanceDay_image\" style=\"width:38%  \"/> <div class=\"row\">"+
+            "<div> <img src=\"data:image/jpeg;base64,"+ performanceEveningBase64Data+"\" alt=\"PerformanceDay_image\" style=\"width:38%  \"/> <div class=\"row\">"+
             "<div class=\"col-sm-8\" style=\"position:absolute;right:0; width:50%; top:100px\">"+
             "<table class=\"table table-bordered table-condensed\"> <tbody style=\"background-color:white;\">"+
             "<TR><td style=\"background-color:#1b3e70;\"></td><td>Non Responder:</td><td>"+ eveningPieData[0] +"%</td><td></td> <td style=\"background-color:#62c9e4;\"></td><td>Non Responder / Responder:</td><td>"+ eveningPieData[1] +"%</td><td></td></TR>"+
@@ -278,28 +349,60 @@ class ResultPage extends PureComponent {
     };
 
     generatePDF = async() => {
-        let pkProfilePath = await this.capture(this.pkProfileRef);
-        let performanceDayPath = await this.capture(this.performanceDayRef);
-        let performancePMPath = false;
+        //await this.toggleSpinner();
+        //await this.requestExternalStoreageRead();
+        //await this.requestExternalStoreageWrite();
+        let pkProfileBase64Data = await this.capture(this.pkProfileRef);
+        let performanceDayBase64Data = await this.capture(this.performanceDayRef);
+        let performancePMBase64Data = false;
         if(this.performancePMRef)
-            performancePMPath = await this.capture(this.performancePMRef);
+            performancePMBase64Data = await this.capture(this.performancePMRef);
 
-        let performanceEveningPath = await this.capture(this.performanceEveningRef);
+        let performanceEveningBase64Data = await this.capture(this.performanceEveningRef);
 
-        let html = this.generateHTML(pkProfilePath, performanceDayPath, performancePMPath, performanceEveningPath);
+        let html = this.generateHTML(pkProfileBase64Data, performanceDayBase64Data, performancePMBase64Data, performanceEveningBase64Data);
 
         let fileName = this.props.state.main.resultsList[this.state.currentPosition].name;
-        //remove all ponctuations
-        fileName = fileName.replace(/(~|`|!|@|#|$|%|^|&|\*|\(|\)|{|}|\[|\]|;|:|\"|'|<|,|\.|>|\?|\/|\\|\||-|_|\+|=)/g,"");
+        //remove all ponctuations off the fileName
+        fileName = "MDRA_Result_"+ fileName.replace(/(~|`|!|@|#|$|%|^|&|\*|\(|\)|{|}|\[|\]|;|:|\"|'|<|,|\.|>|\?|\/|\\|\||-|_|\+|=)/g,"");
+        //
         let options = {
             html: html,
-            fileName: ('Result'+fileName),
+            fileName: (fileName),
             directory: 'Documents',
+            base64: true
         };
-
+        //
         let file = await RNHTMLtoPDF.convert(options);
         // console.log(file.filePath);
-        await alert(file.filePath);
+
+        //Unfortunately, openGeneratedPDF cannot find the RNHTMLtoPDF 'Documents' location
+        // so, a new pdf file is generated at the same spot as the first
+        let filePath = file.filePath;
+        //console.log("Base64: "+ file.base64);
+        let writeResult = "No need, it is IOS";
+        if(Platform.OS === 'android'){
+            filePath = RNFetchBlob.fs.dirs.DownloadDir + fileName +'.pdf';
+            await RNFetchBlob.fs.writeFile(filePath, file.base64, 'base64')
+                .then(response => {
+                    console.log('Success Log: ', response);
+                    writeResult = 'Success Log: '+ response;
+                })
+                .catch(errors => {
+                    console.log(" Error Log: ", errors);
+                    writeResult = " Error Log: "+ errors;
+                })
+
+        }
+
+        //await this.toggleSpinner();
+
+        await Alert.alert(
+            'PDF Creation Confirmation',
+            ("The pdf was created at this location: " + filePath+ " and writeResult??->>>"+writeResult)
+        );
+        //as there
+        await this.props.onAddPDFToResult(this.state.currentPosition, filePath);
     };
 
     capture = async(ref) => {
@@ -307,11 +410,13 @@ class ResultPage extends PureComponent {
         await captureRef(ref, {
             format: 'jpg',
             quality: 1,
+            result: "base64"
         }).then(uri => {
             capturePath = uri;
         });
         if(capturePath !== "")
         {
+            //console.log("capture result:"+ capturePath);
             return capturePath
         }
         else{
@@ -330,7 +435,9 @@ class ResultPage extends PureComponent {
                     style: 'cancel'
                 }, {
                     text: 'Agree',
-                    onPress: () => this.generatePDF()
+                    onPress: () =>{
+                        this.generatePDF();
+                    }
                 }
             ],
             {
@@ -339,13 +446,31 @@ class ResultPage extends PureComponent {
         );
     };
 
+    openGeneratedPDF = (sentPath) => {
+        let path = this.props.state.main.resultsList[this.state.currentPosition].filePDF;
+        if(sentPath)
+        {
+            console.log("sent path: "+ sentPath);
+            path = "data/"+ sentPath;
+        }
+        console.log("CURRENT PATH BEFORE OPENING IS: "+ path);
+        if(Platform.OS === "ios"){
+            RNFetchBlob.ios.openDocument(path);
+        }
+        else{
+            const android = RNFetchBlob.android;
+            android.actionViewIntent(path, 'application/pdf');
+        }
+    };
+
 //    Animated.sequence([
 
     render() {
         this.setTitleOnChange();
         if(this.state.visible  && Platform.OS === "ios")this._handleOnStartUp();
         let allPieData= this.props.state.main.resultsList[this.state.currentPosition].data;
-        console.log("THIS IS THE DATE OF THIS RESULT: "+this.props.state.main.resultsList[this.state.currentPosition].date);
+        //console.log("THIS IS THE filePDF OF THIS RESULT: "+JSON.stringify(this.props.state.main.resultsList[this.state.currentPosition].filePDF));
+        //console.log("THIS IS THE FORMDATA page 1 OF THIS RESULT: "+JSON.stringify(this.props.state.main.resultsList[this.state.currentPosition].formData[1]));
         let firstPieData = [allPieData.characNR, allPieData.characNRR, allPieData.characR, allPieData.characRAR, allPieData.characAR, allPieData.characNRRAR];
         let secondPieData = [0,0,0,0,0,0];
         let eveningPieData =[allPieData.characNRNuit, allPieData.characNRRNuit, allPieData.characRNuit, allPieData.characRARNuit, allPieData.characARNuit, allPieData.characNRRARNuit];
@@ -422,55 +547,121 @@ class ResultPage extends PureComponent {
                             </View>
                         </ScrollView>
                     </View>
-                    <View style={styles.pdfButtonContainerStyle}>
-                        <Button onPress={this.handleGeneratePDF} title={"Press to generate PDF"} buttonStyle={styles.pdfButtonStyle}/>
+                    <View>
+                        {this.props.state.main.resultsList[this.state.currentPosition].filePDF
+                            ?<View style={{padding: 10, height:"100%"}}>
+                                <TitleComponent text={"PDF already generated for this result"} />
+                                <View style={[styles.pdfButtonContainerStyle]}>
+                                    <TouchableOpacity
+                                        onPress={()=>{
+                                            console.log("not implemented yet?");
+                                            this.openGeneratedPDF();}}
+                                    >
+                                        <View  style={[styles.drawerItem]}>
+                                            <Ionicon
+                                                size={40}
+                                                name= {"md-open"}
+                                                color="#52afff" style={styles.drawerItemIcon}
+                                            />
+                                            <View style={styles.drawerTextContainer}>
+                                                <Text style={styles.drawerText}>{"Press to view or share the generated PDF"}</Text>
+                                            </View>
+                                        </View>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity onPress={this.handleGeneratePDF}>
+                                        <View  style={styles.drawerItem}>
+                                            <Ionicon
+                                                size={40}
+                                                name= {"ios-repeat"}
+                                                color="#52afff" style={styles.drawerItemIcon}
+                                            />
+                                            <View style={styles.drawerTextContainer}>
+                                                <Text style={styles.drawerText}>{"Press to generate PDF again in case of an Error"}</Text>
+                                            </View>
+                                        </View>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity onPress={console.log("PDF DELETION NOT IMPLEMENTED YET")}>
+                                        <View  style={[styles.drawerItem,{backgroundColor:"#f9000b"}]}>
+                                            <Ionicon
+                                                size={40}
+                                                name= {"ios-trash"}
+                                                color="#52afff" style={styles.drawerItemIcon}
+                                            />
+                                            <View style={styles.drawerTextContainer}>
+                                                <Text style={styles.drawerText}>{"Delete generated PDF"}</Text>
+                                            </View>
+                                        </View>
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                            :<View  style={styles.pdfButtonContainerStyle}>
+                                <Button onPress={this.handleGeneratePDF} title={"Press to generate PDF"} buttonStyle={styles.pdfButtonStyle}/>
+                            </View>
+                        }
                     </View>
                 </IndicatorViewPager>
-                <View style={[styles.buttonsContainer]}>
-                    <Button
-                        title="Go back"
-                        onPress={this._handleOnPressBack}
-                        disabled={
-                            this.state.listLength<1 ||
-                            this.state.currentPosition === 0
-                        }
-                        raise={
-                            this.state.listLength<1 ||
-                            this.state.currentPosition === 0
-                        }
-                        icon={
-                            {
-                                name: "chevron-left",
-                                color: "white",
-                                type: "ionicons"
+                <View style={[styles.buttonsContainer, {paddingHorizontal:10}]}>
+                    <View style={{flexDirection: 'row',justifyContent:"center"}}>
+                        <Ionicon
+                            size={30}
+                            name= {"md-arrow-dropleft"}
+                            color= {(this.state.listLength<1 || this.state.currentPosition === 0)?"#eee" :"#52afff"} style={styles.drawerItemIcon}
+                            style={{paddingTop:4.5}}
+                        />
+                        <Button
+                            title="Go back"
+                            onPress={this._handleOnPressBack}
+                            disabled={
+                                this.state.listLength<1 ||
+                                this.state.currentPosition === 0
                             }
-                        }
-                    />
+                            raise={
+                                this.state.listLength<1 ||
+                                this.state.currentPosition === 0
+                            }
+                            icon={
+                                {
+                                    name: "chevron-left",
+                                    color: "white",
+                                    type: "ionicons"
+                                }
+                            }
+
+                        />
+                    </View>
                     <Button
                         title="Restore Data"
                         onPress={this._handleOnPressReuse}
                         buttonStyle={{backgroundColor:"#27408b"}}
                     />
-                    <Button
-                        title="Go next"
-                        onPress={this._handleOnPressNext}
-                        iconRight={
-                            {
-                                name:"chevron-right"
+                    <View style={{flexDirection: 'row',justifyContent:"center"}}>
+                        <Button
+                            title="Go next"
+                            onPress={this._handleOnPressNext}
+                            iconRight={
+                                {
+                                    name:"chevron-right"
+                                }
                             }
-                        }
-                        disabled={
-                            this.state.listLength<1 ||
-                            this.state.currentPosition > this.state.listLength-2
-                        }
-                        raise={
-                            this.state.listLength<1 ||
-                            this.state.currentPosition > this.state.listLength-2
-                        }
-                    />
+                            disabled={
+                                this.state.listLength<1 ||
+                                this.state.currentPosition > this.state.listLength-2
+                            }
+                            raise={
+                                this.state.listLength<1 ||
+                                this.state.currentPosition > this.state.listLength-2
+                            }
+                        />
+                        <Ionicon
+                            size={30}
+                            name= {"md-arrow-dropright"}
+                            color="#52afff" style={styles.drawerItemIcon}
+                            style={{paddingTop:4.5}}
+                        />
+                    </View>
                 </View>
                 <View>
-                    <Spinner visible={this.state.visible} textContent={"Loading..."} textStyle={{color: '#FFF'}} />
+                    <Spinner visible={this.state.visible} textContent={this.state.creatingPDF?"Generating PDF":"Loading..."} textStyle={{color: '#FFF'}} />
                 </View>
             </View>
         )
@@ -498,6 +689,7 @@ const styles = StyleSheet.create({
     buttonsContainer: {
         flexDirection:"row",
         justifyContent:'center',
+        alignItems: "center",
         height:"10%",
     },
 
@@ -509,7 +701,29 @@ const styles = StyleSheet.create({
     pdfButtonStyle:{
         backgroundColor: 'red',
         borderRadius:80,
-        height: 100
+        height: 100,
+    },
+    drawerItemIcon: {
+        width: "10%"
+    },
+
+    drawerItem: {
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent:"center",
+        padding:10,
+        marginVertical: 10,
+        backgroundColor: "#eee",
+    },
+
+    drawerTextContainer: {
+        width: "90%",
+        padding: 10,
+
+    },
+
+    drawerText:{
+        textAlign: 'center'
     }
 });
 
@@ -518,6 +732,7 @@ const mapDispatchToProps = dispatch => {
         onAddData: (data, position) => dispatch(addData(data, position)),
         onChangePosition: (position) => dispatch(changePosition(position)),
         allowAdvancedOptions: () => dispatch(allowAdvancedOptions()),
+        onAddPDFToResult: (selectedResult, pdfLocation) => dispatch(addPDFToResult(selectedResult,pdfLocation))
 
     }
 };

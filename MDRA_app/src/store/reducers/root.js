@@ -1,48 +1,50 @@
 import {
     ADD_DATA, ADD_LIST, ALLOW_ADV,
-    POS_CHNG, REMOVE_LIST, RENAME_LIST, EMPTY_LIST, BACKUP_LIST, RESTORE_BACKUP
+    POS_CHNG, REMOVE_LIST, RENAME_LIST, EMPTY_LIST,
+    BACKUP_LIST, RESTORE_BACKUP,ADD_PDF_LIST, TOGGLE_INDICATOR_VISIBILITY
 } from '../actions/actionTypes'
 
 const initialState = {
     position: 0,
-    PageData: {
-      Page0: null,
-      Page1: null,
-      Page2: null,
-    },
     Page0Data: null,
     Page1Data: null,
     Page2Data: null,
     Page3Data: null,
     advanceTabAccessible: false,
     receivedData: null,
-    resultsList: [],//{key:'1',data:[data],formData:[], name:name, id: id, date}}],
-    backUpResultList: []//backup for when doing a full deletion (NOTE: could be done for partial deletion as well)
+    resultsList: [],//{key:'1',data:[data],formData:[], name:name, id: id, date, filePDF}}],
+    backUpResultList: [], //backup for when doing a full deletion (NOTE: could be done for partial deletion as well)
+    indicatorVisibility: 1 //this removes the visibility of the indicator in order to see what we are typing when the glitch keyboard is active
 };
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
         case (ADD_DATA+'0'):
+            //saves data for page 0 of form
             return {
                 ...state,
                 Page0Data: action.pageData,
             };
         case (ADD_DATA+'1'):
+            //saves data for page 1 of form
             return {
                 ...state,
                 Page1Data: action.pageData,
             };
         case (ADD_DATA+'2'):
+            //saves data for page 2 of form
             return {
                 ...state,
                 Page2Data: action.pageData,
             };
         case (ADD_DATA+'3'):
+            //saves data for page 3 of form
             return {
                 ...state,
                 Page3Data: action.pageData,
             };
         case (POS_CHNG):
+            //position here refers to the position in the form
             return{
                 ...state,
                 position:action.position
@@ -64,6 +66,7 @@ const reducer = (state = initialState, action) => {
                 };
             }
         case(ADD_LIST):
+            //adds a result to the result list
             return{
                 ...state,
                 resultsList:
@@ -73,7 +76,9 @@ const reducer = (state = initialState, action) => {
                         formData: action.formData,
                         name: action.name,
                         id: action.name,
-                        date:action.date
+                        date:action.date,
+                        filePDF: undefined
+
                     }].concat(state.resultsList),
             };
         case(REMOVE_LIST):
@@ -93,20 +98,23 @@ const reducer = (state = initialState, action) => {
                     break;
                 }
             }
-            console.log(target);
-            console.log("IF NOT NULL HERE WHAT IT SHOULD EQUAL: " + JSON.stringify(state.resultsList[target].name));
+            //console.log(target);
+            //console.log("IF NOT NULL HERE WHAT IT SHOULD EQUAL: " + JSON.stringify(state.resultsList[target].name));
             let targetedObject = state.resultsList[target];
-            console.log(JSON.stringify(targetedObject));
+            //console.log(JSON.stringify(targetedObject));
             let updatedResult = {
-                key: targetedObject.key,
+                key: action.key,
                 data: targetedObject.data,
                 formData: targetedObject.formData,
                 name: action.newName,
-                id: targetedObject.id
+                id: targetedObject.id,
+                date: targetedObject.date,
+                filePDF: targetedObject.filePDF
+
             };
             //console.log(JSON.stringify(updatedResult));
             state.resultsList.splice(target, 1);
-            state.resultsList.splice(target,0,updatedResult);
+            state.resultsList.splice(target, 0, updatedResult);
             //console.log(JSON.stringify(state.resultsList.name));
             return {
                 ...state
@@ -115,18 +123,18 @@ const reducer = (state = initialState, action) => {
         case(EMPTY_LIST):
         {
             return {
-                ...state,
+        ...state,
                 resultsList: []
-            }
+        }
         }
         case(BACKUP_LIST):
         {
             let backUp = state.resultsList.slice();
             return{
-                ...state,
+        ...state,
                 backUpResultList: backUp
 
-            }
+        }
         }
 
         case(RESTORE_BACKUP):
@@ -137,7 +145,42 @@ const reducer = (state = initialState, action) => {
                 resultsList: restoredBackUp,
                 backUpResultList: []
 
+        }
+        }
+
+        case(ADD_PDF_LIST):
+        {
+            let target = action.position;
+            //console.log(target);
+            let targetedObject = state.resultsList[target];
+            //console.log(JSON.stringify(targetedObject));
+            let updatedResult = {
+            key: targetedObject.key,
+            data: targetedObject.data,
+            formData: targetedObject.formData,
+            name: targetedObject.name,
+            id: targetedObject.id,
+            date:targetedObject.date,
+            filePDF: action.pdfLocation,
+
+        };
+            //console.log(JSON.stringify(updatedResult));
+            state.resultsList.splice(target, 1);
+            state.resultsList.splice(target,0,updatedResult);
+            //console.log(JSON.stringify(state.resultsList.name));
+            return {
+                ...state
             }
+        }
+
+        //This is a special case for androids keyboard avoiding scroll
+            //
+        case(TOGGLE_INDICATOR_VISIBILITY):{
+            console.log("toggling indicator");
+            return {
+                ...state,
+                indicatorVisibility: state.indicatorVisibility===0?0:1
+            };
         }
         default:
             return state

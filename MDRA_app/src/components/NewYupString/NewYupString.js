@@ -4,6 +4,7 @@ import * as yup from 'yup'
 //functions import
 import containsOnlyNumbersFunction from '../../functions/containsOnlyNumbers';
 import isLaterThanFunction from '../../functions/isLaterThan';
+import isSameName from "../../functions/IsSameName";
 
 class NewYupString extends yup.string {
 
@@ -85,6 +86,27 @@ class NewYupString extends yup.string {
                     return result;
                 }
                 return true
+            }
+        })
+    }
+
+    //IMPROTANT
+    // since ref and msg are the only items sent when calling this function
+    //they will be used to pass the list address and the key
+    // so list->ref and currentTarget->msg
+    isSameName(ref,msg) {
+        return this.test({
+            name: 'isSameName',
+            exclusive: false,
+            message: 'Item name must be different',
+            test: function(value){
+                if(value) {
+                    //console.log("This is the ref "+ref);
+                    //console.log("This is the msg "+ msg);
+                    let result = !isSameName(value,ref,msg);
+                    //console.log("This is the result "+ result);
+                    return result;
+                }
             }
         })
     }

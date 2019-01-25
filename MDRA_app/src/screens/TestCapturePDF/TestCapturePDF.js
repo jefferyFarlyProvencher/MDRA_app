@@ -144,7 +144,7 @@ class TestCapturePDF extends PureComponent {
                     "</div>"+
                 "</div>"+
                 //Footer
-                "<div style=\"bottom:0; right:0; position:absolute; font-size: 10px\">In collaboration with <img style=\"width:10em; bottom: 0;right: 0;\" src=\"https://medecine.umontreal.ca/wp-content/uploads/sites/8/2018/02/UdeM-officiel-RVB.png\" alt=\"UdeM_logo\"/> </div></div>"
+                "<div style=\"bottom:0; right:0; position:absolute; font-size: 10px\">In collaboration with <img style=\"width:10em; bottom: 0;right: 0;\" src=\"https://medecine.umontreal.ca/wp-content/uploads/sites/8/2018/02/officiel-RVB.png\" alt=\"UdeM_logo\"/> </div></div>"
         return html;
     };
 

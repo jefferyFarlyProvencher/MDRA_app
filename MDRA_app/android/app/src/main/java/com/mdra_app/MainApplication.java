@@ -14,6 +14,12 @@ import com.oblador.vectoricons.VectorIconsPackage;
 
 import com.horcrux.svg.SvgPackage;
 
+import fr.greweb.reactnativeviewshot.RNViewShotPackage;
+
+import com.christopherdro.htmltopdf.RNHTMLtoPDFPackage;
+
+import com.RNFetchBlob.RNFetchBlobPackage;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -31,7 +37,10 @@ public class MainApplication extends NavigationApplication  {
        return Arrays.<ReactPackage>asList(
            new VectorIconsPackage(),
            new SvgPackage(),
-           new PickerViewPackage()
+           new PickerViewPackage(),
+           new RNViewShotPackage(),
+           new RNHTMLtoPDFPackage(),
+           new RNFetchBlobPackage()
 
        );
     }

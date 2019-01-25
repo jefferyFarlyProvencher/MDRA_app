@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import {
     View,
     Text,
-    TouchableHighlight,
+    TouchableOpacity,
     TouchableWithoutFeedback,
     Animated,
     Modal,
@@ -26,6 +26,8 @@ import TitleComponent from "../../components/TitleComponent/TitleComponent";
 import {udemDark} from "../../assets/colors";
 import Spinner from "react-native-loading-spinner-overlay";
 import SelectionList from "../../components/SelectionList/SelectionList";
+import isSameName from '../../functions/IsSameName';
+import NewYupString from "../../components/NewYupString/NewYupString";
 
 
 class ResultScreen extends Component{
@@ -45,6 +47,7 @@ class ResultScreen extends Component{
         amountOfPushes: 0,
         selectorListAvailable: false,
         currentlySelectedItem: 0,
+        renameError: false
     };
 
     static navigatorButtons = {
@@ -245,7 +248,9 @@ class ResultScreen extends Component{
                     style: 'cancel'
                 }, {
                     text: 'Yes, erase it',
-                    onPress: () => this.props.onRemoveData(key)
+                    onPress: () =>{
+                        this.props.onRemoveData(key)
+                    }
                 }
             ],
             {
@@ -256,7 +261,7 @@ class ResultScreen extends Component{
     };
 
     handleSelectionDeletion = (selectedList)=>{
-        console.log("selectedList: "+ selectedList);
+        //console.log("selectedList: "+ selectedList);
         Alert.alert(
             'Confirmation',
             'Do you really want to remove the selected results?', [
@@ -278,15 +283,23 @@ class ResultScreen extends Component{
         );
     };
 
-    _handleSubmit =(async (values, bag) => {
+    _handleRenameSubmit =(async (values, bag) => {
         try {
-            this.props.onRenameData(this.state.renameTarget,values.newName);
-            this.setState((oldState)=>{
-                return({
-                    ...oldState,
-                })
-            });
-            this.setModalVisible(false);
+            if(!isSameName(values.newName, this.props.state.main.resultsList, this.state.renameTarget)) {
+                this.props.onRenameData(this.state.renameTarget,values.newName);
+                this.setState((oldState)=>{
+                    return({
+                        ...oldState,
+                        renameError: false,
+                    })
+                });
+                await this.setModalVisible(false);
+            }else{
+                await Alert.alert("Rename Warning","Name "+ action.name +" is already used by another Result, please use a name that is not used by any other item");
+                console.log("Rename Warning","Name "+ action.name +" is already used by another Result, please use a name that is not used by any other item");
+                bag.setErrors("newName","Name "+ action.name +" is already used by another Result, please use a name that is not used by any other item");
+            }
+
         }catch (e) {
             bag.setSubmitting(false);
             bag.setErrors(e);
@@ -314,8 +327,13 @@ class ResultScreen extends Component{
                     extraData={this.state}
                 />
         );
-//        console.log(this.props.state.main.resultsList);
+//      console.log(this.props.state.main.resultsList);
+        //console.log("This is the current list of results[1]:"+ JSON.stringify(this.props.state.main.resultsList));
+//        console.log("This is the current list of results[2]:"+ JSON.stringify(this.props.state.main.resultsList[2]));
+//        console.log("This is the current list of results[3]:"+ JSON.stringify(this.props.state.main.resultsList[3]));
+        console.log("THIS IS THE renameError: " + this.state.renameError);
         return(
+
             <View>
                 <View style={{margin:0, paddingBottom:0, height:"92%"}}>
                     {this.props.state.main.resultsList.length > 0
@@ -366,9 +384,9 @@ class ResultScreen extends Component{
                                 </View>
                                 <Formik
                                     initialValues={{ newName: JSON.stringify(this.props.state.main.data)}}
-                                    onSubmit={this._handleSubmit}
+                                    onSubmit={this._handleRenameSubmit}
                                     validationSchema={Yup.object().shape({
-                                        newName: Yup.string().required(),
+                                        newName: NewYupString().isSameName(this.props.state.main.resultsList,this.state.renameTarget).required(),
                                     })}
                                     render={({
                                                  values,
@@ -389,10 +407,10 @@ class ResultScreen extends Component{
                                                     onChange={setFieldValue}
                                                     onTouch={setFieldTouched}
                                                     name="newName"
-                                                    error={touched.newName && errors.newName}
+                                                    error={touched.newName && errors.newName || this.state.renameError}
                                                 />
                                             </View>
-                                            <TouchableHighlight
+                                            <TouchableOpacity
                                                 onPress={handleSubmit}
                                                 style={[styles.buttonStyles, {backgroundColor:"#EEE", borderRadius: 15}]}
                                             >
@@ -401,8 +419,8 @@ class ResultScreen extends Component{
                                                     textStyle={{fontSize:15}}
                                                     containerStyle={styles.buttonTitleComponentStyle}
                                                 />
-                                            </TouchableHighlight>
-                                            <TouchableHighlight
+                                            </TouchableOpacity>
+                                            <TouchableOpacity
                                                 onPress={() =>{this.setModalVisible(false)}}
                                                 style={[styles.buttonStyles, {backgroundColor:"transparent"}]}
                                             >
@@ -411,7 +429,7 @@ class ResultScreen extends Component{
                                                     textStyle={{fontSize:15}}
                                                     containerStyle={styles.buttonTitleComponentStyle}
                                                 />
-                                            </TouchableHighlight>
+                                            </TouchableOpacity>
                                         </View>
                                     )}
                                 />
