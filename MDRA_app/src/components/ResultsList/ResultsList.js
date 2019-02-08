@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import {View, Text,StyleSheet, FlatList, TouchableWithoutFeedback} from 'react-native'
 import {List, ListItem, SearchBar} from 'react-native-elements'
 import Swipeout  from 'react-native-swipeout'
+import * as colors from "../../assets/colors";
 
 //credits to vikrant negi which helped with the search bar
 class ResultsList extends Component{
@@ -102,7 +103,7 @@ class ResultsList extends Component{
 
                                             text: "Rename",
                                             color: "white",
-                                            backgroundColor: "teal",
+                                            backgroundColor: colors.royalBlue4,
                                             onPress: () => {
                                                 this.handleOnPressRename(info.item.key)
                                             },
@@ -111,7 +112,7 @@ class ResultsList extends Component{
 
                                             text: "Delete",
                                             color: "white",
-                                            backgroundColor: "red",
+                                            backgroundColor: "#ff374b",
                                             onPress: () => {
                                                 this.handleOnPressDelete(info.item.key)
                                             },
@@ -121,13 +122,13 @@ class ResultsList extends Component{
                             >
                                 <ListItem
                                     roundAvatar
-                                    title={"Test Result: " + info.item.id}
-                                    subtitle={info.item.name}
+                                    title={"Test Result: " + info.item.name}
+                                    subtitle={info.item.id}
                                     key={info.item.key}
                                     onLongPress={() => {
                                         this.props.onToggleSelectorList(info.item.key);
                                         console.log('Item selected: ' + info.item.key);
-                                        console.log('pressed longly');
+                                        console.log('pressed slowly');
                                     }
                                     }
                                     onPress={() => {

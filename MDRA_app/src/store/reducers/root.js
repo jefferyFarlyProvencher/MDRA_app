@@ -1,7 +1,8 @@
 import {
     ADD_DATA, ADD_LIST, ALLOW_ADV,
     POS_CHNG, REMOVE_LIST, RENAME_LIST, EMPTY_LIST,
-    BACKUP_LIST, RESTORE_BACKUP,ADD_PDF_LIST, TOGGLE_INDICATOR_VISIBILITY
+    BACKUP_LIST, RESTORE_BACKUP,ADD_PDF_LIST,
+    TOGGLE_INDICATOR_VISIBILITY, REMOVE_PDF_LIST
 } from '../actions/actionTypes'
 
 const initialState = {
@@ -51,8 +52,10 @@ const reducer = (state = initialState, action) => {
             };
         case (ALLOW_ADV):
             //if position is at advanced screen, return to weights screen
+            console.log("this is the current state.position: "+state.position);
             if(state.position === 3)
             {
+                console.log("passed the position === 4 test");
                 return{
                     ...state,
                     position:2,
@@ -163,6 +166,30 @@ const reducer = (state = initialState, action) => {
             date:targetedObject.date,
             filePDF: action.pdfLocation,
 
+        };
+            //console.log(JSON.stringify(updatedResult));
+            state.resultsList.splice(target, 1);
+            state.resultsList.splice(target,0,updatedResult);
+            //console.log(JSON.stringify(state.resultsList.name));
+            return {
+                ...state
+            }
+        }
+
+        case(REMOVE_PDF_LIST):
+        {
+            let target = action.position;
+            //console.log(target);
+            let targetedObject = state.resultsList[target];
+            //console.log(JSON.stringify(targetedObject));
+            let updatedResult = {
+            key: targetedObject.key,
+            data: targetedObject.data,
+            formData: targetedObject.formData,
+            name: targetedObject.name,
+            id: targetedObject.id,
+            date:targetedObject.date,
+            filePDF: undefined,
         };
             //console.log(JSON.stringify(updatedResult));
             state.resultsList.splice(target, 1);

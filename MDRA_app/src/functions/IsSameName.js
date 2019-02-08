@@ -6,7 +6,7 @@
  * @returns {boolean}
  */
 let isSameName = (name, list, currentTarget) => {
-    console.log("Is same name starting...");
+    //console.log("Is same name starting...");
     for (let i = 0; i < list.length; i++) {
         console.log(i);
         if (list[i].name === name && list[i].key !== currentTarget) {

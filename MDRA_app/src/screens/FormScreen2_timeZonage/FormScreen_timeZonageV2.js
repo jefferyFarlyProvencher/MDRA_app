@@ -79,7 +79,7 @@ class FormScreenTimeZonage extends PureComponent{
                 return (
                     Yup.object().shape({
                         tsDay: NewYupString().containsOnlyNumbers().required(requiredMessage),
-                        teDay: NewYupString().containsOnlyNumbers().isLaterThan(Yup.ref('tsDay', null)).isEarlierThan('16:00', thisTimeShouldBe + "earlier than 16:00").required(requiredMessage),
+                        teDay: NewYupString().containsOnlyNumbers().isLaterThan(Yup.ref('tsDay', null)).isEarlierThan('17:00', thisTimeShouldBe + "earlier than 17:00").required(requiredMessage),
                         tsEvening: NewYupString().containsOnlyNumbers().isLaterThan(Yup.ref('teDay', null)).required(requiredMessage),
                         teEvening: NewYupString().containsOnlyNumbers().isLaterThan(Yup.ref('tsEvening', null)).required(requiredMessage),
                         lunch: NewYupString().containsOnlyNumbers().isLaterThan('11:00', thisTimeShouldBe + "later than 11:00").isEarlierThan(Yup.ref('tsEvening', null)).required(requiredMessage),//Yup.number().positive().lessThan(Yup.ref('tsEvening', null)).moreThan(10).required(requiredMessage),
@@ -111,13 +111,32 @@ class FormScreenTimeZonage extends PureComponent{
         return convertTimeToHourFormat(""+value)
     };
 
-    /*
+    /**
         takes HH:MM value
         returns float
-     */
+
+     **/
     handleUnFormatTime = (value) => {
         return parseFloat(convertTimeToDecimal(""+value))
     };
+
+    /**
+     *
+     * @param initialValue, is this value bigger
+     * @param valueToCompare, than this value
+     * @param initialName, needed to set it setValueFunction
+     * @param comparedName, needed to set it setValueFunction
+     * @param setValueFunction, refers to the setFieldValue function, but it is passed here in order to use it
+     * @param sameSliderFlag, refers to it whether or not where comparing two items of the same slider
+     */
+    handleSliderTimeChanges(initialValue, valueToCompare, initialName, comparedName, setValueFunction, sameSliderFlag){
+        if(this.handleUnFormatTime(initialValue) > this.handleUnFormatTime(valueToCompare)) {
+            setValueFunction(comparedName, this.handleFormatTime((initialValue+(sameSliderFlag?0.5:0))).toString());
+        }
+        if(!sameSliderFlag) {
+            setValueFunction(initialName, this.handleFormatTime(initialValue).toString());
+        }
+    }
 
     render() {
         return(
@@ -173,9 +192,28 @@ class FormScreenTimeZonage extends PureComponent{
                                                 onChange={(name,value) => {
                                                     let onlyOneBox= value==="One therapeutic box (from AM to PM)";
                                                     if(!onlyOneBox) { //if two boxes
+                                                        console.log("normal value: "+ values.teDay+"and the parsedFloat version: "+parseFloat(values.teDay));
                                                         if(parseFloat(values.teDay) > 12) {
                                                             setFieldValue('teDay', '12:00');
                                                         }
+                                                        //I don't know why, but this generates a red error
+                                                        this.handleSliderTimeChanges(
+                                                            this.handleUnFormatTime(values.tePM),
+                                                            this.handleUnFormatTime(values.tsEvening),
+                                                            'tePM',
+                                                            'tsEvening',
+                                                            setFieldValue,
+                                                            false
+                                                        );
+                                                        this.handleSliderTimeChanges(
+                                                            this.handleUnFormatTime(values.tePM),
+                                                            this.handleUnFormatTime(values.teEvening),
+                                                            'tsEvening',
+                                                            'teEvening',
+                                                            setFieldValue,
+                                                            true
+                                                        );
+
                                                     }
                                                     this.setState( (oldState) =>
                                                         {
@@ -248,9 +286,24 @@ class FormScreenTimeZonage extends PureComponent{
                                                     step={0.5}
                                                     values={[this.handleUnFormatTime(values.tsDay),this.handleUnFormatTime(values.teDay)]}
                                                     onValuesChange={
-                                                        (values) => {
-                                                            setFieldValue('tsDay', this.handleFormatTime(values[0].toString()));
-                                                            setFieldValue('teDay', this.handleFormatTime(values[1].toString()));
+                                                        (sliderValues) => {
+                                                            // true ==> Evening, false ==> PM
+                                                            let PMorEvening = this.state.nbOfBoxes ===1;
+                                                            setFieldValue('tsDay', this.handleFormatTime(sliderValues[0].toString()));
+                                                            this.handleSliderTimeChanges(sliderValues[1],values.tsPM, 'teDay', (this.state.nbOfBoxes ===1? 'tsEvening' :'tsPM'), setFieldValue,false);
+                                                            //special case for this item
+                                                            //also needs to verify if same slider items have been modified
+                                                            this.handleSliderTimeChanges(
+                                                                sliderValues[1],
+                                                                (PMorEvening? values.teEvening:values.tePM),
+                                                                (PMorEvening? 'tsEvening' :'tsPM'),
+                                                                (PMorEvening? 'teEvening' :'tePM'),
+                                                                setFieldValue,
+                                                                true
+                                                            )
+                                                            ;
+
+                                                            //setFieldValue('teDay', this.handleFormatTime(sliderValues[1].toString()));
                                                         }
                                                     }
                                                 />
@@ -306,17 +359,27 @@ class FormScreenTimeZonage extends PureComponent{
                                                     <CustomMultiSlider
                                                         sliderLength={Dimensions.get("window").width*0.80}
                                                         min={this.handleUnFormatTime(values.teDay)}
-                                                        max={18}
+                                                        max={20}
                                                         step={0.5}
                                                         values={[this.handleUnFormatTime(values.tsPM),this.handleUnFormatTime(values.tePM)]}
                                                         onValuesChange={
-                                                            (values) => {
-                                                                setFieldValue('tsPM', this.handleFormatTime(values[0].toString()));
-                                                                setFieldValue('tePM', this.handleFormatTime(values[1].toString()));
+                                                            (sliderValues) => {
+                                                                if(values.tsPM < values.teDay) {
+                                                                    setFieldValue('tsPM', values.teDay);
+                                                                } else {
+                                                                    setFieldValue('tsPM', this.handleFormatTime(sliderValues[0].toString()));
+                                                                }
+                                                                console.log("evaluating if tePM value is bigger than tsEvening, result: "+ (sliderValues[1] > this.handleUnFormatTime(values.tsEvening)));
+                                                                console.log("tsEvening value: "+ values.tsEvening);
+                                                                console.log("sliderValues[1] value: "+ sliderValues[1]);
+                                                                this.handleSliderTimeChanges(sliderValues[1],values.tsEvening, 'tePM', 'tsEvening', setFieldValue, false);
+                                                                //technically speaking, if first one must change, in order to change the second part.
+                                                                //thus comparing with sliderValues[1] again should work
+                                                                this.handleSliderTimeChanges(sliderValues[1],values.teEvening, 'tsEvening', 'teEvening', setFieldValue, true);
                                                             }
                                                         }
                                                     />
-                                            </View>
+                                                </View>
                                             </View>
                                             :<View/>
                                         }
@@ -521,3 +584,11 @@ const mapDispatchToProps = dispatch => {
 };
 
 export default connect(null,mapDispatchToProps)(FormScreenTimeZonage);
+
+// if(sliderValues[1] > this.handleUnFormatTime(values.tsEvening)) {
+//     setFieldValue('tsEvening', this.handleFormatTime(sliderValues[1].toString()));
+//     setFieldValue('tePM', this.handleFormatTime(sliderValues[1].toString()));
+// }
+// else{
+//     setFieldValue('tePM', this.handleFormatTime(sliderValues[1].toString()));
+// }

@@ -331,7 +331,7 @@ class ResultScreen extends Component{
         //console.log("This is the current list of results[1]:"+ JSON.stringify(this.props.state.main.resultsList));
 //        console.log("This is the current list of results[2]:"+ JSON.stringify(this.props.state.main.resultsList[2]));
 //        console.log("This is the current list of results[3]:"+ JSON.stringify(this.props.state.main.resultsList[3]));
-        console.log("THIS IS THE renameError: " + this.state.renameError);
+        //console.log("THIS IS THE renameError: " + this.state.renameError);
         return(
 
             <View>

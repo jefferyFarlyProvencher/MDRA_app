@@ -15,13 +15,21 @@ import {connect} from 'react-redux';
 
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import MatComIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {addToResultList, allowAdvancedOptions, emptyResultList, restoreBackUp, backUpBeforeDeletion} from "../../store/actions";
+import {
+    addToResultList,
+    allowAdvancedOptions,
+    emptyResultList,
+    restoreBackUp,
+    backUpBeforeDeletion,
+    addData, changePosition
+} from "../../store/actions";
 import testNetWorkConnection from '../../functions/testNetworkConnection';
 
 
 
 class SideDrawer extends Component{
     logOutHandler = () => {
+        this.props.onChangePosition(0);
         Navigation.startSingleScreenApp({
             screen: {
                 screen: "MDRA_app.mainScreen",
@@ -34,10 +42,12 @@ class SideDrawer extends Component{
         console.log("commencing connection test");
         if(await testNetWorkConnection())
         {
-            console.log("connected")
+            console.log("connected");
+            alert("Connection successful")
         }
         else{
-            console.log("not connected")
+            console.log("not connected");
+            alert("Connection was unsuccessful")
         }
         console.log("RETURNING from connection test");
     };
@@ -186,7 +196,8 @@ const mapDispatchToProps = dispatch => {
         onAddToResultList: (data)=> dispatch(addToResultList(data)),
         onEmptyResultList: () => dispatch(emptyResultList()),
         onBackUpResultList: () => dispatch(backUpBeforeDeletion()),
-        onRestoreBackUp: () => dispatch(restoreBackUp())
+        onRestoreBackUp: () => dispatch(restoreBackUp()),
+        onChangePosition: (position) => dispatch(changePosition(position))
     };
 };
 

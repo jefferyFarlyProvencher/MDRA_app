@@ -10,9 +10,9 @@ import {convertTimeToDecimal} from './FormatTime';
  *  is time1 later or equal to time2
  */
 let isLaterThan = (time1, time2) => {
-    console.log("///isLaterThanFunction is starting////");
-    console.log("Time1: "+time1);
-    console.log("Time2: "+time2);
+    //console.log("///isLaterThanFunction is starting////");
+    //console.log("Time1: "+time1);
+    //console.log("Time2: "+time2);
     if ((typeof time1 === 'number' || time1.includes(':') ) && ((typeof  time2 === 'number')|| time2.includes(':'))){
         //console.log("isLaterThan; if passed; this passed: " + time1+" "+time2 + "; result of include \":\" : "+ (time1.includes(':') && time2.includes(':')));
         let formatedTime1 = parseFloat(convertTimeToDecimal(time1));
@@ -22,7 +22,7 @@ let isLaterThan = (time1, time2) => {
         //console.log("result of: " + formatedTime1 + " >= " + formatedTime2 +" = "+result);
         return (formatedTime1 >= formatedTime2)
     }
-    console.log("returned false");
+    //console.log("returned false");
     return (false)
 };
 

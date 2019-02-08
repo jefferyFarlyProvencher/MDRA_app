@@ -11,7 +11,8 @@ import {
     BackHandler,
     Alert,
     StatusBar,
-    Platform
+    Platform,
+    TouchableWithoutFeedback
 } from 'react-native';
 import {connect} from 'react-redux';
 
@@ -160,6 +161,10 @@ class FormScreen extends Component{
             labelSize: 13,
             currentStepLabelColor: 'transparent'
         };
+
+        if(!this.props.state.main.advanceTabAccessible && this.props.state.main.position === 2){
+            this.handleSetPage(2)
+        }
 
         return(
             <View style={styles.overTheIndicatorContainer}>

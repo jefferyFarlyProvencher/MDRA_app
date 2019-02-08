@@ -80,10 +80,11 @@ class GraphComponent extends PureComponent{
         let startTimeParsed = parseFloat(startTime);
         let lines = [{x:startTimeParsed,y:0}];
         //lunch time line
-        for(let i = 0.5; i < 25; i=i+0.5)
+        for(let i = -0.5; i > -5 ; i=i-0.5)
         {
             lines.push({x:startTimeParsed,y:i})
         }
+        //console.log("lines is:"+ JSON.stringify(lines));
         return lines;
     };
 
@@ -265,7 +266,7 @@ class GraphComponent extends PureComponent{
             <View style={[this.props.style]} pointerEvents="none">
                 <VictoryChart
                     animate={Platform.OS==="ios"?{ duration: this.state.animationTime}:null}
-                    domain={{x:[0,30],y: [0,25]}}
+                    domain={{x:[0,30],y: [-4,25]}}
                     label ={{x:"A",y:"B"}}
                 >
                     <VictoryArea
@@ -330,8 +331,8 @@ class GraphComponent extends PureComponent{
                     <VictoryLabel text={eveningBoxPercentage+"%"} datum={{x:eveningBoxX,y:eveningBoxY+eveningBoxHeight+1}}/>
                     <VictoryLabel text={"Time (h)"} datum={{x:29,y:1}}/>
                     <VictoryLabel text={"Concentration (ng/mL)"} datum={{x:0,y:26}}/>
-                    <VictoryLabel text={"Lunch Time"} datum={{x:lunchTime-2,y:24}}/>
-                    <VictoryLabel text={"Bed Time"} datum={{x:bedTime-2.5,y:24}}/>
+                    <VictoryLabel text={"Lunch"} datum={{x:lunchTime-2,y:-4.3}}/>
+                    <VictoryLabel text={"Bed"} datum={{x:bedTime-1.3,y:-4.3}}/>
                </VictoryChart>
                 <TouchableHighlight
                     onPress={()=>{console.log("this was pressed right now"); alert("RollerCoaster Effect: " + displayText[1] +"\n Total Score: " + displayText[0]+"%")}}

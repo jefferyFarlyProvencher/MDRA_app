@@ -18,4 +18,6 @@ export {backUpBeforeDeletion} from './backUpBeforeDeletion';
 
 export {addPDFToResult} from './addPDFToResult';
 
+export {removePDFFromResult} from './removePDFFromResult';
+
 export {toggleIndicatorVisibility} from './toggleIndicatorVisibility';

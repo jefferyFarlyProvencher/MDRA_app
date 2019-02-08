@@ -43,11 +43,13 @@ class FormScreenWeights extends PureComponent{
             this.props.onAddData(values, this.state.currentPosition);
             this.props.setPage(target);
             this.props.onChangePosition(target);
-            // setTimeout(
-            //     () => {
-            //         bag.setSubmitting(false);
-            //     },
-            //     1000)
+            if(this.props.state.main.advanceTabAccessible) {
+                setTimeout(
+                    () => {
+                        bag.setSubmitting(false);
+                    },
+                    1000)
+            }
         }catch (e) {
             bag.setSubmitting(false);
             bag.setErrors(e);
@@ -82,10 +84,10 @@ class FormScreenWeights extends PureComponent{
                                 weight4:'100',
                                 weight5:'100',
                                 weight6: ((this.props.state.main.Page1Data) &&
-                                    (this.props.state.main.Page1Data.nbTheraputicBoxes === "Two therapeutic boxes (AM and PM)"))
+                                    (this.props.state.main.Page1Data.nbTherapeuticBoxes === "Two therapeutic boxes (AM and PM)"))
                                     ?'100':'0',
                                 weight7: ((this.props.state.main.Page1Data) &&
-                                    (this.props.state.main.Page1Data.nbTheraputicBoxes === "Two therapeutic boxes (AM and PM)"))
+                                    (this.props.state.main.Page1Data.nbTherapeuticBoxes === "Two therapeutic boxes (AM and PM)"))
                                     ?'100':'0',
                             }
                         }
@@ -171,7 +173,7 @@ class FormScreenWeights extends PureComponent{
                                     </View>
                                 </View>
                                 {(this.props.state.main.Page1Data)
-                                    ? (this.props.state.main.Page1Data.nbTheraputicBoxes === "Two therapeutic boxes (AM and PM)")?
+                                    ? (this.props.state.main.Page1Data.nbTherapeuticBoxes === "Two therapeutic boxes (AM and PM)")?
                                         <View>
                                             <View>
                                                 <LinedLabel

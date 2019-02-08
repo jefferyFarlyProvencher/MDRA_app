@@ -6,7 +6,6 @@ import {
     Text,
     TouchableWithoutFeedback,
     TouchableOpacity,
-    TouchableHighlight,
     Modal,
     Dimensions,
 } from 'react-native';
@@ -84,7 +83,7 @@ class ResultTest extends PureComponent{
         let willBeAnimated = this.props.Animated
         return(
             <View>
-                <TouchableHighlight
+                <TouchableOpacity
                 onPress={()=>{
                     console.log("This first pie has been pressed");
                     this.handlePieClick(!this.state.modalVisible,this.props.data);
@@ -105,7 +104,7 @@ class ResultTest extends PureComponent{
                             />
                         </View>
                     </View>
-                </TouchableHighlight>
+                </TouchableOpacity>
                 <View>
                     <Modal
                         animationType="fade"
