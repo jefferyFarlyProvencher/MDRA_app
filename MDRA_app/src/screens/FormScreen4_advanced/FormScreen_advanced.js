@@ -41,7 +41,7 @@ class FormScreenAdvanced extends PureComponent{
     });
 
     render() {
-        console.log("Fuck this shit");
+        //console.log("Fuck this shit");
         return(
                 <KeyboardAwareScrollView>
                     <View style={styles.container}>

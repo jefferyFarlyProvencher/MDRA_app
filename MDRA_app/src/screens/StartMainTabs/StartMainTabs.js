@@ -25,6 +25,10 @@ const startTabs = () => {
                             }
                         ],
                     },
+                    navBarBackgroundColor: '#262626',
+                    navBarTextColor: '#ffffff',
+                    statusBarTextColorSchemeSingleScreen: 'light',
+                    navBarButtonColor: Platform.OS === 'android'?'#3057e1': null,
                     topBar: {
                         buttonColor: "blue"
                     }
@@ -43,6 +47,10 @@ const startTabs = () => {
                             }
                         ],
                     },
+                    navBarBackgroundColor: '#262626',
+                    navBarTextColor: '#ffffff',
+                    statusBarTextColorSchemeSingleScreen: 'light',
+                    navBarButtonColor: Platform.OS === 'android'?'#3057e1': null,
                     topBar: {
                         buttonColor: 'blue'
                     }

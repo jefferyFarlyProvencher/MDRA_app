@@ -193,6 +193,13 @@ class FormScreenInitial extends PureComponent{
         }
     };
 
+    handleStepVisibility = (name,setFieldTouched) => {
+        //console.log("step visibility toggle");
+
+        this.props.onToggleIndicator();
+        setFieldTouched(name)
+    };
+
     handleFormatTime = (value)=>{
         return convertTimeToHourFormat(""+value);
     };
@@ -293,10 +300,14 @@ class FormScreenInitial extends PureComponent{
                                                         onChange={(name,value) =>{
                                                             setFieldValue(name,value)
                                                         }}
-                                                        onTouch={setFieldTouched}
+                                                        onTouch={(name)=>{this.handleStepVisibility(name,setFieldTouched)}}
                                                         name="weight"
                                                         error={touched.weight && errors.weight}
                                                         keyboardType="numeric"
+                                                        onBlur={() =>{
+                                                            this.props.onToggleIndicator();
+                                                            //console.log(this.props.state.main.indicatorVisibility)
+                                                        }}
                                                     />
                                                 </View>
                                                 <View style={{paddingTop:"20%", marginLeft:0, paddingRight:20, flexDirection:'row', justifyContent:'center'}}>
@@ -364,8 +375,10 @@ class FormScreenInitial extends PureComponent{
                                                             setFieldValue("adminTime0", value);
                                                         }}
                                                         onBlur={() =>{
+                                                            this.props.onToggleIndicator();
                                                             setFieldValue("adminTime0", this.handleFormatTime(values.adminTime0));
                                                         }}
+                                                        onTouch={(name)=>{this.handleStepVisibility(name,setFieldTouched)}}
                                                         name="adminTime0"
                                                         error={touched.adminTime0 && errors.adminTime0}
                                                         keyboardType="numeric"
@@ -421,9 +434,10 @@ class FormScreenInitial extends PureComponent{
                                                                     setFieldValue("adminTime1", value);
                                                                 }}
                                                                 onBlur={() =>{
+                                                                    this.props.onToggleIndicator();
                                                                     setFieldValue("adminTime1", this.handleFormatTime(values.adminTime1));
                                                                 }}
-                                                                onTouch={(name) =>{ setFieldTouched(name); this.props.onToggleIndicator()}}
+                                                                onTouch={(name)=>{this.handleStepVisibility(name,setFieldTouched)}}
                                                                 name="adminTime1"
                                                                 error={this.state.amountOfPills>=1?(touched.adminTime1 && errors.adminTime1): null}
                                                                 keyboardType="numeric"
@@ -479,9 +493,10 @@ class FormScreenInitial extends PureComponent{
                                                                     setFieldValue("adminTime2", value);
                                                                 }}
                                                                 onBlur={() =>{
+                                                                    this.props.onToggleIndicator();s
                                                                     setFieldValue("adminTime2", this.handleFormatTime(values.adminTime2));
                                                                 }}
-                                                                onTouch={setFieldTouched}
+                                                                onTouch={(name)=>{this.handleStepVisibility(name,setFieldTouched)}}
                                                                 name="adminTime2"
                                                                 error={this.state.amountOfPills>=2?(touched.adminTime2&& errors.adminTime2): null }
                                                                 keyboardType="numeric"
@@ -540,9 +555,10 @@ class FormScreenInitial extends PureComponent{
                                                                     setFieldValue("adminTime3", value);
                                                                 }}
                                                                 onBlur={() =>{
+                                                                    this.props.onToggleIndicator();
                                                                     setFieldValue("adminTime3", this.handleFormatTime(values.adminTime3));
                                                                 }}
-                                                                onTouch={setFieldTouched}
+                                                                onTouch={(name)=>{this.handleStepVisibility(name,setFieldTouched)}}
                                                                 name="adminTime3"
                                                                 error={this.state.amountOfPills>=3?(touched.adminTime3 && errors.adminTime3): null}
                                                                 keyboardType="numeric"

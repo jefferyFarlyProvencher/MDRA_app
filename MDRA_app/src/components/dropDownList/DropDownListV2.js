@@ -47,7 +47,7 @@ class DropDownListV2 extends Component {
             pickerData: data,
             selectedValue: [this.props.value],
             pickerFontColor: [0, 0 ,0, 1],
-            pickerFontSize: 17,
+            pickerFontSize: Platform.OS === "ios"?17:15,
             pickerBg:[255,255,255,1],
             pickerCancelBtnText: "CANCEL",
             pickerConfirmBtnText: "CONFIRM",

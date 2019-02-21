@@ -178,11 +178,23 @@ class ResultPage extends PureComponent {
         }
     };
 
-    setTitleOnChange = () => {
-        console.log("Changing title");
-        this.props.navigator.setTitle({
-            title: this.props.state.main.resultsList[this.state.currentPosition].name
-        });
+    _handleOnPressReuse = () => {
+        Alert.alert(
+            'Confirmation',
+            'Restore these values and go to form?', [
+                {
+                    text: 'Cancel',
+                    onPress: (() => console.log('Cancel Pressed')),
+                    style: 'cancel'
+                }, {
+                    text: 'Yes',
+                    onPress: () => this.setFormValues()
+                }
+            ],
+            {
+                cancelable: false
+            }
+        );
     };
 
     setFormValues = () => {
@@ -200,6 +212,7 @@ class ResultPage extends PureComponent {
         this.props.onAddData(formData[1],1);
         this.props.onAddData(formData[2],2);
         this.props.onAddData(formData[3],3);
+        //console.log("formData[4] => "+ formData[4]);
         if(this.props.state.main.advanceTabAccessible !== formData[4])
         {
             this.props.allowAdvancedOptions();
@@ -230,23 +243,11 @@ class ResultPage extends PureComponent {
         });
     };
 
-    _handleOnPressReuse = () => {
-        Alert.alert(
-            'Confirmation',
-            'Restore these values and go to form?', [
-                {
-                    text: 'Cancel',
-                    onPress: (() => console.log('Cancel Pressed')),
-                    style: 'cancel'
-                }, {
-                    text: 'Yes',
-                    onPress: () => this.setFormValues()
-                }
-            ],
-            {
-                cancelable: false
-            }
-        );
+    setTitleOnChange = () => {
+        console.log("Changing title");
+        this.props.navigator.setTitle({
+            title: this.props.state.main.resultsList[this.state.currentPosition].name
+        });
     };
 
     toggleSpinner = ()=> {
@@ -282,7 +283,7 @@ class ResultPage extends PureComponent {
             "<td align=\"center\">"+currentResult.formData[0].adminTime0+"</td>" +
             "</tr>";
 
-        console.log(inputs);
+        //console.log(inputs);
 
         if(currentResult.formData[0].amountOfPills>=2){
             inputs += "<tr style=\"border: 1px solid grey\">" +
@@ -308,7 +309,7 @@ class ResultPage extends PureComponent {
                 }
             }
         }
-        console.log(inputs);
+        //console.log(inputs);
 
         inputs += "</table>" +
             "<table style=\"width:100%;border-collapse: collapse;margin-top: 1em\">" +
@@ -347,7 +348,8 @@ class ResultPage extends PureComponent {
                     "</table>"+
                     "</td>"
                 )
-            :"")
+                :""
+            )
             +
             "<td>" +
             "<table style=\"width:100%;border-collapse: collapse\">" +
@@ -384,7 +386,64 @@ class ResultPage extends PureComponent {
             "</tr>" +
             "</table>";
 
-        console.log(inputs);
+            //formData[4] === advanceTabAcessible
+            if(currentResult.formData[4]){
+                inputs += ("<table style=\"width:100%;margin-top: 1em\">" +
+                "<tr style=\"background-color:#eee\">" +
+                    "<th>Number of Simulations</th>" +
+                    "<th>Half Day (AM)</th>" +
+                ((currentResult.formData[1].nbTherapeuticBoxes === "Two therapeutic boxes (AM and PM)")
+                    ?"<th>Half Day (PM)</th>"
+                    :"") +
+                    "<th>Evening</th>" +
+                    "<th>Threshold</th>" +
+                "</tr>" +
+                "<tr style=\"border: 1px solid grey; border-top: 0;\">" +
+                "<td align=\"center\" style=\"border: 1px solid grey; border-top: 0;\">"+currentResult.formData[3].numberOfSimulations+"</td>" +
+                "<td align=\"center\" style=\"border: 1px solid grey; border-top: 0;\">"+
+                    "<table style=\"width:100%;border-collapse: collapse\">" +
+                        "<tr>" +
+                            "<th style=\"border: 1px solid grey;border-top:0;\">Cmin</th>" +
+                            "<th style=\"border: 1px solid grey;border-top:0;\">Cmax</th>" +
+                        "</tr>" +
+                        "<tr style=\"border: 1px solid grey\">" +
+                            "<td align=\"center\">"+currentResult.formData[3].cMinTherapeuticHalfDayAM+"</td>" +
+                            "<td align=\"center\">"+currentResult.formData[3].cMaxTherapeuticHalfDayAM+"</td>" +
+                        "</tr>" +
+                    "</table>"+
+                "</td>" +
+                ((currentResult.formData[1].nbTherapeuticBoxes === "Two therapeutic boxes (AM and PM)")
+                    ?"<td align=\"center\" style=\"border: 1px solid grey; border-top: 0;\">"+
+                        "<table style=\"width:100%;border-collapse: collapse\">" +
+                            "<tr>" +
+                                "<th style=\"border: 1px solid grey;border-top:0;\">Cmin</th>" +
+                                "<th style=\"border: 1px solid grey;border-top:0;\">Cmax</th>" +
+                            "</tr>" +
+                            "<tr style=\"border: 1px solid grey\">" +
+                                "<td align=\"center\">"+currentResult.formData[3].cMinTherapeuticDayPM+"</td>" +
+                                "<td align=\"center\">"+currentResult.formData[3].cMaxTherapeuticDayPM+"</td>" +
+                            "</tr>" +
+                        "</table>"+
+                    "</td>"
+                    :"") +
+                "<td align=\"center\" style=\"border: 1px solid grey; border-top: 0;\">"+
+                    "<table style=\"width:100%;border-collapse: collapse\">" +
+                        "<tr>" +
+                            "<th style=\"border: 1px solid grey;border-top:0;\">Cmin</th>" +
+                            "<th style=\"border: 1px solid grey;border-top:0;\">Cmax</th>" +
+                        "</tr>" +
+                        "<tr style=\"border: 1px solid grey\">" +
+                            "<td align=\"center\" >"+currentResult.formData[3].cMinTherapeuticHalfDayAM+"</td>" +
+                            "<td align=\"center\">"+currentResult.formData[3].cMaxTherapeuticHalfDayAM+"</td>" +
+                        "</tr>" +
+                    "</table>"+
+                "</td>"+
+                "<td align=\"center\" style=\"border: 1px solid grey; border-top: 0;\">"+currentResult.formData[3].threshold+"</td>" +
+                "</tr>" +
+                "</table>")
+            }
+
+        //console.log(inputs);
 
         return inputs
 
@@ -448,12 +507,12 @@ class ResultPage extends PureComponent {
             "<h1 style=\"background-color:grey; color:white; text-align: center; padding:0.5em\">Results for the test: "+ currentResult.name +"</h1>"+
             "<h2>Results were calculated on the "+currentResult.date+"</h3>"+
             //inputs
-            "<div style=\"padding-bottom: 50%\">" +
+            "<div style=\"padding-bottom:"+((currentResult.formData[4])?"40%":"50%")+"\">" +
             this.generateHtmlInput()+
             "</div>"+
             //pk profile graph
             "<div style=\"background-color:lightgrey\"><h3>PK Profile<h3></div>"+
-            "<div> <img src=\"data:image/jpeg;base64,"+ pkProfileBase64Data +"\" alt=\"PK_Profile_image\" style=\""+(Platform.OS==="ios"?"height:70%":"height:40%")+"; display: block;margin-left: auto;margin-right: auto;\"/>"+
+            "<div> <img src=\"data:image/jpeg;base64,"+ pkProfileBase64Data +"\" alt=\"PK_Profile_image\" style=\""+(Platform.OS==="ios"?"height:70%":"width:80%")+"; display: block;margin-left: auto;margin-right: auto;\"/>"+
             //there should be percentages here
             //here we start the pie graphs
             //performance
@@ -466,6 +525,10 @@ class ResultPage extends PureComponent {
             "<br/>"+
             "<br/>"+
             "<br/>"+
+            (Platform.OS === "android"
+                    ?"<br/><br/>"
+                    :""
+            )+
             "<div style=\"background-color:lightgrey; margin-top: 10em\"><h3>Performance<h3></div>"+
             //day
             "<div style=\"position:relative\">"+
@@ -745,62 +808,69 @@ class ResultPage extends PureComponent {
                         </ScrollView>
                     </View>
                     <View>
-                        {this.props.state.main.resultsList[this.state.currentPosition].filePDF
-                            ?<View style={{padding: 10, height:"100%"}}>
-                                <TitleComponent text={"PDF already generated for this result"} />
-                                <View style={[styles.pdfButtonContainerStyle]}>
-                                    <TouchableOpacity
-                                        onPress={()=>{
-                                            console.log("not implemented yet?");
-                                            this.openGeneratedPDF();}}
-                                    >
-                                        <View  style={[styles.drawerItem]}>
-                                            <Ionicon
-                                                size={40}
-                                                name= {"md-open"}
-                                                color="#52afff" style={styles.drawerItemIcon}
-                                            />
-                                            <View style={styles.drawerTextContainer}>
-                                                <Text style={styles.drawerText}>{"Press to view or share the generated PDF"}</Text>
+                        <ScrollView
+                            contentContainerStyle={{
+                                flexGrow: 1,
+                                justifyContent: 'space-between'
+                            }}
+                        >
+                            {this.props.state.main.resultsList[this.state.currentPosition].filePDF
+                                ?<View style={{padding: 10, height:"100%"}}>
+                                    <TitleComponent text={"PDF already generated for this result"} />
+                                    <View style={{justifyContent: 'center', alignItems: 'center'}}>
+                                        <TouchableOpacity
+                                            onPress={()=>{
+                                                console.log("not implemented yet?");
+                                                this.openGeneratedPDF();}}
+                                        >
+                                            <View  style={[styles.drawerItem]}>
+                                                <Ionicon
+                                                    size={40}
+                                                    name= {"md-open"}
+                                                    color="#52afff" style={styles.drawerItemIcon}
+                                                />
+                                                <View style={styles.drawerTextContainer}>
+                                                    <Text style={styles.drawerText}>{"Press to view or share the generated PDF"}</Text>
+                                                </View>
                                             </View>
-                                        </View>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity onPress={this.handleRetryGeneratePDF}>
-                                        <View  style={styles.drawerItem}>
-                                            <Ionicon
-                                                size={40}
-                                                name= {"ios-repeat"}
-                                                color="#52afff" style={styles.drawerItemIcon}
-                                            />
-                                            <View style={styles.drawerTextContainer}>
-                                                <Text style={styles.drawerText}>{"Press to generate PDF again in case of an Error"}</Text>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={this.handleRetryGeneratePDF}>
+                                            <View  style={styles.drawerItem}>
+                                                <Ionicon
+                                                    size={40}
+                                                    name= {"ios-repeat"}
+                                                    color="#52afff" style={styles.drawerItemIcon}
+                                                />
+                                                <View style={styles.drawerTextContainer}>
+                                                    <Text style={styles.drawerText}>{"Press to generate PDF again in case of an Error"}</Text>
+                                                </View>
                                             </View>
-                                        </View>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity onPress={this.handleDeletePDF}>
-                                        <View  style={[styles.drawerItem]}>
-                                            <Ionicon
-                                                size={40}
-                                                name= {"ios-trash"}
-                                                color="#f9000b" style={styles.drawerItemIcon}
-                                            />
-                                            <View style={styles.drawerTextContainer}>
-                                                <Text style={styles.drawerText}>{"Delete generated PDF"}</Text>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={this.handleDeletePDF}>
+                                            <View  style={[styles.drawerItem]}>
+                                                <Ionicon
+                                                    size={40}
+                                                    name= {"ios-trash"}
+                                                    color="#f9000b" style={styles.drawerItemIcon}
+                                                />
+                                                <View style={styles.drawerTextContainer}>
+                                                    <Text style={styles.drawerText}>{"Delete generated PDF"}</Text>
+                                                </View>
                                             </View>
-                                        </View>
+                                        </TouchableOpacity>
+                                    </View>
+                                </View>
+                                :<View  style={[styles.pdfButtonContainerStyle]}>
+                                    <TouchableOpacity onPress={this.handleGeneratePDF} style={{alignItems:"center"}}>
+                                        <Image source={pdfRed} style={{height:100, width:100}}/>
+                                        <Text style={{color:"red",fontSize:20}}>Press to generate PDF</Text>
                                     </TouchableOpacity>
                                 </View>
-                            </View>
-                            :<View  style={[styles.pdfButtonContainerStyle,{marginTop:"30%", marginVertical: "5%",paddingTop:"20%", backgroundColor:"#eee"}]}>
-                                <TouchableOpacity onPress={this.handleGeneratePDF} style={{alignItems:"center"}}>
-                                    <Image source={pdfRed} style={{height:100, width:100}}/>
-                                    <Text style={{color:"red",fontSize:20}}>Press to generate PDF</Text>
-                                </TouchableOpacity>
-                            </View>
-                        }
+                            }
+                        </ScrollView>
                     </View>
                 </IndicatorViewPager>
-                <View style={[styles.buttonsContainer, {paddingHorizontal:10}]}>
+                <View style={[styles.buttonsContainer, {paddingHorizontal:10, marginLeft:10}]}>
                     <View style={{justifyContent:"center"}}>
                         <TouchableOpacity
                             onPress={this._handleOnPressBack}
@@ -823,12 +893,13 @@ class ResultPage extends PureComponent {
                         </TouchableOpacity>
 
                     </View>
-
-                    <Button
-                        title="Restore Data"
-                        onPress={this._handleOnPressReuse}
-                        buttonStyle={{backgroundColor:"#27408b"}}
-                    />
+                    <View style={{marginLeft: 10}}>
+                        <Button
+                            title="Restore Data"
+                            onPress={this._handleOnPressReuse}
+                            buttonStyle={{backgroundColor:"#27408b"}}
+                        />
+                    </View>
                     <View style={{justifyContent:"center"}}>
                         <TouchableOpacity
                             onPress={this._handleOnPressNext} 
@@ -887,7 +958,12 @@ const styles = StyleSheet.create({
 
     pdfButtonContainerStyle: {
         justifyContent: 'center',
-        alignItems: 'center',
+        marginTop:"30%",
+        marginVertical: "5%",
+        paddingTop:(Platform.OS === 'ios'?"20%":50),
+        paddingVertical: (Platform.OS === 'ios'?0:50),
+        backgroundColor:"#eee",
+        alignItems:"center"
     },
 
     pdfButtonStyle:{

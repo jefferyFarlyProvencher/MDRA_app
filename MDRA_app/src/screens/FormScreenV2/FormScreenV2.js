@@ -52,13 +52,25 @@ class FormScreen extends Component{
         return true;
     };
 
+    componentWillMount() {
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+        this.props.navigator.setStyle({
+            navBarBackgroundColor: '#262626',
+            navBarTextColor: '#ffffff',
+            statusBarTextColorSchemeSingleScreen: 'light',
+            navBarButtonColor: Platform.OS === 'android'?'#3057e1': null,
+            orientation: 'portrait',
+        });
+    }
+
     componentDidMount() {
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
         this.props.navigator.setStyle({
             navBarBackgroundColor: '#262626',
             navBarTextColor: '#ffffff',
             statusBarTextColorSchemeSingleScreen: 'light',
-            navBarButtonColor: Platform.OS === 'android'?'#3057e1': null
+            navBarButtonColor: Platform.OS === 'android'?'#3057e1': null,
+            orientation: 'portrait',
         });
     };
 
@@ -166,6 +178,12 @@ class FormScreen extends Component{
             this.handleSetPage(2)
         }
 
+        console.log("this.props.state.main.indicatorVisibility: "+ this.props.state.main.indicatorVisibility);
+
+        let indicatorHeight = (this.props.state.main.indicatorVisibility===1 || this.props.state.main.indicatorVisibility === undefined)?'90%':'100%';
+
+        console.log("indicator Height: "+ indicatorHeight);
+
         return(
             <View style={styles.overTheIndicatorContainer}>
                 <StatusBar
@@ -173,9 +191,9 @@ class FormScreen extends Component{
                     barStyle="light-content"
                 />
                 {this.props.state.main.position < 4 || this.props.state.main.position === undefined || this.props.state.main.position === null?
-                    <View style={[{flex:1, opacity: this.props.state.main.indicatorVisibility}]}>
+                    <View style={{flex:1}}>
                         <IndicatorViewPager
-                            style={{height:'90%', width:"100%", bottom:0, left:0}}
+                            style={{height:indicatorHeight, width:"100%", bottom:0, left:0}}
                             indicatorOnTop={true}
                             horizontalScroll={false}
                             scrollEnabled={false}
@@ -200,7 +218,10 @@ class FormScreen extends Component{
                                 </View>
                             }
                         </IndicatorViewPager>
-                        <View style={styles.indicatorContainer}>
+                        <View
+                            style={[styles.indicatorContainer,{opacity: this.props.state.main.indicatorVisibility}]}
+                            pointerEvents={this.props.state.main.indicatorVisibility===0?"none":"auto"}
+                        >
                             <View style={this.props.state.main.advanceTabAccessible ?{ width:'80%'}: {width:'100%'}}>
                                 <StepIndicator
                                     customStyles={customStyles}
@@ -270,6 +291,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFF',
         paddingTop: 10,
         margin:0,
+
     }
 });
 

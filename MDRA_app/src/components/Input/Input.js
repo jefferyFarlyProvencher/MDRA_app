@@ -56,6 +56,7 @@ class Input extends PureComponent{
                     center={true}
                     placeholder={label? label: name}
                     onChangeText={this._handleChangeText}
+                    onFocus={this.props.onTouch}
                     onBlur={this._handleTouch}
                     containerStyle={[
                         {

@@ -29,6 +29,7 @@ import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 
 //assets imports
 import * as colors from "../../assets/colors"
+import {toggleIndicatorVisibility} from "../../store/actions";
 
 //THIS CLASS REFERS TO THE BOXES FOR RESULT PAGE
 // THERE IS A WEIRD BUG THAT PREVENTS ME FROM CHANGING the name
@@ -40,7 +41,7 @@ class FormScreenTimeZonage extends PureComponent{
         ViewMode: Dimensions.get('window').height > 500 ? "portrait" : "landscape",
         currentPosition: 1,
         nbOfBoxes: this.props.data
-            ?this.props.data.nbTherapeuticBoxes==="One therapeutic box (from AM to PM)"
+            ?this.props.data.nbTherapeuticBoxes==="One therapeutic box (AM to PM)"
                 ?1:2
             :1,
 
@@ -138,6 +139,13 @@ class FormScreenTimeZonage extends PureComponent{
         }
     }
 
+    handleStepVisibility = (name,setFieldTouched) => {
+        //console.log("step visibility toggle");
+
+        this.props.onToggleIndicator();
+        setFieldTouched(name)
+    };
+
     render() {
         return(
             <View>
@@ -163,7 +171,7 @@ class FormScreenTimeZonage extends PureComponent{
                                         bed:this.props.data.bed,
                                     }
                                     :{
-                                        nbTherapeuticBoxes:"One therapeutic box (from AM to PM)",
+                                        nbTherapeuticBoxes:"One therapeutic box (AM to PM)",
                                         tsDay: '6:00',
                                         teDay:'15:00',
                                         tsPM:'15:00',
@@ -190,7 +198,7 @@ class FormScreenTimeZonage extends PureComponent{
                                         <View style={{flexDirection:"row"}}>
                                             <DropDownListV2
                                                 onChange={(name,value) => {
-                                                    let onlyOneBox= value==="One therapeutic box (from AM to PM)";
+                                                    let onlyOneBox= value==="One therapeutic box (AM to PM)";
                                                     if(!onlyOneBox) { //if two boxes
                                                         console.log("normal value: "+ values.teDay+"and the parsedFloat version: "+parseFloat(values.teDay));
                                                         if(parseFloat(values.teDay) > 12) {
@@ -232,7 +240,7 @@ class FormScreenTimeZonage extends PureComponent{
                                                 name="nbTherapeuticBoxes"
                                                 label={"Select how many Therapeutic boxes"}
                                                 value={values.nbTherapeuticBoxes}
-                                                itemList={["One therapeutic box (from AM to PM)","Two therapeutic boxes (AM and PM)"]}
+                                                itemList={["One therapeutic box (AM to PM)","Two therapeutic boxes (AM and PM)"]}
                                                 Picker={this.props.Picker}
                                             />
                                         </View>
@@ -250,9 +258,10 @@ class FormScreenTimeZonage extends PureComponent{
                                                                 setFieldValue(name,value)
                                                             }}
                                                             onBlur={() =>{
+                                                                this.props.onToggleIndicator();
                                                                 setFieldValue("tsDay", this.handleFormatTime(values.tsDay));
                                                             }}
-                                                            onTouch={setFieldTouched}
+                                                            onTouch={(name) =>{this.handleStepVisibility(name,setFieldTouched)}}
                                                             name="tsDay"
                                                             error={touched.tsDay && errors.tsDay}
                                                             keyboardType="numeric"
@@ -266,9 +275,10 @@ class FormScreenTimeZonage extends PureComponent{
                                                                 setFieldValue(name,value)
                                                             }}
                                                             onBlur={() =>{
+                                                                this.props.onToggleIndicator();
                                                                 setFieldValue("teDay", this.handleFormatTime(values.teDay));
                                                             }}
-                                                            onTouch={setFieldTouched}
+                                                            onTouch={(name) =>{this.handleStepVisibility(name,setFieldTouched)}}
                                                             name="teDay"
                                                             error={touched.teDay && errors.teDay}
                                                             keyboardType="numeric"
@@ -324,9 +334,10 @@ class FormScreenTimeZonage extends PureComponent{
                                                             setFieldValue(name,value)
                                                         }}
                                                         onBlur={() =>{
+                                                            this.props.onToggleIndicator();
                                                             setFieldValue("tsPM", this.handleFormatTime(values.tsPM));
                                                         }}
-                                                        onTouch={setFieldTouched}
+                                                        onTouch={(name) =>{this.handleStepVisibility(name,setFieldTouched)}}
                                                         name="tsPM"
                                                         error={touched.tsPM && errors.tsPM}
                                                         keyboardType="numeric"
@@ -340,9 +351,10 @@ class FormScreenTimeZonage extends PureComponent{
                                                             setFieldValue(name,value)
                                                         }}
                                                         onBlur={() =>{
+                                                            this.props.onToggleIndicator();
                                                             setFieldValue("tePM", this.handleFormatTime(values.tePM));
                                                         }}
-                                                        onTouch={setFieldTouched}
+                                                        onTouch={(name) =>{this.handleStepVisibility(name,setFieldTouched)}}
                                                         name="tePM"
                                                         error={touched.tePM && errors.tePM}
                                                         keyboardType="numeric"
@@ -395,8 +407,9 @@ class FormScreenTimeZonage extends PureComponent{
                                                             values.tsEvening
                                                         }
                                                         onChange={setFieldValue}
-                                                        onTouch={setFieldTouched}
+                                                        onTouch={(name) =>{this.handleStepVisibility(name,setFieldTouched)}}
                                                         onBlur={() =>{
+                                                            this.props.onToggleIndicator();
                                                             setFieldValue("tsEvening", this.handleFormatTime(values.tsEvening));
                                                         }}
                                                         name="tsEvening"
@@ -415,9 +428,10 @@ class FormScreenTimeZonage extends PureComponent{
                                                         }
                                                         onChange={setFieldValue}
                                                         onBlur={() =>{
+                                                            this.props.onToggleIndicator();
                                                             setFieldValue("teEvening", this.handleFormatTime(values.teEvening));
                                                         }}
-                                                        onTouch={setFieldTouched}
+                                                        onTouch={(name) =>{this.handleStepVisibility(name,setFieldTouched)}}
                                                         name="teEvening"
                                                         error={touched.teEvening && errors.teEvening}
                                                         keyboardType="numeric"
@@ -466,9 +480,10 @@ class FormScreenTimeZonage extends PureComponent{
                                                         value={values.lunch}
                                                         onChange={setFieldValue}
                                                         onBlur={() =>{
+                                                            this.props.onToggleIndicator();
                                                             setFieldValue("lunch", this.handleFormatTime(values.lunch));
                                                         }}
-                                                        onTouch={setFieldTouched}
+                                                        onTouch={(name) =>{this.handleStepVisibility(name,setFieldTouched)}}
                                                         name="lunch"
                                                         error={touched.lunch && errors.lunch}
                                                         keyboardType="numeric"
@@ -490,9 +505,10 @@ class FormScreenTimeZonage extends PureComponent{
                                                         value={values.bed}
                                                         onChange={setFieldValue}
                                                         onBlur={() =>{
+                                                            this.props.onToggleIndicator();
                                                             setFieldValue("bed", this.handleFormatTime(values.bed));
                                                         }}
-                                                        onTouch={setFieldTouched}
+                                                        onTouch={(name) =>{this.handleStepVisibility(name,setFieldTouched)}}
                                                         name="bed"
                                                         error={touched.bed && errors.bed}
                                                         keyboardType="numeric"
@@ -500,7 +516,7 @@ class FormScreenTimeZonage extends PureComponent{
                                                 </View>
                                             </View>
                                         </View>
-                                        <View style={styles.buttonContainer}>
+                                        <View style={[styles.buttonContainer]}>
                                             <Button
                                                 buttonStyle={styles.button}
                                                 title="Go to weights"
@@ -579,7 +595,8 @@ const styles = StyleSheet.create({
 const mapDispatchToProps = dispatch => {
     return {
         onAddData: (data,position) => dispatch(addData(data,position)),
-        onChangePosition: (position) => dispatch(changePosition(position))
+        onChangePosition: (position) => dispatch(changePosition(position)),
+        onToggleIndicator: () => dispatch(toggleIndicatorVisibility())
     };
 };
 

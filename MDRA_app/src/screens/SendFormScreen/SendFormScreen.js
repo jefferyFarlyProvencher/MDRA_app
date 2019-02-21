@@ -44,7 +44,7 @@ class SendFormScreen extends PureComponent{
             d.getDate()+"_"+(d.getMonth()+1)+"_"+d.getFullYear()+"___"+parseInt(Math.random()*1000000+1)
         );
     };
-
+//TODO: do something about page3, might cause bug in the future for the user
     prepareToStoreData (data) {
         //console.log(JSON.stringify(data));
         //current data in redux will be copied to be stored with the result

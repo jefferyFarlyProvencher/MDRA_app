@@ -5,6 +5,8 @@ import {
     TOGGLE_INDICATOR_VISIBILITY, REMOVE_PDF_LIST
 } from '../actions/actionTypes'
 
+import { Platform } from 'react-native';
+
 const initialState = {
     position: 0,
     Page0Data: null,
@@ -203,11 +205,15 @@ const reducer = (state = initialState, action) => {
         //This is a special case for androids keyboard avoiding scroll
             //
         case(TOGGLE_INDICATOR_VISIBILITY):{
-            console.log("toggling indicator");
-            return {
-                ...state,
-                indicatorVisibility: state.indicatorVisibility===0?0:1
-            };
+            //console.log("toggling indicator");
+            if(Platform.OS === 'android'){
+                return {
+                    ...state,
+                    indicatorVisibility: state.indicatorVisibility===0?1:0
+                };
+            }
+            //else{ DO NOTHING }
+
         }
         default:
             return state
