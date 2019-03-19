@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {View, Text,StyleSheet, FlatList, TouchableWithoutFeedback, Button} from 'react-native'
+import {View, Text, StyleSheet, FlatList, TouchableWithoutFeedback, Button, Dimensions} from 'react-native'
 import {List, ListItem, SearchBar} from 'react-native-elements'
 import Swipeout  from 'react-native-swipeout'
 
@@ -174,8 +174,8 @@ class SelectionList extends Component{
 
 const styles = StyleSheet.create({
     listContainer:{
-        width: "100%",
-        height:"100%"
+        //width: "100%",
+        height: (Dimensions.get('window').height)*0.52,
     },
 
     buttonContainer:{

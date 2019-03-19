@@ -32,7 +32,7 @@ let HandleReceivedData = (data) => {
         //console.log("Received data spaces removed: "+data);
         //creating an appropriate
         let allResults = data.split(";");
-        console.log(JSON.stringify(allResults.slice(9,32)));
+        //console.log(JSON.stringify(allResults.slice(9,32)));
         let receivedData = {
 
             allResults: allResults,

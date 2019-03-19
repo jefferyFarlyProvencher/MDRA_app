@@ -376,7 +376,8 @@ const styles = StyleSheet.create({
     scoreContainerStyle: {
         padding : 1,
         borderWidth: 0.5,
-        borderColor: "black"
+        borderColor: "black",
+        backgroundColor: '#EEE'
     },
 
     scoresStyle: {

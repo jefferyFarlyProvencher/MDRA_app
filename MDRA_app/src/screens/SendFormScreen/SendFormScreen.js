@@ -45,10 +45,12 @@ class SendFormScreen extends PureComponent{
         );
     };
 //TODO: do something about page3, might cause bug in the future for the user
-    prepareToStoreData (data) {
+    prepareToStoreData (data, name, date) {
         //console.log(JSON.stringify(data));
+        //console.log(JSON.stringify(name));
+        //console.log(JSON.stringify(date));
+
         //current data in redux will be copied to be stored with the result
-        let d = new Date();
         let formData = [
             this.props.state.main.Page0Data,
             this.props.state.main.Page1Data,
@@ -68,13 +70,13 @@ class SendFormScreen extends PureComponent{
                     cMinTherapeuticEvening: '0',
                     cMaxTherapeuticEvening: '6',
                     threshold: '80'},
-            this.props.state.main.advanceTabAccessible
+            this.props.state.main.advanceTabAccessible+""
         ];
 
-        console.log(formData);
+        //console.log("new result's FormData: "+formData);
 
         //everything is added to the resultsList
-        this.props.onAddToResultList(data, this.generateName(d), formData, d);
+        this.props.onAddToResultList(data, name, formData, date);
 
     }
 
@@ -85,11 +87,19 @@ class SendFormScreen extends PureComponent{
                 dataReceived: false,
             }));
         }
+
         let preparedData = PrepareToSend(this.props.state.main);
-        let data = await SendForm(preparedData);
+
+        let calculatedResult = await SendForm(preparedData);
+
+        //console.log("this is the calculated result: "+ JSON.stringify(calculatedResult));
+
+        let data = calculatedResult[0];
+        let name = calculatedResult[1];
+        let date = calculatedResult[2];
         //console.log(JSON.stringify(data));
         if(data !== -1) {
-            this.prepareToStoreData(data);
+            this.prepareToStoreData(data, name, date);
             if(this.hasNotUnMounted) {
                 this.setState((oldState) => ({
                     ...oldState,

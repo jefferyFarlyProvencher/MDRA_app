@@ -148,12 +148,12 @@ class MainScreen extends Component{
                         <TouchableWithoutFeedback onPress={this._handlerOnPress}>
                                 {this.state.loading
                                     ?<ActivityIndicator size={Platform.OS==='android'?100:0} color="#111e6c" />
-                                    :<View style={[styles.textContainer,]}>
+                                    :<View style={[styles.textContainer,{}]}>
                                         <Text style={[
                                             styles.textStyle,
                                             ]}
                                         >
-                                            Press To Start
+                                            Press to Start
                                         </Text>
                                     </View>
                                 }
@@ -174,7 +174,6 @@ class MainScreen extends Component{
 
 const styles= StyleSheet.create({
     mainContainer:{
-
         height: 200,
         opacity: 0.9,
         backgroundColor: '#111e6c',
@@ -184,20 +183,17 @@ const styles= StyleSheet.create({
 
     textContainer:{
         width: "100%",
-        flex:1,
-        alignItems:"center",
-        justifyContent:"center",
-        padding: 10
-
+        padding: 10,
+        alignItems: 'center',
+        justifyContent: 'center',
+        flex:1, height:"100%"
     },
 
     textStyle:{
         fontSize: 50,
         color: '#FFF',
         textAlign:'center',
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: "75%"
+        width: "100%"
     },
 
     backgroundImage: {

@@ -161,14 +161,14 @@ class FormScreenTimeZonage extends PureComponent{
                                 initialValues={(this.props.data)
                                     ?{
                                         nbTherapeuticBoxes:this.props.data.nbTherapeuticBoxes,
-                                        tsDay: this.props.data.tsDay,
-                                        teDay:this.props.data.teDay,
-                                        tsPM:this.props.data.tsPM,
-                                        tePM:this.props.data.tePM,
-                                        tsEvening:this.props.data.tsEvening,
-                                        teEvening:this.props.data.teEvening,
-                                        lunch:this.props.data.lunch,
-                                        bed:this.props.data.bed,
+                                        tsDay: this.handleFormatTime(this.props.data.tsDay),
+                                        teDay:this.handleFormatTime(this.props.data.teDay),
+                                        tsPM:this.handleFormatTime(this.props.data.tsPM),
+                                        tePM:this.handleFormatTime(this.props.data.tePM),
+                                        tsEvening:this.handleFormatTime(this.props.data.tsEvening),
+                                        teEvening:this.handleFormatTime(this.props.data.teEvening),
+                                        lunch:this.handleFormatTime(this.props.data.lunch),
+                                        bed:this.handleFormatTime(this.props.data.bed),
                                     }
                                     :{
                                         nbTherapeuticBoxes:"One therapeutic box (AM to PM)",

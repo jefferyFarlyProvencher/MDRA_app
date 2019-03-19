@@ -17,10 +17,10 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import Picker from 'react-native-picker';
 
 //Screen Imports
-import FormScreenInitial from '../FormScreen1_initial/FormScreen_initial';
-import FormScreenTimeZonage from '../FormScreen2_timeZonage/FormScreen_timeZonage';
-import FormScreenWeights from '../FormScreen3_weights/FormScreen_weights';
-import FormScreenAdvanced from '../FormScreen4_advanced/FormScreen_advanced';
+import FormScreenInitial from '../FormScreen0_initial/FormScreen_initial';
+import FormScreenTimeZonage from '../FormScreen1_timeZonage/FormScreen_timeZonage';
+import FormScreenWeights from '../FormScreen2_weights/FormScreen_weights';
+import FormScreenAdvanced from '../FormScreen3_advanced/FormScreen_advanced';
 import SendFormScreen from '../SendFormScreen/SendFormScreen';
 import {addData, changePosition} from "../../store/actions/index";
 

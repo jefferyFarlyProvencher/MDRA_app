@@ -22,10 +22,10 @@ import StepIndicator from 'react-native-step-indicator';
 import Picker from 'react-native-picker';
 
 //Screen Imports
-import FormScreenInitial from '../FormScreen1_initial/FormScreen_initialV2';
-import FormScreenTimeZonage from '../FormScreen2_timeZonage/FormScreen_timeZonageV2';
-import FormScreenWeights from '../FormScreen3_weights/FormScreen_weights';
-import FormScreenAdvanced from '../FormScreen4_advanced/FormScreen_advanced';
+import FormScreenInitial from '../FormScreen0_initial/FormScreen_initialV2';
+import FormScreenTimeZonage from '../FormScreen1_timeZonage/FormScreen_timeZonageV2';
+import FormScreenWeights from '../FormScreen2_weights/FormScreen_weights';
+import FormScreenAdvanced from '../FormScreen3_advanced/FormScreen_advanced';
 import SendFormScreen from '../SendFormScreen/SendFormScreen';
 import {addData, changePosition} from "../../store/actions/index";
 
@@ -33,7 +33,8 @@ import {addData, changePosition} from "../../store/actions/index";
 class FormScreen extends Component{
 
     handleBackButton = () => {
-        if(this.props.state.main.position === 0)Alert.alert(
+        if(this.props.state.main.position === 0 || this.props.state.main.position === 4)
+            Alert.alert(
             'Exit App',
             'Exiting the application?', [
                 {

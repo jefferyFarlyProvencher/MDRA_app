@@ -10,13 +10,13 @@ import {
     Platform,
     NetInfo,
     ScrollView,
-    TouchableWithoutFeedback
+    TouchableWithoutFeedback, TouchableOpacity
 } from 'react-native';
 import { Button } from 'react-native-elements';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 //function imports
 import {convertTimeToHourFormat} from '../../functions/FormatTime';
@@ -493,7 +493,7 @@ class FormScreenInitial extends PureComponent{
                                                                     setFieldValue("adminTime2", value);
                                                                 }}
                                                                 onBlur={() =>{
-                                                                    this.props.onToggleIndicator();s
+                                                                    this.props.onToggleIndicator();
                                                                     setFieldValue("adminTime2", this.handleFormatTime(values.adminTime2));
                                                                 }}
                                                                 onTouch={(name)=>{this.handleStepVisibility(name,setFieldTouched)}}
@@ -570,27 +570,62 @@ class FormScreenInitial extends PureComponent{
                                         }
                                     </View>
                                     <View style={styles.pillButtonsContainer}>
-                                        <Button
-                                            icon={{ name: 'minus', type: 'font-awesome' }}
-                                            buttonStyle={styles.pillButton}
-                                            title="Remove a pill!"
-                                            onPress={() => {
-                                                setFieldValue("amountOfPills", this.state.amountOfPills-1);
-                                                this.removeDrugs();
-                                            }
-                                            }
-                                            disabled={this.state.amountOfPills<=1}
-                                        />
-                                        <Button
-                                            iconRight={{ name: 'plus', type: 'font-awesome'}}
-                                            buttonStyle={styles.pillButton}
-                                            title="Add a pill!"
-                                            onPress={() =>{
-                                                setFieldValue("amountOfPills", this.state.amountOfPills+1);
-                                                this.addDrugs();
-                                            }}
-                                            disabled={this.state.amountOfPills>=4}
-                                        />
+                                        {/*<Button*/}
+                                            {/*icon={{ name: 'minus', type: 'font-awesome' }}*/}
+                                            {/*buttonStyle={styles.pillButton}*/}
+                                            {/*title="Remove a pill!"*/}
+                                            {/*onPress={() => {*/}
+                                                {/*setFieldValue("amountOfPills", this.state.amountOfPills-1);*/}
+                                                {/*this.removeDrugs();*/}
+                                            {/*}*/}
+                                            {/*}*/}
+                                            {/*disabled={this.state.amountOfPills<=1}*/}
+                                        {/*/>*/}
+                                        <View style={{marginRight: 10}}>
+                                            <TouchableOpacity
+                                                onPress={() =>{
+                                                    setFieldValue("amountOfPills", this.state.amountOfPills-1);
+                                                    this.removeDrugs();
+                                                }}
+                                                disabled={this.state.amountOfPills<=1}
+                                            >
+                                                <View style={[styles.pillButton2, (this.state.amountOfPills<=1? styles.pillButtonDisabled: styles.pillButtonEnabled)]}>
+                                                    <View style={{alignItems:"center", justifyContent:"center", paddingLeft: 5, paddingRight:10}}>
+                                                        <Icon name={"minus"} color="#FFF"/>
+                                                    </View>
+                                                    <Text style={{textAlign: 'center', color:'#FFF', fontSize: 18}}>
+                                                        Remove a pill
+                                                    </Text>
+
+                                                </View>
+                                            </TouchableOpacity>
+                                        </View>
+                                        {/*<Button*/}
+                                            {/*iconRight={{ name: 'plus', type: 'font-awesome'}}*/}
+                                            {/*buttonStyle={styles.pillButton}*/}
+                                            {/*title="Add a pill!"*/}
+                                            {/*onPress={() =>{*/}
+                                                {/*setFieldValue("amountOfPills", this.state.amountOfPills+1);*/}
+                                                {/*this.addDrugs();*/}
+                                            {/*}}*/}
+                                            {/*disabled={this.state.amountOfPills>=4}*/}
+                                        {/*/>*/}
+                                        <View>
+                                            <TouchableOpacity
+                                                onPress={() =>{
+                                                    setFieldValue("amountOfPills", this.state.amountOfPills+1);
+                                                    this.addDrugs();
+                                                }}
+                                                disabled={this.state.amountOfPills>=4}
+                                            >
+                                                <View style={[styles.pillButton2, (this.state.amountOfPills>=4? styles.pillButtonDisabled: styles.pillButtonEnabled)]}>
+                                                    <Text style={{textAlign: 'center', color:'#FFF', fontSize: 18}}>Add a pill</Text>
+                                                    <View style={{alignItems:"center", justifyContent:"center", paddingLeft: 10, paddingRight:5}}>
+                                                        <Icon name={"plus"} color="#FFF"/>
+                                                    </View>
+                                                </View>
+                                            </TouchableOpacity>
+                                        </View>
                                     </View>
                                     <View style={styles.buttonContainer}>
                                         <Button
@@ -643,7 +678,23 @@ const styles = StyleSheet.create({
 
     pillButton: {
         borderRadius:100,
+        backgroundColor: "#262626",
+    },
+
+    pillButton2: {
+        borderRadius:100,
+        backgroundColor: "#262626",
+        width:"100%",
+        flexDirection:"row",
+        padding:12,
+    },
+
+    pillButtonEnabled: {
         backgroundColor: "#262626"
+    },
+
+    pillButtonDisabled: {
+        backgroundColor: "#dcdcdc"
     },
 
     pillButtonsContainer: {

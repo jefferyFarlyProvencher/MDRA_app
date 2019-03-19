@@ -1,0 +1,40 @@
+
+nInd           =  page3Data.numberOfSimulations
+Gender         =  (page0Data.gender==='Male'?'1': '0')
+weight         =  verifyUnitConversion(page0Data.weight, page0Data.switchWeightFormat)
+a              =  page3Data.cMinTherapeuticDayPM
+b              =  page3Data.cMaxTherapeuticDayPM
+c              =  ((doesItHaveTwoBoxes) ? page1Data.tsPM : page1Data.tsDay)
+
+d              =  ((doesItHaveTwoBoxes)? adjustTime(page1Data.tePM) : adjustTime(page1Data.teDay))
+
+e              =  page3Data.cMinTherapeuticEvening
+f              =  page3Data.cMaxTherapeuticEvening
+g              =  adjustTime(page1Data.tsEvening)
+h              =  adjustTime(page1Data.teEvening)
+WTI1           =  page2Data.weight1
+WTI2           =  page2Data.weight2
+WTI3           =  page2Data.weight3
+WTI4           =  page2Data.weight4
+WTI5           =  page2Data.weight5
+WTI6           =  page2Data.weight6
+WTI7           =  page2Data.weight7
+palier         =  page3Data.threshold
+za             =  page3Data.cMinTherapeuticHalfDayAM
+zb             =  page3Data.cMaxTherapeuticHalfDayAM
+
+//zc to zzd equal -1 if only one box
+zc             =  page1Data.tsDay
+zd             =  page1Data.teDay
+zzc            =  page1Data.tsPM
+zzd            =  page1Data.tePM
+
+heureducoucher =  adjustTime(page1Data.bed)
+startLunchTime =  adjustTime(page1Data.lunch)
+Morning        =  ((doesItHaveTwoBoxes)? 1 : 0)
+
+//repeated for the amount of pills (formulation1,..., formualtion2,...)
+formulation1   =  findFormulaNumber(page0Data.formula0)
+quantitedose1  =  page0Data.dose0
+momentdose1    =  adjustTime(page0Data.adminTime0)
+Food1          =  (page0Data.food0 ==='Yes'? '1':'0') //turns yes/no into bool vals
