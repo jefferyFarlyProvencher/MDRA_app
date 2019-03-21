@@ -25,7 +25,7 @@ import ResultTest from './src/screens/ResultTest/ResultTest';
 import ResultPage from './src/screens/ResultPage/ResultPage';
 import PickerTest from './src/screens/PickerTest/PickerTest';
 import TestCapturePDF from './src/screens/TestCapturePDF/TestCapturePDF';
-import SearchOldResults from './src/screens/SearchOldResultsScreens/RetrieveOldResultsScreen';
+import SearchOldResults from './src/screens/RetrieveOldResultsScreen/RetrieveOldResultsScreen';
 
 import SendForm from './src/components/SendForm/SendForm';
 

@@ -28,6 +28,7 @@ import Spinner from "react-native-loading-spinner-overlay";
 import SelectionList from "../../components/SelectionList/SelectionList";
 import isSameName from '../../functions/IsSameName';
 import NewYupString from "../../components/NewYupString/NewYupString";
+import * as colors from "../../assets/colors";
 
 
 class ResultScreen extends Component{
@@ -47,33 +48,36 @@ class ResultScreen extends Component{
         amountOfPushes: 0,
         selectorListAvailable: false,
         currentlySelectedItem: 0,
-        renameError: false
+        renameError: false,
+        isDeleteDisabled: false
     };
 
-    static navigatorButtons = {
-        rightButtons: [
-            // {
-            //     title: 'Delete', // for a textual button, provide the button title (label)
-            //     id: 'delete', // id for this button, given in onNavigatorEvent(event) to help understand which button was clicked
-            //     disabled: false, // optional, used to disable the button (appears faded and doesn't interact)
-            //     disableIconTint: true, // optional, by default the image colors are overridden and tinted to navBarButtonColor, set to true to keep the original image colors
-            //     showAsAction: 'ifRoom', // optional, Android only. Control how the button is displayed in the Toolbar. Accepted valued: 'ifRoom' (default) - Show this item as a button in an Action Bar if the system decides there is room for it. 'always' - Always show this item as a button in an Action Bar. 'withText' - When this item is in the action bar, always show it with a text label even if it also has an icon specified. 'never' - Never show this item as a button in an Action Bar.
-            //     buttonColor: 'red', // Optional, iOS only. Set color for the button (can also be used in setButtons function to set different button style programatically)
-            //     buttonFontSize: 14, // Set font size for the button (can also be used in setButtons function to set different button style programatically)
-            //     buttonFontWeight: '600', // Set font weight for the button (can also be used in setButtons function to set different button style programatically)
-            // },
-            // {
-            //     title: 'Rename', // for a textual button, provide the button title (label)
-            //     id: 'rename', // id for this button, given in onNavigatorEvent(event) to help understand which button was clicked
-            //     disabled: false, // optional, used to disable the button (appears faded and doesn't interact)
-            //     disableIconTint: false, // optional, by default the image colors are overridden and tinted to navBarButtonColor, set to true to keep the original image colors
-            //     showAsAction: 'ifRoom', // optional, Android only. Control how the button is displayed in the Toolbar. Accepted valued: 'ifRoom' (default) - Show this item as a button in an Action Bar if the system decides there is room for it. 'always' - Always show this item as a button in an Action Bar. 'withText' - When this item is in the action bar, always show it with a text label even if it also has an icon specified. 'never' - Never show this item as a button in an Action Bar.
-            //     buttonColor: 'blue', // Optional, iOS only. Set color for the button (can also be used in setButtons function to set different button style programatically)
-            //     buttonFontSize: 14, // Set font size for the button (can also be used in setButtons function to set different button style programatically)
-            //     buttonFontWeight: '600', // Set font weight for the button (can also be used in setButtons function to set different button style programatically)
-            // }
 
-        ]
+    DefaultCustomButtons = [
+        {
+            title: 'Delete', // for a textual button, provide the button title (label)
+            id: 'deleteButton', // id for this button, given in onNavigatorEvent(event) to help understand which button was clicked
+            disabled:  this.state.isDeleteDisabled, // optional, used to disable the button (appears faded and doesn't interact)
+            disableIconTint: false, // optional, by default the image colors are overridden and tinted to navBarButtonColor, set to true to keep the original image colors
+            showAsAction: 'ifRoom', // optional, Android only. Control how the button is displayed in the Toolbar. Accepted valued: 'ifRoom' (default) - Show this item as a button in an Action Bar if the system decides there is room for it. 'always' - Always show this item as a button in an Action Bar. 'withText' - When this item is in the action bar, always show it with a text label even if it also has an icon specified. 'never' - Never show this item as a button in an Action Bar.
+            buttonColor: '#ff374b', // Optional, iOS only. Set color for the button (can also be used in setButtons function to set different button style programatically)
+            buttonFontSize: 14, // Set font size for the button (can also be used in setButtons function to set different button style programatically)
+            buttonFontWeight: '600', // Set font weight for the button (can also be used in setButtons function to set different button style programatically)
+        },
+        {
+            title: 'Cancel', // for a textual button, provide the button title (label)
+            id: 'cancelButton', // id for this button, given in onNavigatorEvent(event) to help understand which button was clicked
+            disabled: false, // optional, used to disable the button (appears faded and doesn't interact)
+            disableIconTint: false, // optional, by default the image colors are overridden and tinted to navBarButtonColor, set to true to keep the original image colors
+            showAsAction: 'ifRoom', // optional, Android only. Control how the button is displayed in the Toolbar. Accepted valued: 'ifRoom' (default) - Show this item as a button in an Action Bar if the system decides there is room for it. 'always' - Always show this item as a button in an Action Bar. 'withText' - When this item is in the action bar, always show it with a text label even if it also has an icon specified. 'never' - Never show this item as a button in an Action Bar.
+            buttonColor: colors.royalBlue1, // Optional, iOS only. Set color for the button (can also be used in setButtons function to set different button style programatically)
+            buttonFontSize: 14, // Set font size for the button (can also be used in setButtons function to set different button style programatically)
+            buttonFontWeight: '600', // Set font weight for the button (can also be used in setButtons function to set different button style programatically)
+        }
+    ];
+
+    static navigatorButtons = {
+        rightButtons: []
     };
 
     componentWillMount() {
@@ -84,7 +88,7 @@ class ResultScreen extends Component{
             navBarBackgroundColor: '#262626',
             navBarTextColor: '#ffffff',
             statusBarTextColorSchemeSingleScreen: 'light',
-            navBarButtonColor: Platform.OS === 'android'?'#3057e1': null
+            //navBarButtonColor: Platform.OS === 'android'?'#3057e1': null
         });
     }
 
@@ -111,6 +115,13 @@ class ResultScreen extends Component{
                 this.props.navigator.toggleDrawer({
                     side: "left"
                 });
+            }
+            else if(event.id === "deleteButton"){
+                console.log("deleteButton Pressed")
+            }
+            else if(event.id === "cancelButton"){
+                console.log("cancelButton Pressed");
+                this.toggleSelectorList();
             }
         }
     };
@@ -296,6 +307,32 @@ class ResultScreen extends Component{
         );
     };
 
+    handleDisableDeleteButton = (lengthOfSelection) => {
+        let newCustomButtons = [
+            {
+                title: 'Delete', // for a textual button, provide the button title (label)
+                id: 'deleteButton', // id for this button, given in onNavigatorEvent(event) to help understand which button was clicked
+                disabled:  lengthOfSelection < 1, // optional, used to disable the button (appears faded and doesn't interact)
+                disableIconTint: false, // optional, by default the image colors are overridden and tinted to navBarButtonColor, set to true to keep the original image colors
+                showAsAction: 'ifRoom', // optional, Android only. Control how the button is displayed in the Toolbar. Accepted valued: 'ifRoom' (default) - Show this item as a button in an Action Bar if the system decides there is room for it. 'always' - Always show this item as a button in an Action Bar. 'withText' - When this item is in the action bar, always show it with a text label even if it also has an icon specified. 'never' - Never show this item as a button in an Action Bar.
+                buttonColor: '#ff374b', // Optional, iOS only. Set color for the button (can also be used in setButtons function to set different button style programatically)
+                buttonFontSize: 14, // Set font size for the button (can also be used in setButtons function to set different button style programatically)
+                buttonFontWeight: '600', // Set font weight for the button (can also be used in setButtons function to set different button style programatically)
+            },
+            {
+                title: 'Cancel', // for a textual button, provide the button title (label)
+                id: 'cancelButton', // id for this button, given in onNavigatorEvent(event) to help understand which button was clicked
+                disabled: false, // optional, used to disable the button (appears faded and doesn't interact)
+                disableIconTint: false, // optional, by default the image colors are overridden and tinted to navBarButtonColor, set to true to keep the original image colors
+                showAsAction: 'ifRoom', // optional, Android only. Control how the button is displayed in the Toolbar. Accepted valued: 'ifRoom' (default) - Show this item as a button in an Action Bar if the system decides there is room for it. 'always' - Always show this item as a button in an Action Bar. 'withText' - When this item is in the action bar, always show it with a text label even if it also has an icon specified. 'never' - Never show this item as a button in an Action Bar.
+                buttonColor: colors.royalBlue1, // Optional, iOS only. Set color for the button (can also be used in setButtons function to set different button style programatically)
+                buttonFontSize: 14, // Set font size for the button (can also be used in setButtons function to set different button style programatically)
+                buttonFontWeight: '600', // Set font weight for the button (can also be used in setButtons function to set different button style programatically)
+            }
+        ];
+        this.props.navigator.setButtons({rightButtons:newCustomButtons})
+    };
+
     _handleRenameSubmit =(async (values, bag) => {
         try {
             if(!isSameName(values.newName, this.props.state.main.resultsList, this.state.renameTarget)) {
@@ -322,13 +359,14 @@ class ResultScreen extends Component{
     render(){
         let content = (
             (this.state.selectorListAvailable)
-                ?<View style={{height:"50%"}}>
+                ?<View style={{height:"100%"}}>
                     <SelectionList
                         list ={this.props.state.main.resultsList}
                         onItemSelected={this.handleItemSelected}
                         selectedValue={this.state.currentlySelectedItem}
                         cancelSelection={this.toggleSelectorList}
                         deleteSelection={this.handleSelectionDeletion}
+                        disableDeleteButton = {this.handleDisableDeleteButton}
                     />
                 </View>
                 :<View style={{height:"100%"}}>
@@ -342,7 +380,14 @@ class ResultScreen extends Component{
                     />
                 </View>
         );
-//      console.log(this.props.state.main.resultsList);
+
+        if(this.state.selectorListAvailable)
+            this.props.navigator.setButtons({rightButtons:this.DefaultCustomButtons});
+        else{
+            this.props.navigator.setButtons({rightButtons:[]});
+        }
+
+        //console.log(this.props.state.main.resultsList);
         //console.log("This is the current list of results[1]:"+ JSON.stringify(this.props.state.main.resultsList));
 //        console.log("This is the current list of results[2]:"+ JSON.stringify(this.props.state.main.resultsList[2]));
 //        console.log("This is the current list of results[3]:"+ JSON.stringify(this.props.state.main.resultsList[3]));

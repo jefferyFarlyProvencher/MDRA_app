@@ -347,7 +347,7 @@ let HandleReceivedSearch = (returnedList) => {
     let newObjectList = [];
     if(returnedList) {
         console.log("Returned List size: "+ returnedList.length);
-        for (let i = 0; i < 37; i++) {
+        for (let i = 0; i < returnedList.length; i++) {
             let currentResult = returnedList[i];
             //console.log('currentResult is this: '+JSON.stringify(returnedList[i]));
             let newResultName = currentResult['defaultName'];

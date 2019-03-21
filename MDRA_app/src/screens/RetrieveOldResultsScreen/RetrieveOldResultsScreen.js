@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Image, Platform, StyleSheet, View, Text} from "react-native";
+import {Image, Platform, StyleSheet, View, Text, TouchableOpacity, DatePickerIOS} from "react-native";
 
 import {
     Button,
@@ -9,7 +9,7 @@ import {
 import * as colors from "../../assets/colors";
 
 import SendRetrieval from '../../components/SendRetrieval/SendRetrieval';
-import {addToResultList, changePosition} from "../../store/actions";
+import {addToResultList} from "../../store/actions";
 import {connect} from "react-redux";
 
 class RetrieveOldResultsScreen extends Component {
@@ -20,6 +20,7 @@ class RetrieveOldResultsScreen extends Component {
 
     state = {
         searchItems: false,
+        displayedMessage: "Enter proper information to make the appropriate search",
     };
 
     componentWillMount() {
@@ -42,6 +43,19 @@ class RetrieveOldResultsScreen extends Component {
                 });
             }
         }
+    };
+
+    setDate(newDate) {
+        this.setState({chosenDate: newDate});
+    }
+
+    changeDisplayedMessage = (message) => {
+        this.setState(oldState => {
+            return({
+                ...oldState,
+                displayedMessage: message
+            })
+        });
     };
 
     verifyIfNotDuplicate = (resultToCompare) =>{
@@ -67,6 +81,7 @@ class RetrieveOldResultsScreen extends Component {
             let currentResult = retrievalResult[i];
             if(this.verifyIfNotDuplicate(currentResult))
             {
+                this.changeDisplayedMessage("Currently adding the result: "+ currentResult.name + " , to the list.");
                 this.props.onAddToResultList(currentResult.data, currentResult.name, currentResult.formData, currentResult.date)
             }
             else{
@@ -86,7 +101,7 @@ class RetrieveOldResultsScreen extends Component {
         return (
             <View style={styles.containerStyle}>
                 <Text>
-                    In development
+                    {this.state.displayedMessage}
                 </Text>
                 <SearchBar
                     placeholder="Type Here..."
@@ -95,7 +110,14 @@ class RetrieveOldResultsScreen extends Component {
                     round={true}
                     platform="android"
                 />
-                <Button title={"Send"} onPress={()=>{console.log("HEY HEY HEY STARTING SENDSEARCH!"); this.handleRetrieveResults()}}/>
+                <TouchableOpacity title={"Send"} onPress={()=>{console.log("HEY HEY HEY STARTING SENDSEARCH!"); this.handleRetrieveResults()}}>
+                    <View style={[styles.pillButton2]}>
+                        <Text style={{textAlign: 'center', color:'#FFF', fontSize: 18}}>
+                            Start Retrieval Process
+                        </Text>
+
+                    </View>
+                </TouchableOpacity>
             </View>
         );
     }
@@ -106,7 +128,15 @@ const styles = StyleSheet.create({
         flex:1,
         alignItems: "center",
         justifyContent: "center"
-    }
+    },
+    pillButton2: {
+        borderRadius:100,
+        backgroundColor: "#3057e1",
+        width:"100%",
+        flexDirection:"row",
+        padding:12,
+    },
+
 });
 
 const mapStateToProps = state => {

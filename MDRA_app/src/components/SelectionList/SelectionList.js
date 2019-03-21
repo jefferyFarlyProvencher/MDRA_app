@@ -67,6 +67,9 @@ class SelectionList extends Component{
         else {
             newList.push(key);
         }
+
+        this.props.disableDeleteButton(newList.length);
+
         this.setState((oldState)=>{
             return {
                 ...oldState,
@@ -109,21 +112,6 @@ class SelectionList extends Component{
         return (
             <View style={{alignContent:"center",backgroundColor:"#262626"}}>
                 {this.renderHeader()}
-                <View style={styles.buttonContainer}>
-                    <Button
-                        title={"Cancel"}
-                        onPress={this.props.cancelSelection}
-                        color={colors.royalBlue1}
-                        style={styles.buttonStyle}
-                    />
-                    <Button
-                        title={"Delete"}
-                        onPress={() => this.props.deleteSelection(this.state.selectedList)}
-                        disabled={this.state.selectedList.length < 1}
-                        color={'red'}
-                        style={styles.buttonStyle}
-                    />
-                </View>
                 <List containerStyle={{margin:0, padding:0, borderTopWidth:0, borderBottomWidth:0}}>
                     <FlatList
                         style={styles.listContainer}
@@ -175,7 +163,7 @@ class SelectionList extends Component{
 const styles = StyleSheet.create({
     listContainer:{
         //width: "100%",
-        height: (Dimensions.get('window').height)*0.52,
+        height: (Dimensions.get('window').height)*0.70,
     },
 
     buttonContainer:{

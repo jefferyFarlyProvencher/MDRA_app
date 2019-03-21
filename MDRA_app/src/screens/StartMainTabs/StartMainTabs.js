@@ -2,6 +2,9 @@ import {Navigation} from 'react-native-navigation';
 import { Platform } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
+
+
+
 const startTabs = () => {
     Promise.all([
         Icon.getImageSource(Platform.OS==='android'? "md-paper":"ios-paper", 30),
@@ -22,7 +25,8 @@ const startTabs = () => {
                             {
                                 icon: sources[2], //Sources comes from the array up from here, [2] for the 3rd item sp ios-menu
                                 title: "Menu",
-                                id: "sideDrawerToggle"
+                                id: "sideDrawerToggle",
+                                buttonColor:"#3057e1"
                             }
                         ],
                     },
@@ -44,7 +48,8 @@ const startTabs = () => {
                             {
                                 icon: sources[2], //Sources comes from the array up from here, [2] for the 3rd item sp ios-menu
                                 title: "Menu",
-                                id: "sideDrawerToggle"
+                                id: "sideDrawerToggle",
+                                buttonColor:"#3057e1"
                             }
                         ],
                     },
@@ -59,15 +64,16 @@ const startTabs = () => {
                 },
                 {
                     screen: "MDRA_app.searchOldResults",
-                    label: "Search",
-                    title: "Search",
+                    label: "Retrieve",
+                    title: "Retrieve",
                     icon: sources[3],
                     navigatorButtons: {
                         leftButtons: [
                             {
                                 icon: sources[2], //Sources comes from the array up from here, [2] for the 3rd item sp ios-menu
                                 title: "Menu",
-                                id: "sideDrawerToggle"
+                                id: "sideDrawerToggle",
+                                buttonColor:"#3057e1"
                             }
                         ],
                     },

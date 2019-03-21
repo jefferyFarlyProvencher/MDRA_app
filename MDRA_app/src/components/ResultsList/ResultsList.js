@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {View, Text,StyleSheet, FlatList, TouchableWithoutFeedback} from 'react-native'
+import {View, Text, StyleSheet, FlatList, TouchableWithoutFeedback, Dimensions} from 'react-native'
 import {List, ListItem, SearchBar} from 'react-native-elements'
 import Swipeout  from 'react-native-swipeout'
 import * as colors from "../../assets/colors";
@@ -151,7 +151,8 @@ class ResultsList extends Component{
 const styles = StyleSheet.create({
     listContainer:{
         width: "100%",
-        height:"100%"
+        //height:"100%"
+        height: (Dimensions.get('window').height)*0.70,
     },
 });
 
