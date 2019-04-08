@@ -10,7 +10,8 @@ import {
     StyleSheet,
     StatusBar,
     Alert,
-    Platform
+    Platform,
+    Dimensions
 } from 'react-native';
 import {Formik} from "formik";
 import {Button} from 'react-native-elements';
@@ -49,7 +50,8 @@ class ResultScreen extends Component{
         selectorListAvailable: false,
         currentlySelectedItem: 0,
         renameError: false,
-        isDeleteDisabled: false
+        isDeleteDisabled: false,
+        toDeleteList: []
     };
 
 
@@ -61,7 +63,7 @@ class ResultScreen extends Component{
             disableIconTint: false, // optional, by default the image colors are overridden and tinted to navBarButtonColor, set to true to keep the original image colors
             showAsAction: 'ifRoom', // optional, Android only. Control how the button is displayed in the Toolbar. Accepted valued: 'ifRoom' (default) - Show this item as a button in an Action Bar if the system decides there is room for it. 'always' - Always show this item as a button in an Action Bar. 'withText' - When this item is in the action bar, always show it with a text label even if it also has an icon specified. 'never' - Never show this item as a button in an Action Bar.
             buttonColor: '#ff374b', // Optional, iOS only. Set color for the button (can also be used in setButtons function to set different button style programatically)
-            buttonFontSize: 14, // Set font size for the button (can also be used in setButtons function to set different button style programatically)
+            buttonFontSize: 16.5, // Set font size for the button (can also be used in setButtons function to set different button style programatically)
             buttonFontWeight: '600', // Set font weight for the button (can also be used in setButtons function to set different button style programatically)
         },
         {
@@ -71,7 +73,7 @@ class ResultScreen extends Component{
             disableIconTint: false, // optional, by default the image colors are overridden and tinted to navBarButtonColor, set to true to keep the original image colors
             showAsAction: 'ifRoom', // optional, Android only. Control how the button is displayed in the Toolbar. Accepted valued: 'ifRoom' (default) - Show this item as a button in an Action Bar if the system decides there is room for it. 'always' - Always show this item as a button in an Action Bar. 'withText' - When this item is in the action bar, always show it with a text label even if it also has an icon specified. 'never' - Never show this item as a button in an Action Bar.
             buttonColor: colors.royalBlue1, // Optional, iOS only. Set color for the button (can also be used in setButtons function to set different button style programatically)
-            buttonFontSize: 14, // Set font size for the button (can also be used in setButtons function to set different button style programatically)
+            buttonFontSize: 16.5, // Set font size for the button (can also be used in setButtons function to set different button style programatically)
             buttonFontWeight: '600', // Set font weight for the button (can also be used in setButtons function to set different button style programatically)
         }
     ];
@@ -117,7 +119,9 @@ class ResultScreen extends Component{
                 });
             }
             else if(event.id === "deleteButton"){
-                console.log("deleteButton Pressed")
+                console.log("deleteButton Pressed");
+                this.handleSelectionDeletion(this.state.toDeleteList);
+                this.handleDisableDeleteButton(0, [])
             }
             else if(event.id === "cancelButton"){
                 console.log("cancelButton Pressed");
@@ -191,18 +195,24 @@ class ResultScreen extends Component{
         }
     };
 
-    toggleSelectorList = () => {
+    toggleSelectorList = (key) => {
+        //since this is a toggle, if it's false, then it will become true afterwards
+        // and it was sent a key to put in list
+        if(!this.state.selectorListAvailable || key)
+        {
+            this.handleItemSelected(key)
+        }
         this.setState((oldState) => {
             return({
-              ...oldState,
-              selectorListAvailable: !oldState.selectorListAvailable,
+                ...oldState,
+                selectorListAvailable: !oldState.selectorListAvailable,
             })
         })
     };
 
     handleOnEnablingSelection = (key) => {
         this.handleItemSelected(key);
-        this.toggleSelectorList();
+        this.toggleSelectorList(key);
     };
 
     handleItemSelected = (key) => {
@@ -215,7 +225,8 @@ class ResultScreen extends Component{
         this.setState((oldState) => {
             return({
                 ...oldState,
-                currentlySelectedItem: key
+                currentlySelectedItem: key,
+                toDeleteList: [key]
             })
         });
         //reload screen
@@ -231,6 +242,12 @@ class ResultScreen extends Component{
             }
         );
     };
+
+    /**
+     * handleOnRenamePressed prepares for the rename process
+     * @param key
+     */
+
 
     handleOnRenamePressed = (key) =>
     {
@@ -262,6 +279,22 @@ class ResultScreen extends Component{
         // );
     };
 
+    changeDeletionList = (list) =>{
+        this.setState(oldState => {
+
+            return({
+                ...oldState,
+                toDeleteList: list
+            })
+        });
+    };
+
+    /**
+     * handleRemoveResult
+     * @param key
+     *
+     * Deletes ONE result, with confirmation pop up
+     */
     handleRemoveResult = (key) => {
         Alert.alert(
             'Confirmation',
@@ -284,30 +317,52 @@ class ResultScreen extends Component{
 
     };
 
+    /**
+     * handleSelectionDeletion
+     * @param selectedList
+     *
+     * Deletes a group (more than 1) of result
+     */
+
     handleSelectionDeletion = (selectedList)=>{
         //console.log("selectedList: "+ selectedList);
-        Alert.alert(
-            'Confirmation',
-            'Do you really want to remove the selected results?', [
-                {
-                    text: 'Nevermind, no',
-                    onPress: (() => console.log('Cancel Pressed')),
-                    style: 'cancel'
-                }, {
-                    text: 'Yes, erase them',
-                    onPress: () => {
-                        for(let i = 0; i < selectedList.length;i++)
-                            this.props.onRemoveData(selectedList[i])
+        if(this.state.toDeleteList.length > 0) {
+            Alert.alert(
+                'Confirmation',
+                'Do you really want to remove the selected result(s)?', [
+                    {
+                        text: 'Nevermind, no',
+                        onPress: (() => console.log('Cancel Pressed')),
+                        style: 'cancel'
+                    }, {
+                        text: 'Yes, erase them',
+                        onPress: () => {
+                            for (let i = 0; i < selectedList.length; i++)
+                                this.props.onRemoveData(selectedList[i])
+                        }
                     }
+                ],
+                {
+                    cancelable: false
                 }
-            ],
-            {
-                cancelable: false
-            }
-        );
+            );
+        }
+        else if(this.state.toDeleteList.length < 1){
+            Alert.alert("Warning", "No items are selected")
+        }
     };
-
-    handleDisableDeleteButton = (lengthOfSelection) => {
+    /**
+     * Does as it is said
+     * @param lengthOfSelection
+     * @param list
+     *
+     * NOTE: I do not now how to dynamically change the disabled from true to false,
+     *       Thus, I do the extremely inefficient way of recreating the object
+     *
+     * NOTE2: Because of an unknown glitch, we need to have the length sent on its own, as otherwise the effect of the
+     *        disable is not done immediately
+     */
+    handleDisableDeleteButton = (lengthOfSelection, list) => {
         let newCustomButtons = [
             {
                 title: 'Delete', // for a textual button, provide the button title (label)
@@ -316,7 +371,7 @@ class ResultScreen extends Component{
                 disableIconTint: false, // optional, by default the image colors are overridden and tinted to navBarButtonColor, set to true to keep the original image colors
                 showAsAction: 'ifRoom', // optional, Android only. Control how the button is displayed in the Toolbar. Accepted valued: 'ifRoom' (default) - Show this item as a button in an Action Bar if the system decides there is room for it. 'always' - Always show this item as a button in an Action Bar. 'withText' - When this item is in the action bar, always show it with a text label even if it also has an icon specified. 'never' - Never show this item as a button in an Action Bar.
                 buttonColor: '#ff374b', // Optional, iOS only. Set color for the button (can also be used in setButtons function to set different button style programatically)
-                buttonFontSize: 14, // Set font size for the button (can also be used in setButtons function to set different button style programatically)
+                buttonFontSize: 16.5, // Set font size for the button (can also be used in setButtons function to set different button style programatically)
                 buttonFontWeight: '600', // Set font weight for the button (can also be used in setButtons function to set different button style programatically)
             },
             {
@@ -326,11 +381,21 @@ class ResultScreen extends Component{
                 disableIconTint: false, // optional, by default the image colors are overridden and tinted to navBarButtonColor, set to true to keep the original image colors
                 showAsAction: 'ifRoom', // optional, Android only. Control how the button is displayed in the Toolbar. Accepted valued: 'ifRoom' (default) - Show this item as a button in an Action Bar if the system decides there is room for it. 'always' - Always show this item as a button in an Action Bar. 'withText' - When this item is in the action bar, always show it with a text label even if it also has an icon specified. 'never' - Never show this item as a button in an Action Bar.
                 buttonColor: colors.royalBlue1, // Optional, iOS only. Set color for the button (can also be used in setButtons function to set different button style programatically)
-                buttonFontSize: 14, // Set font size for the button (can also be used in setButtons function to set different button style programatically)
+                buttonFontSize: 16.5, // Set font size for the button (can also be used in setButtons function to set different button style programatically)
                 buttonFontWeight: '600', // Set font weight for the button (can also be used in setButtons function to set different button style programatically)
             }
         ];
-        this.props.navigator.setButtons({rightButtons:newCustomButtons})
+
+        this.changeDeletionList(list);
+
+        setTimeout(
+            ()=> {
+                this.props.navigator.setButtons({rightButtons:newCustomButtons});
+            },
+            100
+        )
+
+
     };
 
     _handleRenameSubmit =(async (values, bag) => {
@@ -359,7 +424,7 @@ class ResultScreen extends Component{
     render(){
         let content = (
             (this.state.selectorListAvailable)
-                ?<View style={{height:"100%"}}>
+                ?<View>
                     <SelectionList
                         list ={this.props.state.main.resultsList}
                         onItemSelected={this.handleItemSelected}
@@ -367,9 +432,10 @@ class ResultScreen extends Component{
                         cancelSelection={this.toggleSelectorList}
                         deleteSelection={this.handleSelectionDeletion}
                         disableDeleteButton = {this.handleDisableDeleteButton}
+                        listStyle={{height:Dimensions.get("window").height*(Platform.OS === "android"?0.64:0.71)}}
                     />
                 </View>
-                :<View style={{height:"100%"}}>
+                :<View>
                     <ResultsList
                         list ={this.props.state.main.resultsList}
                         onToggleSelectorList={this.handleOnEnablingSelection}
@@ -377,6 +443,7 @@ class ResultScreen extends Component{
                         onRemoveData={this.handleRemoveResult}
                         onRenameData={this.handleOnRenamePressed}
                         extraData={this.state}
+                        listStyle={{height:Dimensions.get("window").height*(Platform.OS === "android"?0.64:0.71)}}
                     />
                 </View>
         );
@@ -393,7 +460,6 @@ class ResultScreen extends Component{
 //        console.log("This is the current list of results[3]:"+ JSON.stringify(this.props.state.main.resultsList[3]));
         //console.log("THIS IS THE renameError: " + this.state.renameError);
         return(
-
             <View>
                 <View style={{margin:0, paddingBottom:0, height:"92%"}}>
                     {this.props.state.main.resultsList.length > 0
@@ -409,7 +475,6 @@ class ResultScreen extends Component{
                         onRequestClose={() => {
                             this.setModalVisible(!this.state.modalVisible);
                         }}
-                        style={{height: "80%", width:"80%"}}
                     >
                         <View
                             style={{

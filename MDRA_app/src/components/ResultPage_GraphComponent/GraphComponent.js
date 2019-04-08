@@ -116,7 +116,8 @@ class GraphComponent extends PureComponent{
         let startXPosition = this.findStartXPosition();
 
         let returnResult = [];
-        for(let i = 1; i < scoreTableY.length-1; i+=3) {
+        //increasing the step for i reduces precision but increases performance
+        for(let i = 1; i < scoreTableY.length-1; i+=4) {
                 returnResult.push({
                     x: ((i / 10) + startXPosition),
                     y: parseFloat(scoreTableY[i]),

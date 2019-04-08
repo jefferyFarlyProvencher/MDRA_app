@@ -23,6 +23,11 @@ import AwesomeIcon from "react-native-vector-icons/FontAwesome";
  * **NOTE**
  * A weird glitch makes it so that everything below this dropDownV2 is erase from existence
  * to be used with a flexDirection: row in the style of the view surrounding it
+ *
+ * **IMPORTANT**
+ *
+ * this toggles a black translucent background, and thus requires a received function (to toggle it)
+ *  and for it to be set up
  */
 class DropDownListV2 extends Component {
 
@@ -49,8 +54,8 @@ class DropDownListV2 extends Component {
             pickerFontColor: [0, 0 ,0, 1],
             pickerFontSize: Platform.OS === "ios"?17:15,
             pickerBg:[255,255,255,1],
-            pickerCancelBtnText: "CANCEL",
-            pickerConfirmBtnText: "CONFIRM",
+            pickerCancelBtnText: "Cancel",
+            pickerConfirmBtnText: "Confirm",
             pickerCancelBtnColor:[65,105,225,1],
             pickerConfirmBtnColor:[65,105,225,1],
             pickerTitleColor: [255, 255, 255, 1],
@@ -66,10 +71,14 @@ class DropDownListV2 extends Component {
                     }
                 });
                 this._handleChange(pickedValue);
+                if(this.props.setDarkVisibility) {
+                    this.props.setDarkVisibility(false)
+                }
             },
             onPickerCancel: (pickedValue, pickedIndex) => {
-                //do nothing
-                //console.log('date', pickedValue, pickedIndex);
+                if(this.props.setDarkVisibility) {
+                    this.props.setDarkVisibility(false)
+                }
             },
             onPickerSelect: (pickedValue, pickedIndex) => {
                 //do nothing
@@ -84,7 +93,16 @@ class DropDownListV2 extends Component {
         return (
             <View style={[styles.root, this.props.style]}>
                 <FormLabel>{label}</FormLabel>
-                <TouchableOpacity style={[{alignItems: 'center', width: "100%"}, ]} onPress={() => this._showPicker(this.props.itemList, this.props.Picker)}>
+                <TouchableOpacity
+                    style={[{alignItems: 'center', width: "100%"}, ]}
+                    onPress={() => {
+                        if(this.props.setDarkVisibility)
+                         {
+                             this.props.setDarkVisibility(true);
+                         }
+                        this._showPicker(this.props.itemList, this.props.Picker)
+                    }}
+                >
                     <View style={styles.twoPerRowContainer}>
                         <View style={styles.pickerStyle}>
                             {<Text>{this.props.value}</Text>}

@@ -83,12 +83,8 @@ class FormScreenWeights extends PureComponent{
                                 weight3:'100',
                                 weight4:'100',
                                 weight5:'100',
-                                weight6: ((this.props.state.main.Page1Data) &&
-                                    (this.props.state.main.Page1Data.nbTherapeuticBoxes === "Two therapeutic boxes (AM and PM)"))
-                                    ?'100':'0',
-                                weight7: ((this.props.state.main.Page1Data) &&
-                                    (this.props.state.main.Page1Data.nbTherapeuticBoxes === "Two therapeutic boxes (AM and PM)"))
-                                    ?'100':'0',
+                                weight6: '100',
+                                weight7: '100',
                             }
                         }
                         onSubmit={this._handleSubmit}

@@ -6,6 +6,7 @@ import {
     Text,
     TouchableWithoutFeedback,
     TouchableOpacity,
+    TouchableHighlight,
     Modal,
     Dimensions,
 } from 'react-native';
@@ -80,7 +81,7 @@ class ResultTest extends PureComponent{
 
     render() {
         //determines wether or not they have animation
-        let willBeAnimated = this.props.Animated
+        let willBeAnimated = this.props.Animated;
         return(
             <View>
                 <TouchableOpacity
@@ -113,7 +114,6 @@ class ResultTest extends PureComponent{
                         onRequestClose={() => {
                             this.setModalVisible(!this.state.modalVisible);
                         }}
-                        style={{height: "80%", width:"80%"}}
                     >
                         <View
                             style={{
@@ -139,9 +139,9 @@ class ResultTest extends PureComponent{
                                     }}
                                 />
                             </TouchableWithoutFeedback>
-                            <View style={{marginTop: 22, height: "80%", width:"80%", backgroundColor: '#FFF'}}>
+                            <View style={{marginTop: 22, backgroundColor: 'transparent'}}>
                                 <View>
-                                    <View style={styles.modalColors}>
+                                    <View style={[styles.modalColors, {backgroundColor: "#FFF"}]}>
                                         <TitleComponent
                                             text={"Percentages"}
                                             containerStyle={{borderBottomWidth:0}}
@@ -198,7 +198,7 @@ class ResultTest extends PureComponent{
                                                 {this.state.modalPieData?this.state.modalPieData[4]:"4"}
                                                 </Text>
                                         </View>
-                                        <View style={[{backgroundColor:'#f6922d'},styles.modalColors]}>
+                                        <View style={[{backgroundColor:'#f6922d'},styles.modalColors, {height: (Dimensions.get("window").height*0.8)/7}]}>
                                             <TitleComponent
                                                 containerStyle={{marginBottom: 10, paddingBottom:0}}
                                                 textStyle={[styles.ColorTextStyle,{fontSize:13, paddingBottom:0}]}
@@ -209,7 +209,7 @@ class ResultTest extends PureComponent{
                                                 </Text>
                                         </View>
                                         <View style={{height:"13%", width:"100%"}}>
-                                            <TouchableOpacity
+                                            <TouchableHighlight
                                                 onPress={() => {this.setModalVisible(!this.state.modalVisible);}}
 
                                             >
@@ -218,7 +218,7 @@ class ResultTest extends PureComponent{
                                                         text={"Close"}
                                                     />
                                                 </View>
-                                            </TouchableOpacity>
+                                            </TouchableHighlight>
                                         </View>
                                     </View>
                                 </View>
@@ -237,7 +237,7 @@ const styles = StyleSheet.create({
     },
 
     modalColors: {
-        height: "13.1%",
+        height: (Dimensions.get("window").height*0.8)/8,
         width: "100%",
         justifyContent: "center",
         alignItems: "center",

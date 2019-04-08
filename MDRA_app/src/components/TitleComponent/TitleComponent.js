@@ -1,6 +1,14 @@
 import React, {Component} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 
+/**
+ *
+ * TitleComponent REQUIRES these props:
+ *
+ *  - text
+ *
+ */
+
 class TitleComponent extends Component{
     render(){
         return(

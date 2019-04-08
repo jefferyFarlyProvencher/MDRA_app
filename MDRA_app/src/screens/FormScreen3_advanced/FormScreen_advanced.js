@@ -8,7 +8,7 @@ import * as Yup from 'yup';
 
 //component imports
 import Input from "../../components/Input/Input";
-import DropDownListV2 from "../../components/dropDownList/DropDownListV2";
+import DropDownListV2 from "../../components/DropDownList/DropDownListV2";
 import {changePosition, addData} from "../../store/actions";
 import TitleComponent from "../../components/TitleComponent/TitleComponent";
 import LinedLabel from "../../components/LinedLabel/LinedLabel";

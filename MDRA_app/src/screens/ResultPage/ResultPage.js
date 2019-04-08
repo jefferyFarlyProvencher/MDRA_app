@@ -11,7 +11,8 @@ import {
     Alert, Animated,
     PermissionsAndroid,
     Button,
-    Image
+    Image,
+    Picker, Modal, TouchableWithoutFeedback, TouchableHighlight
 } from 'react-native';
 //import {Button} from 'react-native-elements';
 import 'react-native-svg';
@@ -41,6 +42,10 @@ import SinglePieChartComponent from "../../components/ResultPage_PieChartsCompon
 //assets
 //import {udemDark} from "../../assets/colors";
 import pdfRed from '../../assets/pdf-red.png';
+import {Formik} from "formik";
+import * as Yup from "yup";
+import NewYupString from "../../components/NewYupString/NewYupString";
+import Input from "../ResultScreen/ResultScreen";
 
 class ResultPage extends PureComponent {
     state = {
@@ -50,7 +55,8 @@ class ResultPage extends PureComponent {
         modalVisible: false,
         visible: Platform.OS==="ios",
         creatingPDF: false,
-
+        language:"Java",
+        searchTarget: "name"
     };
 
     handleBackButton = () => {
@@ -116,6 +122,11 @@ class ResultPage extends PureComponent {
                             iconSource: pieImage,
                             selectedIconSource: pieImage
                         },
+                        // {
+                        //     text: 'Input',
+                        //     iconSource: udemLogo,
+                        //     selectedIconSource: udemLogo
+                        // },
                         {
                             text: 'PDF Generator',
                             iconSource: pdfImage,
@@ -490,7 +501,7 @@ class ResultPage extends PureComponent {
             performancePMBase64Data
                 ?"<div style=\"position:relative\">"+
                 "<div> <img src=\"data:image/jpeg;base64,"+ performancePMBase64Data+"\" alt=\"PerformanceDay_image\" style=\"width:38%;\"/> <div class=\"row\">"+
-                "<div class=\"col-sm-8\" style=\"position:absolute;right:0; width:50%; top:100px\">"+
+                "<div class=\"col-sm-8\" style=\"position:absolute;right:0; width:62%; top:100px\">"+
                 "<table class=\"table table-bordered table-condensed\"> <tbody style=\"background-color:white;\">"+
                 "<tr><td style=\"background-color:#1b3e70;\"></td><td>Non Responder:</td><td>"+secondPieData[0]  +"%</td><td></td> <td style=\"background-color:#62c9e4;\"></td><td>Non Responder / Responder:</td><td>"+secondPieData[1]  +"%</td><td></td></tr>"+
                 "<tr><td style=\"background-color:#c2c822;\"></td><td>Responder:</td><td>"+secondPieData[2]  +"%</td><td></td><td style=\"background-color:#f8c82c;\"></td><td>Responder / Adverse Responder: </td><td>"+secondPieData[3]  +"%</td><td></td></tr>"+
@@ -533,7 +544,7 @@ class ResultPage extends PureComponent {
             //day
             "<div style=\"position:relative\">"+
             "<div> <img src=\"data:image/jpeg;base64,"+ performanceDayBase64Data+"\" alt=\"PerformanceDay_image\" style=\"width:38%;\"/> <div class=\"row\">"+
-            "<div class=\"col-sm-8\" style=\"position:absolute;right:0; width:50%; top:100px\">"+
+            "<div class=\"col-sm-8\" style=\"position:absolute;right:0; width:62%; top:100px\">"+
             "<table class=\"table table-bordered table-condensed\"> <tbody style=\"background-color:white;\">"+
             "<tr><td style=\"background-color:#1b3e70;\"></td><td>Non Responder:</td><td>"+ firstPieData[0] +"%</td><td></td> <td style=\"background-color:#62c9e4;\"></td><td>Non Responder / Responder:</td><td>"+ firstPieData[1] +"%</td><td></td></tr>"+
             "<tr><td style=\"background-color:#c2c822;\"></td><td>Responder:</td><td>"+ firstPieData[2] +"%</td><td></td><td style=\"background-color:#f8c82c;\"></td><td>Responder / Adverse Responder: </td><td>"+ firstPieData[3] +"%</td><td></td></tr>"+
@@ -545,7 +556,7 @@ class ResultPage extends PureComponent {
             //evening
             "<div style=\"position:relative\">"+
             "<div> <img src=\"data:image/jpeg;base64,"+ performanceEveningBase64Data+"\" alt=\"PerformanceDay_image\" style=\"width:38%  \"/> <div class=\"row\">"+
-            "<div class=\"col-sm-8\" style=\"position:absolute;right:0; width:50%; top:100px\">"+
+            "<div class=\"col-sm-8\" style=\"position:absolute;right:0; width:62%; top:100px\">"+
             "<table class=\"table table-bordered table-condensed\"> <tbody style=\"background-color:white;\">"+
             "<tr><td style=\"background-color:#1b3e70;\"></td><td>Non Responder:</td><td>"+ eveningPieData[0] +"%</td><td></td> <td style=\"background-color:#62c9e4;\"></td><td>Non Responder / Responder:</td><td>"+ eveningPieData[1] +"%</td><td></td></tr>"+
             "<tr><td style=\"background-color:#c2c822;\"></td><td>Responder:</td><td>"+ eveningPieData[2] +"%</td><td></td><td style=\"background-color:#f8c82c;\"></td><td>Responder / Adverse Responder: </td><td>"+ eveningPieData[3] +"%</td><td></td></tr>"+
@@ -604,19 +615,25 @@ class ResultPage extends PureComponent {
 
         }
 
-        // await Alert.alert(
-        //     'PDF Creation Confirmation',
-        //     ("The pdf was created at this location: " + filePath+ " and writeResult??->>>"+writeResult)
-        // );
+
         //as there
         await this.props.onAddPDFToResult(this.state.currentPosition, filePath);
 
         this.toggleSpinner();
+        setTimeout(
+            ()=>{
+                Alert.alert(
+                    'PDF Creation Confirmation',
+                    ("The pdf was created at this location: " + filePath))
+            },
+            (Platform.OS === 'ios'?200:100)
+        )
+
     };
 
     /**
      * Capture "takes a picture" of the ref tag
-     *0. IMPORTANT; it returns the base64 of the image NOT the uri like written
+     * IMPORTANT; it returns the base64 of the image NOT the uri like written
      * @param ref of the react-native <this>
      * @returns {Promise<string>} which is the base64 of the picture generated by capture
      */
@@ -664,7 +681,7 @@ class ResultPage extends PureComponent {
     handleRetryGeneratePDF = () => {
         this.deletePDF();
         this.generatePDF();
-    }
+    };
 
     handleDeletePDF = () => {
         Alert.alert(
@@ -719,7 +736,26 @@ class ResultPage extends PureComponent {
     };
 
     /////// END OF PDF SECTION
+/////this is reserved for its own component, but is now here for testing
+    handleSelectorToggle = (value) => {
+        if(value){
+            this.setState(oldState => {
+                return {
+                    ...oldState,
+                    modalVisible: value
+                }
 
+            })
+        }else {
+            this.setState(oldState => {
+                return {
+                    ...oldState,
+                    modalVisible: !oldState.modalVisible
+                }
+
+            })
+        }
+    };
 
 //    Animated.sequence([
 
@@ -783,6 +819,7 @@ class ResultPage extends PureComponent {
                                                 : "Day Pie Graph"
                                         }
                                         style={{backgroundColor:"white"}}
+                                        Animated={true}
                                     />
                                 </ViewShot>
                                 {nbTherapeuticBoxes?
@@ -792,6 +829,7 @@ class ResultPage extends PureComponent {
                                             formData = {this.props.state.main.resultsList[this.state.currentPosition].formData}
                                             title="PM Pie Graph"
                                             style={{backgroundColor:"white"}}
+                                            Animated={true}
                                         />
                                     </ViewShot>
                                     :<View/>
@@ -802,11 +840,13 @@ class ResultPage extends PureComponent {
                                         formData = {this.props.state.main.resultsList[this.state.currentPosition].formData}
                                         title="Evening Pie Graph"
                                         style={{backgroundColor:"white"}}
+                                        Animated={true}
                                     />
                                 </ViewShot>
                             </View>
                         </ScrollView>
                     </View>
+                    {/*<View></View>*/}
                     <View>
                         <ScrollView
                             contentContainerStyle={{
@@ -827,7 +867,8 @@ class ResultPage extends PureComponent {
                                                 <Ionicon
                                                     size={40}
                                                     name= {"md-open"}
-                                                    color="#52afff" style={styles.drawerItemIcon}
+                                                    color="#52afff"
+                                                    style={styles.drawerItemIcon}
                                                 />
                                                 <View style={styles.drawerTextContainer}>
                                                     <Text style={styles.drawerText}>{"Press to view or share the generated PDF"}</Text>
@@ -839,7 +880,8 @@ class ResultPage extends PureComponent {
                                                 <Ionicon
                                                     size={40}
                                                     name= {"ios-repeat"}
-                                                    color="#52afff" style={styles.drawerItemIcon}
+                                                    color="#52afff"
+                                                    style={styles.drawerItemIcon}
                                                 />
                                                 <View style={styles.drawerTextContainer}>
                                                     <Text style={styles.drawerText}>{"Press to generate PDF again in case of an Error"}</Text>
@@ -858,6 +900,7 @@ class ResultPage extends PureComponent {
                                                 </View>
                                             </View>
                                         </TouchableOpacity>
+
                                     </View>
                                 </View>
                                 :<View  style={[styles.pdfButtonContainerStyle]}>
@@ -882,8 +925,8 @@ class ResultPage extends PureComponent {
                             <Ionicon
                                 size={30}
                                 name= {"md-arrow-dropleft"}
-                                color= {backDisabled?"#eee":"#52afff"} style={styles.drawerItemIcon}
-                                style={{paddingTop:4.5}}
+                                color= {backDisabled?"#eee":"#52afff"}
+                                style={[styles.drawerItemIcon,{paddingTop:4.5}]}
                             />
                             <View style={{paddingTop:7, paddingHorizontal: 10}}>
                                 <Text style={{color:backDisabled?"#eee":"#52afff", fontSize:20}}>
@@ -920,11 +963,60 @@ class ResultPage extends PureComponent {
                                 style={[styles.drawerItemIcon,{paddingTop:4.5}]}
                             />
                         </TouchableOpacity>
-
                     </View>
                 </View>
                 <View>
                     <Spinner visible={this.state.visible} textContent={this.state.creatingPDF?"Generating PDF":"Loading..."} textStyle={{color: '#FFF'}} />
+                </View>
+                <View>
+                    <Modal
+                        animationType="fade"
+                        transparent={true}
+                        visible={this.state.modalVisible}
+                        onRequestClose={() => {
+                            this.handleSelectorToggle(!this.state.modalVisible);
+                        }}
+                        style={{height: "80%", width:"80%"}}
+                    >
+                        <View
+                            style={{
+                                flex: 1,
+                                flexDirection: 'column',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+
+                            }}
+                        >
+                            <TouchableWithoutFeedback
+                                onPress={() => {this.handleSelectorToggle(!this.state.modalVisible);}}
+                            >
+                                <View
+                                    style={{
+                                        backgroundColor:'#000',
+                                        opacity: 0.5,
+                                        flex:1,
+                                        width: "100%",
+                                        height: "100%",
+                                        position: "absolute",
+                                    }}
+                                />
+                            </TouchableWithoutFeedback>
+                            <View>
+                                <View>
+                                    <TouchableHighlight onPress={()=>{console.log("Date pressed")}}>
+                                        <View style={styles.selectorTile}>
+                                            <Text style={styles.selectorTileText}>Java</Text>
+                                        </View>
+                                    </TouchableHighlight>
+                                    <TouchableHighlight>
+                                        <View style={styles.selectorTile}>
+                                            <Text style={styles.selectorTileText}>Javascript</Text>
+                                        </View>
+                                    </TouchableHighlight>
+                                </View>
+                            </View>
+                        </View>
+                    </Modal>
                 </View>
             </View>
         )
@@ -992,6 +1084,17 @@ const styles = StyleSheet.create({
 
     drawerText:{
         textAlign: 'center'
+    },
+
+    selectorTile:{
+        backgroundColor:"#FFF",
+        width:Dimensions.get("window").width*0.85,
+        padding:20
+    },
+
+    selectorTileText:{
+        fontSize: Dimensions.get("window").width*0.045,
+        color: "#000"
     }
 });
 

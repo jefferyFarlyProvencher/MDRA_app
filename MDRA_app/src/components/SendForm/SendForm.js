@@ -65,6 +65,7 @@ let SendForm = async(preparedData, preparedName, preparedDate) => {
             console.log("name: "+ responseJson['name']);
             console.log("date: "+ responseJson['date']);
             console.log("test: "+ responseJson['test']);
+
             let resultToReturn = [(HandleReceivedData(responseJson['data'])), responseJson['name'], responseJson['date']];
             //console.log("result to return is: "+ JSON.stringify(resultToReturn));
             return resultToReturn;

@@ -1,8 +1,8 @@
 import HandleReceivedSearch from "../HandleReceivedSearch/HandleReceivedSearch";
 
-let SendRetrieval = async() => {
+let SendRetrieval = async(name,dateFrom, dateTo) => {
     console.log("----FETCHING RESULTS-----\n");
-    let current_query = 'http://132.204.93.102:81/?'+'$';
+    let current_query = 'http://132.204.93.102:81/?'+'$' +(dateFrom?dateFrom+"$":"")+(dateTo?dateTo:"");
     console.log("current sendSearch query is: "+current_query);
     try{
         //GET

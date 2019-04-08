@@ -7,7 +7,7 @@ import * as Yup from 'yup';
 
 //src imports
 import Input from "../../components/Input/Input";
-import DropDownList from "../../components/dropDownList/DropDownList";
+import DropDownList from "../../components/DropDownList/DropDownList";
 
 const api = (user) => new Promise((resolve, reject) =>{
     setTimeout(() => {

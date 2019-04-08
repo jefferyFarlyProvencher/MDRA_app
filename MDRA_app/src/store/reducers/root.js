@@ -17,7 +17,8 @@ const initialState = {
     receivedData: null,
     resultsList: [],//{key:'1',data:[data],formData:[], name:name, id: id, date, filePDF}}],
     backUpResultList: [], //backup for when doing a full deletion (NOTE: could be done for partial deletion as well)
-    indicatorVisibility: 1 //this removes the visibility of the indicator in order to see what we are typing when the glitch keyboard is active
+    indicatorVisibility: 1, //this removes the visibility of the indicator in order to see what we are typing when the glitch keyboard is active
+    patientList: [] //this is in preparation for the profile
 };
 
 const reducer = (state = initialState, action) => {
@@ -215,6 +216,51 @@ const reducer = (state = initialState, action) => {
             //else{ DO NOTHING }
 
         }
+
+        /*
+        * case(ADD_TO_PATIENT_LIST)
+        * {
+        *   //adds a profile to the patient list
+            return{
+                ...state,
+                patientList:
+                    [{
+                        key: Math.random().toString(),
+                        name:action.name,
+                        gender:action.gender,
+                        weight:action.weight,
+                        kg_pds:action.kg_pds,
+                        dateOfBirth:action.dateOfBirth,
+                        id: action.name,
+                        Gender, Weight, kg/pds, name, bed time, lunch time, dateOfBirth
+
+                    }].concat(state.resultsList),
+            };
+        * }
+        *
+        * case(REMOVE_FROM_PATIENT_LIST)
+        * {
+        *   //adds a profile to the patient list
+            return{
+                ...state,
+                patientsList: state.patientsList.filter(result => {
+                    return result.key !== action.key;
+                }),
+            };
+
+        * }
+        *
+        * case(SET_PAGES_DATA)
+        * {
+        *   return{
+                ...state,
+                Page0Data: action.page0data,
+                Page1Data: action.page1data,
+                Page2Data: action.page2data,
+                Page3Data: action.page3data,
+            };
+        * }
+        * */
         default:
             return state
     }

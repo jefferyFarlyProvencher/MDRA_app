@@ -24,7 +24,7 @@ import containsOnlyNumbers from '../../functions/containsOnlyNumbers';
 
 //component imports
 import Input from "../../components/Input/Input";
-import DropDownListV2 from "../../components/dropDownList/DropDownListV2";
+import DropDownListV2 from "../../components/DropDownList/DropDownListV2";
 import LinedLabel from "../../components/LinedLabel/LinedLabel";
 import NewYupString from '../../components/NewYupString/NewYupString';
 import TitleComponent from '../../components/TitleComponent/TitleComponent';
@@ -67,6 +67,10 @@ class FormScreenInitial extends PureComponent{
         //Switch value indicates if weight is in pounds (true) or in kg (false)
         switchValue: this.props.data?
             this.props.data.switchWeightFormat: false,
+
+        currentlySelectedProfile:"None Selected",
+
+        darkVisible: false
     };
 
     _handleSubmit =(async (values, bag) => {
@@ -200,6 +204,15 @@ class FormScreenInitial extends PureComponent{
         setFieldTouched(name)
     };
 
+    handleSetDarkVisibility = (flag) => {
+        this.setState(oldState =>{
+            return({
+                ...oldState,
+                darkVisible: flag
+            })
+        })
+    };
+
     handleFormatTime = (value)=>{
         return convertTimeToHourFormat(""+value);
     };
@@ -282,6 +295,17 @@ class FormScreenInitial extends PureComponent{
                                      }) => (
                                 <View>
                                     <View style={styles.genderWeightContainerContainer}>
+                                        <View style={{flexDirection:"row", }}>
+                                            <DropDownListV2
+                                                value={this.state.currentlySelectedProfile}
+                                                label={"Patient Profile"}
+                                                name="profile"
+                                                onChange={()=>{console.log("in development...")}}
+                                                itemList={["Profile1","Profile2"]/*this.props.state.main.patientProfileList*/}
+                                                Picker={picker}
+                                                setDarkVisibility = {this.handleSetDarkVisibility}
+                                            />
+                                        </View>
                                         <View style={[styles.twoPerRowContainer,{marginBottom:"0%"}]}>
                                             <DropDownListV2
                                                 style={styles.inputContainer}
@@ -291,11 +315,13 @@ class FormScreenInitial extends PureComponent{
                                                 onChange={setFieldValue}
                                                 itemList={["Male","Female"]}
                                                 Picker={picker}
+                                                setDarkVisibility = {this.handleSetDarkVisibility}
                                             />
                                             <View style={[styles.inputContainer,styles.twoPerRowContainer, {width:"45%", justifyContent:"space-around"} ]}>
                                                 <View style={{width:"80%", marginRight:0}}>
                                                     <Input
                                                         label={"Weight"}
+                                                        labelPosition={"center"}
                                                         value={values.weight}
                                                         onChange={(name,value) =>{
                                                             setFieldValue(name,value)
@@ -308,6 +334,7 @@ class FormScreenInitial extends PureComponent{
                                                             this.props.onToggleIndicator();
                                                             //console.log(this.props.state.main.indicatorVisibility)
                                                         }}
+                                                        maxLength={5}
                                                     />
                                                 </View>
                                                 <View style={{paddingTop:"20%", marginLeft:0, paddingRight:20, flexDirection:'row', justifyContent:'center'}}>
@@ -346,6 +373,7 @@ class FormScreenInitial extends PureComponent{
                                                     }}
                                                     itemList={drugList}
                                                     Picker={picker}
+                                                    setDarkVisibility = {this.handleSetDarkVisibility}
                                                 />
                                                 <DropDownListV2
                                                     style={[styles.inputContainer, {width:"35%"}]}
@@ -355,6 +383,8 @@ class FormScreenInitial extends PureComponent{
                                                     onChange={setFieldValue}
                                                     itemList={["No","Yes"]}
                                                     Picker={picker}
+                                                    setDarkVisibility = {this.handleSetDarkVisibility}
+
                                                 />
                                             </View>
                                             <View style={styles.twoPerRowContainer}>
@@ -366,6 +396,7 @@ class FormScreenInitial extends PureComponent{
                                                     onChange={setFieldValue}
                                                     itemList={this.getDoses(0)}
                                                     Picker={picker}
+                                                    setDarkVisibility = {this.handleSetDarkVisibility}
                                                 />
                                                 <View style={[styles.inputContainer, {width:"55%"}]}>
                                                     <Input
@@ -382,6 +413,7 @@ class FormScreenInitial extends PureComponent{
                                                         name="adminTime0"
                                                         error={touched.adminTime0 && errors.adminTime0}
                                                         keyboardType="numeric"
+                                                        maxLength={5}
                                                     />
                                                 </View>
                                             </View>
@@ -405,6 +437,7 @@ class FormScreenInitial extends PureComponent{
                                                             }}
                                                             itemList={drugList}
                                                             Picker={picker}
+                                                            setDarkVisibility = {this.handleSetDarkVisibility}
                                                         />
                                                         <DropDownListV2
                                                             style={[styles.inputContainer, {width:"35%"}]}
@@ -414,6 +447,7 @@ class FormScreenInitial extends PureComponent{
                                                             onChange={setFieldValue}
                                                             itemList={["No","Yes"]}
                                                             Picker={picker}
+                                                            setDarkVisibility = {this.handleSetDarkVisibility}
                                                         />
                                                     </View>
                                                     <View style={styles.twoPerRowContainer}>
@@ -425,6 +459,7 @@ class FormScreenInitial extends PureComponent{
                                                             onChange={setFieldValue}
                                                             itemList={this.getDoses(1)}
                                                             Picker={picker}
+                                                            setDarkVisibility = {this.handleSetDarkVisibility}
                                                         />
                                                         <View style={[styles.inputContainer, {width:"55%"}]}>
                                                             <Input
@@ -441,6 +476,7 @@ class FormScreenInitial extends PureComponent{
                                                                 name="adminTime1"
                                                                 error={this.state.amountOfPills>=1?(touched.adminTime1 && errors.adminTime1): null}
                                                                 keyboardType="numeric"
+                                                                maxLength={5}
                                                             />
                                                         </View>
                                                     </View>
@@ -465,6 +501,7 @@ class FormScreenInitial extends PureComponent{
                                                         }}
                                                             itemList={drugList}
                                                             Picker={picker}
+                                                            setDarkVisibility = {this.handleSetDarkVisibility}
                                                         />
                                                         <DropDownListV2
                                                             style={[styles.inputContainer, {width:"35%"}]}
@@ -473,6 +510,7 @@ class FormScreenInitial extends PureComponent{
                                                             name="food2" onChange={setFieldValue}
                                                             itemList={["No","Yes"]}
                                                             Picker={picker}
+                                                            setDarkVisibility = {this.handleSetDarkVisibility}
                                                         />
                                                     </View>
                                                     <View style={styles.twoPerRowContainer}>
@@ -484,6 +522,7 @@ class FormScreenInitial extends PureComponent{
                                                             onChange={setFieldValue}
                                                             itemList={this.getDoses(2)}
                                                             Picker={picker}
+                                                            setDarkVisibility = {this.handleSetDarkVisibility}
                                                         />
                                                         <View style={[styles.inputContainer, {width:"55%"}]}>
                                                             <Input
@@ -500,6 +539,7 @@ class FormScreenInitial extends PureComponent{
                                                                 name="adminTime2"
                                                                 error={this.state.amountOfPills>=2?(touched.adminTime2&& errors.adminTime2): null }
                                                                 keyboardType="numeric"
+                                                                maxLength={5}
                                                             />
                                                         </View>
                                                     </View>
@@ -527,6 +567,8 @@ class FormScreenInitial extends PureComponent{
                                                             }
                                                             itemList={drugList}
                                                             Picker={picker}
+                                                            setDarkVisibility = {this.handleSetDarkVisibility}
+
                                                         />
                                                         <DropDownListV2
                                                             style={[styles.inputContainer, {width:"35%"}]}
@@ -535,6 +577,8 @@ class FormScreenInitial extends PureComponent{
                                                             name="food3" onChange={setFieldValue}
                                                             itemList={["No","Yes"]}
                                                             Picker={picker}
+                                                            setDarkVisibility = {this.handleSetDarkVisibility}
+
                                                         />
                                                     </View>
                                                     <View style={styles.twoPerRowContainer}>
@@ -546,6 +590,8 @@ class FormScreenInitial extends PureComponent{
                                                             onChange={setFieldValue}
                                                             itemList={this.getDoses(3)}
                                                             Picker={picker}
+                                                            setDarkVisibility = {this.handleSetDarkVisibility}
+
                                                         />
                                                         <View style={[styles.inputContainer, {width:"55%"}]}>
                                                             <Input
@@ -562,6 +608,7 @@ class FormScreenInitial extends PureComponent{
                                                                 name="adminTime3"
                                                                 error={this.state.amountOfPills>=3?(touched.adminTime3 && errors.adminTime3): null}
                                                                 keyboardType="numeric"
+                                                                maxLength={5}
                                                             />
                                                         </View>
                                                     </View>
@@ -641,6 +688,26 @@ class FormScreenInitial extends PureComponent{
                         />
                     </View>
                 </KeyboardAwareScrollView>
+                {(this.state.darkVisible)?
+                    <TouchableWithoutFeedback
+                        onPress={() => {
+                            this.handleSetDarkVisibility(!this.state.darkVisible);
+                            this.props.Picker.hide()
+                        }}
+                    >
+                        <View
+                            style={{
+                                backgroundColor: '#000',
+                                opacity: 0.5,
+                                flex: 1,
+                                width: "100%",
+                                height: "100%",
+                                position: "absolute",
+                            }}
+                        />
+                    </TouchableWithoutFeedback>
+                    :<View/>
+                }
             </View>
 
         );

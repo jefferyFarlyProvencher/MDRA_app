@@ -94,11 +94,13 @@ class SendFormScreen extends PureComponent{
 
         //console.log("this is the calculated result: "+ JSON.stringify(calculatedResult));
 
+        alert("this is the calculated result: "+ JSON.stringify(calculatedResult));
+
         let data = calculatedResult[0];
         let name = calculatedResult[1];
         let date = calculatedResult[2];
         //console.log(JSON.stringify(data));
-        if(data !== -1) {
+        if(calculatedResult !== -1) {
             this.prepareToStoreData(data, name, date);
             if(this.hasNotUnMounted) {
                 this.setState((oldState) => ({

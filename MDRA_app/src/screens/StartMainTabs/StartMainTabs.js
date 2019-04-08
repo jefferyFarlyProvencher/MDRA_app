@@ -63,7 +63,7 @@ const startTabs = () => {
 
                 },
                 {
-                    screen: "MDRA_app.searchOldResults",
+                    screen: "MDRA_app.retrieveOldResults",
                     label: "Retrieve",
                     title: "Retrieve",
                     icon: sources[3],

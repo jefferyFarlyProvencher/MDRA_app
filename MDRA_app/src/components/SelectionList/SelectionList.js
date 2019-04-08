@@ -68,7 +68,7 @@ class SelectionList extends Component{
             newList.push(key);
         }
 
-        this.props.disableDeleteButton(newList.length);
+        this.props.disableDeleteButton(newList.length, newList);
 
         this.setState((oldState)=>{
             return {
@@ -114,7 +114,7 @@ class SelectionList extends Component{
                 {this.renderHeader()}
                 <List containerStyle={{margin:0, padding:0, borderTopWidth:0, borderBottomWidth:0}}>
                     <FlatList
-                        style={styles.listContainer}
+                        style={[styles.listContainer, this.props.listStyle]}
                         data={this.state.searchText !== ""?this.state.modifiedList:this.props.list}
                         extraData={this.state}
                         renderItem={(info) => {

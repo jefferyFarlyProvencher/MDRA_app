@@ -190,8 +190,8 @@ let PrepareToSend = (data) => {
             '&WTI3=' + page2Data.weight3 +
             '&WTI4=' + page2Data.weight4 +
             '&WTI5=' + page2Data.weight5 +
-            '&WTI6=' + page2Data.weight6 +
-            '&WTI7=' + page2Data.weight7 +
+            '&WTI6=' + ((doesItHaveTwoBoxes)?page2Data.weight6:0) +
+            '&WTI7=' + ((doesItHaveTwoBoxes)?page2Data.weight7:0) +
             '&palier=' + page3Data.threshold +
             '&za=' + page3Data.cMinTherapeuticHalfDayAM +
             '&zb=' + page3Data.cMaxTherapeuticHalfDayAM +

@@ -10,7 +10,7 @@ import AwesomeIcon from 'react-native-vector-icons/FontAwesome'
 
 //component imports
 import Input from "../../components/Input/Input";
-import DropDownList from "../../components/dropDownList/DropDownList";
+import DropDownList from "../../components/DropDownList/DropDownList";
 import CustomMultiSlider from "../../components/CustomMultiSlider/CustomMultiSlider";
 import LinedLabel from "../../components/LinedLabel/LinedLabel";
 

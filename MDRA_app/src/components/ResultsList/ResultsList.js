@@ -4,6 +4,9 @@ import {List, ListItem, SearchBar} from 'react-native-elements'
 import Swipeout  from 'react-native-swipeout'
 import * as colors from "../../assets/colors";
 
+//components
+import SelectorPicker from '../SelectorPicker/SelectorPicker';
+
 //credits to vikrant negi which helped with the search bar
 class ResultsList extends Component{
 
@@ -12,6 +15,7 @@ class ResultsList extends Component{
     state = {
         //list that will be manipulated for the search bar
         modifiedList : this.props.list,
+        searchTarget: 'Name',
         searchText : "",
         date: new Date()
     };
@@ -55,14 +59,38 @@ class ResultsList extends Component{
 
     searchFilterFunction = text => {
         console.log("searchFilterFunction start and the text is: "+text);
-        const newData = (this.props.list).filter(item => {
-            const itemData = `${item.name.toUpperCase()}
+        let tempNewData = null;
+        if(this.state.searchTarget === 'Name'){
+            tempNewData = (this.props.list).filter(item => {
+                const itemData = `${item.name.toUpperCase()}
                               ${item.name.toUpperCase()}
                               ${item.name.toUpperCase()}`;
-            const textData = text.toUpperCase();
+                const textData = text.toUpperCase();
 
-            return itemData.indexOf(textData) > -1;
-        });
+                return itemData.indexOf(textData) > -1;
+            });
+        }
+        else if(this.state.searchTarget === 'Date'){
+            tempNewData = (this.props.list).filter(item => {
+                const itemData = `${item.date.toUpperCase()}
+                              ${item.date.toUpperCase()}
+                              ${item.date.toUpperCase()}`;
+                const textData = text.toUpperCase();
+
+                return itemData.indexOf(textData) > -1;
+            });
+        }
+        /// OLD CODE START
+        // const newData = (this.props.list).filter(item => {
+        //     const itemData = `${item.name.toUpperCase()}
+        //                       ${item.name.toUpperCase()}
+        //                       ${item.name.toUpperCase()}`;
+        //     const textData = text.toUpperCase();
+        //
+        //     return itemData.indexOf(textData) > -1;
+        // });
+        /// OLD CODE END
+        const newData = tempNewData;
         // console.log(JSON.stringify("modList 1: "+ this.state.modifiedList));
         // console.log(JSON.stringify("size modList 1: "+ this.state.modifiedList.length));
         this.setState({
@@ -73,16 +101,30 @@ class ResultsList extends Component{
         // console.log(JSON.stringify("size modList 2: "+ this.state.modifiedList.length));
     };
 
+    handleItemSelected = (target) => {
+        this.setState(oldState=> {
+            return{
+                ...oldState,
+                searchTarget: target
+            }
+
+        })
+    };
+
     renderHeader = () => {
         return (
-            <SearchBar
-                placeholder={"Press to Search"}
-                lightTheme={false}
-                round={true}
-                onChangeText={text => this.searchFilterFunction(text)}
-                autoCorrect={false}
-                containerStyle={{backgroundColor:"#262626", borderTopWidth:0, borderBottomWidth:0, marginBottom:0, paddingBottom:0}}
-            />
+            <View style={{flexDirection:"row", alignItems: "center", justifyContent: "center"}}>
+                <View style={{width: Dimensions.get("window").width *0.8}}><SearchBar
+                    placeholder={"Press to Search"}
+                    lightTheme={false}
+                    round={true}
+                    onChangeText={text => this.searchFilterFunction(text)}
+                    autoCorrect={false}
+                    containerStyle={{backgroundColor:"#262626", borderTopWidth:0, borderBottomWidth:0, marginBottom:0, paddingBottom:0}}
+                />
+                </View>
+                <SelectorPicker itemSelected={this.handleItemSelected} style={{borderRadius:100}}/>
+            </View>
         );
     };
 
@@ -92,7 +134,7 @@ class ResultsList extends Component{
                 {this.renderHeader()}
                 <List containerStyle={{margin:0, padding:0, borderTopWidth:0, borderBottomWidth:0}}>
                     <FlatList
-                        style={styles.listContainer}
+                        style={[styles.listContainer, this.props.listStyle]}
                         data={this.state.searchText !== ""?this.state.modifiedList:this.props.list}
                         extraData={this.props.extraData}
                         renderItem={(info) => (

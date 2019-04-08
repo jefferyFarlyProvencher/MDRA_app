@@ -32,8 +32,8 @@ class SideDrawer extends Component{
         this.props.onChangePosition(0);
         Navigation.startSingleScreenApp({
             screen: {
-                screen: "MDRA_app.mainScreen",
-                title: "mainScreen"
+                screen: "MDRA_app.startScreen",
+                title: "startScreen"
             }
         });
     };
@@ -101,12 +101,24 @@ class SideDrawer extends Component{
                 <View>
                     <Text style={styles.titleStyle}>Menu</Text>
                 </View>
+                <TouchableOpacity onPress={()=>{console.log("This is in development")}}>
+                    <View  style={[styles.drawerItem]}>
+                        <Ionicon
+                            size={40}
+                            name= {Platform.OS==='android'? "md-people" :"ios-people"}
+                            color="#DDD"
+                            style={styles.drawerItemIcon}
+                        />
+                        <Text style={{color:"#DDD"}}>Manage Patient Profiles (In development...)</Text>
+                    </View>
+                </TouchableOpacity>
                 <TouchableOpacity onPress={this.logOutHandler}>
                     <View  style={styles.drawerItem}>
                         <Ionicon
                             size={40}
                             name= {Platform.OS==='android'? "md-log-out" :"ios-log-out-outline"}
-                            color="#52afff" style={styles.drawerItemIcon}
+                            color="#52afff"
+                            style={styles.drawerItemIcon}
                         />
                         <Text>Log Out</Text>
                     </View>
@@ -116,7 +128,8 @@ class SideDrawer extends Component{
                         <Ionicon
                             size={40}
                             name= {Platform.OS==='android'? "md-add-circle" :"ios-add-circle"}
-                            color="#52afff" style={styles.drawerItemIcon}
+                            color="#52afff"
+                            style={styles.drawerItemIcon}
                         />
                         <Text>{this.props.state.main.advanceTabAccessible?"Disable Advanced tab":"Enable Advanced tab"}</Text>
                     </View>
@@ -126,7 +139,8 @@ class SideDrawer extends Component{
                         <Ionicon
                             size={40}
                             name= {Platform.OS==='android'? "md-sync" :"ios-sync"}
-                            color="#52afff" style={styles.drawerItemIcon}
+                            color="#52afff"
+                            style={styles.drawerItemIcon}
                         />
                         <Text>Connect test</Text>
                     </View>

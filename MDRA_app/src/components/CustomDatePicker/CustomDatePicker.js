@@ -6,8 +6,10 @@ import {
     FormValidationMessage,
     FormLabel
 } from 'react-native-elements';
+import * as colors from "../../assets/colors";
+import DatePicker from "react-native-datepicker"
 
-class Input extends PureComponent{
+class CustomDatePicker extends PureComponent{
 
     state = {
 
@@ -51,10 +53,13 @@ class Input extends PureComponent{
         switch (labelPosition) {
             case "left":
                 return "flex-start";
+                break;
             case "center":
                 return "center";
+                break;
             case "right":
                 return "flex-end";
+                break;
         }
     };
 
@@ -66,43 +71,27 @@ class Input extends PureComponent{
                 <FormLabel
                     containerStyle={
                         {
-                            alignItems: labelPosition?this.handleLabelPosition(labelPosition): "flex-start"
+                           alignItems: labelPosition?this.handleLabelPosition(labelPosition): "flex-start"
                         }
                     }
                 >
                     {label}
                 </FormLabel>
-                <FormInput
-                    center={true}
-                    placeholder={label? label: name}
-                    onChangeText={this._handleChangeText}
-                    onFocus={this.props.onTouch}
-                    onBlur={this._handleTouch}
-                    containerStyle={[
-                        {
-                            justifyContent:'flex-start',
-                        },
-                        error
-                            ?{backgroundColor:"#ffb8c3"}
-                            :backgroundColor
-                                ?{backgroundColor:backgroundColor}
-                                :{backgroundColor:"transparent"},
-                        {
-
-                        }
-                    ]}
-                    inputStyle={[
-                        {
-                            width:"100%",
-                        },
-                        this.props.inputStyle
-                    ]}
-                    underlineColorAndroid={"#636363"}
-                    maxLength={this.props.maxLength?this.props.maxLength:null}
-                    {...rest}
+                <DatePicker
+                    style={this.props.style}
+                    date={this.props.date} //initial date from state
+                    mode={this.props.mode?this.props.mode:"date"} //The enum of date, datetime and time
+                    androidMode={this.props.androidMode?this.props.androidMode:"default"}
+                    placeholder="select date"
+                    format="YYYY-MM-DD"
+                    minDate={this.props.minDate}
+                    maxDate={this.props.maxDate}
+                    confirmBtnText="Confirm"
+                    cancelBtnText="Cancel"
+                    customStyles={this.props.customStyles}
+                    onDateChange={this.props.onDateChange}
                 />
-                {error && <FormValidationMessage>{error}</FormValidationMessage>}
-
+                {error && <FormValidationMessage containerStyle={{alignItems:'center'}}>{error}</FormValidationMessage>}
             </View>
         );
     }
@@ -116,4 +105,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default Input;
+export default CustomDatePicker;

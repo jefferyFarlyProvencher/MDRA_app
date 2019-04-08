@@ -3,6 +3,20 @@ import {StyleSheet, View, Dimensions, Text} from 'react-native';
 
 import * as colors from "../../assets/colors"
 
+/**
+ *
+ * LinedLabel REQUIRES these props:
+ *
+ *  - label
+ *
+ *  Optional:
+ *
+ *   - text position: (between right, left, center)
+ *   - style (for the size of the square
+ *
+ */
+
+
 class LinedLabel extends PureComponent{
 
     //props that it takes:
@@ -46,17 +60,17 @@ class LinedLabel extends PureComponent{
 
     render() {
         return(
-            <View style={[styles.root,this.props.style]}>
+            <View style={[styles.root,this.props.containerStyle]}>
                 <View
-                    style={[styles.lineStyle, { width: (this.giveLineWidth(1)),}]}
+                    style={[styles.lineStyle, this.props.lineStyle,{ width: (this.giveLineWidth(1)),}]}
                 />
-                <View style={styles.textStyle}>
-                    <Text style={{        color: "#FFF"}}>
+                <View style={[styles.textContainerStyle, this.props.textContainerStyle]}>
+                    <Text style={[{color: "#FFF"},this.props.textStyle]}>
                         {this.props.label}
                     </Text>
                 </View>
                 <View
-                    style={[styles.lineStyle,{ width: (this.giveLineWidth(2)),}]}
+                    style={[styles.lineStyle, this.props.lineStyle,{ width: (this.giveLineWidth(2)),}]}
                 />
             </View>
         );
@@ -69,16 +83,17 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         justifyContent: 'center',
         flexDirection: 'row',
-        paddingTop: "5%",
+        paddingTop: Dimensions.get("window").height*0.05,
     },
     lineStyle: {
         backgroundColor: colors.royalBlue1,
         height: 1,
-        marginTop:'3%'
+        marginTop:Dimensions.get("window").height*0.02
     },
 
-    textStyle: {
+    textContainerStyle: {
         width: "50%",
+        height: Dimensions.get("window").height*0.04,
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor:colors.royalBlue1,

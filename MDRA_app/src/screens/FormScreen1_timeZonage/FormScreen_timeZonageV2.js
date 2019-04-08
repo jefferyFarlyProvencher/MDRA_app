@@ -1,31 +1,43 @@
 //system imports
 import React, {PureComponent} from 'react';
-import {StyleSheet, View,ScrollView, Alert, Dimensions, Text, KeyboardAvoidingView, Platform, TouchableOpacity} from 'react-native';
+import {
+    StyleSheet,
+    View,
+    ScrollView,
+    Alert,
+    Dimensions,
+    Text,
+    KeyboardAvoidingView,
+    Platform,
+    TouchableOpacity,
+    TouchableWithoutFeedback
+} from 'react-native';
 import { Button } from 'react-native-elements';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import Ionicon from 'react-native-vector-icons/Ionicons'
 import AwesomeIcon from 'react-native-vector-icons/FontAwesome'
+import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 
 //functions imports
 import {convertTimeToHourFormat, convertTimeToDecimal} from '../../functions/FormatTime';
 
-
 //component imports
 import Input from "../../components/Input/Input";
-import DropDownList from "../../components/dropDownList/DropDownList";
+import DropDownList from "../../components/DropDownList/DropDownList";
 import CustomMultiSlider from "../../components/CustomMultiSlider/CustomMultiSlider";
 import LinedLabel from "../../components/LinedLabel/LinedLabel";
 import NewYupString from "../../components/NewYupString/NewYupString";
 import FormBackButton from "../../components/FormBackButton/FormBackButton";
+import DropDownListV2 from "../../components/DropDownList/DropDownListV2";
+import TitleComponent from "../../components/TitleComponent/TitleComponent";
 
 //redux imports
 import {connect} from "react-redux";
 import {addData} from "../../store/actions/addData";
 import {changePosition} from "../../store/actions/changePosition";
-import DropDownListV2 from "../../components/dropDownList/DropDownListV2";
-import TitleComponent from "../../components/TitleComponent/TitleComponent";
-import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
+
+
 
 //assets imports
 import * as colors from "../../assets/colors"
@@ -44,7 +56,7 @@ class FormScreenTimeZonage extends PureComponent{
             ?this.props.data.nbTherapeuticBoxes==="One therapeutic box (AM to PM)"
                 ?1:2
             :1,
-
+        darkVisible: false
     };
 
     /*
@@ -146,10 +158,20 @@ class FormScreenTimeZonage extends PureComponent{
         setFieldTouched(name)
     };
 
+    handleSetDarkVisibility = (flag) => {
+        this.setState(oldState =>{
+            return({
+                ...oldState,
+                darkVisible: flag
+            })
+        })
+    };
+
     render() {
         return(
             <View>
                 <KeyboardAwareScrollView>
+                    <View>
                         <View style={styles.centerElements}>
                             <TitleComponent text={"Therapeutic Boxes"}/>
                         </View>
@@ -242,6 +264,7 @@ class FormScreenTimeZonage extends PureComponent{
                                                 value={values.nbTherapeuticBoxes}
                                                 itemList={["One therapeutic box (AM to PM)","Two therapeutic boxes (AM and PM)"]}
                                                 Picker={this.props.Picker}
+                                                setDarkVisibility = {this.handleSetDarkVisibility}
                                             />
                                         </View>
                                         <View style={{backgroundColor: "white"}}>
@@ -528,7 +551,29 @@ class FormScreenTimeZonage extends PureComponent{
                                 )}
                             />
                         </View>
+                    </View>
                 </KeyboardAwareScrollView>
+                {(this.state.darkVisible)?
+                    <TouchableWithoutFeedback
+                        onPress={() => {
+                            this.handleSetDarkVisibility(!this.state.darkVisible);
+                            this.props.Picker.hide()
+                        }}
+                    >
+                        <View
+                            style={{
+                                backgroundColor: '#000',
+                                opacity: 0.5,
+                                flex: 1,
+                                width: "100%",
+                                height: "100%",
+                                position: "absolute",
+                            }}
+                        />
+                    </TouchableWithoutFeedback>
+                    :<View/>
+                }
+
             </View>
 
         );

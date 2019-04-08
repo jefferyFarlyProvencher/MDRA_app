@@ -20,7 +20,7 @@ import backgroundImage from '../../assets/pills-glasses-stethoscope-text-diagnos
 //functions
 import testNetWorkConnection from '../../functions/testNetworkConnection';
 
-class MainScreen extends Component{
+class StartScreen extends Component{
 
     state={
         loading:false,
@@ -205,4 +205,4 @@ const styles= StyleSheet.create({
     },
 });
 
-export default MainScreen;
+export default StartScreen;
