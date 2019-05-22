@@ -101,7 +101,7 @@ let reverseFindFormulaNumber = (pillNumber) => {
 //LISTEN THIS IS FUCKING DISGUSTING PROGRAMMING AND IT IS NOT MY FUCKING FAULT FUCK
 
 let ReversePrepareToSend = (input) => {
-    let currentInput = input.slice(2,input.length);
+    let currentInput = (input.slice(0,2) === '/?')?input.slice(2,input.length):input;
     console.log('current reverseprepareSend\'s input: '+ currentInput);
     //lets prepare the objects...?
     //by using the default values
@@ -222,7 +222,7 @@ let ReversePrepareToSend = (input) => {
 
     //next we separate each input with its & character
     let formData = currentInput.split("&");
-    //console.log('current reverseprepareSend\'s input after \'&\' split: '+ formData);
+    console.log('current reverseprepareSend\'s input after \'&\' split: '+ formData);
 
     let amountOfPillsCounter = 0;
 
@@ -233,7 +233,7 @@ let ReversePrepareToSend = (input) => {
         formData[i] = formData[i].split("=");
 
         let currentFormData = formData[i];
-        //console.log('current reverseprepareSend\'s input after \'=\' split: '+ currentFormData);
+        console.log('current reverseprepareSend\'s input after \'=\' split: '+ currentFormData);
 
         /*
         * Since we can't attribute c,d,zc,zd,zzc,zzd before knowing if it it has one or two boxes

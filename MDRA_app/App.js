@@ -8,7 +8,7 @@ import configureStore from './src/store/configureStore';
 
 //screens
 import FormScreen from './src/screens/FormScreen/FormScreen';
-import FormScreenV2 from './src/screens/FormScreenV2/FormScreenV2';
+import FormScreenV2 from './src/screens/FormScreen/FormScreenV2';
 import StartScreen from './src/screens/StartScreen/StartScreen';
 import ResultScreen from './src/screens/ResultScreen/ResultScreen';
 import SideDrawer from './src/screens/SideDrawer/SideDrawer';
@@ -25,6 +25,7 @@ import ResultPage from './src/screens/ResultPage/ResultPage';
 import PickerTest from './src/screens/PickerTest/PickerTest';
 import TestCapturePDF from './src/screens/TestCapturePDF/TestCapturePDF';
 import RetrieveOldResults from './src/screens/RetrieveResultsScreens/RetrieveResultsScreen';
+import MainScreenTest from './src/screens/MainScreenTest/MainScreenTest';
 
 import SendForm from './src/components/SendForm/SendForm';
 
@@ -35,7 +36,7 @@ const persistor = configureStoreResult.persistor;
 // register all screens of the app (including internal ones)
 Navigation.registerComponent('MDRA_app.formTest', () => FormTest);
 Navigation.registerComponent('MDRA_app.mainScreenTest', () => mainScreenTest);
-Navigation.registerComponent('MDRA_app.startScreen', ()=>StartScreen);
+Navigation.registerComponent('MDRA_app.startScreen', ()=>StartScreen, store, Provider, persistor);
 Navigation.registerComponent('MDRA_app.resultScreen',()=>ResultScreen,store, Provider, persistor);
 Navigation.registerComponent('MDRA_app.sideDrawerScreen', () => SideDrawer, store, Provider, persistor);
 Navigation.registerComponent('MDRA_app.optionsDrawerScreen', () => OptionsDrawer, store, Provider, persistor);
@@ -51,6 +52,7 @@ Navigation.registerComponent('MDRA_app.resultPage',() => ResultPage, store, Prov
 Navigation.registerComponent('MDRA_app.pickerTest',() => PickerTest);
 Navigation.registerComponent('MDRA_app.testCapturePDF',() => TestCapturePDF, store, Provider, persistor);
 Navigation.registerComponent('MDRA_app.retrieveOldResults',() => RetrieveOldResults, store, Provider, persistor);
+Navigation.registerComponent('MDRA_app.mainScreenTest',() => MainScreenTest, store, Provider, persistor);
 
 
 //start App

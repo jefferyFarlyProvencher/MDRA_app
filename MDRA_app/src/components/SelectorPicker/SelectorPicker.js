@@ -106,7 +106,7 @@ class ResultPage extends PureComponent {
                                 </TouchableHighlight>
                                 <TouchableHighlight onPress={()=>{this.handleItemSelected("Date")}}>
                                     <View style={styles.selectorTile}>
-                                        <Text style={styles.selectorTileText}>Creation Date</Text>
+                                        <Text style={styles.selectorTileText}>Creation Date (format: YYYY-MM-DD)</Text>
                                     </View>
                                 </TouchableHighlight>
                                 <TouchableHighlight>

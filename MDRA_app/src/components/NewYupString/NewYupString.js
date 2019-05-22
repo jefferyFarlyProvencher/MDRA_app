@@ -24,7 +24,7 @@ class NewYupString extends yup.string {
 
    containsOnlyNumbers(msg) {
         return this.test({
-            message: msg || '${path} is does not contain solely numbers',
+            message: msg || '${path} does not contain solely numbers',
             name: 'containsOnlyNumbers',
             exclusive: true,
             test: function(value) {

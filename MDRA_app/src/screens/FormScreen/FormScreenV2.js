@@ -12,7 +12,7 @@ import {
     Alert,
     StatusBar,
     Platform,
-    TouchableWithoutFeedback
+    Animated
 } from 'react-native';
 import {connect} from 'react-redux';
 
@@ -27,10 +27,15 @@ import FormScreenTimeZonage from '../FormScreen1_timeZonage/FormScreen_timeZonag
 import FormScreenWeights from '../FormScreen2_weights/FormScreen_weights';
 import FormScreenAdvanced from '../FormScreen3_advanced/FormScreen_advanced';
 import SendFormScreen from '../SendFormScreen/SendFormScreen';
-import {addData, changePosition} from "../../store/actions/index";
-
+import {addData, changePosition, toggleIndicatorVisibility} from "../../store/actions";
+import WelcomeScreen from "../../components/WelcomeScreen/WelcomeScreen";
+//component Imports
 
 class FormScreen extends Component{
+
+    state={
+        welcomeScreenVisible: true
+    };
 
     handleBackButton = () => {
         if(this.props.state.main.position === 0 || this.props.state.main.position === 4)
@@ -55,6 +60,7 @@ class FormScreen extends Component{
 
     componentWillMount() {
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+
         this.props.navigator.setStyle({
             navBarBackgroundColor: '#262626',
             navBarTextColor: '#ffffff',
@@ -75,6 +81,8 @@ class FormScreen extends Component{
         });
     };
 
+
+
     componentWillUnmount() {
         BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
     };
@@ -93,12 +101,55 @@ class FormScreen extends Component{
             }
         }
     };
+    //Credits to guyca ad M-Jas for the buttons push fix
+    // _keyboardDidShow = () => {
+    //     // alert('Keyboard Shown');
+    //     console.log("this.props.state.main.indicatorVisibility: "+ this.props.state.main.indicatorVisibility)
+    //     if(Platform.OS === 'android' && this.props.state.main.indicatorVisibility === 1) {
+    //         this.props.onToggleIndicator(false);
+    //         this.props.navigator.toggleTabs({
+    //             to: 'hidden',
+    //             animated: false
+    //         });
+    //     }
+    //
+    // };
+    //
+    // _keyboardDidHide = () => {
+    //     // alert('Keyboard Hidden');
+    //     if(Platform.OS === 'android' && this.props.state.main.indicatorVisibility === 0) {
+    //         this.props.onToggleIndicator(true);
+    //         this.props.navigator.toggleTabs({
+    //             to: 'shown',
+    //             animated: false
+    //         });
+    //     }
+    // };
+    ///
 
-    handleSetPage = (pageNumber) => {
-        console.log("should be changing page");
-        this.viewPager.setPage(pageNumber);
+    handleRemoveWelcomeScreen = (value) =>{
+        if(value)
+        {
+            this.setState(oldState => {
+                return{
+                    ...oldState,
+                    welcomeScreenVisible: value
+                }
+            })
+        }else{
+            this.setState(oldState => {
+                return{
+                    ...oldState,
+                    welcomeScreenVisible: !oldState.welcomeScreenVisible
+                }
+            })
+        }
     };
 
+    handleSetPage = (pageNumber) => {
+        console.log("should be changing page to: "+ pageNumber);
+        this.viewPager.setPage(pageNumber);
+    };
 
     indicatorPressedHandler = (pageNumber) => {
         console.log("HEY HEY HEY!");
@@ -175,15 +226,19 @@ class FormScreen extends Component{
             currentStepLabelColor: 'transparent'
         };
 
-        if(!this.props.state.main.advanceTabAccessible && this.props.state.main.position === 2){
+        //SOURCE OF ERROR ON PAGE 3 IS HERE//
+        if( typeof this.props.state.main.advanceTabAccessible !== "undefined" && this.props.state.main.position === 2 && !this.props.state.main.advanceTabAccessible){
             this.handleSetPage(2)
         }
+        ////////////////////////////////////
 
-        console.log("this.props.state.main.indicatorVisibility: "+ this.props.state.main.indicatorVisibility);
+        //console.log("this.props.state.main.indicatorVisibility: "+ this.props.state.main.indicatorVisibility);
 
         let indicatorHeight = (this.props.state.main.indicatorVisibility===1 || this.props.state.main.indicatorVisibility === undefined)?'90%':'100%';
 
-        console.log("indicator Height: "+ indicatorHeight);
+        //console.log("indicator Height: "+ indicatorHeight);
+
+        //console.log("formscreen patientsList: "+ JSON.stringify(this.props.state.main.patientsList));
 
         return(
             <View style={styles.overTheIndicatorContainer}>
@@ -201,7 +256,7 @@ class FormScreen extends Component{
                             ref={viewPager => { this.viewPager = viewPager; }}
                         >
                             <View>
-                                <FormScreenInitial data={this.props.state.main.Page0Data} setPage={this.handleSetPage} Picker={Picker}/>
+                                <FormScreenInitial data={this.props.state.main.Page0Data} patientsList={this.props.state.main.patientsList} setPage={this.handleSetPage} Picker={Picker}/>
                             </View>
                             <View>
                                 <FormScreenTimeZonage data={this.props.state.main.Page1Data} setPage={this.handleSetPage} Picker={Picker}/>
@@ -258,12 +313,24 @@ class FormScreen extends Component{
                             <SendFormScreen/>
                             :
                             <View>
-                                <Text>//empty page in case of errors when switch from results
+                                <Text>
+                                    //empty page in case of errors when switch from results
                                 </Text>
                             </View>
                         }
 
                      </View>
+                }
+                {this.state.welcomeScreenVisible?
+                    <View style={{position: "absolute", flex: 1, width: "100%", height: "100%"}}>
+                        <WelcomeScreen
+                            title={"Dr."}
+                            name={this.props.state.main.linkedAccount.name}
+                            showWelcomeScreen={this.state.welcomeScreenVisible}
+                            removeWelcomeScreen = {this.handleRemoveWelcomeScreen}
+                        />
+                    </View>
+                    :<View/>
                 }
 
 
@@ -293,7 +360,8 @@ const styles = StyleSheet.create({
         paddingTop: 10,
         margin:0,
 
-    }
+    },
+
 });
 
 const mapStateToProps = (state) => {
@@ -305,7 +373,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = dispatch => {
     return {
         onAddData: (data, position) => dispatch(addData(data, position)),
-        onChangePosition: (position) => dispatch(changePosition(position))
+        onChangePosition: (position) => dispatch(changePosition(position)),
+        onToggleIndicator: (value) => dispatch(toggleIndicatorVisibility(value))
     };
 };
 

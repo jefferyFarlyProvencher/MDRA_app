@@ -8,7 +8,7 @@ import {
     TouchableOpacity,
     ToastAndroid,
     Alert,
-    BackHandler
+    BackHandler, Switch
 } from 'react-native';
 import {Navigation} from 'react-native-navigation';
 import {connect} from 'react-redux';
@@ -24,6 +24,7 @@ import {
     addData, changePosition
 } from "../../store/actions";
 import testNetWorkConnection from '../../functions/testNetworkConnection';
+import * as colors from "../../assets/colors";
 
 
 
@@ -63,8 +64,10 @@ class SideDrawer extends Component{
                 }, {
                     text: 'Yes, erase everything',
                     onPress: () => {
-                        this.props.onBackUpResultList();
-                        this.props.onEmptyResultList()
+                        if(this.props.state.main.resultsList.length > 0) {
+                            this.props.onBackUpResultList();
+                            this.props.onEmptyResultList()
+                        }
                     }
                 }
             ],
@@ -101,17 +104,20 @@ class SideDrawer extends Component{
                 <View>
                     <Text style={styles.titleStyle}>Menu</Text>
                 </View>
-                <TouchableOpacity onPress={()=>{console.log("This is in development")}}>
-                    <View  style={[styles.drawerItem]}>
-                        <Ionicon
-                            size={40}
-                            name= {Platform.OS==='android'? "md-people" :"ios-people"}
-                            color="#DDD"
-                            style={styles.drawerItemIcon}
-                        />
-                        <Text style={{color:"#DDD"}}>Manage Patient Profiles (In development...)</Text>
-                    </View>
-                </TouchableOpacity>
+                {/*<TouchableOpacity*/}
+                    {/*onPress={()=>{console.log("This is in development")}}*/}
+                    {/*disabled={IsBackUpRestoreDisabled}*/}
+                {/*>*/}
+                    {/*<View  style={[styles.drawerItem]}>*/}
+                        {/*<Ionicon*/}
+                            {/*size={40}*/}
+                            {/*name= {Platform.OS==='android'? "md-people" :"ios-people"}*/}
+                            {/*color="#DDD"*/}
+                            {/*style={styles.drawerItemIcon}*/}
+                        {/*/>*/}
+                        {/*<Text style={{color:"#DDD"}}>Manage Patient Profiles (In development...)</Text>*/}
+                    {/*</View>*/}
+                {/*</TouchableOpacity>*/}
                 <TouchableOpacity onPress={this.logOutHandler}>
                     <View  style={styles.drawerItem}>
                         <Ionicon
@@ -125,13 +131,23 @@ class SideDrawer extends Component{
                 </TouchableOpacity>
                 <TouchableOpacity onPress={this.props.allowAdvancedOptions}>
                     <View  style={styles.drawerItem}>
-                        <Ionicon
-                            size={40}
-                            name= {Platform.OS==='android'? "md-add-circle" :"ios-add-circle"}
-                            color="#52afff"
-                            style={styles.drawerItemIcon}
-                        />
+                        {/*<Ionicon*/}
+                            {/*size={40}*/}
+                            {/*name= {Platform.OS==='android'? "md-add-circle" :"ios-add-circle"}*/}
+                            {/*color="#52afff"*/}
+                            {/*style={styles.drawerItemIcon}*/}
+                        {/*/>*/}
+                        <View style={{marginRight: 10}}>
+                            <Switch
+                                value={this.props.state.main.advanceTabAccessible}
+                                onValueChange={this.props.allowAdvancedOptions}
+                                tintColor={"#ddd"}
+                                onTintColor={"#52afff"}
+                                thumbTintColor={(Platform==="ios"? "white": '#eee')}
+                            />
+                        </View>
                         <Text>{this.props.state.main.advanceTabAccessible?"Disable Advanced tab":"Enable Advanced tab"}</Text>
+
                     </View>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={this.handleConnectionTest}>

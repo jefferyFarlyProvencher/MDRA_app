@@ -39,27 +39,29 @@ let dataToSend_GET_Test = 'nInd=1000&Gender=1&weight=40&a=6&b=20&c=8&d=18&e=0&f=
 let dataToSend_GET_Test2 = 'nInd=1000&Gender=1&weight=40&a=6&b=20&c=8&d=18&e=0&f=6&g=20&h=22&WTI1=100&WTI2=100&WTI3=100&WTI4=100&WTI5=100&WTI6=0&WTI7=0&palier=80&za=6&zb=20&zc=-1&zd=-1&zzc=-1&zzd=-1&heureducoucher=22&startLunchTime=12&Morning=0&formulation1=1&quantitedose1=10&momentdose1=8&Food1=0'
 let dataToSend_POST_Test = 'nInd=1000&Gender=1&weight=40&a=6&b=20&c=8&d=18&e=0&f=6&g=20&h=22&WTI1=100&WTI2=100&WTI3=100&WTI4=100&WTI5=100&WTI6=0&WTI7=0&palier=80&za=6&zb=20&zc=-1&zd=-1&zzc=-1&zzd=-1&heureducoucher=22&startLunchTime=12&Morning=0&formulation1=1&quantitedose1=30&momentdose1=8&Food1=0';
 */
-let SendForm = async(preparedData, preparedName, preparedDate) => {
+let SendForm = async(preparedData, patient, token) => {
     console.log("----FETCHING THINGY-----\n");
-    let current_query = 'http://132.204.93.102:81/?'+preparedData;
-    console.log("current query is: "+current_query);
+    // let current_query = 'http://132.204.93.102:81/?'+preparedData;
+    // console.log("current query is: "+current_query);
     try{
         //GET
-        let response = await fetch(current_query);
+        // let response = await fetch(current_query);
 
         //POST (server not working yet)
-        /*let response = await fetch('http://132.204.93.102:82/MDRA_HANDLER.php', {
+        let response = await fetch('http://132.204.93.102:81', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                data:"2"
+                input: preparedData,
+                account: token,
+                queryType: "generateResult"
             })
-        });*/
+        });
         let responseJson = await response.json();
-        //console.log("RESULT:"+JSON.stringify(responseJson));
+        console.log("RESULT:"+JSON.stringify(responseJson));
         if(responseJson)
             console.log("----FETCHING OVER-----\n");
             console.log("name: "+ responseJson['name']);

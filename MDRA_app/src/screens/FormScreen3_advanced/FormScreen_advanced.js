@@ -281,7 +281,7 @@ const styles = StyleSheet.create({
 
     buttonsContainer: {
         backgroundColor:"#27408b",
-        marginTop: 20,
+        margin: 20,
     },
 
     twoPerRowContainer: {

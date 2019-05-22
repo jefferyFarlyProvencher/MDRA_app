@@ -11,7 +11,7 @@ const startTabs = () => {
         Icon.getImageSource(Platform.OS==='android'? "md-podium": "ios-podium", 30),
         Icon.getImageSource(Platform.OS==='android'? "ios-menu" :"ios-menu", 30),
         Icon.getImageSource(Platform.OS==='android'? "md-search" :"ios-search", 30),
-        Icon.getImageSource("md-more",30),
+        Icon.getImageSource("md-more",3),
     ]).then(sources => {
         Navigation.startTabBasedApp({
             tabs: [
@@ -36,7 +36,7 @@ const startTabs = () => {
                     navBarButtonColor: Platform.OS === 'android'?'#3057e1': null,
                     topBar: {
                         buttonColor: "blue"
-                    }
+                    },
                 },
                 {
                     screen: "MDRA_app.resultScreen",

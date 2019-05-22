@@ -1,11 +1,26 @@
 import React, {PureComponent} from 'react';
-import {StyleSheet, View, Platform} from 'react-native';
+import {StyleSheet, View, Platform, TextInput} from 'react-native';
 
 import {
     FormInput,
     FormValidationMessage,
     FormLabel
 } from 'react-native-elements';
+
+/**
+ *  Input requires:
+ *
+ *  name: string
+ *  onTouch: function
+ *  onChange: function
+ *
+ *  Input optional:
+ *
+ *  label: string
+ *  inputStyle: object,
+ *  style: object
+ *
+ */
 
 class Input extends PureComponent{
 
@@ -63,45 +78,55 @@ class Input extends PureComponent{
         let labelPosition = this.props.labelPosition;
         return(
             <View style={[styles.root,this.props.style]}>
-                <FormLabel
-                    containerStyle={
-                        {
-                            alignItems: labelPosition?this.handleLabelPosition(labelPosition): "flex-start"
+                {label
+                    ?<FormLabel
+                        containerStyle={
+                            {
+                                alignItems: labelPosition?this.handleLabelPosition(labelPosition): "flex-start"
+                            }
                         }
-                    }
-                >
-                    {label}
-                </FormLabel>
-                <FormInput
-                    center={true}
-                    placeholder={label? label: name}
-                    onChangeText={this._handleChangeText}
-                    onFocus={this.props.onTouch}
-                    onBlur={this._handleTouch}
-                    containerStyle={[
-                        {
-                            justifyContent:'flex-start',
-                        },
-                        error
-                            ?{backgroundColor:"#ffb8c3"}
-                            :backgroundColor
-                                ?{backgroundColor:backgroundColor}
-                                :{backgroundColor:"transparent"},
-                        {
+                    >
+                        {label}
+                    </FormLabel>
+                    :<View/>
+                }
+                <View>
+                    <FormInput
+                        center={true}
+                        placeholder={label? label: name}
+                        onChangeText={this._handleChangeText}
+                        onFocus={this.props.onTouch}
+                        onBlur={this._handleTouch}
+                        containerStyle={[
+                            {
+                                justifyContent:'flex-start',
+                            },
+                            error
+                                ?{backgroundColor:"#ffb8c3"}
+                                :backgroundColor
+                                    ?{backgroundColor:backgroundColor}
+                                    :{backgroundColor:"transparent"},
+                            {
 
-                        }
-                    ]}
-                    inputStyle={[
-                        {
-                            width:"100%",
-                        },
-                        this.props.inputStyle
-                    ]}
-                    underlineColorAndroid={"#636363"}
-                    maxLength={this.props.maxLength?this.props.maxLength:null}
-                    {...rest}
-                />
-                {error && <FormValidationMessage>{error}</FormValidationMessage>}
+                            }
+                        ]}
+                        inputStyle={[
+                            {
+                                width:"100%",
+                            },
+                            this.props.inputStyle
+                        ]}
+                        underlineColorAndroid={"#636363"}
+                        maxLength={this.props.maxLength?this.props.maxLength:null}
+                        {...rest}
+                    />
+
+                </View>
+                <View style={{
+                    alignItems: labelPosition?this.handleLabelPosition(labelPosition): "flex-start"
+                }}>
+                    {error && <FormValidationMessage>{error}</FormValidationMessage>}
+                </View>
 
             </View>
         );

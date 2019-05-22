@@ -117,7 +117,7 @@ class GraphComponent extends PureComponent{
 
         let returnResult = [];
         //increasing the step for i reduces precision but increases performance
-        for(let i = 1; i < scoreTableY.length-1; i+=4) {
+        for(let i = 1; i < scoreTableY.length-1; i+=(Platform.OS === "ios"?3:4)) {
                 returnResult.push({
                     x: ((i / 10) + startXPosition),
                     y: parseFloat(scoreTableY[i]),

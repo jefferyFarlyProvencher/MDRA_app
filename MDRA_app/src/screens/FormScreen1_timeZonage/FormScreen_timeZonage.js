@@ -19,6 +19,8 @@ import {connect} from "react-redux";
 import {addData} from "../../store/actions/addData";
 import {changePosition} from "../../store/actions/changePosition";
 
+//TODO: fix error caused by putting st or ed before/after the other (maybe if greater than not change, put 30 min before?)
+
 //THIS CLASS REFERS TO THE BOX FOR PAGE
 // THERE IS A WEIRD BUG THAT PREVENTS ME FROM CHANGING the name
 // Look, we all know time zonage is a weird name, but I didn't know what the

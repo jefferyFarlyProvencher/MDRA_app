@@ -72,7 +72,7 @@ class CustomMultiSlider extends PureComponent{
                     }
                     onValuesChangeFinish={
                         (values) => {
-                            console.log(values);
+                            console.log("CustomMultiSlider changing value: "+ values);
                             this._handlesOnValueChangeFinish();
                             this.props.onValuesChange(this.state.valuesArray);
 
@@ -135,11 +135,11 @@ class CustomMultiSlider extends PureComponent{
                                         styles.rulerPercentContainer,
                                         this.state.valuesArray[1]?{width:"50%",borderRightWidth:1, alignItems:"center"}:{width:"100%", alignItems:"center"},
                                         ]}>
-                                        <Text>{this.state.valuesArray[0]?parseFloat(this.state.valuesArray[0]).toFixed(1):0}</Text>
+                                        <Text numberOfLines={1} style={{flexWrap: 'wrap'}}>{this.state.valuesArray[0]?parseFloat(this.state.valuesArray[0]).toFixed(1):0}</Text>
                                     </View>
                                     {this.state.secondScreenVisible
                                         ? <View style={[styles.rulerPercentContainer,{width:"50%", alignItems:"center"}]}>
-                                            <Text>{this.state.valuesArray[1]?parseFloat(this.state.valuesArray[1]).toFixed(1):0}</Text>
+                                            <Text numberOfLines={1} style={{flexWrap: 'wrap'}}>{this.state.valuesArray[1]?parseFloat(this.state.valuesArray[1]).toFixed(1):0}</Text>
                                         </View>
                                         : <View/>
                                     }
@@ -176,9 +176,11 @@ const styles = StyleSheet.create({
     },
 
     rulerPercentContainer: {
-        paddingHorizontal: 10,
+        paddingHorizontal: 9,
         paddingVertical: 5,
         borderColor: 'black',
+        flexDirection: "row",
+        alignItems:"center"
     },
 
     animatedContainerStyle: {

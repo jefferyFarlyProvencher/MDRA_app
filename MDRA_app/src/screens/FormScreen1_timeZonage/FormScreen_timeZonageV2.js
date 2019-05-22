@@ -10,7 +10,9 @@ import {
     KeyboardAvoidingView,
     Platform,
     TouchableOpacity,
-    TouchableWithoutFeedback
+    TouchableWithoutFeedback,
+    LayoutAnimation,
+    Keyboard
 } from 'react-native';
 import { Button } from 'react-native-elements';
 import { Formik } from 'formik';
@@ -56,7 +58,8 @@ class FormScreenTimeZonage extends PureComponent{
             ?this.props.data.nbTherapeuticBoxes==="One therapeutic box (AM to PM)"
                 ?1:2
             :1,
-        darkVisible: false
+        darkVisible: false,
+        paddingHeight:0
     };
 
     /*
@@ -95,8 +98,8 @@ class FormScreenTimeZonage extends PureComponent{
                         teDay: NewYupString().containsOnlyNumbers().isLaterThan(Yup.ref('tsDay', null)).isEarlierThan('17:00', thisTimeShouldBe + "earlier than 17:00").required(requiredMessage),
                         tsEvening: NewYupString().containsOnlyNumbers().isLaterThan(Yup.ref('teDay', null)).required(requiredMessage),
                         teEvening: NewYupString().containsOnlyNumbers().isLaterThan(Yup.ref('tsEvening', null)).required(requiredMessage),
-                        lunch: NewYupString().containsOnlyNumbers().isLaterThan('11:00', thisTimeShouldBe + "later than 11:00").isEarlierThan(Yup.ref('tsEvening', null)).required(requiredMessage),//Yup.number().positive().lessThan(Yup.ref('tsEvening', null)).moreThan(10).required(requiredMessage),
-                        bed: NewYupString().containsOnlyNumbers().isLaterThan(Yup.ref('teEvening', null)).required(requiredMessage),//Yup.number().positive().lessThan(24.00001,"Cannot exceed 24").moreThan(18.99999,"Cannot be less than 19").required(requiredMessage)
+                        lunch: NewYupString().containsOnlyNumbers().isEarlierThan(Yup.ref('bed', null)).required(requiredMessage),//Yup.number().positive().lessThan(Yup.ref('tsTest', null)).moreThan(10).required(requiredMessage),
+                        bed: NewYupString().containsOnlyNumbers().isLaterThan(Yup.ref('lunch', null)).required(requiredMessage),//Yup.number().positive().lessThan(24.00001,"Cannot exceed 24").moreThan(18.99999,"Cannot be less than 19").required(requiredMessage)
                     })
                 );
             case 2:
@@ -108,8 +111,8 @@ class FormScreenTimeZonage extends PureComponent{
                         tePM: NewYupString().containsOnlyNumbers().isLaterThan(Yup.ref('tsPM', null)).required(requiredMessage),//Yup.number().positive().moreThan(Yup.ref('tsPM', null)).required(requiredMessage),
                         tsEvening: NewYupString().containsOnlyNumbers().isLaterThan(Yup.ref('tePM', null)).required(requiredMessage),//Yup.number().positive().moreThan(Yup.ref('teDay'), null).required(requiredMessage),
                         teEvening: NewYupString().containsOnlyNumbers().isLaterThan(Yup.ref('tsEvening', null)).required(requiredMessage),//Yup.number().positive().moreThan(Yup.ref('tsEvening', null)).required(requiredMessage),
-                        lunch: NewYupString().containsOnlyNumbers().isLaterThan('11:00', thisTimeShouldBe + "later than 11:00").isEarlierThan(Yup.ref('tsEvening', null)).required(requiredMessage),//Yup.number().positive().lessThan(Yup.ref('tsEvening', null)).required(requiredMessage),
-                        bed: NewYupString().containsOnlyNumbers().isLaterThan(Yup.ref('teEvening', null)).required(requiredMessage),//Yup.number().positive().lessThan((24.00001)).moreThan(Yup.ref('teEvening', null)).required(requiredMessage)
+                        lunch: NewYupString().containsOnlyNumbers().isEarlierThan(Yup.ref('bed', null)).required(requiredMessage),//Yup.number().positive().lessThan(Yup.ref('tsEvening', null)).required(requiredMessage),
+                        bed: NewYupString().containsOnlyNumbers().isLaterThan(Yup.ref('lunch', null)).required(requiredMessage),//Yup.number().positive().lessThan((24.00001)).moreThan(Yup.ref('teEvening', null)).required(requiredMessage)
                     })
                 );
         }
@@ -150,13 +153,6 @@ class FormScreenTimeZonage extends PureComponent{
             setValueFunction(initialName, this.handleFormatTime(initialValue).toString());
         }
     }
-
-    handleStepVisibility = (name,setFieldTouched) => {
-        //console.log("step visibility toggle");
-
-        this.props.onToggleIndicator();
-        setFieldTouched(name)
-    };
 
     handleSetDarkVisibility = (flag) => {
         this.setState(oldState =>{
@@ -281,10 +277,10 @@ class FormScreenTimeZonage extends PureComponent{
                                                                 setFieldValue(name,value)
                                                             }}
                                                             onBlur={() =>{
-                                                                this.props.onToggleIndicator();
+
                                                                 setFieldValue("tsDay", this.handleFormatTime(values.tsDay));
                                                             }}
-                                                            onTouch={(name) =>{this.handleStepVisibility(name,setFieldTouched)}}
+                                                            onTouch={setFieldTouched}
                                                             name="tsDay"
                                                             error={touched.tsDay && errors.tsDay}
                                                             keyboardType="numeric"
@@ -298,10 +294,10 @@ class FormScreenTimeZonage extends PureComponent{
                                                                 setFieldValue(name,value)
                                                             }}
                                                             onBlur={() =>{
-                                                                this.props.onToggleIndicator();
+
                                                                 setFieldValue("teDay", this.handleFormatTime(values.teDay));
                                                             }}
-                                                            onTouch={(name) =>{this.handleStepVisibility(name,setFieldTouched)}}
+                                                            onTouch={setFieldTouched}
                                                             name="teDay"
                                                             error={touched.teDay && errors.teDay}
                                                             keyboardType="numeric"
@@ -350,37 +346,37 @@ class FormScreenTimeZonage extends PureComponent{
                                                     textPosition="center"/>
                                                 <View style={styles.twoPerRowContainer}>
                                                     <View style={styles.inputContainerForTwo}>
-                                                        < Input
-                                                        label = "Start Time"
-                                                        value={values.tsPM}
-                                                        onChange={(name,value) => {
-                                                            setFieldValue(name,value)
-                                                        }}
-                                                        onBlur={() =>{
-                                                            this.props.onToggleIndicator();
-                                                            setFieldValue("tsPM", this.handleFormatTime(values.tsPM));
-                                                        }}
-                                                        onTouch={(name) =>{this.handleStepVisibility(name,setFieldTouched)}}
-                                                        name="tsPM"
-                                                        error={touched.tsPM && errors.tsPM}
-                                                        keyboardType="numeric"
+                                                        <Input
+                                                            label = "Start Time"
+                                                            value={values.tsPM}
+                                                            onChange={(name,value) => {
+                                                                setFieldValue(name,value)
+                                                            }}
+                                                            onBlur={() =>{
+
+                                                                setFieldValue("tsPM", this.handleFormatTime(values.tsPM));
+                                                            }}
+                                                            onTouch={setFieldTouched}
+                                                            name="tsPM"
+                                                            error={touched.tsPM && errors.tsPM}
+                                                            keyboardType="numeric"
                                                         />
                                                     </View>
                                                     <View style={styles.inputContainerForTwo}>
                                                         <Input
-                                                        label="End Time"
-                                                        value={values.tePM}
-                                                        onChange={(name,value) => {
-                                                            setFieldValue(name,value)
-                                                        }}
-                                                        onBlur={() =>{
-                                                            this.props.onToggleIndicator();
-                                                            setFieldValue("tePM", this.handleFormatTime(values.tePM));
-                                                        }}
-                                                        onTouch={(name) =>{this.handleStepVisibility(name,setFieldTouched)}}
-                                                        name="tePM"
-                                                        error={touched.tePM && errors.tePM}
-                                                        keyboardType="numeric"
+                                                            label="End Time"
+                                                            value={values.tePM}
+                                                            onChange={(name,value) => {
+                                                                setFieldValue(name,value)
+                                                            }}
+                                                            onBlur={() =>{
+
+                                                                setFieldValue("tePM", this.handleFormatTime(values.tePM));
+                                                            }}
+                                                            onTouch={setFieldTouched}
+                                                            name="tePM"
+                                                            error={touched.tePM && errors.tePM}
+                                                            keyboardType="numeric"
                                                         />
                                                     </View>
                                                 </View>
@@ -399,11 +395,7 @@ class FormScreenTimeZonage extends PureComponent{
                                                         values={[this.handleUnFormatTime(values.tsPM),this.handleUnFormatTime(values.tePM)]}
                                                         onValuesChange={
                                                             (sliderValues) => {
-                                                                if(values.tsPM < values.teDay) {
-                                                                    setFieldValue('tsPM', values.teDay);
-                                                                } else {
-                                                                    setFieldValue('tsPM', this.handleFormatTime(sliderValues[0].toString()));
-                                                                }
+                                                                setFieldValue('tsPM', this.handleFormatTime(sliderValues[0].toString()));
                                                                 console.log("evaluating if tePM value is bigger than tsEvening, result: "+ (sliderValues[1] > this.handleUnFormatTime(values.tsEvening)));
                                                                 console.log("tsEvening value: "+ values.tsEvening);
                                                                 console.log("sliderValues[1] value: "+ sliderValues[1]);
@@ -425,16 +417,16 @@ class FormScreenTimeZonage extends PureComponent{
                                             <View style={styles.twoPerRowContainer}>
                                                 <View style={styles.inputContainerForTwo}>
                                                     <Input
-                                                        label="Start Time"
-                                                        value={
-                                                            values.tsEvening
-                                                        }
-                                                        onChange={setFieldValue}
-                                                        onTouch={(name) =>{this.handleStepVisibility(name,setFieldTouched)}}
+                                                        label = "Start Time"
+                                                        value={values.tsEvening}
+                                                        onChange={(name,value) => {
+                                                            setFieldValue(name,value)
+                                                        }}
                                                         onBlur={() =>{
-                                                            this.props.onToggleIndicator();
+
                                                             setFieldValue("tsEvening", this.handleFormatTime(values.tsEvening));
                                                         }}
+                                                        onTouch={setFieldTouched}
                                                         name="tsEvening"
                                                         error={touched.tsEvening && errors.tsEvening}
                                                         keyboardType="numeric"
@@ -443,18 +435,15 @@ class FormScreenTimeZonage extends PureComponent{
                                                 <View style={styles.inputContainerForTwo}>
                                                     <Input
                                                         label="End Time"
-                                                        value={
-                                                            this.handleFormatTime(values.teEvening)<this.handleFormatTime(values.tsEvening)
-                                                                ?setFieldValue('teEvening', values.tsEvening)+0.5
-                                                                :values.teEvening
-
-                                                        }
-                                                        onChange={setFieldValue}
+                                                        value={values.teEvening}
+                                                        onChange={(name,value) => {
+                                                            setFieldValue(name,value)
+                                                        }}
                                                         onBlur={() =>{
-                                                            this.props.onToggleIndicator();
+
                                                             setFieldValue("teEvening", this.handleFormatTime(values.teEvening));
                                                         }}
-                                                        onTouch={(name) =>{this.handleStepVisibility(name,setFieldTouched)}}
+                                                        onTouch={setFieldTouched}
                                                         name="teEvening"
                                                         error={touched.teEvening && errors.teEvening}
                                                         keyboardType="numeric"
@@ -481,6 +470,9 @@ class FormScreenTimeZonage extends PureComponent{
                                                     }
                                                     onValuesChange={
                                                         (valuesS) => {
+                                                            console.log("this is valuesS: "+ valuesS);
+                                                            console.log("handleFormaTime 1 : "+this.handleFormatTime(valuesS[0].toString()));
+                                                            console.log("handleFormaTime 2 : "+this.handleFormatTime(valuesS[1].toString()));
                                                             setFieldValue('tsEvening', this.handleFormatTime(valuesS[0].toString()));
                                                             setFieldValue('teEvening', this.handleFormatTime(valuesS[1].toString()));
                                                         }
@@ -503,10 +495,10 @@ class FormScreenTimeZonage extends PureComponent{
                                                         value={values.lunch}
                                                         onChange={setFieldValue}
                                                         onBlur={() =>{
-                                                            this.props.onToggleIndicator();
+
                                                             setFieldValue("lunch", this.handleFormatTime(values.lunch));
                                                         }}
-                                                        onTouch={(name) =>{this.handleStepVisibility(name,setFieldTouched)}}
+                                                        onTouch={setFieldTouched}
                                                         name="lunch"
                                                         error={touched.lunch && errors.lunch}
                                                         keyboardType="numeric"
@@ -528,10 +520,10 @@ class FormScreenTimeZonage extends PureComponent{
                                                         value={values.bed}
                                                         onChange={setFieldValue}
                                                         onBlur={() =>{
-                                                            this.props.onToggleIndicator();
+
                                                             setFieldValue("bed", this.handleFormatTime(values.bed));
                                                         }}
-                                                        onTouch={(name) =>{this.handleStepVisibility(name,setFieldTouched)}}
+                                                        onTouch={setFieldTouched}
                                                         name="bed"
                                                         error={touched.bed && errors.bed}
                                                         keyboardType="numeric"
@@ -553,6 +545,7 @@ class FormScreenTimeZonage extends PureComponent{
                         </View>
                     </View>
                 </KeyboardAwareScrollView>
+                <View style={{ height:this.state.paddingHeight }} />
                 {(this.state.darkVisible)?
                     <TouchableWithoutFeedback
                         onPress={() => {
@@ -654,3 +647,36 @@ export default connect(null,mapDispatchToProps)(FormScreenTimeZonage);
 // else{
 //     setFieldValue('tePM', this.handleFormatTime(sliderValues[1].toString()));
 // }
+
+
+/*
+    state = {
+        height: 0,
+    };
+
+    componentDidMount() {
+        this.handler = Keyboard.addListener('keyboardWillChangeFrame', this.onKeyboardWillChangeFrame);
+    }
+
+    componentWillUnmount() {
+        this.handler.remove();
+    }
+
+    onKeyboardWillChangeFrame = e => {
+        const { startCoordinates, endCoordinates } = e;
+        const height = startCoordinates.screenY - endCoordinates.screenY;
+        LayoutAnimation.configureNext();
+        this.setState({ height });
+    }
+
+    render() {
+        const { height } = this.state;
+        return (
+            <ScrollView>
+                {this.props.children}
+                <View style={{ height }} />
+            </ScrollView>
+        );
+    }
+}
+ */

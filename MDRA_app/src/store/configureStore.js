@@ -12,7 +12,7 @@ const persistConfig = {
     transforms: [
         createWhitelistFilter(
             'main',
-            ['resultsList']
+            ['resultsList', 'patientsList', "indicatorVisibility", "linkedAccount"]
         )
     ]
 };
@@ -34,8 +34,7 @@ if (__DEV__) {
 const configureStore = () => {
     let store = createStore(persistedReducer);
     let persistor = persistStore(store);
-
-    return { store, persistor};
+    return {store, persistor};
 };
 
 export default configureStore;

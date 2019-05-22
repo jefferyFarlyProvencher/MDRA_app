@@ -94,7 +94,7 @@ class SendFormScreen extends PureComponent{
 
         //console.log("this is the calculated result: "+ JSON.stringify(calculatedResult));
 
-        alert("this is the calculated result: "+ JSON.stringify(calculatedResult));
+        //alert("this is the calculated result: "+ JSON.stringify(calculatedResult));
 
         let data = calculatedResult[0];
         let name = calculatedResult[1];

@@ -21,3 +21,5 @@ export {addPDFToResult} from './addPDFToResult';
 export {removePDFFromResult} from './removePDFFromResult';
 
 export {toggleIndicatorVisibility} from './toggleIndicatorVisibility';
+
+export {addAccount} from './addAccount';

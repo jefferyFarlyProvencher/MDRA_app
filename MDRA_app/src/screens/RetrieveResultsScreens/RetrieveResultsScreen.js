@@ -22,6 +22,7 @@ import CustomDatePicker from '../../components/CustomDatePicker/CustomDatePicker
 
 //asset import
 import * as colors from "../../assets/colors";
+import CustomTimePicker from "../../components/CustomTimePicker/CustomTimePicker";
 
 
 
@@ -37,7 +38,7 @@ class RetrieveResultsScreen extends Component {
         searchItems: false,
         displayedMessage: "Enter proper information to make the appropriate search",
         dateFrom: "2019-01-01",
-        dateTo: this.dateObject.toISOString().slice(0,10),
+        dateTo: "",// this.dateObject.toISOString().slice(0,10),
         dateFromError: false,
         dateToError: false,
         minDate: "01/01/2019",
@@ -137,7 +138,7 @@ class RetrieveResultsScreen extends Component {
                     ()=> {
                         alert((possibleDuplicatesList.length === 1 ? "This result was a possible duplicate and thus has " : "These results were possible duplicates and thus have ") + "not been added to the list: " + possibleDuplicatesList)
                     }
-                    ,10
+                    ,100
                 )
             }
         }
@@ -237,8 +238,8 @@ class RetrieveResultsScreen extends Component {
                 <ScrollView style={{flex:1}}>
                     <View style={{flex:1}}>
                         <View style={styles.containerStyle}>
-                            <View style={{marginVertical: Dimensions.get("window").width * 0.02}}>
-                                <Text>
+                            <View style={[{marginBottom: Dimensions.get("window").width * 0.02},styles.displayTextContainer]}>
+                                <Text style={{color:"#FFF"}}>
                                     {this.state.displayedMessage}
                                 </Text>
                             </View>
@@ -328,12 +329,13 @@ class RetrieveResultsScreen extends Component {
                                                 return{
                                                     ...oldState,
                                                     dateFrom: date,
-                                                    dateFromError: false
+                                                    dateFromError: false,
+                                                    dateToError: false
                                                 }
                                             })
                                         }
                                     }}
-                                    error={this.state.dateFromError?"Thingy cannot be thingy222":null}
+                                    error={this.state.dateFromError?"Start Date cannot be after End Date":null}
                                 />
                             </View>
                             <LinedLabel
@@ -341,14 +343,14 @@ class RetrieveResultsScreen extends Component {
                                 style={styles.linedLabelStyle}
                             />
                             <View style={styles.containerStyle2}>
-                                <CustomDatePicker
+                                <CustomTimePicker
                                     style={{width: 300, paddingRight: 20}}
                                     date={this.state.dateTo} //initial date from state
-                                    mode="date" //The enum of date, datetime and time
-                                    placeholder="select date"
-                                    format="YYYY-MM-DD"
-                                    minDate="2019-01-01"
-                                    maxDate={this.state.maxDate}
+                                    // mode="date" //The enum of date, datetime and time
+                                    // placeholder="select date"
+                                    // format="YYYY-MM-DD"
+                                    // minDate="2019-01-01"
+                                    // maxDate={this.state.maxDate}
                                     confirmBtnText="Confirm"
                                     cancelBtnText="Cancel"
                                     customStyles={{
@@ -387,12 +389,13 @@ class RetrieveResultsScreen extends Component {
                                                 return{
                                                     ...oldState,
                                                     dateTo: date,
-                                                    dateToError: false
+                                                    dateToError: false,
+                                                    dateFromError: false
                                                 }
                                             })
                                         }
                                     }}
-                                    error={this.state.dateToError?"Thingy cannot be thingy":null}
+                                    error={this.state.dateToError?"End date cannot be before Start Date":null}
                                 />
                             </View>
                         </View>
@@ -439,6 +442,16 @@ const styles = StyleSheet.create({
     linedLabelStyle: {
         height: "10%",
         backgroundColor: 'red'
+    },
+
+    displayTextContainer: {
+        width: Dimensions.get("window").width,
+        height: Dimensions.get("window").height*0.05,
+        marginBottom: 10,
+        backgroundColor: '#111e6c',
+        opacity: 0.8,
+        alignItems: "center",
+        justifyContent: "center"
     }
 });
 

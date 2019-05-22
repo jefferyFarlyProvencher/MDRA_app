@@ -5,6 +5,7 @@ import {connect} from 'react-redux';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 import FormTest from './FormTest';
+import Input from "../../components/Input/Input";
 
 
 class mainScreen extends Component{
@@ -66,6 +67,81 @@ class mainScreen extends Component{
                         children={this._handlePickerItem()}
                     >
                     </Picker>
+                    <Input
+                        label={"Weight"}
+                        labelPosition={"left"}
+                        value={""}
+                        onChange={(name,value) =>{
+                            //do nothing
+                        }}
+                        name="weight"
+                        keyboardType="numeric"
+                        onBlur={() =>{
+                            //this.props.onToggleIndicator();
+                            //console.log(this.props.state.main.indicatorVisibility)
+                        }}
+                        maxLength={5}
+                    />
+                    <Input
+                        label={"Weight"}
+                        labelPosition={"left"}
+                        value={""}
+                        onChange={(name,value) =>{
+                            //do nothing
+                        }}
+                        name="weight"
+                        keyboardType="numeric"
+                        onBlur={() =>{
+                            //this.props.onToggleIndicator();
+                            //console.log(this.props.state.main.indicatorVisibility)
+                        }}
+                        maxLength={5}
+                    />
+                    <Input
+                        label={"Weight"}
+                        labelPosition={"left"}
+                        value={""}
+                        onChange={(name,value) =>{
+                            //do nothing
+                        }}
+                        name="weight"
+                        keyboardType="numeric"
+                        onBlur={() =>{
+                            //this.props.onToggleIndicator();
+                            //console.log(this.props.state.main.indicatorVisibility)
+                        }}
+                        maxLength={5}
+                    />
+                    <Input
+                        label={"Weight"}
+                        labelPosition={"left"}
+                        value={""}
+                        onChange={(name,value) =>{
+                            //do nothing
+                        }}
+                        name="weight"
+                        keyboardType="numeric"
+                        onBlur={() =>{
+                            //this.props.onToggleIndicator();
+                            //console.log(this.props.state.main.indicatorVisibility)
+                        }}
+                        maxLength={5}
+                    />
+                    <Input
+                        label={"Weight"}
+                        labelPosition={"left"}
+                        value={""}
+                        onChange={(name,value) =>{
+                            //do nothing
+                        }}
+                        name="weight"
+                        keyboardType="numeric"
+                        onBlur={() =>{
+                            //this.props.onToggleIndicator();
+                            //console.log(this.props.state.main.indicatorVisibility)
+                        }}
+                        maxLength={5}
+                    />
                 </ScrollView>
             </View>
         )

@@ -224,7 +224,7 @@ class ResultPage extends PureComponent {
         this.props.onAddData(formData[2],2);
         this.props.onAddData(formData[3],3);
         //console.log("formData[4] => "+ formData[4]);
-        if(this.props.state.main.advanceTabAccessible !== formData[4])
+        if(this.props.state.main.advanceTabAccessible && this.props.state.main.advanceTabAccessible !== formData[4])
         {
             this.props.allowAdvancedOptions();
         }
@@ -278,7 +278,7 @@ class ResultPage extends PureComponent {
         let inputs = "<div style=\"background-color:lightgrey\"><h3>Inputs<h3></div>" +
             "<br/>"+
             "<br/>"+
-            "<div style=\"background-color:#eee\"><div>Gender: "+currentResult.formData[0].gender+"</div><div>Weight: "+currentResult.formData[0].weight+"kg</div></div>" +
+            "<div style=\"background-color:#eee\"><div>Gender: "+currentResult.formData[0].gender+"</div><div>Weight: "+currentResult.formData[0].weight+(currentResult.formData[0].switchWeightFormat?" lbs":" kg")+"</div></div>" +
             "<br/>"+
             "<table style=\"width:100%; border-collapse: collapse;\">" +
             "<tr style=\"background-color:#eee\">" +
@@ -536,10 +536,11 @@ class ResultPage extends PureComponent {
             "<br/>"+
             "<br/>"+
             "<br/>"+
-            (Platform.OS === "android"
-                    ?"<br/><br/>"
-                    :""
-            )+
+            "<br/>"+
+            "<br/>"+
+            "<br/>"+
+            "<br/>"+
+            "<div>   </div>"+
             "<div style=\"background-color:lightgrey; margin-top: 10em\"><h3>Performance<h3></div>"+
             //day
             "<div style=\"position:relative\">"+
@@ -622,7 +623,8 @@ class ResultPage extends PureComponent {
         this.toggleSpinner();
         setTimeout(
             ()=>{
-                Alert.alert(
+                if(Platform.OS === 'android')
+                    Alert.alert(
                     'PDF Creation Confirmation',
                     ("The pdf was created at this location: " + filePath))
             },

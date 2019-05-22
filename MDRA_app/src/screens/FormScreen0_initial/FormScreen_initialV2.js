@@ -70,7 +70,9 @@ class FormScreenInitial extends PureComponent{
 
         currentlySelectedProfile:"None Selected",
 
-        darkVisible: false
+        darkVisible: false,
+
+        //selectedPatientProfile: this.props.state.main.patientsList[0].name
     };
 
     _handleSubmit =(async (values, bag) => {
@@ -93,13 +95,15 @@ class FormScreenInitial extends PureComponent{
         }
     });
 
-    _handleChangeSwitch = (switchBoolean) => {
+    _handleChangeSwitch = (switchBoolean, setFieldValue) => {
         this.setState(oldState =>{
             return {
                 ...oldState,
                 switchValue:switchBoolean
             }
         });
+
+        setFieldValue('switchWeightFormat', switchBoolean)
     };
 
     _handleValidation = () => {
@@ -197,6 +201,27 @@ class FormScreenInitial extends PureComponent{
         }
     };
 
+    handlePatientProfileSelection = (patientProfileName, setFieldValue) => {
+
+        if(patientProfileName !== 'None Selected')
+        {
+            console.log("patientProfileName received: " + patientProfileName);
+            //should replace values for gender, weight, kg/lbs, and, of course, patientProfile
+            let currentProfile = (this.props.patientsList.filter(patient => {
+                return patient.name === patientProfileName;
+            }))[0];
+
+            console.log("current Profile selected: " + JSON.stringify(currentProfile));
+
+            setFieldValue('weight', currentProfile['weight']);
+            setFieldValue('gender', currentProfile['gender']);
+            this._handleChangeSwitch(currentProfile['kg_lbs'] === 'lbs', setFieldValue);
+            //setFieldValue('patientProfile', patientProfileName);
+        }
+        //else do not change anything
+
+    };
+
     handleStepVisibility = (name,setFieldTouched) => {
         //console.log("step visibility toggle");
 
@@ -219,6 +244,16 @@ class FormScreenInitial extends PureComponent{
 
     render() {
         let drugList = ["Ritalin IR","Pms-Methylphenidate IR", "Concerta", "Pms-Methylphenidate ER"];
+
+        let patientsList_name = [];
+
+        for(let i = 0; i < this.props.patientsList.length; i++)
+        {
+
+            patientsList_name.push(this.props.patientsList[i].name)
+        }
+        console.log("patient list name: "+patientsList_name);
+        console.log("patient list: "+JSON.stringify(this.props.patientsList[1].name));
         let picker = this.props.Picker;
         return(
             <View style={styles.container}>
@@ -229,13 +264,14 @@ class FormScreenInitial extends PureComponent{
                     }}
                 >
                     <View>
-                        <View style={styles.centerElements}>
+                        <View style={[styles.centerElements]}>
                             <TitleComponent text={"Initialization"} containerStyle={{top:0,left:0, position: "absolute"}}/>
                         </View>
                         <Formik
                             initialValues={
                                 (this.props.data)
                                     ?{
+                                        patientProfile: "None Selected", //always none selected because error otherwise?
                                         gender: this.props.data.gender,
                                         weight: this.props.data.weight,
                                         dose0: this.props.data.dose0,
@@ -258,6 +294,7 @@ class FormScreenInitial extends PureComponent{
                                         switchWeightFormat: this.props.switchWeightFormat
                                     }
                                     :{
+                                        patientProfile:"None Selected",
                                         gender: 'Male',
                                         weight: '40',
                                         dose0: '10',
@@ -297,11 +334,15 @@ class FormScreenInitial extends PureComponent{
                                     <View style={styles.genderWeightContainerContainer}>
                                         <View style={{flexDirection:"row", }}>
                                             <DropDownListV2
-                                                value={this.state.currentlySelectedProfile}
+                                                value={values.patientProfile}
                                                 label={"Patient Profile"}
-                                                name="profile"
-                                                onChange={()=>{console.log("in development...")}}
-                                                itemList={["Profile1","Profile2"]/*this.props.state.main.patientProfileList*/}
+                                                name="patientProfile"
+                                                onChange={(name,value)=>{
+                                                    console.log("in development...? "+ value);
+                                                    setFieldValue(name, value);
+                                                    this.handlePatientProfileSelection(value, setFieldValue)
+                                                }}
+                                                itemList={patientsList_name}
                                                 Picker={picker}
                                                 setDarkVisibility = {this.handleSetDarkVisibility}
                                             />
@@ -321,19 +362,15 @@ class FormScreenInitial extends PureComponent{
                                                 <View style={{width:"80%", marginRight:0}}>
                                                     <Input
                                                         label={"Weight"}
-                                                        labelPosition={"center"}
+                                                        labelPosition={"left"}
                                                         value={values.weight}
                                                         onChange={(name,value) =>{
                                                             setFieldValue(name,value)
                                                         }}
-                                                        onTouch={(name)=>{this.handleStepVisibility(name,setFieldTouched)}}
                                                         name="weight"
                                                         error={touched.weight && errors.weight}
                                                         keyboardType="numeric"
-                                                        onBlur={() =>{
-                                                            this.props.onToggleIndicator();
-                                                            //console.log(this.props.state.main.indicatorVisibility)
-                                                        }}
+                                                        onBlur={setFieldTouched}
                                                         maxLength={5}
                                                     />
                                                 </View>
@@ -344,8 +381,8 @@ class FormScreenInitial extends PureComponent{
                                                     <Switch
                                                         value={this.state.switchValue}
                                                         onValueChange={(value) => {
-                                                            setFieldValue('switchWeightFormat', !this.state.switchValue);
-                                                            this._handleChangeSwitch(value);
+                                                            console.log("value of switch: "+ value);
+                                                            this._handleChangeSwitch(value, setFieldValue);
                                                         }
                                                         }
                                                         tintColor={colors.royalBlue1}
@@ -406,10 +443,9 @@ class FormScreenInitial extends PureComponent{
                                                             setFieldValue("adminTime0", value);
                                                         }}
                                                         onBlur={() =>{
-                                                            this.props.onToggleIndicator();
                                                             setFieldValue("adminTime0", this.handleFormatTime(values.adminTime0));
                                                         }}
-                                                        onTouch={(name)=>{this.handleStepVisibility(name,setFieldTouched)}}
+                                                        onTouch={setFieldTouched}
                                                         name="adminTime0"
                                                         error={touched.adminTime0 && errors.adminTime0}
                                                         keyboardType="numeric"
@@ -469,10 +505,10 @@ class FormScreenInitial extends PureComponent{
                                                                     setFieldValue("adminTime1", value);
                                                                 }}
                                                                 onBlur={() =>{
-                                                                    this.props.onToggleIndicator();
                                                                     setFieldValue("adminTime1", this.handleFormatTime(values.adminTime1));
+                                                                    setFieldTouched("adminTime1", true)
                                                                 }}
-                                                                onTouch={(name)=>{this.handleStepVisibility(name,setFieldTouched)}}
+                                                                onTouch={setFieldTouched}
                                                                 name="adminTime1"
                                                                 error={this.state.amountOfPills>=1?(touched.adminTime1 && errors.adminTime1): null}
                                                                 keyboardType="numeric"
@@ -532,10 +568,11 @@ class FormScreenInitial extends PureComponent{
                                                                     setFieldValue("adminTime2", value);
                                                                 }}
                                                                 onBlur={() =>{
-                                                                    this.props.onToggleIndicator();
                                                                     setFieldValue("adminTime2", this.handleFormatTime(values.adminTime2));
+                                                                    setFieldTouched("adminTime2", true)
+
                                                                 }}
-                                                                onTouch={(name)=>{this.handleStepVisibility(name,setFieldTouched)}}
+                                                                onTouch={setFieldTouched}
                                                                 name="adminTime2"
                                                                 error={this.state.amountOfPills>=2?(touched.adminTime2&& errors.adminTime2): null }
                                                                 keyboardType="numeric"
@@ -601,10 +638,11 @@ class FormScreenInitial extends PureComponent{
                                                                     setFieldValue("adminTime3", value);
                                                                 }}
                                                                 onBlur={() =>{
-                                                                    this.props.onToggleIndicator();
                                                                     setFieldValue("adminTime3", this.handleFormatTime(values.adminTime3));
+                                                                    setFieldTouched("adminTime3", true)
+
                                                                 }}
-                                                                onTouch={(name)=>{this.handleStepVisibility(name,setFieldTouched)}}
+                                                                onTouch={setFieldTouched}
                                                                 name="adminTime3"
                                                                 error={this.state.amountOfPills>=3?(touched.adminTime3 && errors.adminTime3): null}
                                                                 keyboardType="numeric"
@@ -815,7 +853,6 @@ const mapDispatchToProps = dispatch => {
     return {
         onAddData: (data, position) => dispatch(addData(data, position)),
         onChangePosition: (pos) => dispatch(changePosition(pos)),
-        onToggleIndicator: () => dispatch(toggleIndicatorVisibility())
     };
 };
 

@@ -2,7 +2,8 @@ import {
     ADD_DATA, ADD_LIST, ALLOW_ADV,
     POS_CHNG, REMOVE_LIST, RENAME_LIST, EMPTY_LIST,
     BACKUP_LIST, RESTORE_BACKUP,ADD_PDF_LIST,
-    TOGGLE_INDICATOR_VISIBILITY, REMOVE_PDF_LIST
+    TOGGLE_INDICATOR_VISIBILITY, REMOVE_PDF_LIST,
+    ADD_ACCOUNT
 } from '../actions/actionTypes'
 
 import { Platform } from 'react-native';
@@ -18,7 +19,11 @@ const initialState = {
     resultsList: [],//{key:'1',data:[data],formData:[], name:name, id: id, date, filePDF}}],
     backUpResultList: [], //backup for when doing a full deletion (NOTE: could be done for partial deletion as well)
     indicatorVisibility: 1, //this removes the visibility of the indicator in order to see what we are typing when the glitch keyboard is active
-    patientList: [] //this is in preparation for the profile
+    linkedAccount:{name:null,token:null},
+    patientsList: [
+        {key: Math.random().toString(), name:"None Selected",id: "None Selected"}, //default
+        {key: Math.random().toString(), name:"Josh Merlin",gender:"Male", weight:"40", kg_lbs:"kg", dateOfBirth:"2010-09-01", id: "JoshMerlin20100901"}
+    ], //this is in preparation for the profile
 };
 
 const reducer = (state = initialState, action) => {
@@ -145,12 +150,13 @@ const reducer = (state = initialState, action) => {
 
         case(RESTORE_BACKUP):
         {
+
             let restoredBackUp = state.backUpResultList.slice();
+
             return{
-                ...state,
+        ...state,
                 resultsList: restoredBackUp,
                 backUpResultList: []
-
         }
         }
 
@@ -204,18 +210,31 @@ const reducer = (state = initialState, action) => {
         }
 
         //This is a special case for androids keyboard avoiding scroll
-            //
+        //
         case(TOGGLE_INDICATOR_VISIBILITY):{
-            //console.log("toggling indicator");
+            //console.log(JSON.stringify(action));
             if(Platform.OS === 'android'){
+                let value = null;
+                if(action.value)
+                value = action.value? 1:0;
                 return {
-                    ...state,
-                    indicatorVisibility: state.indicatorVisibility===0?1:0
+                ...state,
+                        indicatorVisibility: value? value: state.indicatorVisibility===0?1:0
                 };
             }
             //else{ DO NOTHING }
 
         }
+
+        case(ADD_ACCOUNT):
+            return {
+                ...state,
+                linkedAccount: {
+                    name: action.name,
+                    token: action.token
+                }
+            };
+
 
         /*
         * case(ADD_TO_PATIENT_LIST)
@@ -223,16 +242,16 @@ const reducer = (state = initialState, action) => {
         *   //adds a profile to the patient list
             return{
                 ...state,
-                patientList:
+                patientsList:
                     [{
                         key: Math.random().toString(),
                         name:action.name,
                         gender:action.gender,
                         weight:action.weight,
-                        kg_pds:action.kg_pds,
+                        kg_lbs:action.kg_pds,
                         dateOfBirth:action.dateOfBirth,
-                        id: action.name,
-                        Gender, Weight, kg/pds, name, bed time, lunch time, dateOfBirth
+                        id: action.name+action.dateOfBirth,
+                        //Gender, Weight, kg/pds, name, bed time, lunch time, dateOfBirth
 
                     }].concat(state.resultsList),
             };
@@ -265,5 +284,7 @@ const reducer = (state = initialState, action) => {
             return state
     }
 };
+
+
 
 export default reducer;

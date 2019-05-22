@@ -99,6 +99,9 @@ let preparePills = (page0Data) => {
 };
 
 let verifyUnitConversion = (originalWeight, switchWeightFormat) => {
+    console.log("SwitchWeightFormat value: "+ switchWeightFormat);
+    console.log("original value: "+originalWeight);
+    console.log("Switched value: "+ (switchWeightFormat? (""+parseFloat(originalWeight)*0.45359237) :originalWeight));
     return (switchWeightFormat  //turns lbs to kg
         ? (""+parseFloat(originalWeight)*0.45359237)
         :originalWeight);
