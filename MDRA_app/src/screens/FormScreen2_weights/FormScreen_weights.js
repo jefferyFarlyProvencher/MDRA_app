@@ -93,43 +93,36 @@ class FormScreenWeights extends PureComponent{
                                 weight1:
                                     Yup.number()
                                         .positive()
-                                        .integer()
                                         .lessThan(201, "Cannot exceed 200")
                                         .required(),
                                 weight2:
                                     Yup.number()
                                         .positive()
-                                        .integer()
                                         .lessThan(201, "Cannot exceed 200")
                                         .required(),
                                 weight3:
                                     Yup.number()
                                         .positive()
-                                        .integer()
                                         .lessThan(201, "Cannot exceed 200")
                                         .required(),
                                 weight4:
                                     Yup.number()
                                         .positive()
-                                        .integer()
                                         .lessThan(201, "Cannot exceed 200")
                                         .required(),
                                 weight5:
                                     Yup.number()
                                         .positive()
-                                        .integer()
                                         .lessThan(201, "Cannot exceed 200")
                                         .required(),
                                 weight6:
                                     Yup.number()
                                         .positive()
-                                        .integer()
                                         .lessThan(201, "Cannot exceed 200")
                                         .required(),
                                 weight7:
                                     Yup.number()
                                         .positive()
-                                        .integer()
                                         .lessThan(201, "Cannot exceed 200")
                                         .required(),
                         })}
@@ -157,7 +150,7 @@ class FormScreenWeights extends PureComponent{
                                             sliderLength={Dimensions.get('window').width * 0.80}
                                             min={0}
                                             max={100}
-                                            step={1}
+                                            step={0.1}
                                             values={[parseFloat(values.weight1)]}
                                             onValuesChange={
                                                 (values) => {
@@ -184,7 +177,7 @@ class FormScreenWeights extends PureComponent{
                                                     sliderLength={Dimensions.get('window').width * 0.80}
                                                     min={0}
                                                     max={100}
-                                                    step={1}
+                                                    step={0.1}
                                                     values={[parseFloat(values.weight6)]}
                                                     onValuesChange={
                                                         (someValues) => {
@@ -236,7 +229,7 @@ class FormScreenWeights extends PureComponent{
                                                 sliderLength={Dimensions.get('window').width * 0.80}
                                                 min={0}
                                                 max={100}
-                                                step={1}
+                                                step={0.1}
                                                 values={[parseFloat(values.weight5)]}
                                                 onValuesChange={
                                                     (values) => {

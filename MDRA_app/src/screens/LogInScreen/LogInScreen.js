@@ -131,7 +131,7 @@ class LogInScreen extends Component{
             if (this.state.attempt < 100)
                 this.toggleLoading(true);
             else {
-                this.displayConnectionError()
+                this.props.displayConnectionError()
             }
         }
     };
@@ -151,7 +151,7 @@ class LogInScreen extends Component{
                 return{
                     ...oldState,
                     logInError: true,
-                    errorText: connectionResult
+                    errorText: logInResult
                 }
             });
         }
@@ -243,6 +243,7 @@ class LogInScreen extends Component{
                                         labelPosition={"center"}
                                         placeholderTextColor={'white'}
                                         maxLength={320}
+                                        keyboardType={"email-address"}
                                     />
                                 </View>
                                 <View style={[styles.inputStyle,{width: Dimensions.get("window").width*0.80, flexDirection:"row"}]}>
@@ -269,6 +270,7 @@ class LogInScreen extends Component{
                                     />
                                     <View  style={[styles.drawerItem,{margin:0, position: "absolute", right: "1%", top:"25%"}]}>
                                         <TouchableOpacity onPress={this.handlePasswordVisibility}>
+                                            <View>
                                             {this.state.passwordNotVisible
                                                 ?<Ionicon
                                                     size={40}
@@ -283,6 +285,7 @@ class LogInScreen extends Component{
                                                     style={styles.drawerItemIcon}
                                                 />
                                             }
+                                            </View>
                                         </TouchableOpacity>
                                     </View>
                                 </View>
@@ -293,7 +296,7 @@ class LogInScreen extends Component{
                                 </View>
                                 <View>
                                     <View pointerEvents={(isValid?"auto":"none")}>
-                                        <TouchableOpacity onPress={handleSubmit}>//this._handlerOnPress}>
+                                        <TouchableOpacity onPress={handleSubmit}>
                                             <View style={[styles.textContainer,(isValid?styles.mainContainerValid: styles.mainContainerInvalid)]}>
                                                 <Text style={[
                                                     styles.textStyle,
@@ -324,9 +327,11 @@ class LogInScreen extends Component{
                 </View>
                 <TouchableOpacity onPress={()=>{this.props.handleScreenToggle()}}>
                     <View>
-                        <Text style={[
-                            styles.textStyle,{color: "#000", fontSize: 17, fontWeight: 'bold'}
-                        ]}>Register here</Text>
+                        <Text
+                            style={[
+                                styles.textStyle,{color: "#000", fontSize: 17, fontWeight: 'bold'}
+                            ]}
+                        >Register here</Text>
                     </View>
                 </TouchableOpacity>
             </View>

@@ -131,15 +131,23 @@ class CustomMultiSlider extends PureComponent{
                                     },
                                     ]}
                                 >
-                                    <View style={[
-                                        styles.rulerPercentContainer,
-                                        this.state.valuesArray[1]?{width:"50%",borderRightWidth:1, alignItems:"center"}:{width:"100%", alignItems:"center"},
-                                        ]}>
-                                        <Text numberOfLines={1} style={{flexWrap: 'wrap'}}>{this.state.valuesArray[0]?parseFloat(this.state.valuesArray[0]).toFixed(1):0}</Text>
+                                    <View
+                                        style={[
+                                            styles.rulerPercentContainer,
+                                            this.state.valuesArray[1]
+                                                ?{width:"50%",borderRightWidth:1, alignItems:"center"}
+                                                :{width:"100%", alignItems:"center"},
+                                        ]}
+                                    >
+                                        <Text numberOfLines={1} style={{flexWrap: 'wrap', textAlign: "center"}}>
+                                            {this.state.valuesArray[0]?parseFloat(this.state.valuesArray[0]).toFixed(1):0}
+                                        </Text>
                                     </View>
                                     {this.state.secondScreenVisible
                                         ? <View style={[styles.rulerPercentContainer,{width:"50%", alignItems:"center"}]}>
-                                            <Text numberOfLines={1} style={{flexWrap: 'wrap'}}>{this.state.valuesArray[1]?parseFloat(this.state.valuesArray[1]).toFixed(1):0}</Text>
+                                            <Text numberOfLines={1} style={{flexWrap: 'wrap', textAlign:"center"}}>
+                                                {this.state.valuesArray[1]?parseFloat(this.state.valuesArray[1]).toFixed(1):0}
+                                            </Text>
                                         </View>
                                         : <View/>
                                     }

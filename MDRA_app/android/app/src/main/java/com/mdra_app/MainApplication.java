@@ -2,6 +2,7 @@ package com.mdra_app;
 
 import android.app.Application;
 
+import com.RNFetchBlob.RNFetchBlobPackage;
 import com.beefe.picker.PickerViewPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
@@ -18,7 +19,6 @@ import fr.greweb.reactnativeviewshot.RNViewShotPackage;
 
 import com.christopherdro.htmltopdf.RNHTMLtoPDFPackage;
 
-import com.RNFetchBlob.RNFetchBlobPackage;
 
 import java.util.Arrays;
 import java.util.List;

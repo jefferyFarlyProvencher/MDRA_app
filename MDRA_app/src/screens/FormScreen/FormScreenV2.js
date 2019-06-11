@@ -29,6 +29,7 @@ import FormScreenAdvanced from '../FormScreen3_advanced/FormScreen_advanced';
 import SendFormScreen from '../SendFormScreen/SendFormScreen';
 import {addData, changePosition, toggleIndicatorVisibility} from "../../store/actions";
 import WelcomeScreen from "../../components/WelcomeScreen/WelcomeScreen";
+import PatientsList from "../../components/PatientsList/PatientsList";
 //component Imports
 
 class FormScreen extends Component{
@@ -68,6 +69,10 @@ class FormScreen extends Component{
             navBarButtonColor: Platform.OS === 'android'?'#3057e1': null,
             orientation: 'portrait',
         });
+        //
+        this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
+
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
     }
 
     componentDidMount() {
@@ -81,20 +86,35 @@ class FormScreen extends Component{
         });
     };
 
-
-
-    componentWillUnmount() {
-        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
-    };
-
     constructor(props){
         super(props);
         this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent);
     }
 
     onNavigatorEvent = event => {
+        console.log("event: " + event);
         if(event.type === "NavBarButtonPress") {
             if(event.id === "sideDrawerToggle") {
+                this.props.navigator.toggleDrawer({
+                    side: "left"
+                });
+            }
+        }
+        else if(event.type === "DeepLink"){
+            if(event.link === "managePatientsScreen")
+            {
+                this.props.navigator.popToRoot({
+                    animated: false,
+                    //animationType: 'fade',
+                });
+
+                this.props.navigator.showModal({
+                    screen: "MDRA_app.managePatientsScreen",
+                    title: "PatientsList",
+                    passProps: {
+                        patientsList: this.props.state.main.patientsList
+                    }
+                });
                 this.props.navigator.toggleDrawer({
                     side: "left"
                 });

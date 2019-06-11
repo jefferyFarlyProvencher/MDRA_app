@@ -112,13 +112,27 @@ class RegisterScreen extends Component{
         console.log("received values : " + JSON.stringify(values));
         let registerResult = await register(values.email,values.firstName,values.lastName,values.password);
         console.log("the register has ended");
-        this.props.addAccount
         // if(registerResult === "Registration/LogIn Successful!")
         // {
         //     this.props.toggleLoading();
         // }
         // else
-        alert(JSON.stringify(registerResult));
+        if(typeof registerResult === "object")
+        {
+            alert(JSON.stringify("Register Successful"));
+            this.props.startMainApp(registerResult);
+        }
+        else{
+            await this.toggleLoading();
+            this.setState((oldState)=>{
+                return{
+                    ...oldState,
+                    logInError: true,
+                    errorText: registerResult
+                }
+            });
+        }
+        //alert(JSON.stringify(registerResult));
     }
 
     render(){
@@ -131,7 +145,6 @@ class RegisterScreen extends Component{
                             styles.textStyle,{color: "#FFF", fontSize: 15}
                         ]}>Please fill all the fields</Text>
                     </View>
-                    }
                     {/*<View style={[styles.inputStyle,{width: Dimensions.get("window").width*0.80,}]}>*/}
                     {/*<Text style={[*/}
                     {/*styles.textStyle,*/}
@@ -158,7 +171,7 @@ class RegisterScreen extends Component{
                         style={this.props.style}
                         initialValues={{
                         }}
-                        onSubmit={(values, bag) => {console.log("the register is starting"); this._handleRegister(values,bag)}}//this.launchNewScreen()}}
+                        onSubmit={(values, bag) => {console.log("the register is starting"); this._handleRegister(values,bag)}}
                         validationSchema={Yup.object().shape({
                             firstName: NewYupString().required(),
                             lastName: NewYupString().required(),
@@ -291,7 +304,7 @@ class RegisterScreen extends Component{
                                 </View>
                                 <View>
                                     <View pointerEvents={(isValid?"auto":"none")}>
-                                        <TouchableOpacity onPress={handleSubmit}>//this._handlerOnPress}>
+                                        <TouchableOpacity onPress={handleSubmit}>
                                             <View style={[styles.textContainer,(isValid?styles.mainContainerValid: styles.mainContainerInvalid)]}>
                                                 <Text style={[
                                                     styles.textStyle,

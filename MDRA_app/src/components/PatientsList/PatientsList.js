@@ -4,11 +4,8 @@ import {List, ListItem, SearchBar} from 'react-native-elements'
 import Swipeout  from 'react-native-swipeout'
 import * as colors from "../../assets/colors";
 
-//components
-import SelectorPicker from '../SelectorPicker/SelectorPicker';
-
 //credits to vikrant negi which helped with the search bar
-class ResultsList extends Component{
+class PatientsList extends Component{
 
 
 
@@ -114,24 +111,19 @@ class ResultsList extends Component{
     renderHeader = () => {
         return (
             <View style={{flexDirection:"row", alignItems: "center", justifyContent: "center"}}>
-                <View style={{width: Dimensions.get("window").width *0.8}}><SearchBar
-                    placeholder={"Press to Search"}
-                    lightTheme={false}
-                    round={true}
-                    onChangeText={text => this.searchFilterFunction(text)}
-                    autoCorrect={false}
-                    containerStyle={{backgroundColor:"#262626", borderTopWidth:0, borderBottomWidth:0, marginBottom:0, paddingBottom:0}}
-                />
+                <View style={{width: Dimensions.get("window").width *0.8}}>
+                    <SearchBar
+                        placeholder={"Press to Search"}
+                        lightTheme={false}
+                        round={true}
+                        onChangeText={text => this.searchFilterFunction(text)}
+                        autoCorrect={false}
+                        containerStyle={{backgroundColor:"#262626", borderTopWidth:0, borderBottomWidth:0, marginBottom:0, paddingBottom:0}}
+                    />
                 </View>
-                <SelectorPicker itemSelected={this.handleItemSelected} style={{borderRadius:100}}/>
             </View>
         );
     };
-
-    test = (index) => {
-        console.log("index: "+ index);
-        return(<View/>)
-    }
 
     render() {
         return (
@@ -143,48 +135,24 @@ class ResultsList extends Component{
                         data={this.state.searchText !== ""?this.state.modifiedList:this.props.list}
                         extraData={this.props.extraData}
                         renderItem={(info) => (
-                            <Swipeout
-                                right={
-                                    [
-                                        {
-
-                                            text: "Rename",
-                                            color: "white",
-                                            backgroundColor: colors.royalBlue4,
-                                            onPress: () => {
-                                                this.handleOnPressRename(info.item.key)
-                                            },
-                                        },
-                                        {
-
-                                            text: "Delete",
-                                            color: "white",
-                                            backgroundColor: "#ff374b",
-                                            onPress: () => {
-                                                this.handleOnPressDelete(info.item.key)
-                                            },
-                                        },]
+                            <ListItem
+                                roundAvatar
+                                title={info.item.name}
+                                subtitle={info.item.id}
+                                key={info.item.key}
+                                onLongPress={() => {
+                                    this.props.onItemAccessed(info.item.key);
+                                    console.log('Item Accessed: ' + info.item.key);
+                                    console.log('pressed slowly');
                                 }
-                                backgroundColor={((info.index%2) === 0)?"#FFF":"#f3f3f3"}
-                            >
-                                <ListItem
-                                    roundAvatar
-                                    title={"Test Result: " + info.item.name}
-                                    subtitle={info.item.id}
-                                    key={info.item.key}
-                                    onLongPress={() => {
-                                        this.props.onToggleSelectorList(info.item.key);
-                                        console.log('Item selected: ' + info.item.key);
-                                        console.log('pressed slowly');
-                                    }
-                                    }
-                                    onPress={() => {
-                                            this.props.onItemAccessed(info.item.key);
-                                            console.log('Item accessed: ' + info.item.key);
-                                            console.log('pressed quickly');
-                                    }}
-                                />
-                            </Swipeout>
+                                }
+                                onPress={() => {
+                                    this.props.onItemAccessed(info.item.key);
+                                    console.log('Item accessed: ' + info.item.key);
+                                    console.log('pressed quickly');
+                                }}
+                                style={{backgroundColor:info.item.color}}
+                            />
                         )}
                         keyExtractor={item => item.name}
                     />
@@ -198,8 +166,8 @@ const styles = StyleSheet.create({
     listContainer:{
         width: "100%",
         //height:"100%"
-        height: (Dimensions.get('window').height)*0.70,
+        height: (Dimensions.get('window').height)*0.85,
     },
 });
 
-export default ResultsList;
+export default PatientsList;

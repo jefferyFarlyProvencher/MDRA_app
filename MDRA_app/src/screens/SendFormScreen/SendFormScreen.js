@@ -23,7 +23,7 @@ class SendFormScreen extends PureComponent{
 
     componentWillMount(){
         if(this.props.state.main.Page0Data) {
-            this.sendRequest();
+            this.sendGenerateRequest();
         }
         else{
             this.setState((oldState) =>({
@@ -80,7 +80,7 @@ class SendFormScreen extends PureComponent{
 
     }
 
-    sendRequest = async () => {
+    sendGenerateRequest = async () => {
         if(this.hasNotUnMounted) {
             this.setState((oldState) => ({
                 ...oldState,
@@ -88,9 +88,13 @@ class SendFormScreen extends PureComponent{
             }));
         }
 
-        let preparedData = PrepareToSend(this.props.state.main);
+        let formData = this.props.state.main;
 
-        let calculatedResult = await SendForm(preparedData);
+        let preparedInput = PrepareToSend(formData);
+
+        let patient = formData.Page0Data.patientProfile !== "None Selected"?formData.Page0Data.patientProfile:null;
+
+        let calculatedResult = await SendForm(preparedInput, this.props.state.main.linkedAccount.token, patient);
 
         //console.log("this is the calculated result: "+ JSON.stringify(calculatedResult));
 

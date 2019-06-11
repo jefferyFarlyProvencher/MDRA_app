@@ -24,8 +24,9 @@ import testNetWorkConnection from '../../functions/testNetworkConnection';
 //screens
 import LogInScreen from '../../screens/LogInScreen/LogInScreen'
 import RegisterScreen from '../../screens/RegisterScreen/RegisterScreen'
+//REdyx
 import {connect} from "react-redux";
-import {addAccount} from "../../store/actions";
+import {addAccount, emptyResultList} from "../../store/actions";
 
 class StartScreen extends Component{
 
@@ -122,11 +123,12 @@ class StartScreen extends Component{
 
     logOut = async () => {
         await this.props.onAddAccount(null, null);
+        await this.props.onEmptyResultList();
     };
 
     launchNewScreen = () => {
         console.log("launching new screen");
-        setTimeout(()=>{console.log("main tabs starting");startMainTabs();},1500);
+        setTimeout(()=>{console.log("main tabs starting");startMainTabs();},500);
     };
 
     //attempts to load the app, basically does a verification of network status and waits .5 secs before launching
@@ -155,6 +157,7 @@ class StartScreen extends Component{
 
     render(){
         this.startBreathAnimation();
+        let displayLogRegScreens = !(typeof this.props.state.main.linkedAccount !== "undefined"&&this.props.state.main.linkedAccount.token&&typeof this.props.state.main.linkedAccount.token !== "undefined");
         return(
             <ImageBackground source={backgroundImage} resizeMode='cover' style={styles.backgroundImage} blurRadius={0.5}>
                 {this.state.loading
@@ -168,13 +171,14 @@ class StartScreen extends Component{
                         }
                     </View>
                     :<View>
-                        {(typeof this.props.state.main.linkedAccount !== "undefined"&&this.props.state.main.linkedAccount.token&&typeof this.props.state.main.linkedAccount.token !== "undefined")
+                        {!displayLogRegScreens
                         ?<View>
-                                <View style={styles.surroundTextContainerStyle}>
-                                    <Text style={[styles.surroundTextStyle, {fontSize:30}]}>
-                                        Welcome back {this.props.state.main.linkedAccount.name} !
-                                    </Text>
-                                </View>
+                            <View style={styles.surroundTextContainerStyle}>
+                                <Text style={[styles.surroundTextStyle, {fontSize:30}]}>
+                                    Welcome back Dr.{this.props.state.main.linkedAccount.name} !
+                                </Text>
+                            </View>
+                            <View style={{alignItems: "center", justifyContent:"center"}}>
                                 <Animated.View style={[
                                     {transform: [{scale: this.state.startAnim.interpolate({
                                                 inputRange: [1,1.1],
@@ -183,32 +187,34 @@ class StartScreen extends Component{
                                         }]
                                     },
                                     (this.state.loading)?null:styles.mainContainer
-                                    ]}>
-                                        <View style={{alignItems:"center", justifyContent:"center"}}>
-                                            <TouchableWithoutFeedback onPress={this._startMainApp}>
-                                                    <View style={[styles.textContainer,{}]}>
-                                                        <Text style={[
-                                                            styles.textStyle,
-                                                            ]}
-                                                        >
-                                                            Press to Start
-                                                        </Text>
-                                                    </View>
-                                            </TouchableWithoutFeedback>
-                                        </View>
+                                    ]
+                                }>
+                                    <View style={{alignItems:"center", justifyContent:"center"}}>
+                                        <TouchableWithoutFeedback onPress={this._startMainApp}>
+                                                <View style={[styles.textContainer,{}]}>
+                                                    <Text style={[
+                                                        styles.textStyle,
+                                                        ]}
+                                                    >
+                                                        Press to Start
+                                                    </Text>
+                                                </View>
+                                        </TouchableWithoutFeedback>
+                                    </View>
                                 </Animated.View>
-                                <View style={[styles.surroundTextContainerStyle,{backgroundColor:"#b8d6ff", width:Dimensions.get("window").width}]}>
-                                    <Text style={styles.surroundTextStyle}>Not {this.props.state.main.linkedAccount.name}? Press </Text>
-                                    <TouchableOpacity onPress={this.logOut}>
-                                        <Text style={[styles.surroundTextStyle,{fontSize:20, fontWeight: "bold"}]}>
-                                            HERE
-                                        </Text>
-                                    </TouchableOpacity>
-                                    <Text style={styles.surroundTextStyle}> to switch account</Text>
-                                </View>
                             </View>
-                        :<View>_
-                            <LogInScreen  style={{display:this.state.isItLogIn?"flex":"none"}} handleScreenToggle={() => {console.log("Trying stuff 1"); this.handleScreenToggle(false)}} startMainApp = {this._startMainApp}/>
+                            <View style={[styles.surroundTextContainerStyle,{backgroundColor:"#b8d6ff", width:Dimensions.get("window").width}]}>
+                                <Text style={styles.surroundTextStyle}>Not {this.props.state.main.linkedAccount.name?this.props.state.main.linkedAccount.name:"Error Man"}? Press </Text>
+                                <TouchableOpacity onPress={this.logOut}>
+                                    <Text style={[styles.surroundTextStyle,{fontSize:20, fontWeight: "bold"}]}>
+                                        HERE
+                                    </Text>
+                                </TouchableOpacity>
+                                <Text style={styles.surroundTextStyle}> to Log Out</Text>
+                            </View>
+                        </View>
+                        :<View style={{display: !displayLogRegScreens?"none":"flex"}}>
+                            <LogInScreen  style={{display:this.state.isItLogIn?"flex":"none"}} handleScreenToggle={() => {console.log("Trying stuff 1"); this.handleScreenToggle(false)}} startMainApp = {this._startMainApp} displayConnectionError={this.displayConnectionError}/>
                             <RegisterScreen style={{display:this.state.isItLogIn?"none":"flex"}} handleScreenToggle={() => {console.log("Trying stuff 2"); this.handleScreenToggle(true)}} startMainApp = {this._startMainApp}/>
                         </View>
                         }
@@ -223,6 +229,7 @@ class StartScreen extends Component{
 const styles= StyleSheet.create({
     mainContainer:{
         height: 200,
+        width: "90%",
         opacity: 0.9,
         backgroundColor: '#111e6c',
         borderRadius:80,
@@ -236,14 +243,13 @@ const styles= StyleSheet.create({
         padding: 10,
         alignItems: 'center',
         justifyContent: 'center',
-        flex:1, height:"100%"
+        flex:1, height:"100%",
     },
 
     textStyle:{
         fontSize: 50,
         color: '#FFF',
         textAlign:'center',
-        width: "100%"
     },
 
     backgroundImage: {
@@ -276,6 +282,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = dispatch => {
     return {
         onAddAccount: (name, token) => dispatch(addAccount(name, token)),
+        onEmptyResultList: () => dispatch(emptyResultList())
     };
 };
 

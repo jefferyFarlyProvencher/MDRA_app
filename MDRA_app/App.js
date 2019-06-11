@@ -26,6 +26,7 @@ import PickerTest from './src/screens/PickerTest/PickerTest';
 import TestCapturePDF from './src/screens/TestCapturePDF/TestCapturePDF';
 import RetrieveOldResults from './src/screens/RetrieveResultsScreens/RetrieveResultsScreen';
 import MainScreenTest from './src/screens/MainScreenTest/MainScreenTest';
+import ManagePatientScreen from './src/screens/ManagePatientsScreen/ManagePatientsScreen';
 
 import SendForm from './src/components/SendForm/SendForm';
 
@@ -53,6 +54,7 @@ Navigation.registerComponent('MDRA_app.pickerTest',() => PickerTest);
 Navigation.registerComponent('MDRA_app.testCapturePDF',() => TestCapturePDF, store, Provider, persistor);
 Navigation.registerComponent('MDRA_app.retrieveOldResults',() => RetrieveOldResults, store, Provider, persistor);
 Navigation.registerComponent('MDRA_app.mainScreenTest',() => MainScreenTest, store, Provider, persistor);
+Navigation.registerComponent('MDRA_app.managePatientsScreen',() => ManagePatientScreen, store, Provider, persistor);
 
 
 //start App

@@ -256,7 +256,10 @@ class GraphComponent extends PureComponent{
         }
 
         //these are the texts versions
-        let displayText = ["Total Score: "+ this.props.data.TotalScore,"Roller Coaster Effect: "+this.props.data.rce];
+        let displayText = [
+            "Total Score: "+ ((this.props.data.TotalScore === 'NaN')?0:this.props.data.TotalScore),
+            "Roller Coaster Effect: "+ ((this.props.data.rce === 'NaN')?0:this.props.data.rce)
+        ];
         //these are only the values
         let totalScoreAndRce = [this.props.data.TotalScore, this.props.data.rce];
         //configuring bed and lunch times
@@ -354,10 +357,14 @@ class GraphComponent extends PureComponent{
                             ]}
                         >
                             <View style={styles.scoresStyle}>
-                                <Text style={{color:this.scoreColorIdentification(parseFloat(totalScoreAndRce[0]))}}>{displayText[0] + "%"}</Text>
+                                <Text style={{color:this.scoreColorIdentification(parseFloat(totalScoreAndRce[0]))}}>
+                                    {displayText[0] + "%"}
+                                </Text>
                             </View>
                             <View style={styles.scoresStyle}>
-                                <Text style={{color:this.scoreColorIdentification(parseFloat(totalScoreAndRce[1]))}}>{displayText[1] + "%"}</Text>
+                                <Text style={{color:this.scoreColorIdentification(parseFloat(totalScoreAndRce[1]))}}>
+                                    {displayText[1] + "%"}
+                                </Text>
                             </View>
                         </Animated.View>
                     </View>

@@ -38,7 +38,7 @@ class RetrieveResultsScreen extends Component {
         searchItems: false,
         displayedMessage: "Enter proper information to make the appropriate search",
         dateFrom: "2019-01-01",
-        dateTo: "",// this.dateObject.toISOString().slice(0,10),
+        dateTo:  this.dateObject.toISOString().slice(0,10),
         dateFromError: false,
         dateToError: false,
         minDate: "01/01/2019",
@@ -101,9 +101,9 @@ class RetrieveResultsScreen extends Component {
         let currentResultList = this.props.state.main.resultsList;
         for(let i = 0; i < currentResultList.length; i++)
         {
-            console.log("this is the current result form from resultList: " + JSON.stringify(currentResultList[i].formData));
-            console.log("and this is the result form compared to: "+ JSON.stringify(resultToCompare.formData));
-            if(JSON.stringify(currentResultList[i].formData) === JSON.stringify(resultToCompare.formData))
+            console.log("this is the current result form from resultList: " + JSON.stringify(currentResultList[i].id));
+            console.log("and this is the result form compared to: "+ JSON.stringify(resultToCompare.name));
+            if(JSON.stringify(currentResultList[i].id) === JSON.stringify(resultToCompare.name))
             {
                 return false;
             }
@@ -117,9 +117,14 @@ class RetrieveResultsScreen extends Component {
      */
 
     handleRetrieveResults = async() => {
-        let retrievalResult = await SendRetrieval(this.state.resultName,dateFrom=this.state.dateFrom, dateTo=this.state.dateTo);
+        let dateToCorrected = this.state.dateTo.split("-");
+        console.log("dateTo : "+ this.state.dateTo);
+        dateToCorrected[2] = ""+ (parseInt(dateToCorrected[2]) + 1 );
+        dateToCorrected = dateToCorrected.join('-');
+        console.log("dateToCorrected: "+ dateToCorrected);
+        let retrievalResult = await SendRetrieval(this.state.resultName,dateFrom=this.state.dateFrom, dateTo=dateToCorrected, this.props.state.main.linkedAccount.token);
         //console.log('handleRetrieveResult: '+ JSON.stringify(retrievalResult));
-        if(retrievalResult !== -1) {
+        if(retrievalResult !== -1 && retrievalResult.length > 0) {
             let possibleDuplicatesList = [];
             for (let i = 0; i < retrievalResult.length; i++) {
                 let currentResult = retrievalResult[i];
@@ -136,9 +141,17 @@ class RetrieveResultsScreen extends Component {
             if (possibleDuplicatesList.length > 0) {
                 setTimeout(
                     ()=> {
-                        alert((possibleDuplicatesList.length === 1 ? "This result was a possible duplicate and thus has " : "These results were possible duplicates and thus have ") + "not been added to the list: " + possibleDuplicatesList)
+                        alert((retrievalResult.length-possibleDuplicatesList.length+" were added to the Results List\n")+(possibleDuplicatesList.length === 1 ? "This result was a possible duplicate and thus has " : "These results were possible duplicates and thus have ") + "not been added to the list: " + possibleDuplicatesList)
                     }
-                    ,100
+                    ,10
+                )
+            }
+            else if(possibleDuplicatesList.length === 0){
+                setTimeout(
+                    ()=> {
+                        alert((retrievalResult.length-possibleDuplicatesList.length+" were added to the Results List\n"))
+                    }
+                    ,10
                 )
             }
         }
@@ -146,7 +159,10 @@ class RetrieveResultsScreen extends Component {
             this.toggleSpinnerVisibility();
             setTimeout(
                 ()=> {
-                    alert("An error occured which prevented the retrieval of the desired data...")
+                    alert(retrievalResult === -1
+                        ? "An error occured which prevented the retrieval of the desired data..."
+                        : "No Results Were pulled"
+                    )
                 }
                 ,10
             )
@@ -287,7 +303,7 @@ class RetrieveResultsScreen extends Component {
                                     date={this.state.dateFrom} //initial date from state
                                     mode="date" //The enum of date, datetime and time
                                     androidMode={"default"}
-                                    placeholder="select date"
+                                    placeholder="Select date"
                                     format="YYYY-MM-DD"
                                     minDate={this.state.minDate}
                                     maxDate={this.state.maxDate}
@@ -343,14 +359,14 @@ class RetrieveResultsScreen extends Component {
                                 style={styles.linedLabelStyle}
                             />
                             <View style={styles.containerStyle2}>
-                                <CustomTimePicker
+                                <CustomDatePicker
                                     style={{width: 300, paddingRight: 20}}
                                     date={this.state.dateTo} //initial date from state
-                                    // mode="date" //The enum of date, datetime and time
-                                    // placeholder="select date"
-                                    // format="YYYY-MM-DD"
-                                    // minDate="2019-01-01"
-                                    // maxDate={this.state.maxDate}
+                                    mode="date" //The enum of date, datetime and time
+                                    placeholder="select date"
+                                    format="YYYY-MM-DD"
+                                    minDate="2019-01-01"
+                                    maxDate={this.state.maxDate}
                                     confirmBtnText="Confirm"
                                     cancelBtnText="Cancel"
                                     customStyles={{

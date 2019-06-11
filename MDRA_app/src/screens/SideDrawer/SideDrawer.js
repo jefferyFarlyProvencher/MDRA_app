@@ -26,9 +26,12 @@ import {
 import testNetWorkConnection from '../../functions/testNetworkConnection';
 import * as colors from "../../assets/colors";
 
+//component
+import ManagePatientsScreen from '../ManagePatientsScreen/ManagePatientsScreen';
 
 
 class SideDrawer extends Component{
+
     logOutHandler = () => {
         this.props.onChangePosition(0);
         Navigation.startSingleScreenApp({
@@ -37,6 +40,10 @@ class SideDrawer extends Component{
                 title: "startScreen"
             }
         });
+    };
+
+    handlePatientProfilesScreen = () => {
+        this.props.navigator.handleDeepLink({ link: "managePatientsScreen"});
     };
 
     handleConnectionTest = async()=>{
@@ -104,20 +111,6 @@ class SideDrawer extends Component{
                 <View>
                     <Text style={styles.titleStyle}>Menu</Text>
                 </View>
-                {/*<TouchableOpacity*/}
-                    {/*onPress={()=>{console.log("This is in development")}}*/}
-                    {/*disabled={IsBackUpRestoreDisabled}*/}
-                {/*>*/}
-                    {/*<View  style={[styles.drawerItem]}>*/}
-                        {/*<Ionicon*/}
-                            {/*size={40}*/}
-                            {/*name= {Platform.OS==='android'? "md-people" :"ios-people"}*/}
-                            {/*color="#DDD"*/}
-                            {/*style={styles.drawerItemIcon}*/}
-                        {/*/>*/}
-                        {/*<Text style={{color:"#DDD"}}>Manage Patient Profiles (In development...)</Text>*/}
-                    {/*</View>*/}
-                {/*</TouchableOpacity>*/}
                 <TouchableOpacity onPress={this.logOutHandler}>
                     <View  style={styles.drawerItem}>
                         <Ionicon
@@ -129,6 +122,22 @@ class SideDrawer extends Component{
                         <Text>Log Out</Text>
                     </View>
                 </TouchableOpacity>
+                <TouchableOpacity
+                    onPress={()=>{
+                        console.log("This is in development????");
+                        this.handlePatientProfilesScreen();
+                    }}
+                >
+                <View  style={[styles.drawerItem]}>
+                    <Ionicon
+                        size={40}
+                        name= {Platform.OS==='android'? "md-people" :"ios-people"}
+                        color="#52afff"
+                        style={styles.drawerItemIcon}
+                    />
+                    <Text style={{color:"#000000"}}>Manage Patient Profiles</Text>
+                </View>
+            </TouchableOpacity>
                 <TouchableOpacity onPress={this.props.allowAdvancedOptions}>
                     <View  style={styles.drawerItem}>
                         {/*<Ionicon*/}

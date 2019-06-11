@@ -18,7 +18,7 @@ import { Button } from 'react-native-elements';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import Ionicon from 'react-native-vector-icons/Ionicons'
-import AwesomeIcon from 'react-native-vector-icons/FontAwesome'
+import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 
 //functions imports
@@ -28,6 +28,7 @@ import {convertTimeToHourFormat, convertTimeToDecimal} from '../../functions/For
 import Input from "../../components/Input/Input";
 import DropDownList from "../../components/DropDownList/DropDownList";
 import CustomMultiSlider from "../../components/CustomMultiSlider/CustomMultiSlider";
+import CustomTimeModal from '../../components/CustomTimeModal/CustomTimeModal'
 import LinedLabel from "../../components/LinedLabel/LinedLabel";
 import NewYupString from "../../components/NewYupString/NewYupString";
 import FormBackButton from "../../components/FormBackButton/FormBackButton";
@@ -270,37 +271,57 @@ class FormScreenTimeZonage extends PureComponent{
                                             <View>
                                                 <View style={styles.twoPerRowContainer}>
                                                     <View style={styles.inputContainerForTwo}>
-                                                        <Input
-                                                            label="Start Time"
-                                                            value={values.tsDay}
-                                                            onChange={(name,value) => {
-                                                                setFieldValue(name,value)
-                                                            }}
-                                                            onBlur={() =>{
+                                                        {/*<Input*/}
+                                                            {/*label="Start Time"*/}
+                                                            {/*value={values.tsDay}*/}
+                                                            {/*onChange={(name,value) => {*/}
+                                                                {/*setFieldValue(name,value)*/}
+                                                            {/*}}*/}
+                                                            {/*onBlur={() =>{*/}
 
-                                                                setFieldValue("tsDay", this.handleFormatTime(values.tsDay));
+                                                                {/*setFieldValue("tsDay", this.handleFormatTime(values.tsDay));*/}
+                                                            {/*}}*/}
+                                                            {/*onTouch={setFieldTouched}*/}
+                                                            {/*name="tsDay"*/}
+                                                            {/*error={touched.tsDay && errors.tsDay}*/}
+                                                            {/*keyboardType="numeric"*/}
+                                                        {/*/>*/}
+                                                        <CustomTimeModal
+                                                            label="Start Time"
+                                                            onChange={(name, value) => {
+                                                                setFieldValue(name, value);
                                                             }}
-                                                            onTouch={setFieldTouched}
+                                                            value={values.tsDay}
                                                             name="tsDay"
                                                             error={touched.tsDay && errors.tsDay}
-                                                            keyboardType="numeric"
+                                                            displayTextStyle={styles.displayText}
                                                         />
                                                     </View>
                                                     <View style={styles.inputContainerForTwo}>
-                                                        <Input
-                                                            label="End Time"
-                                                            value={values.teDay}
-                                                            onChange={(name,value) => {
-                                                                setFieldValue(name,value)
-                                                            }}
-                                                            onBlur={() =>{
+                                                        {/*<Input*/}
+                                                            {/*label="End Time"*/}
+                                                            {/*value={values.teDay}*/}
+                                                            {/*onChange={(name,value) => {*/}
+                                                                {/*setFieldValue(name,value)*/}
+                                                            {/*}}*/}
+                                                            {/*onBlur={() =>{*/}
 
-                                                                setFieldValue("teDay", this.handleFormatTime(values.teDay));
+                                                                {/*setFieldValue("teDay", this.handleFormatTime(values.teDay));*/}
+                                                            {/*}}*/}
+                                                            {/*onTouch={setFieldTouched}*/}
+                                                            {/*name="teDay"*/}
+                                                            {/*error={touched.teDay && errors.teDay}*/}
+                                                            {/*keyboardType="numeric"*/}
+                                                        {/*/>*/}
+                                                        <CustomTimeModal
+                                                            label="End Time"
+                                                            onChange={(name, value) => {
+                                                                setFieldValue(name, value);
                                                             }}
-                                                            onTouch={setFieldTouched}
+                                                            value={values.teDay}
                                                             name="teDay"
                                                             error={touched.teDay && errors.teDay}
-                                                            keyboardType="numeric"
+                                                            displayTextStyle={styles.displayText}
                                                         />
                                                     </View>
                                                 </View>
@@ -318,7 +339,9 @@ class FormScreenTimeZonage extends PureComponent{
                                                         (sliderValues) => {
                                                             // true ==> Evening, false ==> PM
                                                             let PMorEvening = this.state.nbOfBoxes ===1;
+                                                            //setting tsDay because this doesnt need any changes
                                                             setFieldValue('tsDay', this.handleFormatTime(sliderValues[0].toString()));
+                                                            //
                                                             this.handleSliderTimeChanges(sliderValues[1],values.tsPM, 'teDay', (this.state.nbOfBoxes ===1? 'tsEvening' :'tsPM'), setFieldValue,false);
                                                             //special case for this item
                                                             //also needs to verify if same slider items have been modified
@@ -490,25 +513,36 @@ class FormScreenTimeZonage extends PureComponent{
                                                     />
                                                 </View>
                                                 <View style={styles.inputWithIcon_Input}>
-                                                    <Input
-                                                        label="Lunch Time (o'clock)"
-                                                        value={values.lunch}
-                                                        onChange={setFieldValue}
-                                                        onBlur={() =>{
+                                                    {/*<Input*/}
+                                                        {/*label="Lunch Time (o'clock)"*/}
+                                                        {/*value={values.lunch}*/}
+                                                        {/*onChange={setFieldValue}*/}
+                                                        {/*onBlur={() =>{*/}
 
-                                                            setFieldValue("lunch", this.handleFormatTime(values.lunch));
+                                                            {/*setFieldValue("lunch", this.handleFormatTime(values.lunch));*/}
+                                                        {/*}}*/}
+                                                        {/*onTouch={setFieldTouched}*/}
+                                                        {/*name="lunch"*/}
+                                                        {/*error={touched.lunch && errors.lunch}*/}
+                                                        {/*keyboardType="numeric"*/}
+                                                    {/*/>*/}
+                                                    <CustomTimeModal
+                                                        label="Lunch Time (o'clock)"
+                                                        onChange={(name, value) => {
+                                                            setFieldValue(name, value);
                                                         }}
-                                                        onTouch={setFieldTouched}
+                                                        value={values.lunch}
                                                         name="lunch"
                                                         error={touched.lunch && errors.lunch}
-                                                        keyboardType="numeric"
+                                                        displayTextStyle={styles.displayText}
+                                                        displayBox={styles.inputWithIcon_Input}
                                                     />
                                                 </View>
 
                                             </View>
                                             <View style={[styles.inputWithIconContainer]}>
                                                 <View  style={styles.inputWithIcon_Icon}>
-                                                    <AwesomeIcon
+                                                    <FontAwesome
                                                         size={35}
                                                         name= {Platform.OS==='android'? "bed" :"bed"}
                                                         color="#52afff" style={styles.drawerItemIcon}
@@ -628,7 +662,12 @@ const styles = StyleSheet.create({
 
     inputWithIcon_Input:{
         width:"90%"
+    },
+
+    displayText: {
+        fontSize: 17
     }
+
 });
 const mapDispatchToProps = dispatch => {
     return {

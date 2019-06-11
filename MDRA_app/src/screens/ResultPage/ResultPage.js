@@ -738,26 +738,6 @@ class ResultPage extends PureComponent {
     };
 
     /////// END OF PDF SECTION
-/////this is reserved for its own component, but is now here for testing
-    handleSelectorToggle = (value) => {
-        if(value){
-            this.setState(oldState => {
-                return {
-                    ...oldState,
-                    modalVisible: value
-                }
-
-            })
-        }else {
-            this.setState(oldState => {
-                return {
-                    ...oldState,
-                    modalVisible: !oldState.modalVisible
-                }
-
-            })
-        }
-    };
 
 //    Animated.sequence([
 
@@ -938,7 +918,7 @@ class ResultPage extends PureComponent {
                         </TouchableOpacity>
 
                     </View>
-                    <View style={{marginLeft: 10}}>
+                    <View style={{marginLeft: 0}}>
                         <Button
                             title="Restore Data"
                             onPress={this._handleOnPressReuse}
@@ -969,56 +949,6 @@ class ResultPage extends PureComponent {
                 </View>
                 <View>
                     <Spinner visible={this.state.visible} textContent={this.state.creatingPDF?"Generating PDF":"Loading..."} textStyle={{color: '#FFF'}} />
-                </View>
-                <View>
-                    <Modal
-                        animationType="fade"
-                        transparent={true}
-                        visible={this.state.modalVisible}
-                        onRequestClose={() => {
-                            this.handleSelectorToggle(!this.state.modalVisible);
-                        }}
-                        style={{height: "80%", width:"80%"}}
-                    >
-                        <View
-                            style={{
-                                flex: 1,
-                                flexDirection: 'column',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-
-                            }}
-                        >
-                            <TouchableWithoutFeedback
-                                onPress={() => {this.handleSelectorToggle(!this.state.modalVisible);}}
-                            >
-                                <View
-                                    style={{
-                                        backgroundColor:'#000',
-                                        opacity: 0.5,
-                                        flex:1,
-                                        width: "100%",
-                                        height: "100%",
-                                        position: "absolute",
-                                    }}
-                                />
-                            </TouchableWithoutFeedback>
-                            <View>
-                                <View>
-                                    <TouchableHighlight onPress={()=>{console.log("Date pressed")}}>
-                                        <View style={styles.selectorTile}>
-                                            <Text style={styles.selectorTileText}>Java</Text>
-                                        </View>
-                                    </TouchableHighlight>
-                                    <TouchableHighlight>
-                                        <View style={styles.selectorTile}>
-                                            <Text style={styles.selectorTileText}>Javascript</Text>
-                                        </View>
-                                    </TouchableHighlight>
-                                </View>
-                            </View>
-                        </View>
-                    </Modal>
                 </View>
             </View>
         )

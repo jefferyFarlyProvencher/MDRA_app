@@ -3,11 +3,10 @@ import containsOnlyNumbers from './containsOnlyNumbers';
 
 export let convertTimeToHourFormat = (time) =>
 {
-    return FormatTime(time,false)
-}
-;
+    return FormatTime(time, false)
+};
 
-export let convertTimeToDecimal = (time) =>
+export let convertTimeToDecimal = (time, amPmFormat) =>
 {
     return FormatTime(time,true)
 };

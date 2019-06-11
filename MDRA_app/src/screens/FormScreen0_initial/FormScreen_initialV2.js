@@ -24,6 +24,7 @@ import containsOnlyNumbers from '../../functions/containsOnlyNumbers';
 
 //component imports
 import Input from "../../components/Input/Input";
+import CustomTimeModal from '../../components/CustomTimeModal/CustomTimeModal';
 import DropDownListV2 from "../../components/DropDownList/DropDownListV2";
 import LinedLabel from "../../components/LinedLabel/LinedLabel";
 import NewYupString from '../../components/NewYupString/NewYupString';
@@ -271,7 +272,7 @@ class FormScreenInitial extends PureComponent{
                             initialValues={
                                 (this.props.data)
                                     ?{
-                                        patientProfile: "None Selected", //always none selected because error otherwise?
+                                        patientProfile: this.props.data.patientProfile?this.props.data.patientProfile:"None Selected", //always none selected because error otherwise?
                                         gender: this.props.data.gender,
                                         weight: this.props.data.weight,
                                         dose0: this.props.data.dose0,
@@ -436,20 +437,37 @@ class FormScreenInitial extends PureComponent{
                                                     setDarkVisibility = {this.handleSetDarkVisibility}
                                                 />
                                                 <View style={[styles.inputContainer, {width:"55%"}]}>
-                                                    <Input
+                                                    {/*<Input*/}
+                                                        {/*label="Administration Time"*/}
+                                                        {/*value={values.adminTime0}*/}
+                                                        {/*onChange={(name,value) => {*/}
+                                                            {/*setFieldValue("adminTime0", value);*/}
+                                                        {/*}}*/}
+                                                        {/*onBlur={() =>{*/}
+                                                            {/*setFieldValue("adminTime0", this.handleFormatTime(values.adminTime0));*/}
+                                                        {/*}}*/}
+                                                        {/*onTouch={setFieldTouched}*/}
+                                                        {/*name="adminTime0"*/}
+                                                        {/*error={touched.adminTime0 && errors.adminTime0}*/}
+                                                        {/*keyboardType="numeric"*/}
+                                                        {/*maxLength={5}*/}
+                                                    {/*/>*/}
+                                                    <CustomTimeModal
                                                         label="Administration Time"
+                                                        onChange={(name, value) => {
+                                                            // let time = value.split(":");
+                                                            // if(amOrPmSwitch != null) {
+                                                            //     //console.log("time[0] result before: "+ time[0]);
+                                                            //     time[0] = parseInt(time[0]) + (amOrPmSwitch? 0 : 12);
+                                                            //     //console.log("time[0] result after: "+ time[0]);
+                                                            //
+                                                            // }
+                                                            // let formattedTime = this.handleFormatTime(time[0]+":"+ time[1]);
+                                                            setFieldValue(name, this.handleFormatTime(value));
+                                                        }}
                                                         value={values.adminTime0}
-                                                        onChange={(name,value) => {
-                                                            setFieldValue("adminTime0", value);
-                                                        }}
-                                                        onBlur={() =>{
-                                                            setFieldValue("adminTime0", this.handleFormatTime(values.adminTime0));
-                                                        }}
-                                                        onTouch={setFieldTouched}
                                                         name="adminTime0"
                                                         error={touched.adminTime0 && errors.adminTime0}
-                                                        keyboardType="numeric"
-                                                        maxLength={5}
                                                     />
                                                 </View>
                                             </View>
