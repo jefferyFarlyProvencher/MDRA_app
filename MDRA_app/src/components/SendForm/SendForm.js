@@ -59,7 +59,7 @@ let SendForm = async(preparedInput, token, patient) => {
            JSON.stringify({
                 input: preparedInput,
                 account: token,
-                patient: patient,
+                patient: JSON.stringify(patient),
                 queryType: "generateResult"
            }))
             .then((response2) => {
@@ -78,8 +78,8 @@ let SendForm = async(preparedInput, token, patient) => {
                 console.log("----FETCHING OVER-----\n");
                 console.log("name: " + responseJson['name']);
                 console.log("date: " + responseJson['date']);
-                console.log("test: " + responseJson['test']);
-                let resultToReturn = [(HandleReceivedData(responseJson['data'])), responseJson['name'], responseJson['date']];
+                console.log("patient: " + responseJson['patient']);
+                let resultToReturn = [(HandleReceivedData(responseJson['data'])), responseJson['name'], responseJson['date'], responseJson['patient']];
                 //console.log("result to return is: "+ JSON.stringify(resultToReturn));
                 return resultToReturn;
             }

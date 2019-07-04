@@ -173,7 +173,7 @@ let PrepareToSend = (data) => {
         dataToReturn = (
             'nInd=' + page3Data.numberOfSimulations +
             '&Gender=' + (page0Data.gender==='Male'?'1': '0') +
-            '&weight=' + verifyUnitConversion(page0Data.weight, page0Data.switchWeightFormat) +
+            '&weight=' + verifyUnitConversion(page0Data.weight, page0Data.kg_lbs) +
             '&a=' + page3Data.cMinTherapeuticDayPM +
             '&b=' + page3Data.cMaxTherapeuticDayPM +
             '&c=' + ((doesItHaveTwoBoxes)

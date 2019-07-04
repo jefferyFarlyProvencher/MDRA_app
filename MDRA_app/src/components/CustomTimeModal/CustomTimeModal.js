@@ -24,6 +24,7 @@ import * as Yup from "yup";
 
 //functions imports
 import {convertTimeToHourFormat} from '../../functions/FormatTime';
+import timeToAmPmFormat from "../../functions/timeToAmPmFormat";
 //components
 import NewYupString from "../NewYupString/NewYupString";
 import TitleComponent from "../../components/TitleComponent/TitleComponent";
@@ -43,7 +44,7 @@ class CustomTimeModal extends PureComponent{
 
     };
 
-    componentWillMount() {
+    componentDidMount() {
         this.handleTextDisplay()
     }
 
@@ -147,41 +148,41 @@ class CustomTimeModal extends PureComponent{
     handleTextDisplay = () => {
         let unadjustedValue = this.props.value;
         //console.log("unadjustedValue: "+ unadjustedValue + " for " + this.props.name);
-        let adjustedValue = "";
-        if(unadjustedValue === '')
-        {
-            unadjustedValue = ["",""];
-            adjustedValue = '??:?? AM'
-        }
-        else if(unadjustedValue.includes("AM") || unadjustedValue.includes("PM") )
-        {
-            adjustedValue = unadjustedValue
-        }else{
-            unadjustedValue = unadjustedValue.split(":");
-            //console.log("updated 1 unadjustedValue: "+ unadjustedValue);
-            let amOrPm = "AM";
-            if(parseInt(unadjustedValue[0]) > 11)
-            {
-                amOrPm = "PM";
-
-                if(unadjustedValue[0] !== '12') {
-                    unadjustedValue[0] = parseInt(unadjustedValue[0]) - 12;
-                }
-            }
-            if(unadjustedValue[0] === '0' || unadjustedValue[0] === '00' ){
-                unadjustedValue[0] = '12';
-            }
-            //console.log("updated 2 unadjustedValue: "+ unadjustedValue);
-
-            adjustedValue = unadjustedValue[0]+":"+unadjustedValue[1]+" "+amOrPm;
-
-
-        }
+        // let adjustedValue = "";
+        // if(unadjustedValue === '')
+        // {
+        //     unadjustedValue = ["",""];
+        //     adjustedValue = '??:?? AM'
+        // }
+        // else if(unadjustedValue.includes("AM") || unadjustedValue.includes("PM") )
+        // {
+        //     adjustedValue = unadjustedValue
+        // }else{
+        //     unadjustedValue = unadjustedValue.split(":");
+        //     //console.log("updated 1 unadjustedValue: "+ unadjustedValue);
+        //     let amOrPm = "AM";
+        //     if(parseInt(unadjustedValue[0]) > 11)
+        //     {
+        //         amOrPm = "PM";
+        //
+        //         if(unadjustedValue[0] !== '12') {
+        //             unadjustedValue[0] = parseInt(unadjustedValue[0]) - 12;
+        //         }
+        //     }
+        //     if(unadjustedValue[0] === '0' || unadjustedValue[0] === '00' ){
+        //         unadjustedValue[0] = '12';
+        //     }
+        //     //console.log("updated 2 unadjustedValue: "+ unadjustedValue);
+        //
+        //     adjustedValue = unadjustedValue[0]+":"+unadjustedValue[1]+" "+amOrPm;
+        //
+        //
+        // }
         //console.log("adjustedTime: "+ adjustedValue);
         this.setState((oldState)=>{
             return{
                 ...oldState,
-                timeValue: adjustedValue,
+                timeValue: timeToAmPmFormat(unadjustedValue),
             }
         })
     };
@@ -207,7 +208,9 @@ class CustomTimeModal extends PureComponent{
                     amOrPmSwitch: localTimeValue[1] === "AM"
                 }
             }
-        )
+        );
+
+        //this.hoursInput.focus();
     }
 
     switchAmOrPm = () => {
@@ -221,6 +224,8 @@ class CustomTimeModal extends PureComponent{
 
     render() {
         const {label, error, backgroundColor, name, labelPosition, ...rest } = this.props;
+
+        // console.log("Time value of TimeModal: "+ this.state.timeValue);
 
         return(
             <View style={[styles.root,this.props.style]}>
@@ -271,7 +276,10 @@ class CustomTimeModal extends PureComponent{
                             }}
                         >
                             <TouchableWithoutFeedback
-                                onPress={() => {this.setModalVisible(!this.state.modalVisible);}}
+                                onPress={() => {
+                                    this.setModalVisible(!this.state.modalVisible);
+                                    this.hoursInput.focus();
+                                }}
                             >
                                 <View
                                     style={{
@@ -312,7 +320,9 @@ class CustomTimeModal extends PureComponent{
                                                 <View style={{flexDirection: "row", justifyContent:"space-between", alignItems:"center"}}>
                                                     <View style={{width:"45%"}}>
                                                         <FormInput
+                                                            ref={(input)=>{this.hoursInput = input}}
                                                             center={true}
+                                                            value={this.state.hour}
                                                             placeholder={"00"}
                                                             onChangeText={(value) => {this.handleChangeText(value, "hour")}}
                                                             // onFocus={this.props.onTouch}
@@ -334,7 +344,8 @@ class CustomTimeModal extends PureComponent{
                                                             underlineColorAndroid={"#636363"}
                                                             maxLength={2}
                                                             keyboardType="numeric"
-                                                            value={this.state.hour}
+                                                            returnKeyType={"next"}
+                                                            onSubmitEditing={() => { this.minutesInput.focus(); }}
                                                         />
                                                     </View>
                                                     <View>
@@ -342,7 +353,9 @@ class CustomTimeModal extends PureComponent{
                                                     </View>
                                                     <View style={{width:"45%"}}>
                                                         <FormInput
+                                                            ref={(input) => { this.minutesInput = input; }}
                                                             center={true}
+                                                            value={this.state.minute}
                                                             placeholder={"00"}
                                                             onChangeText={(value) => {this.handleChangeText(value, "minute")}}
                                                             // onFocus={this.handleTouch}
@@ -365,7 +378,6 @@ class CustomTimeModal extends PureComponent{
                                                             underlineColorAndroid={"#636363"}
                                                             maxLength={2}
                                                             keyboardType="numeric"
-                                                            value={this.state.minute}
                                                         />
                                                     </View>
                                                     {(this.state.amOrPmMode)
@@ -391,7 +403,6 @@ class CustomTimeModal extends PureComponent{
                                             </View>
                                         )}/>
                                     </View>
-
                                 </View>
                         </View>
                     </Modal>

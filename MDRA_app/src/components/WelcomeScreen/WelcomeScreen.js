@@ -7,7 +7,7 @@ class WelcomeScreen extends Component {
         welcomeScreenOpacity: new Animated.Value(0.7)
     };
 
-    componentWillMount() {
+    componentDidMount() {
         if(this.props.showWelcomeScreen)
             this.handleWelComeScreenDisplay();
     }

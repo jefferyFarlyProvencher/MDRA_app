@@ -78,13 +78,13 @@ class FormScreenWeights extends PureComponent{
                                 weight7:this.props.data.weight7
                             }
                             : {
-                                weight1:'100',
-                                weight2: '100',
-                                weight3:'100',
-                                weight4:'100',
-                                weight5:'100',
-                                weight6: '100',
-                                weight7: '100',
+                                weight1:'50',
+                                weight2: '50',
+                                weight3:'50',
+                                weight4:'50',
+                                weight5:'50',
+                                weight6: '50',
+                                weight7: '50',
                             }
                         }
                         onSubmit={this._handleSubmit}
@@ -140,7 +140,11 @@ class FormScreenWeights extends PureComponent{
                                 <View>
                                     <View>
                                         <LinedLabel
-                                            label={"Weight of Box 1"}
+                                            label={(this.props.state.main.Page1Data)
+                                                ? (this.props.state.main.Page1Data.nbTherapeuticBoxes === "Two therapeutic boxes (AM and PM)")
+                                                    ?"Problems in the Morning":"Problems in the Day"
+                                                :"Problems in the day"
+                                            }
                                         />
                                     </View>
                                     <View
@@ -166,7 +170,7 @@ class FormScreenWeights extends PureComponent{
                                         <View>
                                             <View>
                                                 <LinedLabel
-                                                    label={"Weight of Box 2"}
+                                                    label={"Problems in the afternoon"}
                                                 />
                                             </View>
                                             <View
@@ -194,7 +198,7 @@ class FormScreenWeights extends PureComponent{
                                 <View>
                                     <View>
                                         <LinedLabel
-                                            label={"Weight of Evening Box "}
+                                            label={"Problems to go to sleep"}
                                         />
                                     </View>
                                     <View

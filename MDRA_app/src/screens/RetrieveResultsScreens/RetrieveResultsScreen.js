@@ -47,7 +47,7 @@ class RetrieveResultsScreen extends Component {
         visible:false
     };
 
-    componentWillMount() {
+    componentDidMount() {
         this.props.navigator.setStyle({
             navBarNoBorder: false,
             topBarElevationShadowEnabled: false,
@@ -130,7 +130,8 @@ class RetrieveResultsScreen extends Component {
                 let currentResult = retrievalResult[i];
                 if (this.verifyIfNotDuplicate(currentResult)) {
                     //this.changeDisplayedMessage("Currently adding the result: "+ currentResult.name + " , to the list.");
-                    this.props.onAddToResultList(currentResult.data, currentResult.name, currentResult.formData, currentResult.date)
+                    console.log("TEST 22: "+ JSON.stringify(currentResult));
+                    this.props.onAddToResultList(currentResult.data, currentResult.name, currentResult.formData, currentResult.date, currentResult.patient)
                 } else {
                     possibleDuplicatesList.push(currentResult.name)
                 }
@@ -245,7 +246,7 @@ class RetrieveResultsScreen extends Component {
     // };
 
     render() {
-        console.log("this is dateTo: "+ this.state.dateTo);
+        // console.log("this is dateTo: "+ this.state.dateTo);
         return (
             <View style={{flex:1}}>
                 <TitleComponent
@@ -480,7 +481,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onAddToResultList: (data,name, formData, date)=>dispatch(addToResultList(data, name, formData, date)),
+        onAddToResultList: (data,name, formData, date, patient)=>dispatch(addToResultList(data, name, formData, date, patient)),
     };
 };
 

@@ -9,7 +9,7 @@ import CustomMarker from '../../components/CustomMarker/CustomMarker';
 import timeToAmPmFormat from '../../functions/timeToAmPmFormat'
 import {convertTimeToHourFormat} from '../../functions/FormatTime';
 
-class CustomMultiSlider extends PureComponent{
+class CustomTimeMultiSlider extends PureComponent{
 
     state= {
         numberOfDots: 1,
@@ -17,7 +17,8 @@ class CustomMultiSlider extends PureComponent{
         selectedDot: 1,
         screenOpacityAnimation: new Animated.Value(0.3),
         secondScreenVisible: !!this.props.values[1],
-        valuesArray: this.props.values
+        valuesArray: this.props.values,
+        enableAmPm: true
     };
 
     componentWillReceiveProps(nextProps) {
@@ -25,7 +26,8 @@ class CustomMultiSlider extends PureComponent{
             (oldState) =>{
                 return {
                     ...oldState,
-                    valuesArray: nextProps.values
+                    valuesArray: nextProps.values,
+                    enableAmPm: this.props.enableAmPm === null || typeof this.props.enableAmPm === "undefined"?oldState.enableAmPm:this.props.enableAmPm
                 }
             }
         );
@@ -50,6 +52,9 @@ class CustomMultiSlider extends PureComponent{
     render(){
         //console.log(this.generateDataSingle(this.props.data.percentile10));
         let isAndroid = Platform.OS === 'android';
+
+        let enableAmPm = this.state.enableAmPm;
+
         return(
             <View style={[this.props.style, styles.containerStyle]}>
                 <MultiSlider
@@ -113,14 +118,12 @@ class CustomMultiSlider extends PureComponent{
                 />
                 <View style={styles.rulerStyle}>
                     <Text>
-                        {this.props.min}
+                        {timeToAmPmFormat(
+                            convertTimeToHourFormat(this.props.min+"")
+                        )}
                     </Text>
                     <View
-                        style={{
-                            borderBottomColor: 'transparent',
-                            borderBottomWidth: 1,
-                            width: (this.props.sliderLength/3),
-                        }}
+                        style={[styles.spacingStyle,{width: (enableAmPm?this.props.sliderLength/8:this.props.sliderLength/3)}]}
                     />
                     <TouchableWithoutFeedback
                         onTouch={() => alert("This does not change the values. " +
@@ -132,9 +135,11 @@ class CustomMultiSlider extends PureComponent{
                                     styles.animatedContainerStyle,
                                     {
                                         opacity: this.state.screenOpacityAnimation,
-                                        width: this.props.sliderLength/3,
+                                        width: enableAmPm?this.props.sliderLength/2:this.props.sliderLength/3,
                                         borderRadius:20,
                                         borderWidth: 1,
+                                        backgroundColor:"#EEE"
+
                                     },
                                     ]}
                                 >
@@ -147,13 +152,26 @@ class CustomMultiSlider extends PureComponent{
                                         ]}
                                     >
                                         <Text numberOfLines={1} style={{flexWrap: 'wrap', textAlign: "center"}}>
-                                            {this.state.valuesArray[0]?parseFloat(this.state.valuesArray[0]).toFixed(1):0}
+                                            {
+                                                enableAmPm
+                                                    ?timeToAmPmFormat(
+                                                        convertTimeToHourFormat((this.state.valuesArray[0]?parseFloat(this.state.valuesArray[0]).toFixed(1):0)+"")
+
+                                                    )
+                                                    :(this.state.valuesArray[1]?parseFloat(this.state.valuesArray[1]).toFixed(1):0)
+                                            }
                                         </Text>
                                     </View>
                                     {this.state.secondScreenVisible
                                         ? <View style={[styles.rulerPercentContainer,{width:"50%", alignItems:"center"}]}>
                                             <Text numberOfLines={1} style={{flexWrap: 'wrap', textAlign:"center"}}>
-                                                {this.state.valuesArray[1]?parseFloat(this.state.valuesArray[1]).toFixed(1):0}
+                                                {
+                                                    enableAmPm
+                                                        ?timeToAmPmFormat(
+                                                            convertTimeToHourFormat((this.state.valuesArray[1]?parseFloat(this.state.valuesArray[1]).toFixed(1):0)+"")
+                                                         )
+                                                        :(this.state.valuesArray[1]?parseFloat(this.state.valuesArray[1]).toFixed(1):0)
+                                                }
                                             </Text>
                                         </View>
                                         : <View/>
@@ -161,17 +179,13 @@ class CustomMultiSlider extends PureComponent{
                                 </Animated.View>
                         </View>
                     </TouchableWithoutFeedback>
-
                     <View
-                        style={{
-                            borderBottomColor: 'transparent',
-                            borderBottomWidth: 1,
-                            width: (this.props.sliderLength/3),
-                        }}
+                        style={[styles.spacingStyle, {width: (enableAmPm?this.props.sliderLength/8:this.props.sliderLength/3)}]}
                     />
-
                     <Text>
-                        {this.props.max}
+                        {timeToAmPmFormat(
+                                convertTimeToHourFormat(this.props.max+"")
+                        )}
                     </Text>
                 </View>
 
@@ -203,7 +217,14 @@ const styles = StyleSheet.create({
     animatedContainerStyle: {
         flexDirection:"row",
         alignItems: 'center'
-    }
+    },
+
+    spacingStyle: {
+        borderBottomColor: 'transparent',
+        borderBottomWidth: 1,
+        backgroundColor: "transparent"
+    },
+
 });
 
-export default (CustomMultiSlider);
+export default (CustomTimeMultiSlider);

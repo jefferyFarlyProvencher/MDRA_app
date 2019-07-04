@@ -1,9 +1,11 @@
 import {
     ADD_DATA, ADD_LIST, ALLOW_ADV,
     POS_CHNG, REMOVE_LIST, RENAME_LIST, EMPTY_LIST,
-    BACKUP_LIST, RESTORE_BACKUP,ADD_PDF_LIST,
+    BACKUP_LIST, RESTORE_BACKUP, ADD_PDF_LIST,
     TOGGLE_INDICATOR_VISIBILITY, REMOVE_PDF_LIST,
-    ADD_ACCOUNT
+    ADD_ACCOUNT, ADD_TO_PATIENT_LIST,
+    REMOVE_FROM_PATIENTS_LIST, UPDATE_PATIENT_INFO,
+    SET_PATIENT_FORMDATA, EMPTY_PATIENTS_LIST
 } from '../actions/actionTypes'
 
 import { Platform } from 'react-native';
@@ -21,8 +23,8 @@ const initialState = {
     indicatorVisibility: 1, //this removes the visibility of the indicator in order to see what we are typing when the glitch keyboard is active
     linkedAccount:{name:null,token:null},
     patientsList: [
-        {key: Math.random().toString(), name:"None Selected",id: "None Selected"}, //default
-        {key: Math.random().toString(), name:"Josh Merlin",gender:"Male", weight:"40", kg_lbs:"kg", dateOfBirth:"2010-09-01", id: "JoshMerlin20100901"}
+        {key: Math.random().toString(), name:"Josh Merlin",gender:"Male", weight:"40", kg_lbs:true, color:"#5F55F5" ,dateOfBirth:"2010-09-01", id: "JoshMerlin20100901"},
+        {key: Math.random().toString(), name:"Jocelyn Merlina",gender:"Female", weight:"35", kg_lbs:false, color:"#f593dd" ,dateOfBirth:"2009-08-10", id: "JocelynMerlina20100810"}
     ], //this is in preparation for the profile
 };
 
@@ -88,6 +90,7 @@ const reducer = (state = initialState, action) => {
                         name: action.name,
                         id: action.name,
                         date:action.date,
+                        patient:action.patient,
                         filePDF: undefined
 
                     }].concat(state.resultsList),
@@ -132,17 +135,15 @@ const reducer = (state = initialState, action) => {
             }
         }
         case(EMPTY_LIST):
-        {
             return {
-        ...state,
+                ...state,
                 resultsList: []
-        }
-        }
+            }
         case(BACKUP_LIST):
         {
             let backUp = state.resultsList.slice();
             return{
-        ...state,
+                ...state,
                 backUpResultList: backUp
 
         }
@@ -235,11 +236,15 @@ const reducer = (state = initialState, action) => {
                 }
             };
 
+        case(EMPTY_PATIENTS_LIST):
+            return {
+                ...state,
+                patientsList: []
+            }
 
-        /*
-        * case(ADD_TO_PATIENT_LIST)
-        * {
-        *   //adds a profile to the patient list
+        case(ADD_TO_PATIENT_LIST):
+        {
+         //adds a profile to the patient list
             return{
                 ...state,
                 patientsList:
@@ -248,28 +253,119 @@ const reducer = (state = initialState, action) => {
                         name:action.name,
                         gender:action.gender,
                         weight:action.weight,
-                        kg_lbs:action.kg_pds,
+                        kg_lbs:action.kg_lbs,
+                        color:action.color,
                         dateOfBirth:action.dateOfBirth,
-                        id: action.name+action.dateOfBirth,
+                        id: (action.name).replace(" ","")+"_"+(action.dateOfBirth.replace(" ","")),//+parseInt(Math.random()*1000+1), <- this is removed because there might be some issues later on lets bet that someone wont share the exact name and birthday as someone else
+                        dinerTime: action.dinerTime,
+                        bedTime: action.bedTime,
+                        formData: null
                         //Gender, Weight, kg/pds, name, bed time, lunch time, dateOfBirth
 
-                    }].concat(state.resultsList),
+                    }].concat(state.patientsList),
             };
-        * }
-        *
-        * case(REMOVE_FROM_PATIENT_LIST)
-        * {
-        *   //adds a profile to the patient list
+        }
+
+        case(REMOVE_FROM_PATIENTS_LIST):
+        {
+           //adds a profile to the patient list
             return{
                 ...state,
-                patientsList: state.patientsList.filter(result => {
-                    return result.key !== action.key;
+                patientsList: state.patientsList.filter(patient => {
+                    return patient.key !== action.key;
                 }),
             };
 
-        * }
-        *
-        * case(SET_PAGES_DATA)
+        }
+
+        case(UPDATE_PATIENT_INFO):
+        {
+            let i = 0;
+            let targetFound = false;
+
+
+
+            for(i; i < state.patientsList.length; i++)
+            {
+                if(action.key === state.patientsList[i].key){
+                    targetFound = true;
+                    break;
+                }
+            }
+
+            //update info by creating a new account and replacing at position,
+            // because it is faster than verifying if each elements has been changed individually
+            let newPatientsList = state.patientsList;
+            if(targetFound) {
+                newPatientsList[i] = {
+                    key: action.key,
+                    name: action.name,
+                    gender: action.gender,
+                    weight: action.weight,
+                    kg_lbs: action.kg_lbs,
+                    color: action.color,
+                    dateOfBirth: action.dateOfBirth,
+                    id: action.id,
+                    dinerTime: action.dinerTime,
+                    bedTime: action.bedTime,
+                    formData: action.formData
+                    //Gender, Weight, kg/pds, name, bed time, lunch time, dateOfBirth
+                };
+            }
+
+            console.log("targetFound? "+ targetFound);
+
+            //update a profile to the patient list, and refresh by setting same (but updated) state
+            return{
+                ...state,
+                patientsList: newPatientsList
+            }
+        }
+
+        case(SET_PATIENT_FORMDATA):{
+            let newPatientsList = state.patientsList;
+
+            console.log("Patient id: "+ action.patientID);
+
+            if(action.id !== null)
+            {
+                let i = 0;
+                let targetFound = false;
+
+                for(i; i < state.patientsList.length; i++)
+                {
+                    if(action.patientID === state.patientsList[i].id){
+                        targetFound = true;
+                        break;
+                    }
+                }
+                if(targetFound) {
+                    let patientTarget = newPatientsList[i];
+                    newPatientsList[i] = {
+                        key: patientTarget.key,
+                        name: patientTarget.name,
+                        gender: patientTarget.gender,
+                        weight: patientTarget.weight,
+                        kg_lbs: patientTarget.kg_lbs,
+                        color: patientTarget.color,
+                        dateOfBirth: patientTarget.dateOfBirth,
+                        id: patientTarget.id,
+                        dinerTime: patientTarget.dinerTime,
+                        bedTime: patientTarget.bedTime,
+                        formData: action.formData
+                        //Gender, Weight, kg/pds, name, bed time, lunch time, dateOfBirth
+                    };
+                }
+                console.log("targetFound? "+ targetFound);
+            }
+                //update a profile to the patient list, and refresh by setting same (but updated) state
+            return{
+                ...state,
+                patientsList: newPatientsList
+            }
+        }
+
+        /* case(SET_PAGES_DATA)
         * {
         *   return{
                 ...state,

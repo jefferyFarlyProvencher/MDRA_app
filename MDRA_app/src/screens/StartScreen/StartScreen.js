@@ -72,11 +72,11 @@ class StartScreen extends Component{
         }
     };
 
-    componentWillMount() {
-        this.props.navigator.setStyle({
-            navBarHidden: true
-        });
-    }
+    // componentWillMount() {
+    //     this.props.navigator.setStyle({
+    //         navBarHidden: true
+    //     });
+    // }
 
     componentDidMount() {
         this.props.navigator.setStyle({
@@ -122,8 +122,29 @@ class StartScreen extends Component{
     };
 
     logOut = async () => {
-        await this.props.onAddAccount(null, null);
-        await this.props.onEmptyResultList();
+        Alert.alert(
+            'Certain you want to Sign Out?',
+            '(NOTE: All Patients and Results will be erased)', [
+                {
+                    text: 'Cancel',
+                    onPress: (() => {
+                        console.log('Cancel Pressed');
+                    }),
+                    style: 'cancel'
+                }, {
+                    text: 'Sign Out',
+                    onPress:async () => {
+                        await this.props.onAddAccount(null, null);
+                        await this.props.onEmptyResultList();
+                        await this.props.onEmptyPatientsList();
+                    }
+                }
+            ],
+            {
+                cancelable: true
+            }
+        );
+
     };
 
     launchNewScreen = () => {
@@ -210,7 +231,7 @@ class StartScreen extends Component{
                                         HERE
                                     </Text>
                                 </TouchableOpacity>
-                                <Text style={styles.surroundTextStyle}> to Log Out</Text>
+                                <Text style={styles.surroundTextStyle}> to Sign Out</Text>
                             </View>
                         </View>
                         :<View style={{display: !displayLogRegScreens?"none":"flex"}}>
@@ -282,7 +303,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = dispatch => {
     return {
         onAddAccount: (name, token) => dispatch(addAccount(name, token)),
-        onEmptyResultList: () => dispatch(emptyResultList())
+        onEmptyResultList: () => dispatch(emptyResultList()),
+        onEmptyPatientsList: () => dispatch(emptyPatientsList())
     };
 };
 

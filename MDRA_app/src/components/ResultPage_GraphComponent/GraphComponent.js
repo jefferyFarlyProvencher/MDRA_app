@@ -2,7 +2,7 @@ import React, {PureComponent} from 'react';
 import {View, StyleSheet, Dimensions, Platform, Animated,Text, TouchableHighlight} from 'react-native';
 import 'react-native-svg';
 
-import {VictoryArea, VictoryChart, VictoryLine, VictoryLabel} from "victory-native";
+import {VictoryArea, VictoryChart, VictoryGroup, VictoryLine, VictoryLabel} from "victory-native";
 
 import {convertTimeToDecimal} from '../../functions/FormatTime'
 
@@ -10,12 +10,12 @@ import {convertTimeToDecimal} from '../../functions/FormatTime'
 
 class GraphComponent extends PureComponent{
     state = {
-        animationTime:500,
+        animationTime:300,
         textColor: ["red","blue"],
         fadeAnim: new Animated.Value(1),
         fadeInAnimDuration: 1000 ,
         fadeOutAnimDuration: 4000,
-        currentTextTurn: 0
+        currentTextTurn: 0,
     };
 
     hasNotUnMounted = true;
@@ -117,7 +117,7 @@ class GraphComponent extends PureComponent{
 
         let returnResult = [];
         //increasing the step for i reduces precision but increases performance
-        for(let i = 1; i < scoreTableY.length-1; i+=(Platform.OS === "ios"?3:4)) {
+        for(let i = 1; i < scoreTableY.length-1; i+=(Platform.OS === "ios"?3:3)) {
                 returnResult.push({
                     x: ((i / 10) + startXPosition),
                     y: parseFloat(scoreTableY[i]),
@@ -268,76 +268,90 @@ class GraphComponent extends PureComponent{
         ///ACTUAL RENDERING STARTS HERE
         return(
             <View style={[this.props.style]} pointerEvents="none">
-                <VictoryChart
-                    animate={Platform.OS==="ios"?{ duration: this.state.animationTime}:null}
+                <VictoryGroup
                     domain={{x:[0,30],y: [-4,25]}}
                     label ={{x:"A",y:"B"}}
                 >
                     <VictoryArea
                         style={{data: {fill: '#cbe3f3'}}}
                         data={this.generateDataDouble(this.props.data.percentile10, this.props.data.percentile90)}
+                        animate={this.props.animate?{duration: this.state.animationTime}:null}
                     />
                     <VictoryArea
                         style={{data: {fill: '#a7cfeb'}}}
                         data={this.generateDataDouble(this.props.data.percentile20, this.props.data.percentile80)}
+                        animate={this.props.animate?{duration: this.state.animationTime}:null}
                     />
                     <VictoryArea
                         style={{data: {fill: '#8dc1e5'}}}
                         data={this.generateDataDouble(this.props.data.percentile30, this.props.data.percentile70)}
+                        animate={this.props.animate?{duration: this.state.animationTime}:null}
                     />
                     <VictoryArea
                         style={{data: {fill: '#7bb7e1'}}}
                         data={this.generateDataDouble(this.props.data.percentile40, this.props.data.percentile60)}
+                        animate={this.props.animate?{duration: this.state.animationTime}:null}
                     />
                     <VictoryLine
                         style={{data: {stroke: '#4c92cd'}}}
                         data={this.generateDataSingle(this.props.data.percentileY)}
+                        animate={this.props.animate?{duration: this.state.animationTime}:null}
                     />
+               </VictoryGroup>
+                <View
+                    style={{position: "absolute"}}
+                >
+                    <VictoryChart
+                        animate={null}
+                        domain={{x:[0,30],y: [-4,25]}}
+                        label ={{x:"A",y:"B"}}
+                    >
+                        <VictoryLabel text={"Time (h)"} datum={{x:29,y:1}}/>
+                        <VictoryLabel text={"Concentration (ng/mL)"} datum={{x:0,y:26}}/>
+                        <VictoryLabel text={(firstBoxPercentage !== null)?firstBoxPercentage+"%": "There was an error because this is null"} datum={{x:firstBoxX,y:firstBoxY+firstBoxHeight+1}}/>
+                        <VictoryLabel text={(secondBoxPercentage !== null)?secondBoxPercentage+"%":""} datum={{x:secondBoxX,y:secondBoxY+secondBoxHeight+1}}/>
+                        <VictoryLabel text={eveningBoxPercentage+"%"} datum={{x:eveningBoxX,y:eveningBoxY+eveningBoxHeight+1}}/>
+                        <VictoryLine
+                            style={{data:{stroke:"#00d9e2"}}}
+                            data={this.generateVerticalLine(lunchTime)}
+                        />
+                        <VictoryLine
+                            style={{data:{stroke:"#0700a6"}}}
+                            data={this.generateVerticalLine(bedTime)}
+                        />
 
-                    <VictoryLine
-                        style={{data:{stroke:this.scoreColorIdentification(firstBoxPercentage)}}}
-                        data={this.generateSquareTopLeft(firstBoxX,firstBoxY,firstBoxHeight,firstBoxWidth)}
-                    />
-                    <VictoryLine
-                        style={{data:{stroke:this.scoreColorIdentification(firstBoxPercentage)}}}
-                        data={this.generateSquareBottomRight(firstBoxX,firstBoxY,firstBoxHeight,firstBoxWidth)}
-                    />
+                        <VictoryLabel text={"Lunch"} datum={{x:lunchTime-2,y:-4.3}}/>
+                        <VictoryLabel text={"Bed"} datum={{x:bedTime-1.3,y:-4.3}}/>
 
-                    <VictoryLine
-                        style={{data:{stroke:(secondBoxPercentage !== null)? this. scoreColorIdentification(secondBoxPercentage):"transparent"}}}
-                        data={this.generateSquareTopLeft(secondBoxX,secondBoxY,secondBoxHeight,secondBoxWidth)}
-                    />
-                    <VictoryLine
-                        style={{data:{stroke:(secondBoxPercentage !== null)? this. scoreColorIdentification(secondBoxPercentage):"transparent"}}}
-                        data={this.generateSquareBottomRight(secondBoxX,secondBoxY,secondBoxHeight,secondBoxWidth)} //(x,y,height,width)
-                    />
 
-                    <VictoryLine
-                        style={{data:{stroke:this.scoreColorIdentification(eveningBoxPercentage)}}}
-                        data={this.generateSquareTopLeft(eveningBoxX,eveningBoxY,eveningBoxHeight,eveningBoxWidth)}
-                    />
-                    <VictoryLine
-                        style={{data:{stroke:this.scoreColorIdentification(eveningBoxPercentage)}}}
-                        data={this.generateSquareBottomRight(eveningBoxX,eveningBoxY,eveningBoxHeight,eveningBoxWidth)}
-                    />
-                    <VictoryLine
-                        style={{data:{stroke:"#00d9e2"}}}
-                        data={this.generateVerticalLine(lunchTime)}
-                    />
-                    <VictoryLine
-                        style={{data:{stroke:"#0700a6"}}}
-                        data={this.generateVerticalLine(bedTime)}
-                    />
+                        <VictoryLine
+                            style={{data:{stroke:this.scoreColorIdentification(firstBoxPercentage)}}}
+                            data={this.generateSquareTopLeft(firstBoxX,firstBoxY,firstBoxHeight,firstBoxWidth)}
+                        />
+                        <VictoryLine
+                            style={{data:{stroke:this.scoreColorIdentification(firstBoxPercentage)}}}
+                            data={this.generateSquareBottomRight(firstBoxX,firstBoxY,firstBoxHeight,firstBoxWidth)}
+                        />
 
-                    <VictoryLabel text={(firstBoxPercentage !== null)?firstBoxPercentage+"%": "There was an error because this is null"} datum={{x:firstBoxX,y:firstBoxY+firstBoxHeight+1}}/>
-                    <VictoryLabel text={(secondBoxPercentage !== null)?secondBoxPercentage+"%":""} datum={{x:secondBoxX,y:secondBoxY+secondBoxHeight+1
-                    }}/>
-                    <VictoryLabel text={eveningBoxPercentage+"%"} datum={{x:eveningBoxX,y:eveningBoxY+eveningBoxHeight+1}}/>
-                    <VictoryLabel text={"Time (h)"} datum={{x:29,y:1}}/>
-                    <VictoryLabel text={"Concentration (ng/mL)"} datum={{x:0,y:26}}/>
-                    <VictoryLabel text={"Lunch"} datum={{x:lunchTime-2,y:-4.3}}/>
-                    <VictoryLabel text={"Bed"} datum={{x:bedTime-1.3,y:-4.3}}/>
-               </VictoryChart>
+                        <VictoryLine
+                            style={{data:{stroke:(secondBoxPercentage !== null)? this. scoreColorIdentification(secondBoxPercentage):"transparent"}}}
+                            data={this.generateSquareTopLeft(secondBoxX,secondBoxY,secondBoxHeight,secondBoxWidth)}
+                        />
+                        <VictoryLine
+                            style={{data:{stroke:(secondBoxPercentage !== null)? this. scoreColorIdentification(secondBoxPercentage):"transparent"}}}
+                            data={this.generateSquareBottomRight(secondBoxX,secondBoxY,secondBoxHeight,secondBoxWidth)} //(x,y,height,width)
+                        />
+
+                        <VictoryLine
+                            style={{data:{stroke:this.scoreColorIdentification(eveningBoxPercentage)}}}
+                            data={this.generateSquareTopLeft(eveningBoxX,eveningBoxY,eveningBoxHeight,eveningBoxWidth)}
+                        />
+                        <VictoryLine
+                            style={{data:{stroke:this.scoreColorIdentification(eveningBoxPercentage)}}}
+                            data={this.generateSquareBottomRight(eveningBoxX,eveningBoxY,eveningBoxHeight,eveningBoxWidth)}
+                        />
+                    </VictoryChart>
+                </View>
                 <TouchableHighlight
                     onPress={()=>{console.log("this was pressed right now"); alert("RollerCoaster Effect: " + displayText[1] +"\n Total Score: " + displayText[0]+"%")}}
                 >

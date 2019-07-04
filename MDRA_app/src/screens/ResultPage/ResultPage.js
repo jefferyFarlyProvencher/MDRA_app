@@ -56,7 +56,9 @@ class ResultPage extends PureComponent {
         visible: Platform.OS==="ios",
         creatingPDF: false,
         language:"Java",
-        searchTarget: "name"
+        searchTarget: "name",
+        //on start it is false to accelerate the loading of the graph
+        animationFlag: true
     };
 
     handleBackButton = () => {
@@ -180,6 +182,8 @@ class ResultPage extends PureComponent {
                     ...oldState,
                     ///update position
                     currentPosition: oldState.currentPosition + 1,
+                    //activate animation
+                    animationFlag:  true
                 })
             });
             //update title
@@ -219,7 +223,50 @@ class ResultPage extends PureComponent {
         // );
         //console.log("FORMDATA: " + JSON.stringify(formData));
         //set It to each page
-        this.props.onAddData(formData[0],0);
+
+        //verify if patient's in the local list
+        let patientsList = this.props.state.main.patientsList;
+        console.log("patientsList: "+ JSON.stringify(patientsList));
+        console.log("patient: " + JSON.stringify(formData[0].patientProfile));
+        let patientNotInList = true;
+        let patientProfileId = formData[0].patientProfile.id !== null? formData[0].patientProfile.id: formData[0].patientProfile;
+        for(let i = 0; i < patientsList.length; i++){
+            if(patientsList[i].id === patientProfileId)
+            {
+                patientNotInList=false
+            }
+        }
+
+        //copy formData[0] in order to change patientProfile as it is immutable while in this page
+        let newFormData0 = null;
+
+       newFormData0 = {
+           patientProfile: patientNotInList?"None Selected":formData[0].patientProfile, //always none selected because error otherwise?
+           gender: formData[0].gender,
+           weight: formData[0].weight,
+           dose0: formData[0].dose0,
+           adminTime0: formData[0].adminTime0,
+           formula0: formData[0].formula0,
+           food0: formData[0].food0,
+           dose1: formData[0].dose1,
+           adminTime1: formData[0].adminTime1,
+           formula1: formData[0].formula1,
+           food1: formData[0].food1,
+           dose2: formData[0].dose2,
+           adminTime2: formData[0].adminTime2,
+           formula2: formData[0].formula2,
+           food2: formData[0].food2,
+           dose3: formData[0].dose3,
+           adminTime3: formData[0].adminTime3,
+           formula3: formData[0].formula3,
+           food3: formData[0].food3,
+           amountOfPills: formData[0].amountOfPills,
+           kg_lbs: formData[0].kg_lbs ? formData[0].kg_lbs : formData[0].switchWeightFormat
+       }
+       if(patientNotInList)
+           alert("The patient with the id " + formData[0].patientProfile.id + " was not used as it is not in the Patients' List and ");
+
+        this.props.onAddData(newFormData0?newFormData0:formData[0],0);
         this.props.onAddData(formData[1],1);
         this.props.onAddData(formData[2],2);
         this.props.onAddData(formData[3],3);
@@ -782,6 +829,7 @@ class ResultPage extends PureComponent {
                                         data={this.props.state.main.resultsList[this.state.currentPosition].data}
                                         formData = {this.props.state.main.resultsList[this.state.currentPosition].formData}
                                         style={{backgroundColor:"white"}}
+                                        animate={this.state.animationFlag}
                                     />
                                 </ViewShot>
                             </View>

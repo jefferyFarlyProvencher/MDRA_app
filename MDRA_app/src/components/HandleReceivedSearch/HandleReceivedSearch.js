@@ -358,14 +358,21 @@ let HandleReceivedSearch = (returnedList) => {
             //if(i === 1)console.log('currentResults\'s ouput: '+JSON.stringify(newResultData) );
             let newResultFormData = ReversePrepareToSend(currentResult['input']);
             //if(i === 1)console.log('currentResults\'s input: '+JSON.stringify(newResultFormData));
+            let patient = currentResult['patient'];
 
+            console.log("newResultFormData[0] before: " + JSON.stringify(newResultFormData));
+            //we need to also set the formData's page 0's patientProfile
+            newResultFormData[0]["patientProfile"] = patient;
+            console.log("newResultFormData[0] after: " + JSON.stringify(newResultFormData));
+
+          //  console.log(JSON.stringify(currentResult));
 
             newObjectList.push({
                 data: newResultData,
                 name: newResultName,
                 formData: newResultFormData,
                 date: newResultDate,
-
+                patient: patient
             })
 
         }

@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {View, Text, StyleSheet, FlatList, TouchableWithoutFeedback, Dimensions} from 'react-native'
 import {List, ListItem, SearchBar} from 'react-native-elements'
-import Swipeout  from 'react-native-swipeout'
+import FontAwesome from "react-native-vector-icons/FontAwesome"
 import * as colors from "../../assets/colors";
 
 //credits to vikrant negi which helped with the search bar
@@ -137,6 +137,15 @@ class PatientsList extends Component{
                         renderItem={(info) => (
                             <ListItem
                                 roundAvatar
+                                leftIcon={
+                                    {
+
+                                        name:"user-circle",
+                                        type:"font-awesome",
+                                        size:30,
+                                        color:info.item.color,
+                                    }
+                                }
                                 title={info.item.name}
                                 subtitle={info.item.id}
                                 key={info.item.key}
@@ -151,10 +160,10 @@ class PatientsList extends Component{
                                     console.log('Item accessed: ' + info.item.key);
                                     console.log('pressed quickly');
                                 }}
-                                style={{backgroundColor:info.item.color}}
+                                containertyle={{backgroundColor:info.item.color}}
                             />
                         )}
-                        keyExtractor={item => item.name}
+                        keyExtractor={item => item.key}
                     />
                 </List>
             </View>

@@ -17,6 +17,8 @@ import {Formik} from "formik";
 import {Button} from 'react-native-elements';
 import {connect} from "react-redux";
 import * as Yup from "yup";
+import Picker from 'react-native-picker';
+
 //actions
 import {removeData, renameData} from '../../store/actions/index';
 
@@ -51,7 +53,9 @@ class ResultScreen extends Component{
         currentlySelectedItem: 0,
         renameError: false,
         isDeleteDisabled: false,
-        toDeleteList: []
+        toDeleteList: [],
+        darkVisible: false,
+
     };
 
 
@@ -421,6 +425,15 @@ class ResultScreen extends Component{
         }
     });
 
+    handleSetDarkVisibility = () => {
+        this.setState(oldState =>{
+            return({
+                ...oldState,
+                darkVisible: !oldState.darkVisible
+            })
+        })
+    };
+
     render(){
         let content = (
             (this.state.selectorListAvailable)
@@ -444,6 +457,9 @@ class ResultScreen extends Component{
                         onRenameData={this.handleOnRenamePressed}
                         extraData={this.state}
                         listStyle={{height:Dimensions.get("window").height*(Platform.OS === "android"?0.64:0.71)}}
+                        patientsList={this.props.state.main.patientsList}
+                        Picker={Picker}
+                        handleSetDarkVisibility={this.handleSetDarkVisibility}
                     />
                 </View>
         );
@@ -562,6 +578,27 @@ class ResultScreen extends Component{
                         </View>
                     </Modal>
                 </View>
+                {(this.state.darkVisible)?
+                    <TouchableWithoutFeedback
+                        onPress={() => {
+                            this.handleSetDarkVisibility(!this.state.darkVisible);
+                            Picker.hide()
+                        }}
+                    >
+                        <View
+                            style={{
+                                backgroundColor: '#000',
+                                opacity: 0.5,
+                                flex: 1,
+                                width: "100%",
+                                height: "100%",
+                                position: "absolute",
+
+                            }}
+                        />
+                    </TouchableWithoutFeedback>
+                    :<View/>
+                }
                 <View>
                     <Spinner visible={this.state.spinnerIsVisible} textContent={"Loading..."} textStyle={{color: '#FFF'}} />
                 </View>

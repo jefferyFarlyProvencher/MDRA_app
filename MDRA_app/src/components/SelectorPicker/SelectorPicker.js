@@ -7,15 +7,14 @@ import {
     Dimensions,
     Platform,
     TouchableOpacity,
-    BackHandler,
-    Alert, Animated,
-    PermissionsAndroid,
-    Button,
-    Image,
-    Picker, Modal, TouchableWithoutFeedback, TouchableHighlight
+    Modal,
+    TouchableWithoutFeedback,
+    TouchableHighlight,
+    FlatList
 } from 'react-native';
 //import {Button} from 'react-native-elements';
 import 'react-native-svg';
+import {ListItem} from "react-native-elements";
 class ResultPage extends PureComponent {
     state = {
         modalVisible: false,
@@ -44,12 +43,13 @@ class ResultPage extends PureComponent {
     };
 
     handleItemSelected = (selectedItem) =>{
+        let differentDisplay = selectedItem.displayName !== null && typeof selectedItem.displayName !== "undefined";
         this.setState((oldState)=>{
             return({
                 ...oldState,
                 selectedItem: selectedItem
             })
-        })
+        });
         this.handleSelectorToggle(false);
         this.props.itemSelected(selectedItem)
     };
@@ -61,8 +61,29 @@ class ResultPage extends PureComponent {
             <View style={{flex:1}}>
                 <View >
                     <TouchableOpacity onPress={()=>{console.log("toggling selector");this.handleSelectorToggle(true)}}>
-                        <View style={[{alignItems:"center", justifyContent:"center", backgroundColor:"#2e2e2e", height: Dimensions.get("window").height*0.05, width: Dimensions.get("window").width*0.17, padding: 10},this.props.style]}>
-                            <Text style={{color:'#e4e4e4', textAlign: "center"}}>{this.state.selectedItem}</Text>
+                        <View
+                            style={
+                                [
+                                    {
+                                        alignItems:"center",
+                                        justifyContent:"center",
+                                        backgroundColor:"#2e2e2e",
+                                        height: Dimensions.get("window").height*0.05,
+                                        // width: Dimensions.get("window").width*0.17,
+                                        padding: 10,
+                                        marginHorizontal: 5
+                                    },
+                                    this.props.style
+                                ]}
+                        >
+                            <Text style={
+                                [
+                                    {
+                                        color:'#e4e4e4',
+                                        textAlign: "center"
+                                    },
+                                ]
+                            }>{this.state.selectedItem}</Text>
                         </View>
                     </TouchableOpacity>
                 </View>
@@ -109,12 +130,27 @@ class ResultPage extends PureComponent {
                                         <Text style={styles.selectorTileText}>{"Creation Date \n(format: YYYY-MM-DD)"}</Text>
                                     </View>
                                 </TouchableHighlight>
-                                <TouchableHighlight>
-                                    <View style={styles.selectorTileDisabled}>
-                                        <Text style={styles.selectorTileTextDisabled}>Patient Name (Coming Soon...)</Text>
+                                <TouchableHighlight onPress={()=>{this.handleItemSelected("Patients")}}>
+                                    <View style={styles.selectorTile}>
+                                        <Text style={styles.selectorTileText}>Patient Name</Text>
                                     </View>
                                 </TouchableHighlight>
                             </View>
+                            {/*<FlatList*/}
+                                {/*contentContainterStyle={{*/}
+                                    {/*flex:1,*/}
+                                    {/*justifyContent: 'center',*/}
+                                    {/*alignItems: 'center',*/}
+                                {/*}}*/}
+                                {/*data={this.props.choices}*/}
+                                {/*renderItem={(info) =>*/}
+                                    {/*<TouchableHighlight onPress={()=>{this.handleItemSelected(info.item)}}>*/}
+                                        {/*<View style={styles.selectorTile}>*/}
+                                            {/*<Text style={styles.selectorTileText}>{info.item.name}</Text>*/}
+                                        {/*</View>*/}
+                                    {/*</TouchableHighlight>*/}
+                                {/*}*/}
+                            {/*/>*/}
                         </View>
                     </View>
                 </Modal>
@@ -122,6 +158,23 @@ class ResultPage extends PureComponent {
         )
     }
 }
+{/*<ListItem*/}
+{/*roundAvatar*/}
+{/*title={info.item.name}*/}
+{/*key={info.item.key}*/}
+{/*onLongPress={() => {*/}
+{/*this.props.handleItemSelected(info.item);*/}
+{/*console.log('Item Accessed: ' + info.item.name);*/}
+{/*console.log('pressed slowly');*/}
+{/*}*/}
+{/*}*/}
+{/*onPress={() => {*/}
+{/*this.props.handleItemSelected(info.item);*/}
+{/*console.log('Item accessed: ' + info.item.key);*/}
+{/*console.log('pressed quickly');*/}
+{/*}}*/}
+{/*containertyle={{backgroundColor:"#FFF"}}*/}
+{/*/>*/}
 
 const styles = StyleSheet.create({
 

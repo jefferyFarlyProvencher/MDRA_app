@@ -23,3 +23,13 @@ export {removePDFFromResult} from './removePDFFromResult';
 export {toggleIndicatorVisibility} from './toggleIndicatorVisibility';
 
 export {addAccount} from './addAccount';
+
+export {addToPatientsList} from './addToPatientsList';
+
+export {removeFromPatientsList} from './removeFromPatientsList';
+
+export {updatePatientInfo} from './updatePatientInfo';
+
+export {setPatientLatestForm} from './setPatientLatestForm';
+
+export {emptyPatientsList} from './emptyPatientsList';

@@ -10,8 +10,7 @@ import TitleComponent from '../../components/TitleComponent/TitleComponent';
 
 //redux imports
 import {connect} from "react-redux";
-import {addToResultList} from "../../store/actions";
-import {changePosition} from "../../store/actions";
+import {addToResultList, changePosition, setPatientLatestForm} from "../../store/actions";
 
 class SendFormScreen extends PureComponent{
     state = {
@@ -21,7 +20,7 @@ class SendFormScreen extends PureComponent{
 
     };
 
-    componentWillMount(){
+    componentDidMount(){
         if(this.props.state.main.Page0Data) {
             this.sendGenerateRequest();
         }
@@ -45,10 +44,12 @@ class SendFormScreen extends PureComponent{
         );
     };
 //TODO: do something about page3, might cause bug in the future for the user
-    prepareToStoreData (data, name, date) {
+    prepareToStoreData (data, name, date, patientID) {
         //console.log(JSON.stringify(data));
         //console.log(JSON.stringify(name));
         //console.log(JSON.stringify(date));
+
+        console.log(JSON.stringify(patientID));
 
         //current data in redux will be copied to be stored with the result
         let formData = [
@@ -76,7 +77,9 @@ class SendFormScreen extends PureComponent{
         //console.log("new result's FormData: "+formData);
 
         //everything is added to the resultsList
-        this.props.onAddToResultList(data, name, formData, date);
+        this.props.onAddToResultList(data, name, formData, date, patientID);
+
+        this.props.onSetPatientFormInput(patientID,formData)
 
     }
 
@@ -92,7 +95,19 @@ class SendFormScreen extends PureComponent{
 
         let preparedInput = PrepareToSend(formData);
 
-        let patient = formData.Page0Data.patientProfile !== "None Selected"?formData.Page0Data.patientProfile:null;
+        //transforms array into object or turns it into null
+
+        let patient = formData.Page0Data.patientProfile !== "None Selected"
+            ?{
+                name:formData.Page0Data.patientProfile.name,
+                id:formData.Page0Data.patientProfile.id
+            }
+            :{
+                name:null,
+                id:null
+            };
+
+        console.log("SendScreen's patient: "+ JSON.stringify(patient));
 
         let calculatedResult = await SendForm(preparedInput, this.props.state.main.linkedAccount.token, patient);
 
@@ -103,9 +118,10 @@ class SendFormScreen extends PureComponent{
         let data = calculatedResult[0];
         let name = calculatedResult[1];
         let date = calculatedResult[2];
+        let patientId = calculatedResult[3];
         //console.log(JSON.stringify(data));
         if(calculatedResult !== -1) {
-            this.prepareToStoreData(data, name, date);
+            this.prepareToStoreData(data, name, date, patientId);
             if(this.hasNotUnMounted) {
                 this.setState((oldState) => ({
                     ...oldState,
@@ -114,6 +130,13 @@ class SendFormScreen extends PureComponent{
                 }));
                 if (this.state.dataReceived) {
                     if (Platform.OS === "android") ToastAndroid.showWithGravity("Data added to List", 1, ToastAndroid.BOTTOM + 15);
+                    this.props.navigator.push({
+                        screen: "MDRA_app.resultPage",
+                        title: this.props.state.main.resultsList[0].name,
+                        passProps: {
+                            selectedPosition: 0
+                        }
+                    });
                 }
             }
         }
@@ -188,8 +211,9 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onAddToResultList: (data,name, formData, date)=>dispatch(addToResultList(data, name, formData, date)),
-        onChangePosition:   (pos) => dispatch(changePosition(pos))
+        onAddToResultList: (data,name, formData, date, patient)=>dispatch(addToResultList(data, name, formData, date, patient)),
+        onChangePosition:   (pos) => dispatch(changePosition(pos)),
+        onSetPatientFormInput: (patientID, formData) => dispatch(setPatientLatestForm(patientID,formData)),
     };
 };
 

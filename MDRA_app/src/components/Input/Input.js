@@ -43,6 +43,8 @@ class Input extends PureComponent{
 
         },
 
+        lineColor: "#888",
+
         inputValue: "",
 
         switchValue: true,
@@ -62,6 +64,27 @@ class Input extends PureComponent{
         this.props.onTouch(this.props.name)
     };
 
+    handleOnBlur = (onBlur) => {
+        this.setState( oldState =>{
+            return{
+                ...oldState,
+                lineColor: "#888"
+            }
+        });
+        onBlur();
+    };
+
+    handleOnFocus = () => {
+        this.setState( oldState =>{
+            return{
+                ...oldState,
+                lineColor: "#2740ff"
+            }
+        });
+        if(this.props.onTouch)
+            this.props.onTouch();
+    };
+
     handleLabelPosition = (labelPosition) =>{
         switch (labelPosition) {
             case "left":
@@ -73,8 +96,10 @@ class Input extends PureComponent{
         }
     };
 
+
+
     render() {
-        const {label, error, backgroundColor, name, ...rest } = this.props;
+        const {label, error, backgroundColor, name, center,onBlur, maxLength, inputStyle,...rest } = this.props;
         let labelPosition = this.props.labelPosition;
         return(
             <View style={[styles.root,this.props.style]}>
@@ -92,11 +117,12 @@ class Input extends PureComponent{
                 }
                 <View>
                     <FormInput
-                        center={true}
+                        center={center?center:true}
                         placeholder={label? label: name}
                         onChangeText={this._handleChangeText}
-                        onFocus={this.props.onTouch}
-                        onBlur={this._handleTouch}
+                        onFocus={this.handleOnFocus}
+                        //onBlur={this._handleTouch}
+                        onBlur={() => this.handleOnBlur(onBlur)}
                         containerStyle={[
                             {
                                 justifyContent:'flex-start',
@@ -107,17 +133,17 @@ class Input extends PureComponent{
                                     ?{backgroundColor:backgroundColor}
                                     :{backgroundColor:"transparent"},
                             {
-
+                                borderBottomColor: this.state.lineColor,
                             }
                         ]}
                         inputStyle={[
                             {
                                 width:"100%",
                             },
-                            this.props.inputStyle
+                            inputStyle
                         ]}
                         underlineColorAndroid={"#636363"}
-                        maxLength={this.props.maxLength?this.props.maxLength:null}
+                        maxLength={maxLength?maxLength:null}
                         {...rest}
                     />
 

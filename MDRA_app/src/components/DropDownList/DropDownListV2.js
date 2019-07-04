@@ -62,7 +62,7 @@ class DropDownListV2 extends Component {
             pickerToolBarBg: [38,38,38,1],
             pickerTitleText: "Please select item",
             onPickerConfirm: (pickedValue, pickedIndex) => {
-                console.log('date', pickedValue, pickedIndex);
+                //console.log('date', pickedValue, pickedIndex);
                 this.setState(oldState => {
                     return {
                         ...oldState,
@@ -90,9 +90,10 @@ class DropDownListV2 extends Component {
 
     render() {
         const {label, error, ...rest } = this.props;
+        let newItemList = [];
         return (
             <View style={[styles.root, this.props.style]}>
-                <FormLabel>{label}</FormLabel>
+                {label?<FormLabel>{label}</FormLabel>:<View/>}
                 <TouchableOpacity
                     style={[{alignItems: 'center', width: "100%"}, ]}
                     onPress={() => {
@@ -104,14 +105,24 @@ class DropDownListV2 extends Component {
                     }}
                 >
                     <View style={styles.twoPerRowContainer}>
-                        <View style={styles.pickerStyle}>
-                            {<Text>{this.props.value}</Text>}
+                        <View style={[
+                                styles.pickerStyle,
+                                {backgroundColor:this.props.pickerBackgroundColor?this.props.pickerBackgroundColor:"#c8e5f9"}
+                            ]}>
+                            {<Text numberOfLines={1} style={{color:this.props.textColor}}>{this.props.value}</Text>}
                         </View>
-                        <View style={styles.angleDownContainer}>
+                        <View style={
+                                [
+                                    styles.angleDownContainer,
+                                    {backgroundColor:this.props.pickerBackgroundColor?this.props.pickerBackgroundColor:"#c8e5f9"}
+
+                                ]
+                            }
+                        >
                             <AwesomeIcon
                                 size={20}
                                 name= {"angle-down"}
-                                color="#000"
+                                color={this.props.textColor?this.props.textColor:"#000"}
                             />
                         </View>
                     </View>

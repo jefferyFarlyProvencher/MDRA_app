@@ -15,16 +15,25 @@
 // note that patientProfiles should be imported automatically upon log in  (should results be as well?)
 
 import React, {Component} from 'react';
-import {View, Text, StyleSheet, Platform, ScrollView, Dimensions, Picker, BackHandler} from 'react-native';
-import {connect} from 'react-redux';
-
+import {View, Text, StyleSheet, Platform, ScrollView, Dimensions, BackHandler} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 
 import Input from "../../components/Input/Input";
 
 import PatientsList from "../../components/PatientsList/PatientsList";
+import {
+    addToPatientsList,
+    removeFromPatientsList,
+    updatePatientInfo
+} from "../../store/actions";
+import {connect} from "react-redux";
 
 class ManagePatientsScreen extends Component{
+
+    state = {
+        amountOfPushes: 0
+    };
+
 
     static navigatorButtons = {
         leftButtons: [
@@ -77,18 +86,92 @@ class ManagePatientsScreen extends Component{
             }
             else if(event.id === 'addPatient')
             {
-                alert("Add patient? Maybe? No? Okay...?")
+                //alert("Add patient? Maybe? No? Okay...?")
+                this.props.navigator.push({
+                    screen: "MDRA_app.patientPage",
+                    title: "Create Account",
+                    passProps: {
+                        patientProfile: null,
+                        onCreatePatientProfile: async (data)=>{
+                            console.log("Testing on create patient profile: "+JSON.stringify(data));
+                            await this.props.onAddToPatientList(data);
+
+                            alert(data.name+"'s Profile has been added!")
+                        },
+                    }
+                });
+
             }
         }
     }
 
-    getRandomColor = () => {
-        var letters = '0123456789ABCDEF';
-        var color = '#';
-        for (var i = 0; i < 6; i++) {
-            color += letters[Math.floor(Math.random() * 16)];
+    handleItemAccessed = key => {
+        // //blocker's purpose is to stop multi pushes on android
+        let activateBlocker = Platform.OS === "android";
+        let patientsList = this.props.state.main.patientsList;
+        if(this.state.amountOfPushes === 0) {
+            if(activateBlocker) {
+                //this.spinnerToggler();
+            }
+            let selResult = null;
+            let selPosition = 0;
+            for (let i = 0; i < patientsList.length; i++) {
+                if (patientsList[i].key === key) {
+                    selResult = patientsList[selPosition];
+                    selPosition = i;
+                }
+            }
+            //console.log(key);
+            //this.props.navigator.popToRoot();
+            this.props.navigator.push({
+                screen: "MDRA_app.patientPage",
+                title: patientsList[selPosition].name,
+                passProps: {
+                    patientProfile: patientsList[selPosition],
+                    onRemovePatientProfile: async (name,key) =>{
+                        console.log("Testing on remove patient profile: "+JSON.stringify(key));
+                        await this.props.onRemoveFromPatientsList(key);
+
+                        alert(name+" Profile has been removed.")
+
+                    },
+                    onUpdatePatientInfo: async (data) => {
+                        console.log("Testing on update patient profile: "+JSON.stringify(key));
+                        await this.props.onUpdatePatientInfo(data);
+
+                        alert(data.name+" Profile has been updated.")
+                    }
+                }
+            });
+
+
+            if(activateBlocker) {
+                //remove spinner
+                setTimeout(
+                    () => {
+                        //this.spinnerToggler();
+                        this.setState((oldState)=>{
+                            return {
+                                ...oldState,
+                                amountOfPushes: 0
+                            }
+                        });
+                    },
+                    1000)
+            }
         }
-        return color;
+        else{
+            setTimeout(
+                () => {
+                    this.setState((oldState)=>{
+                        return {
+                            ...oldState,
+                            amountOfPushes: 0
+                        }
+                    });
+                },
+                100)
+        }
     };
 
     render() {
@@ -96,8 +179,9 @@ class ManagePatientsScreen extends Component{
             <View style={styles.container}>
                 <View style={styles.pickerStyle}>
                     <PatientsList
-                        list={this.props.patientsList}
+                        list={this.props.state.main.patientsList}
                         style={styles.pickerStyle}
+                        onItemAccessed={this.handleItemAccessed}
                     />
                 </View>
             </View>
@@ -118,4 +202,18 @@ const styles = StyleSheet.create({
     }
 });
 
-export default ManagePatientsScreen
+const mapDispatchToProps = dispatch => {
+    return {
+        onAddToPatientList: (data) => dispatch(addToPatientsList(data)),
+        onRemoveFromPatientsList: (key) => dispatch(removeFromPatientsList(key)),
+        onUpdatePatientInfo: (data) => dispatch(updatePatientInfo(data))
+    };
+};
+
+const mapStateToProps = state => {
+    return {state}
+};
+
+export default connect(mapStateToProps,mapDispatchToProps)(ManagePatientsScreen);
+
+//export default ManagePatientsScreen

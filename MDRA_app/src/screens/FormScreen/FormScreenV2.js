@@ -59,21 +59,21 @@ class FormScreen extends Component{
         return true;
     };
 
-    componentWillMount() {
-        BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
-
-        this.props.navigator.setStyle({
-            navBarBackgroundColor: '#262626',
-            navBarTextColor: '#ffffff',
-            statusBarTextColorSchemeSingleScreen: 'light',
-            navBarButtonColor: Platform.OS === 'android'?'#3057e1': null,
-            orientation: 'portrait',
-        });
-        //
-        this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
-
-        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
-    }
+    // componentWillMount() {
+    //     BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+    //
+    //     this.props.navigator.setStyle({
+    //         navBarBackgroundColor: '#262626',
+    //         navBarTextColor: '#ffffff',
+    //         statusBarTextColorSchemeSingleScreen: 'light',
+    //         navBarButtonColor: Platform.OS === 'android'?'#3057e1': null,
+    //         orientation: 'portrait',
+    //     });
+    //     //
+    //     this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
+    //
+    //     BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+    // }
 
     componentDidMount() {
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
@@ -84,6 +84,10 @@ class FormScreen extends Component{
             navBarButtonColor: Platform.OS === 'android'?'#3057e1': null,
             orientation: 'portrait',
         });
+
+        this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
+
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
     };
 
     constructor(props){
@@ -92,12 +96,15 @@ class FormScreen extends Component{
     }
 
     onNavigatorEvent = event => {
-        console.log("event: " + event);
+        //console.log("event: " + event);
         if(event.type === "NavBarButtonPress") {
             if(event.id === "sideDrawerToggle") {
                 this.props.navigator.toggleDrawer({
                     side: "left"
                 });
+            }
+            else if(event.id === "informationButton"){
+                this.showInformationAlert()
             }
         }
         else if(event.type === "DeepLink"){
@@ -110,10 +117,7 @@ class FormScreen extends Component{
 
                 this.props.navigator.showModal({
                     screen: "MDRA_app.managePatientsScreen",
-                    title: "PatientsList",
-                    passProps: {
-                        patientsList: this.props.state.main.patientsList
-                    }
+                    title: "Patients List",
                 });
                 this.props.navigator.toggleDrawer({
                     side: "left"
@@ -146,6 +150,25 @@ class FormScreen extends Component{
     //     }
     // };
     ///
+
+    showInformationAlert = () => {
+        let message = "Something 0";
+        switch (this.props.state.main.position) {
+            case 0:
+                message = "Something 0";
+                break;
+            case 1:
+                message = "Something 1";
+                break;
+            case 2:
+                message = "Something 2";
+                break;
+            case 3:
+                message = "Something 3";
+                break;
+        }
+        Alert.alert("Information", message)
+    };
 
     handleRemoveWelcomeScreen = (value) =>{
         if(value)
@@ -289,7 +312,8 @@ class FormScreen extends Component{
                                     <FormScreenAdvanced data={this.props.state.main.Page3Data} setPage={this.handleSetPage}/>
                                 </View>
                                 :<View>
-                                    <Text>//empty page in case of errors when switch from results
+                                    <Text>
+                                        //empty page in case of errors when switch from results
                                     </Text>
                                 </View>
                             }
@@ -330,11 +354,13 @@ class FormScreen extends Component{
                     </View>
                     :<View style={{flex:1}}>
                         {this.props.state.main.position === 4?
-                            <SendFormScreen/>
+                            <SendFormScreen
+                                navigator = {this.props.navigator}
+                            />
                             :
-                            <View>
-                                <Text>
-                                    //empty page in case of errors when switch from results
+                            <View style={{flex:1, alignItems:"center", justifyContent: "center"}}>
+                                <Text style={{fontSize: 40}}>
+                                    Loading...
                                 </Text>
                             </View>
                         }

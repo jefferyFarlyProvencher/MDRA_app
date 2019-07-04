@@ -74,6 +74,8 @@ class FormScreenInitial extends PureComponent{
         darkVisible: false,
 
         //selectedPatientProfile: this.props.state.main.patientsList[0].name
+
+        defaultPatient: {name:"None Selected", id: "None Selected"}
     };
 
     _handleSubmit =(async (values, bag) => {
@@ -116,14 +118,14 @@ class FormScreenInitial extends PureComponent{
             case 1:
                 return (
                     Yup.object().shape({
-                        weight: this.state.switchValue?Yup.number().positive().lessThan(160).required(requiredMessage):Yup.number().positive().lessThan(80).required(requiredMessage),
+                        weight: this.state.switchValue?Yup.number().positive().lessThan(201).required(requiredMessage):Yup.number().positive().lessThan(101).required(requiredMessage),
                         adminTime0: NewYupString(timeMessage).containsOnlyNumbers().required(requiredMessage),
                     })
                 );
             case 2:
                 return (
                     Yup.object().shape({
-                        weight: this.state.switchValue?Yup.number().positive().lessThan(160).required():Yup.number().positive().lessThan(80).required(requiredMessage),
+                        weight: this.state.switchValue?Yup.number().positive().lessThan(201).required():Yup.number().positive().lessThan(101).required(requiredMessage),
                         adminTime0: NewYupString(timeMessage).containsOnlyNumbers().required(requiredMessage),
                         adminTime1: NewYupString(timeMessage).containsOnlyNumbers().required(requiredMessage),
                     })
@@ -131,7 +133,7 @@ class FormScreenInitial extends PureComponent{
             case 3:
                 return (
                     Yup.object().shape({
-                        weight: this.state.switchValue?Yup.number().positive().lessThan(160).required():Yup.number().positive().lessThan(80).required(requiredMessage),
+                        weight: this.state.switchValue?Yup.number().positive().lessThan(201).required():Yup.number().positive().lessThan(101).required(requiredMessage),
                         adminTime0: NewYupString(timeMessage).containsOnlyNumbers().required(requiredMessage),
                         adminTime1: NewYupString(timeMessage).containsOnlyNumbers().required(requiredMessage),
                         adminTime2: NewYupString(timeMessage).containsOnlyNumbers().required(requiredMessage)
@@ -140,7 +142,7 @@ class FormScreenInitial extends PureComponent{
             case 4:
                 return (
                     Yup.object().shape({
-                        weight: this.state.switchValue?Yup.number().positive().lessThan(160).required():Yup.number().positive().lessThan(80).required(requiredMessage),
+                        weight: this.state.switchValue?Yup.number().positive().lessThan(201).required():Yup.number().positive().lessThan(101).required(requiredMessage),
                         adminTime0: NewYupString(timeMessage).containsOnlyNumbers().required(requiredMessage),
                         adminTime1: NewYupString(timeMessage).containsOnlyNumbers().required(requiredMessage),
                         adminTime2: NewYupString(timeMessage).containsOnlyNumbers().required(requiredMessage),
@@ -202,24 +204,98 @@ class FormScreenInitial extends PureComponent{
         }
     };
 
-    handlePatientProfileSelection = (patientProfileName, setFieldValue) => {
 
-        if(patientProfileName !== 'None Selected')
+    setFormValues = (formData) => {
+        // console.log("FORM BEFORE: "+
+        //     JSON.stringify(this.props.state.main.Page0Data) + ";"+
+        //     JSON.stringify(this.props.state.main.Page1Data) + ";"+
+        //     JSON.stringify(this.props.state.main.Page2Data) + ";"+
+        //     JSON.stringify(this.props.state.main.Page3Data) + ";"
+        // );
+        //console.log("FORMDATA: " + JSON.stringify(formData));
+        //set It to each page
+        this.props.onAddData(formData[0],0);
+        this.props.onAddData(formData[1],1);
+        this.props.onAddData(formData[2],2);
+        this.props.onAddData(formData[3],3);
+        //console.log("formData[4] => "+ formData[4]);
+
+        // console.log("FORM AFTER: "+
+        //     JSON.stringify(this.props.state.main.Page0Data) + ";"+
+        //     JSON.stringify(this.props.state.main.Page1Data) + ";"+
+        //     JSON.stringify(this.props.state.main.Page2Data) + ";"+
+        //     JSON.stringify(this.props.state.main.Page3Data) + ";"
+        // );
+
+        //Changes here to reset form
+        //go to empty screen, then, back to 1,
+        // in order to reset form to new values
+        this.props.onChangePosition(6);
+        this.props.onChangePosition(0);
+    };
+
+    handlePatientProfileSelection = (patientProfile, setFieldValue) => {
+
+        console.log("patientProfile: 5 "+ patientProfile);
+
+        if(patientProfile.name !== 'None Selected' && patientProfile !== 'None Selected')
         {
-            console.log("patientProfileName received: " + patientProfileName);
+            console.log("patientProfile received: " + JSON.stringify(patientProfile));
+
+            // let pseudoPatientProfile = patientProfile.split("\n");
+
+            // console.log("pseudoPatientProfile: " + JSON.stringify(pseudoPatientProfile));
+
             //should replace values for gender, weight, kg/lbs, and, of course, patientProfile
+            //filter MIGHT not be efficient for this case as it goes through EVERY
             let currentProfile = (this.props.patientsList.filter(patient => {
-                return patient.name === patientProfileName;
-            }))[0];
+                console.log("patient: "+ JSON.stringify(patient));
+                console.log("patient.id === pseudo[1]: "+ patient.id +"==="+ patientProfile +"?"+(patient.id === patientProfile));
+                return patient.id === patientProfile;
+            }));
 
-            console.log("current Profile selected: " + JSON.stringify(currentProfile));
+            currentProfile = currentProfile[0];
 
-            setFieldValue('weight', currentProfile['weight']);
-            setFieldValue('gender', currentProfile['gender']);
-            this._handleChangeSwitch(currentProfile['kg_lbs'] === 'lbs', setFieldValue);
-            //setFieldValue('patientProfile', patientProfileName);
+            console.log("currentProfile: "+ JSON.stringify(currentProfile));
+
+            if(typeof currentProfile !== 'undefined') {
+                if(typeof currentProfile.formData !== 'undefined' && currentProfile.formData !== null) {
+                    Alert.alert('Confirmation',
+                        'Do you want to reload the patient ' + currentProfile.name + (currentProfile.name[currentProfile.name.length-1] === 's'?'\'':'\'s') + " last drug regiment?", [
+                            {
+                                text: 'No',
+                                onPress: (() => {
+                                    console.log('Cancel Pressed')
+                                }),
+                                style: 'cancel'
+                            }, {
+                                text: 'Yes',
+                                onPress: () => {
+                                    this.setFormValues(currentProfile.formData, currentProfile)
+                                }
+                            }
+                        ],
+                        {
+                            cancelable: false
+                        }
+                    )
+                }
+                console.log("current Profile selected: " + JSON.stringify(currentProfile));
+
+                setFieldValue('patientProfile', currentProfile);
+                setFieldValue('weight', currentProfile['weight']);
+                setFieldValue('gender', currentProfile['gender']);
+                console.log("currentProfile's kg_lbs: "+ currentProfile["kg_lbs"]);
+                this._handleChangeSwitch(currentProfile['kg_lbs'], setFieldValue);
+                //setFieldValue('patientProfile', patientProfileName);
+            }
+            else{
+                setFieldValue('patientProfile', this.state.defaultPatient)
+            }
         }
-        //else do not change anything
+        else{
+            setFieldValue('patientProfile', [patientProfile]);
+        } //do not change anything
 
     };
 
@@ -246,19 +322,21 @@ class FormScreenInitial extends PureComponent{
     render() {
         let drugList = ["Ritalin IR","Pms-Methylphenidate IR", "Concerta", "Pms-Methylphenidate ER"];
 
-        let patientsList_name = [];
+        let patientsList_id = ["None Selected"];
+
+        //console.log("patientsList size: "+ this.props.patientsList.length);
 
         for(let i = 0; i < this.props.patientsList.length; i++)
         {
 
-            patientsList_name.push(this.props.patientsList[i].name)
+            patientsList_id.push(this.props.patientsList[i].id);
         }
-        console.log("patient list name: "+patientsList_name);
-        console.log("patient list: "+JSON.stringify(this.props.patientsList[1].name));
+        //console.log("patient list name: "+patientsList_id);
+        //console.log("patient list: "+JSON.stringify(this.props.patientsList[0].name));
         let picker = this.props.Picker;
         return(
             <View style={styles.container}>
-                <KeyboardAwareScrollView
+                <ScrollView
                     ref={ref => this.scrollView = ref}
                     onContentSizeChange={(contentWidth, contentHeight)=>{
                         if(this.state.amountOfPills>1)this.scrollView.scrollToEnd({animated: true});
@@ -266,7 +344,7 @@ class FormScreenInitial extends PureComponent{
                 >
                     <View>
                         <View style={[styles.centerElements]}>
-                            <TitleComponent text={"Initialization"} containerStyle={{top:0,left:0, position: "absolute"}}/>
+                            <TitleComponent text={"Initialization"}/>
                         </View>
                         <Formik
                             initialValues={
@@ -292,10 +370,10 @@ class FormScreenInitial extends PureComponent{
                                         formula3: this.props.data.formula3,
                                         food3: this.props.data.food3,
                                         amountOfPills: this.props.data.amountOfPills,
-                                        switchWeightFormat: this.props.switchWeightFormat
+                                        kg_lbs: this.props.kg_lbs?this.props.kg_lbs:this.props.switchWeightFormat
                                     }
                                     :{
-                                        patientProfile:"None Selected",
+                                        patientProfile:this.state.defaultPatient,
                                         gender: 'Male',
                                         weight: '40',
                                         dose0: '10',
@@ -315,7 +393,7 @@ class FormScreenInitial extends PureComponent{
                                         formula3: 'Ritalin IR',
                                         food3: 'No',
                                         amountOfPills: this.state.amountOfPills,
-                                        switchWeightFormat: this.state.switchValue,
+                                        kg_lbs: this.state.switchValue,
                                     }
                             }
                             onSubmit={this._handleSubmit}
@@ -332,22 +410,21 @@ class FormScreenInitial extends PureComponent{
                                          isSubmitting,
                                      }) => (
                                 <View>
-                                    <View style={styles.genderWeightContainerContainer}>
-                                        <View style={{flexDirection:"row", }}>
-                                            <DropDownListV2
-                                                value={values.patientProfile}
-                                                label={"Patient Profile"}
-                                                name="patientProfile"
-                                                onChange={(name,value)=>{
-                                                    console.log("in development...? "+ value);
-                                                    setFieldValue(name, value);
-                                                    this.handlePatientProfileSelection(value, setFieldValue)
-                                                }}
-                                                itemList={patientsList_name}
-                                                Picker={picker}
-                                                setDarkVisibility = {this.handleSetDarkVisibility}
-                                            />
-                                        </View>
+                                    <View style={{flexDirection:"row", marginHorizontal: "10%"}}>
+                                        <DropDownListV2
+                                            value={values.patientProfile.name}
+                                            label={"Patient Profile"}
+                                            name="patientProfile"
+                                            onChange={(name,value)=>{
+                                                console.log("in development...? "+ value);
+                                                this.handlePatientProfileSelection(value, setFieldValue)
+                                            }}
+                                            itemList={patientsList_id}
+                                            Picker={picker}
+                                            setDarkVisibility = {this.handleSetDarkVisibility}
+                                        />
+                                    </View>
+                                    <View style={[styles.genderWeightContainerContainer]}>
                                         <View style={[styles.twoPerRowContainer,{marginBottom:"0%"}]}>
                                             <DropDownListV2
                                                 style={styles.inputContainer}
@@ -395,7 +472,10 @@ class FormScreenInitial extends PureComponent{
                                         </View>
                                     </View>
                                     <View>
-                                        <View style={styles.drugContainer}>
+                                        <View
+                                            ref={ref => this.formulation1 = ref}
+                                            style={styles.drugContainer}
+                                        >
                                             <LinedLabel label={"Formulation 1"} textPosition={"center"}/>
                                             <View style={styles.twoPerRowContainer}>
                                                 <DropDownListV2
@@ -464,6 +544,9 @@ class FormScreenInitial extends PureComponent{
                                                             // }
                                                             // let formattedTime = this.handleFormatTime(time[0]+":"+ time[1]);
                                                             setFieldValue(name, this.handleFormatTime(value));
+                                                            //scroll to end or to next component? NOT WORKING
+                                                            // let scrollTarget = this.state.amountOfPills > 1?this.formulation2:this.submitButton;
+                                                            // console.log(this.scrollView)
                                                         }}
                                                         value={values.adminTime0}
                                                         name="adminTime0"
@@ -475,7 +558,10 @@ class FormScreenInitial extends PureComponent{
                                         {
                                             this.state.amountOfPills >= 2
                                                 ?
-                                                <View style={[styles.styleEvenFormulations,styles.drugContainer]}>
+                                                <View
+                                                    style={[styles.styleEvenFormulations,styles.drugContainer]}
+                                                    ref={ref => this.formulation2 = ref}
+                                                >
                                                     <LinedLabel label={"Formulation 2"} textPosition={"center"}/>
                                                     <View style={styles.twoPerRowContainer}>
                                                         <DropDownListV2
@@ -516,21 +602,41 @@ class FormScreenInitial extends PureComponent{
                                                             setDarkVisibility = {this.handleSetDarkVisibility}
                                                         />
                                                         <View style={[styles.inputContainer, {width:"55%"}]}>
-                                                            <Input
+                                                            {/*<Input*/}
+                                                                {/*label="Administration Time"*/}
+                                                                {/*value={values.adminTime1}*/}
+                                                                {/*onChange={(name,value) => {*/}
+                                                                    {/*setFieldValue("adminTime1", value);*/}
+                                                                {/*}}*/}
+                                                                {/*onBlur={() =>{*/}
+                                                                    {/*setFieldValue("adminTime1", this.handleFormatTime(values.adminTime1));*/}
+                                                                    {/*setFieldTouched("adminTime1", true)*/}
+                                                                {/*}}*/}
+                                                                {/*onTouch={setFieldTouched}*/}
+                                                                {/*name="adminTime1"*/}
+                                                                {/*error={this.state.amountOfPills>=1?(touched.adminTime1 && errors.adminTime1): null}*/}
+                                                                {/*keyboardType="numeric"*/}
+                                                                {/*maxLength={5}*/}
+                                                            {/*/>*/}
+                                                            <CustomTimeModal
                                                                 label="Administration Time"
+                                                                onChange={(name, value) => {
+                                                                    // let time = value.split(":");
+                                                                    // if(amOrPmSwitch != null) {
+                                                                    //     //console.log("time[0] result before: "+ time[0]);
+                                                                    //     time[0] = parseInt(time[0]) + (amOrPmSwitch? 0 : 12);
+                                                                    //     //console.log("time[0] result after: "+ time[0]);
+                                                                    //
+                                                                    // }
+                                                                    // let formattedTime = this.handleFormatTime(time[0]+":"+ time[1]);
+                                                                    setFieldValue(name, this.handleFormatTime(value));
+                                                                    //scroll to end or to next component? NOT WORKING
+                                                                    // let scrollTarget = this.state.amountOfPills > 1?this.formulation2:this.submitButton;
+                                                                    // console.log(this.scrollView)
+                                                                }}
                                                                 value={values.adminTime1}
-                                                                onChange={(name,value) => {
-                                                                    setFieldValue("adminTime1", value);
-                                                                }}
-                                                                onBlur={() =>{
-                                                                    setFieldValue("adminTime1", this.handleFormatTime(values.adminTime1));
-                                                                    setFieldTouched("adminTime1", true)
-                                                                }}
-                                                                onTouch={setFieldTouched}
                                                                 name="adminTime1"
-                                                                error={this.state.amountOfPills>=1?(touched.adminTime1 && errors.adminTime1): null}
-                                                                keyboardType="numeric"
-                                                                maxLength={5}
+                                                                error={touched.adminTime1 && errors.adminTime1}
                                                             />
                                                         </View>
                                                     </View>
@@ -540,7 +646,10 @@ class FormScreenInitial extends PureComponent{
                                         {
                                             this.state.amountOfPills >= 3
                                                 ?
-                                                <View style={[styles.drugContainer]}>
+                                                <View
+                                                    style={[styles.drugContainer]}
+                                                    ref={ref => this.formulation3 = ref}
+                                                >
                                                     <LinedLabel label={"Formulation 3"} textPosition={"center"}/>
                                                     <View style={styles.twoPerRowContainer}>
                                                         <DropDownListV2
@@ -579,22 +688,42 @@ class FormScreenInitial extends PureComponent{
                                                             setDarkVisibility = {this.handleSetDarkVisibility}
                                                         />
                                                         <View style={[styles.inputContainer, {width:"55%"}]}>
-                                                            <Input
-                                                                label="Administration Time"
-                                                                value={values.adminTime2}
-                                                                onChange={(name,value) => {
-                                                                    setFieldValue("adminTime2", value);
-                                                                }}
-                                                                onBlur={() =>{
-                                                                    setFieldValue("adminTime2", this.handleFormatTime(values.adminTime2));
-                                                                    setFieldTouched("adminTime2", true)
+                                                            {/*<Input*/}
+                                                                {/*label="Administration Time"*/}
+                                                                {/*value={values.adminTime2}*/}
+                                                                {/*onChange={(name,value) => {*/}
+                                                                    {/*setFieldValue("adminTime2", value);*/}
+                                                                {/*}}*/}
+                                                                {/*onBlur={() =>{*/}
+                                                                    {/*setFieldValue("adminTime2", this.handleFormatTime(values.adminTime2));*/}
+                                                                    {/*setFieldTouched("adminTime2", true)*/}
 
+                                                                {/*}}*/}
+                                                                {/*onTouch={setFieldTouched}*/}
+                                                                {/*name="adminTime2"*/}
+                                                                {/*error={this.state.amountOfPills>=2?(touched.adminTime2&& errors.adminTime2): null }*/}
+                                                                {/*keyboardType="numeric"*/}
+                                                                {/*maxLength={5}*/}
+                                                            {/*/>*/}
+                                                            <CustomTimeModal
+                                                                label="Administration Time"
+                                                                onChange={(name, value) => {
+                                                                    // let time = value.split(":");
+                                                                    // if(amOrPmSwitch != null) {
+                                                                    //     //console.log("time[0] result before: "+ time[0]);
+                                                                    //     time[0] = parseInt(time[0]) + (amOrPmSwitch? 0 : 12);
+                                                                    //     //console.log("time[0] result after: "+ time[0]);
+                                                                    //
+                                                                    // }
+                                                                    // let formattedTime = this.handleFormatTime(time[0]+":"+ time[1]);
+                                                                    setFieldValue(name, this.handleFormatTime(value));
+                                                                    //scroll to end or to next component? NOT WORKING
+                                                                    // let scrollTarget = this.state.amountOfPills > 1?this.formulation2:this.submitButton;
+                                                                    // console.log(this.scrollView)
                                                                 }}
-                                                                onTouch={setFieldTouched}
+                                                                value={values.adminTime2}
                                                                 name="adminTime2"
-                                                                error={this.state.amountOfPills>=2?(touched.adminTime2&& errors.adminTime2): null }
-                                                                keyboardType="numeric"
-                                                                maxLength={5}
+                                                                error={touched.adminTime2 && errors.adminTime2}
                                                             />
                                                         </View>
                                                     </View>
@@ -604,7 +733,10 @@ class FormScreenInitial extends PureComponent{
                                         {
                                             this.state.amountOfPills >= 4
                                                 ?
-                                                <View style={[styles.drugContainer,styles.styleEvenFormulations]}>
+                                                <View
+                                                    style={[styles.drugContainer,styles.styleEvenFormulations]}
+                                                    ref={ref => this.formulation4 = ref}
+                                                >
                                                     <LinedLabel label={"Formulation 4"} textPosition={"center"}/>
                                                     <View style={styles.twoPerRowContainer}>
                                                         <DropDownListV2
@@ -649,22 +781,42 @@ class FormScreenInitial extends PureComponent{
 
                                                         />
                                                         <View style={[styles.inputContainer, {width:"55%"}]}>
-                                                            <Input
-                                                                label="Administration Time"
-                                                                value={values.adminTime3}
-                                                                onChange={(name,value) => {
-                                                                    setFieldValue("adminTime3", value);
-                                                                }}
-                                                                onBlur={() =>{
-                                                                    setFieldValue("adminTime3", this.handleFormatTime(values.adminTime3));
-                                                                    setFieldTouched("adminTime3", true)
+                                                            {/*<Input*/}
+                                                                {/*label="Administration Time"*/}
+                                                                {/*value={values.adminTime3}*/}
+                                                                {/*onChange={(name,value) => {*/}
+                                                                    {/*setFieldValue("adminTime3", value);*/}
+                                                                {/*}}*/}
+                                                                {/*onBlur={() =>{*/}
+                                                                    {/*setFieldValue("adminTime3", this.handleFormatTime(values.adminTime3));*/}
+                                                                    {/*setFieldTouched("adminTime3", true)*/}
 
+                                                                {/*}}*/}
+                                                                {/*onTouch={setFieldTouched}*/}
+                                                                {/*name="adminTime3"*/}
+                                                                {/*error={this.state.amountOfPills>=3?(touched.adminTime3 && errors.adminTime3): null}*/}
+                                                                {/*keyboardType="numeric"*/}
+                                                                {/*maxLength={5}*/}
+                                                            {/*/>*/}
+                                                            <CustomTimeModal
+                                                                label="Administration Time"
+                                                                onChange={(name, value) => {
+                                                                    // let time = value.split(":");
+                                                                    // if(amOrPmSwitch != null) {
+                                                                    //     //console.log("time[0] result before: "+ time[0]);
+                                                                    //     time[0] = parseInt(time[0]) + (amOrPmSwitch? 0 : 12);
+                                                                    //     //console.log("time[0] result after: "+ time[0]);
+                                                                    //
+                                                                    // }
+                                                                    // let formattedTime = this.handleFormatTime(time[0]+":"+ time[1]);
+                                                                    setFieldValue(name, this.handleFormatTime(value));
+                                                                    //scroll to end or to next component? NOT WORKING
+                                                                    // let scrollTarget = this.state.amountOfPills > 1?this.formulation2:this.submitButton;
+                                                                    // console.log(this.scrollView)
                                                                 }}
-                                                                onTouch={setFieldTouched}
+                                                                value={values.adminTime3}
                                                                 name="adminTime3"
-                                                                error={this.state.amountOfPills>=3?(touched.adminTime3 && errors.adminTime3): null}
-                                                                keyboardType="numeric"
-                                                                maxLength={5}
+                                                                error={touched.adminTime3 && errors.adminTime3}
                                                             />
                                                         </View>
                                                     </View>
@@ -730,7 +882,10 @@ class FormScreenInitial extends PureComponent{
                                             </TouchableOpacity>
                                         </View>
                                     </View>
-                                    <View style={styles.buttonContainer}>
+                                    <View
+                                        style={styles.buttonContainer}
+                                        ref={ref => this.submitButton = ref}
+                                    >
                                         <Button
                                             buttonStyle={styles.button}
                                             title="Go to next step"
@@ -743,7 +898,7 @@ class FormScreenInitial extends PureComponent{
                             )}
                         />
                     </View>
-                </KeyboardAwareScrollView>
+                </ScrollView>
                 {(this.state.darkVisible)?
                     <TouchableWithoutFeedback
                         onPress={() => {
@@ -759,6 +914,7 @@ class FormScreenInitial extends PureComponent{
                                 width: "100%",
                                 height: "100%",
                                 position: "absolute",
+                                zIndex: 2
                             }}
                         />
                     </TouchableWithoutFeedback>
@@ -778,7 +934,7 @@ const styles = StyleSheet.create({
 
     genderWeightContainerContainer: {
         marginHorizontal: Dimensions.get('window').width*0.05,
-        marginTop: Dimensions.get('window').height*0.12,
+        //marginTop: Dimensions.get('window').height*0.12,
     },
 
     centerElements:{

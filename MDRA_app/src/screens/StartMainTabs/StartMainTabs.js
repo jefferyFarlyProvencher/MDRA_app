@@ -12,6 +12,7 @@ const startTabs = () => {
         IonIcons.getImageSource(Platform.OS==='android'? "ios-menu" :"ios-menu", 30),
         IonIcons.getImageSource(Platform.OS==='android'? "md-search" :"ios-search", 30),
         IonIcons.getImageSource("md-more",3),
+        IonIcons.getImageSource(Platform.OS==='android'? "ios-information-circle-outline": "ios-information-circle-outline",30)
     ]).then(sources => {
         Navigation.startTabBasedApp({
             tabs: [
@@ -29,14 +30,22 @@ const startTabs = () => {
                                 buttonColor:"#3057e1"
                             }
                         ],
+                        rightButtons: [
+                            {
+                                icon:sources[5],
+                                title: "Information",
+                                id: "informationButton",
+                                buttonColor:"#FFF"
+                            }
+                        ]
                     },
                     navBarBackgroundColor: '#262626',
                     navBarTextColor: '#ffffff',
                     statusBarTextColorSchemeSingleScreen: 'light',
-                    navBarButtonColor: Platform.OS === 'android'?'#3057e1': null,
-                    topBar: {
-                        buttonColor: "blue"
-                    },
+                    //navBarButtonColor: Platform.OS === 'android'?'#3057e1': null,
+                    // topBar: {
+                    //     buttonColor: "blue"
+                    // },
                 },
                 {
                     screen: "MDRA_app.resultScreen",
@@ -76,6 +85,14 @@ const startTabs = () => {
                                 buttonColor:"#3057e1"
                             }
                         ],
+                        rightButtons: [
+                            {
+                                icon:sources[5],
+                                title: "Information",
+                                id: "informationButton",
+                                buttonColor:"#FFF"
+                            }
+                        ]
                     },
                     navBarBackgroundColor: '#262626',
                     navBarTextColor: '#ffffff',
