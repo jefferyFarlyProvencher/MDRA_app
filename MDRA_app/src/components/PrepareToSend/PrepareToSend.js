@@ -98,11 +98,11 @@ let preparePills = (page0Data) => {
     return elementToReturn;
 };
 
-let verifyUnitConversion = (originalWeight, switchWeightFormat) => {
-    console.log("SwitchWeightFormat value: "+ switchWeightFormat);
+let verifyUnitConversion = (originalWeight, kg_lbs) => {
+    console.log("SwitchWeightFormat value: "+ kg_lbs);
     console.log("original value: "+originalWeight);
-    console.log("Switched value: "+ (switchWeightFormat? (""+parseFloat(originalWeight)*0.45359237) :originalWeight));
-    return (switchWeightFormat  //turns lbs to kg
+    console.log("Switched value: "+ (kg_lbs? (""+parseFloat(originalWeight)*0.45359237) :originalWeight));
+    return (kg_lbs  //turns lbs to kg
         ? (""+parseFloat(originalWeight)*0.45359237)
         :originalWeight);
 };

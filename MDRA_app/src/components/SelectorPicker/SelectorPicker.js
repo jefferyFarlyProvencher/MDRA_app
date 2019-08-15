@@ -10,7 +10,7 @@ import {
     Modal,
     TouchableWithoutFeedback,
     TouchableHighlight,
-    FlatList
+    FlatList, Image
 } from 'react-native';
 //import {Button} from 'react-native-elements';
 import 'react-native-svg';
@@ -57,6 +57,19 @@ class ResultPage extends PureComponent {
 //    Animated.sequence([
 
     render() {
+
+        const pickerElements = this.props.choices.map(item => {
+            return(
+                <View  key={item.key}>
+                    <TouchableHighlight onPress={()=>{this.handleItemSelected(item.displayName)}}>
+                        <View style={styles.selectorTile}>
+                            <Text style={styles.selectorTileText}>{item.name}</Text>
+                        </View>
+                    </TouchableHighlight>
+                </View>
+            )
+        });
+
         return(
             <View style={{flex:1}}>
                 <View >
@@ -82,6 +95,7 @@ class ResultPage extends PureComponent {
                                         color:'#e4e4e4',
                                         textAlign: "center"
                                     },
+                                    this.props.textStyle
                                 ]
                             }>{this.state.selectedItem}</Text>
                         </View>
@@ -119,23 +133,24 @@ class ResultPage extends PureComponent {
                             />
                         </TouchableWithoutFeedback>
                         <View>
-                            <View>
-                                <TouchableHighlight onPress={()=>{this.handleItemSelected("Name")}}>
-                                    <View style={styles.selectorTile}>
-                                        <Text style={styles.selectorTileText}>Result Name</Text>
-                                    </View>
-                                </TouchableHighlight>
-                                <TouchableHighlight onPress={()=>{this.handleItemSelected("Date")}}>
-                                    <View style={styles.selectorTile}>
-                                        <Text style={styles.selectorTileText}>{"Creation Date \n(format: YYYY-MM-DD)"}</Text>
-                                    </View>
-                                </TouchableHighlight>
-                                <TouchableHighlight onPress={()=>{this.handleItemSelected("Patients")}}>
-                                    <View style={styles.selectorTile}>
-                                        <Text style={styles.selectorTileText}>Patient Name</Text>
-                                    </View>
-                                </TouchableHighlight>
-                            </View>
+                            {pickerElements}
+                            {/*<View>*/}
+                                {/*<TouchableHighlight onPress={()=>{this.handleItemSelected("Name")}}>*/}
+                                    {/*<View style={styles.selectorTile}>*/}
+                                        {/*<Text style={styles.selectorTileText}>Result Name</Text>*/}
+                                    {/*</View>*/}
+                                {/*</TouchableHighlight>*/}
+                                {/*<TouchableHighlight onPress={()=>{this.handleItemSelected("Date")}}>*/}
+                                    {/*<View style={styles.selectorTile}>*/}
+                                        {/*<Text style={styles.selectorTileText}>{"Creation Date \n(format: YYYY-MM-DD)"}</Text>*/}
+                                    {/*</View>*/}
+                                {/*</TouchableHighlight>*/}
+                                {/*<TouchableHighlight onPress={()=>{this.handleItemSelected("Patients")}}>*/}
+                                    {/*<View style={styles.selectorTile}>*/}
+                                        {/*<Text style={styles.selectorTileText}>Patient Name</Text>*/}
+                                    {/*</View>*/}
+                                {/*</TouchableHighlight>*/}
+                            {/*</View>*/}
                             {/*<FlatList*/}
                                 {/*contentContainterStyle={{*/}
                                     {/*flex:1,*/}

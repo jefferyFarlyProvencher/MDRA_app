@@ -10,7 +10,7 @@ import {
     StyleSheet,
     Dimensions,
     Platform,
-    Alert
+    Alert, BackHandler
 } from 'react-native';
 
 //Navigation
@@ -78,11 +78,40 @@ class StartScreen extends Component{
     //     });
     // }
 
+    handleBackButton = () => {
+        // if(this.props.state.main.position === 0 || this.props.state.main.position === 4)
+        Alert.alert(
+            'Exit App',
+            'Exiting the application?', [
+                {
+                    text: 'Cancel',
+                    onPress: (() => console.log('Cancel Pressed')),
+                    style: 'cancel'
+                }, {
+                    text: 'OK',
+                    onPress: () => BackHandler.exitApp(),
+                }
+            ],
+            {
+                cancelable: false
+            }
+        );
+        return true;
+    };
+
     componentDidMount() {
         this.props.navigator.setStyle({
             navBarHidden: true
         });
+
+        BackHandler.removeEventListener('hardwareBackPress',  ()=>{BackHandler.exitApp()});
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+    };
+
+    componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress',  this.handleBackButton)
     }
+
 
     displayConnectionError = () =>{
 
@@ -200,16 +229,18 @@ class StartScreen extends Component{
                                 </Text>
                             </View>
                             <View style={{alignItems: "center", justifyContent:"center"}}>
-                                <Animated.View style={[
-                                    {transform: [{scale: this.state.startAnim.interpolate({
-                                                inputRange: [1,1.1],
-                                                outputRange: [1,1.1]
-                                            })
-                                        }]
-                                    },
-                                    (this.state.loading)?null:styles.mainContainer
-                                    ]
-                                }>
+                                <Animated.View
+                                    style={[
+
+                                        {transform: [{scale: this.state.startAnim.interpolate({
+                                                    inputRange: [1,1.1],
+                                                    outputRange: [1,1.1]
+                                                })
+                                            }]
+                                        },
+                                        (this.state.loading)?null:styles.mainContainer
+                                    ]}
+                                >
                                     <View style={{alignItems:"center", justifyContent:"center"}}>
                                         <TouchableWithoutFeedback onPress={this._startMainApp}>
                                                 <View style={[styles.textContainer,{}]}>

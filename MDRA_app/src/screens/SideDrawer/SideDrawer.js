@@ -15,6 +15,7 @@ import {connect} from 'react-redux';
 
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import MatComIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {
     addToResultList,
     allowAdvancedOptions,
@@ -156,7 +157,6 @@ class SideDrawer extends Component{
                             />
                         </View>
                         <Text>{this.props.state.main.advanceTabAccessible?"Disable Advanced tab":"Enable Advanced tab"}</Text>
-
                     </View>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={this.handleConnectionTest}>
@@ -195,7 +195,18 @@ class SideDrawer extends Component{
                         <Text>Empty Result List</Text>
                     </View>
                 </TouchableOpacity>
-
+                <TouchableOpacity
+                    onPress={() => alert("Still need to do this...")}
+                >
+                    <View  style={[styles.drawerItem,{borderBottomWidth: 1,}]}>
+                        <FontAwesome
+                            size={40}
+                            name= {"question-circle-o"}
+                            color="#AAA" style={[styles.drawerItemIcon]}
+                        />
+                        <Text>About this app</Text>
+                    </View>
+                </TouchableOpacity>
             </View>
         );
     }

@@ -58,39 +58,39 @@ let HandleReceivedData = (data) => {
             TIEffD1: parseFloat(allResults[9]),
 
             TIEffD1s: parseFloat(allResults[9]) !== -1 ?
-                parseFloat(allResults[9]).toFixed(0) + ''
+                parseFloat(allResults[9])+""//.toFixed(0) + ''
                 :null,
 
-            TIEffD2: (parseFloat(allResults[10])).toFixed(0) + '',
+            TIEffD2: (parseFloat(allResults[10])),//.toFixed(0) + '',
 
-            TIEffE: (parseFloat(allResults[11])).toFixed(0) + '',
+            TIEffE: (parseFloat(allResults[11])),//.toFixed(0) + '',
 
-            TotalScore: (parseFloat(allResults[12])).toFixed(0) + '',
+            TotalScore: (parseFloat(allResults[12])),//.toFixed(0) + '',
 
-            characNRAM: parseFloat(allResults[13]).toPrecision(2),
-            characNRRAM: parseFloat(allResults[14]).toPrecision(2),
-            characRAM: parseFloat(allResults[15]).toPrecision(2),
-            characRARAM: parseFloat(allResults[16]).toPrecision(2),
-            characARAM: parseFloat(allResults[17]).toPrecision(2),
-            characNRRARAM: parseFloat(allResults[18]).toPrecision(2),
+            characNRAM: parseFloat(allResults[13]),//.toPrecision(2),
+            characNRRAM: parseFloat(allResults[14]),//.toPrecision(2),
+            characRAM: parseFloat(allResults[15]),//.toPrecision(2),
+            characRARAM: parseFloat(allResults[16]),//.toPrecision(2),
+            characARAM: parseFloat(allResults[17]),//.toPrecision(2),
+            characNRRARAM: parseFloat(allResults[18]),//.toPrecision(2),
 
-            characNR: parseFloat(allResults[19]).toPrecision(2),
-            characNRR: parseFloat(allResults[20]).toPrecision(2),
-            characR: parseFloat(allResults[21]).toPrecision(2),
-            characRAR: parseFloat(allResults[22]).toPrecision(2),
-            characAR: parseFloat(allResults[23]).toPrecision(2),
-            characNRRAR: parseFloat(allResults[24]).toPrecision(2),
+            characNR: parseFloat(allResults[19]),//.toPrecision(2),
+            characNRR: parseFloat(allResults[20]),//.toPrecision(2),
+            characR: parseFloat(allResults[21]),//.toPrecision(2),
+            characRAR: parseFloat(allResults[22]),//.toPrecision(2),
+            characAR: parseFloat(allResults[23]),//.toPrecision(2),
+            characNRRAR: parseFloat(allResults[24]),//.toPrecision(2),
 
-            characNRNuit: parseFloat(allResults[25]).toPrecision(2),
-            characNRRNuit: parseFloat(allResults[26]).toPrecision(2),
-            characRNuit: parseFloat(allResults[27]).toPrecision(2),
-            characRARNuit: parseFloat(allResults[28]).toPrecision(2),
-            characARNuit: parseFloat(allResults[29]).toPrecision(2),
-            characNRRARNuit: parseFloat(allResults[30]).toPrecision(2),
+            characNRNuit: parseFloat(allResults[25]),//.toPrecision(2),
+            characNRRNuit: parseFloat(allResults[26]),//.toPrecision(2),
+            characRNuit: parseFloat(allResults[27]),//.toPrecision(2),
+            characRARNuit: parseFloat(allResults[28]),//.toPrecision(2),
+            characARNuit: parseFloat(allResults[29]),//.toPrecision(2),
+            characNRRARNuit: parseFloat(allResults[30]),//.toPrecision(2),
 
             maxPercentile: parseFloat(allResults[31]),
 
-            rce: 100.0 - (parseFloat(allResults[32])).toFixed(0) + ''
+            rce: 100.0 - (parseFloat(allResults[32]))+'',//.toFixed(0) + ''
         };
         //console.log("RECEIVED DATA: " + JSON.stringify(receivedData));
         return receivedData;

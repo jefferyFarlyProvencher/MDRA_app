@@ -256,6 +256,11 @@ class CustomTimeModal extends PureComponent{
                            </Text>
                        </View>
                    </TouchableOpacity>
+                    <View style={{
+                        alignItems: labelPosition?this.handleLabelPosition(labelPosition): "flex-start"
+                    }}>
+                        {error && <FormValidationMessage>{error}</FormValidationMessage>}
+                    </View>
                 </View>
                 <View>
                     <Modal

@@ -127,7 +127,7 @@ let ReversePrepareToSend = (input) => {
             formula3: 'Ritalin IR',
             food3: 'No',
             amountOfPills: 1,
-            switchWeightFormat: false
+            kg_lbs: false
         };
     //page 1 => timeZonage
     let newPage1Object = {
@@ -265,7 +265,19 @@ let ReversePrepareToSend = (input) => {
             //verify if index is in page0,
             if (newPage0Object[currentlyEvaluatedIndex]|| newPage0Object[currentlyEvaluatedIndex] === '') {
 
-                if(currentlyEvaluatedIndex.includes('adminTime'))
+                if(currentlyEvaluatedIndex === 'weight')
+                {
+                    //automatic lbs to kg converter makes string more than 5 of length, since max in form is 5
+                    // if string length is > 5 then reconvert back to lbs
+                    if(currentFormData[1].length > 5)
+                    {
+                        //brings the kg format back to lbs
+                        newPage0Object['weight'] = parseFloat(currentFormData[1]/0.45359237)+"";
+                        //and sets the trigger to true
+                        newPage0Object['kg_lbs'] = true;
+                    }
+                }
+                else if(currentlyEvaluatedIndex.includes('adminTime'))
                 {
                     newPage0Object[currentlyEvaluatedIndex] = convertTimeToHourFormat(currentFormData[1]);
 

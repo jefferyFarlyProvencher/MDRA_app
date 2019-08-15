@@ -76,12 +76,17 @@ class ResultsList extends Component{
         else if(this.state.searchTarget === 'Date'){
             console.log("filtering with Date");
             tempNewData = (this.props.list).filter(item => {
-                const itemData = `${item.date.toUpperCase()}
+                if(item.date !== 'null' && typeof item.date !== "undefined") {
+                    console.log("filtering with Date -> passed if");
+                    const itemData = `${item.date.toUpperCase()}
                               ${item.date.toUpperCase()}
                               ${item.date.toUpperCase()}`;
-                const textData = text.toUpperCase();
+                    const textData = text.toUpperCase();
 
-                return itemData.indexOf(textData) > -1;
+                    return itemData.indexOf(textData) > -1;
+                }else{
+                    return false
+                }
             });
         }
         else if(this.state.searchTarget === 'Patients'){
@@ -113,7 +118,7 @@ class ResultsList extends Component{
         // });
         /// OLD CODE END
         const newData = tempNewData;
-        // console.log(JSON.stringify("modList 1: "+ this.state.modifiedList));
+        //console.log(JSON.stringify("modList 1: "+ this.state.modifiedList));
         // console.log(JSON.stringify("size modList 1: "+ this.state.modifiedList.length));
         this.setState({
             modifiedList: newData,
@@ -145,22 +150,23 @@ class ResultsList extends Component{
         })
     };
 
-    test = () =>{
-
-    }
-
     renderHeader = () => {
         let selectorChoices= [
             {
-                key: '0',
+                key: '0848496513',
                 name: "Result Name",
                 subtitle:"",
                 displayName: "Name",
             },
             {
-                key: '1',
+                key: '15555884454',
                 name: "Creation Date\n(format: YYYY-MM-DD)",
                 displayName: "Date"
+            },
+            {
+                key: '26655894135',
+                name: "Patient Profile",
+                displayName: "Patients"
             },
         ];
 
@@ -210,11 +216,6 @@ class ResultsList extends Component{
         );
     };
 
-    test = (index) => {
-        console.log("index: "+ index);
-        return(<View/>)
-    }
-
     render() {
         return (
             <View style={{alignContent:"center",backgroundColor:"#262626"}}>
@@ -258,13 +259,13 @@ class ResultsList extends Component{
                                         subtitle={info.item.patient?info.item.patient:" "}
                                         key={info.item.key}
                                         onLongPress={() => {
-                                            this.props.onToggleSelectorList(info.item.key);
+                                            this.props.onToggleSelectorList(info.item.key, this.state.modifiedList);
                                             console.log('Item selected: ' + info.item.key);
                                             console.log('pressed slowly');
                                         }
                                         }
                                         onPress={() => {
-                                            this.props.onItemAccessed(info.item.key);
+                                            this.props.onItemAccessed(info.item.key, this.state.modifiedList);
                                             console.log('Item accessed: ' + info.item.key);
                                             console.log('pressed quickly');
                                         }}

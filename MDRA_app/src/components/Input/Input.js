@@ -71,7 +71,8 @@ class Input extends PureComponent{
                 lineColor: "#888"
             }
         });
-        onBlur();
+        if(typeof onBlur !== "undefined" && onBlur!==null)
+            onBlur();
     };
 
     handleOnFocus = () => {

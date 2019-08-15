@@ -123,6 +123,7 @@ const reducer = (state = initialState, action) => {
                 name: action.newName,
                 id: targetedObject.id,
                 date: targetedObject.date,
+                patient:targetedObject.patient,
                 filePDF: targetedObject.filePDF
 
             };
@@ -174,6 +175,7 @@ const reducer = (state = initialState, action) => {
             name: targetedObject.name,
             id: targetedObject.id,
             date:targetedObject.date,
+                patient:targetedObject.patient,
             filePDF: action.pdfLocation,
 
         };

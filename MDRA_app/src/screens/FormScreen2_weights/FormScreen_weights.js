@@ -142,7 +142,7 @@ class FormScreenWeights extends PureComponent{
                                         <LinedLabel
                                             label={(this.props.state.main.Page1Data)
                                                 ? (this.props.state.main.Page1Data.nbTherapeuticBoxes === "Two therapeutic boxes (AM and PM)")
-                                                    ?"Problems in the Morning":"Problems in the Day"
+                                                    ?"Problems in the morning":"Problems in the day"
                                                 :"Problems in the day"
                                             }
                                         />

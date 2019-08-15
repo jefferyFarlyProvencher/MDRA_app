@@ -48,16 +48,16 @@ class FormScreenInitial extends PureComponent{
                 :["Ritalin IR","Ritalin IR","Ritalin IR","Ritalin IR"]
         ,
         //time values are there to set the dosage
-        timeValues:
-            this.props.data
-                ?[
-                    this.props.data.adminTime0,
-                    this.props.data.adminTime1,
-                    this.props.data.adminTime2,
-                    this.props.data.adminTime3,
-                ]
-                :["","","",""]
-        ,
+        // timeValues:
+        //     this.props.data
+        //         ?[
+        //             this.props.data.adminTime0,
+        //             this.props.data.adminTime1,
+        //             this.props.data.adminTime2,
+        //             this.props.data.adminTime3,
+        //         ]
+        //         :["","","",""]
+        // ,
         //if there is data and an amountOfPills,
         // Number of pill given (1 to 4)
         amountOfPills:this.props.data
@@ -67,9 +67,7 @@ class FormScreenInitial extends PureComponent{
             :1,
         //Switch value indicates if weight is in pounds (true) or in kg (false)
         switchValue: this.props.data?
-            this.props.data.switchWeightFormat: false,
-
-        currentlySelectedProfile:"None Selected",
+            this.props.data.kg_lbs: false,
 
         darkVisible: false,
 
@@ -77,6 +75,24 @@ class FormScreenInitial extends PureComponent{
 
         defaultPatient: {name:"None Selected", id: "None Selected"}
     };
+
+    // componentDidMount() {
+    //     console.log("componentDidMount");
+    //     console.log("formScreenInitial's props: "+ JSON.stringify(this.props.data) );
+    //     if(typeof this.props.data !== "undefined") {
+    //         console.log("this is the value of kg_lbs in props: " + this.props.data.kg_lbs + " and this is the value in state: " + this.state.switchValue);
+    //         if (this.props.data.kg_lbs) {
+    //             console.log('Setting kg_LBS');
+    //             this.setState(oldState => {
+    //                 return {
+    //                     ...oldState,
+    //                     switchValue: true
+    //                 }
+    //
+    //             })
+    //         }
+    //     }
+    // }
 
     _handleSubmit =(async (values, bag) => {
         try {
@@ -106,7 +122,9 @@ class FormScreenInitial extends PureComponent{
             }
         });
 
-        setFieldValue('switchWeightFormat', switchBoolean)
+        if(setFieldValue !== null) {
+            setFieldValue('kg_lbs', switchBoolean)
+        }
     };
 
     _handleValidation = () => {
@@ -205,7 +223,7 @@ class FormScreenInitial extends PureComponent{
     };
 
 
-    setFormValues = (formData) => {
+    setFormValues = (formData, currentProfile, setFieldValue) => {
         // console.log("FORM BEFORE: "+
         //     JSON.stringify(this.props.state.main.Page0Data) + ";"+
         //     JSON.stringify(this.props.state.main.Page1Data) + ";"+
@@ -219,7 +237,7 @@ class FormScreenInitial extends PureComponent{
         this.props.onAddData(formData[2],2);
         this.props.onAddData(formData[3],3);
         //console.log("formData[4] => "+ formData[4]);
-
+        //this._handleChangeSwitch()
         // console.log("FORM AFTER: "+
         //     JSON.stringify(this.props.state.main.Page0Data) + ";"+
         //     JSON.stringify(this.props.state.main.Page1Data) + ";"+
@@ -227,7 +245,6 @@ class FormScreenInitial extends PureComponent{
         //     JSON.stringify(this.props.state.main.Page3Data) + ";"
         // );
 
-        //Changes here to reset form
         //go to empty screen, then, back to 1,
         // in order to reset form to new values
         this.props.onChangePosition(6);
@@ -249,14 +266,14 @@ class FormScreenInitial extends PureComponent{
             //should replace values for gender, weight, kg/lbs, and, of course, patientProfile
             //filter MIGHT not be efficient for this case as it goes through EVERY
             let currentProfile = (this.props.patientsList.filter(patient => {
-                console.log("patient: "+ JSON.stringify(patient));
-                console.log("patient.id === pseudo[1]: "+ patient.id +"==="+ patientProfile +"?"+(patient.id === patientProfile));
+                //console.log("patient: "+ JSON.stringify(patient));
+                //console.log("patient.id === pseudo[1]: "+ patient.id +"==="+ patientProfile +"?"+(patient.id === patientProfile));
                 return patient.id === patientProfile;
             }));
 
             currentProfile = currentProfile[0];
 
-            console.log("currentProfile: "+ JSON.stringify(currentProfile));
+            //console.log("currentProfile: "+ JSON.stringify(currentProfile));
 
             if(typeof currentProfile !== 'undefined') {
                 if(typeof currentProfile.formData !== 'undefined' && currentProfile.formData !== null) {
@@ -265,13 +282,18 @@ class FormScreenInitial extends PureComponent{
                             {
                                 text: 'No',
                                 onPress: (() => {
-                                    console.log('Cancel Pressed')
+                                    console.log('Cancel Pressed');
+                                    setFieldValue('patientProfile', currentProfile);
+                                    setFieldValue('weight', currentProfile['weight']);
+                                    setFieldValue('gender', currentProfile['gender']);
+                                    //console.log("currentProfile's kg_lbs: "+ currentProfile["kg_lbs"]);
+                                    this._handleChangeSwitch(currentProfile['kg_lbs'], setFieldValue);
                                 }),
                                 style: 'cancel'
                             }, {
                                 text: 'Yes',
                                 onPress: () => {
-                                    this.setFormValues(currentProfile.formData, currentProfile)
+                                    this.setFormValues(currentProfile.formData, currentProfile);
                                 }
                             }
                         ],
@@ -280,13 +302,15 @@ class FormScreenInitial extends PureComponent{
                         }
                     )
                 }
-                console.log("current Profile selected: " + JSON.stringify(currentProfile));
+                else{
+                    setFieldValue('patientProfile', currentProfile);
+                    setFieldValue('weight', currentProfile['weight']);
+                    setFieldValue('gender', currentProfile['gender']);
+                    //console.log("currentProfile's kg_lbs: "+ currentProfile["kg_lbs"]);
+                    this._handleChangeSwitch(currentProfile['kg_lbs'], setFieldValue);
+                }
+                //console.log("current Profile selected: " + JSON.stringify(currentProfile));
 
-                setFieldValue('patientProfile', currentProfile);
-                setFieldValue('weight', currentProfile['weight']);
-                setFieldValue('gender', currentProfile['gender']);
-                console.log("currentProfile's kg_lbs: "+ currentProfile["kg_lbs"]);
-                this._handleChangeSwitch(currentProfile['kg_lbs'], setFieldValue);
                 //setFieldValue('patientProfile', patientProfileName);
             }
             else{
@@ -294,7 +318,7 @@ class FormScreenInitial extends PureComponent{
             }
         }
         else{
-            setFieldValue('patientProfile', [patientProfile]);
+            setFieldValue('patientProfile', this.state.defaultPatient);
         } //do not change anything
 
     };
@@ -350,7 +374,9 @@ class FormScreenInitial extends PureComponent{
                             initialValues={
                                 (this.props.data)
                                     ?{
-                                        patientProfile: this.props.data.patientProfile?this.props.data.patientProfile:"None Selected", //always none selected because error otherwise?
+                                        patientProfile: this.props.data.patientProfile && typeof this.props.data.patientProfile !== 'undefined'
+                                            ?this.props.data.patientProfile
+                                            :this.state.defaultPatient, //always none selected because error otherwise?
                                         gender: this.props.data.gender,
                                         weight: this.props.data.weight,
                                         dose0: this.props.data.dose0,
@@ -370,7 +396,7 @@ class FormScreenInitial extends PureComponent{
                                         formula3: this.props.data.formula3,
                                         food3: this.props.data.food3,
                                         amountOfPills: this.props.data.amountOfPills,
-                                        kg_lbs: this.props.kg_lbs?this.props.kg_lbs:this.props.switchWeightFormat
+                                        kg_lbs: parseInt(this.props.weight) > 101? true :(this.props.data.kg_lbs?this.props.data.kg_lbs:this.props.data.switchWeightFormat)
                                     }
                                     :{
                                         patientProfile:this.state.defaultPatient,
@@ -457,7 +483,7 @@ class FormScreenInitial extends PureComponent{
                                                         <Text>{(this.state.switchValue?"lbs":"kg ")}</Text>
                                                     </View>
                                                     <Switch
-                                                        value={this.state.switchValue}
+                                                        value={values.kg_lbs}
                                                         onValueChange={(value) => {
                                                             console.log("value of switch: "+ value);
                                                             this._handleChangeSwitch(value, setFieldValue);

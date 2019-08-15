@@ -25,7 +25,7 @@ import Draggable from 'react-native-draggable';
 
 //Image imports
 import areaImage from '../../assets/area_small.png';
-import pieImage from '../../assets/pie_small.png';
+import pieImage from '../../assets/pie.png';
 
 //redux imports
 import {connect} from 'react-redux';

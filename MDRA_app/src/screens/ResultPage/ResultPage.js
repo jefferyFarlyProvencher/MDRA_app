@@ -17,6 +17,7 @@ import {
 //import {Button} from 'react-native-elements';
 import 'react-native-svg';
 import { IndicatorViewPager, PagerTitleIndicator, PagerTabIndicator } from 'rn-viewpager'
+import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import Spinner from "react-native-loading-spinner-overlay";
 import RNHTMLtoPDF from "react-native-html-to-pdf";
@@ -27,9 +28,10 @@ import Draggable from 'react-native-draggable';
 
 //Image imports
 import areaImage from '../../assets/area_small.png';
-import pieImage from '../../assets/pie_small.png';
-import pdfImage from '../../assets/pdf-2.png';
+import pieImage from '../../assets/pie.png';
+import pdfImage from '../../assets/pdfImageSmall22.png';
 import udemLogo from '../../assets/UdeMLogo.png';
+import textDocument from '../../assets/text-document-black.png'
 
 //redux imports
 import {connect} from 'react-redux';
@@ -37,19 +39,28 @@ import {addData, changePosition, allowAdvancedOptions, addPDFToResult, removePDF
 //component imports
 import GraphComponent from '../../components/ResultPage_GraphComponent/GraphComponent';
 import TitleComponent from "../../components/TitleComponent/TitleComponent";
-
 import SinglePieChartComponent from "../../components/ResultPage_PieChartsComponent/SinglePieChartComponent";
+import ViewToggle from "../../components/ViewToggle/ViewToggle"
+import InputDisplay from "../../components/InputDisplay/InputDisplay";
+import LifeBar from '../../components/LifeBar/LifeBar';
+import LinedLabel from "../../components/LinedLabel/LinedLabel";
+
 //assets
 //import {udemDark} from "../../assets/colors";
 import pdfRed from '../../assets/pdf-red.png';
 import {Formik} from "formik";
 import * as Yup from "yup";
 import NewYupString from "../../components/NewYupString/NewYupString";
-import Input from "../ResultScreen/ResultScreen";
+import ScrollDownIndicator from "../../components/ScrollDownIndicator/ScrollDownIndicator";
 
 class ResultPage extends PureComponent {
     state = {
-        listLength: this.props.state.main.resultsList.length,
+        listLength: this.props.contextSensitiveList == null
+            ?this.props.state.main.resultsList.length
+            :this.props.contextSensitiveList.length,
+        list: this.props.contextSensitiveList == null
+            ?this.props.state.main.resultsList
+            :this.props.contextSensitiveList,
         currentPosition: this.props.selectedPosition,
         orientation: true, //portrait true, landscape false
         modalVisible: false,
@@ -58,19 +69,45 @@ class ResultPage extends PureComponent {
         language:"Java",
         searchTarget: "name",
         //on start it is false to accelerate the loading of the graph
-        animationFlag: true
+        animationFlag: true,
+        title:"",
+        sliderIndicatorActivated: true,
+        sliderOffset: Dimensions.get("window").height*0.3
     };
 
     handleBackButton = () => {
-
+        this.props.navigator.pop();
     };
 
     componentDidMount() {
+        //BackHandler.removeEventListener('hardwareBackPress');
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+
     };
 
     componentWillUnmount() {
-        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+        BackHandler.removeEventListener('hardwareBackPress',  ()=>{BackHandler.exitApp()});
+        BackHandler.addEventListener('hardwareBackPress',
+            () => {
+                // if(this.props.state.main.position === 0 || this.props.state.main.position === 4)
+                Alert.alert(
+                    'Exit App',
+                    'Exiting the application?', [
+                        {
+                            text: 'Cancel',
+                            onPress: (() => console.log('Cancel Pressed')),
+                            style: 'cancel'
+                        }, {
+                            text: 'OK',
+                            onPress: () => BackHandler.exitApp(),
+                        }
+                    ],
+                    {
+                        cancelable: false
+                    }
+                );
+                return true;
+            })
     };
 
     async requestExternalStorageRead() {
@@ -93,7 +130,14 @@ class ResultPage extends PureComponent {
 
     async requestExternalStorageWrite() {
         try {
-            const granted = await PermissionsAndroid.request(
+            const granted = await PermissionsAndroid.request(        // this.buttonBar.measure((fx, fy, width, height, px, py) => {
+                //     console.log('Component width is: ' + width)
+                //     console.log('Component height is: ' + height)
+                //     console.log('X offset to frame: ' + fx)
+                //     console.log('Y offset to frame: ' + fy)
+                //     console.log('X offset to page: ' + px)
+                //     console.log('Y offset to page: ' + py)
+                // })
                 PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
                 {
                     'title': 'Cool App ...',
@@ -109,38 +153,7 @@ class ResultPage extends PureComponent {
         }
     }
 
-    _renderTabIndicator = () => {
-        return (
-            <PagerTabIndicator
-                tabs={
-                    [
-                        {
-                            text: 'Pk Profile',
-                            iconSource: areaImage,
-                            selectedIconSource: areaImage
-                        },
-                        {
-                            text: 'Performance',
-                            iconSource: pieImage,
-                            selectedIconSource: pieImage
-                        },
-                        // {
-                        //     text: 'Input',
-                        //     iconSource: udemLogo,
-                        //     selectedIconSource: udemLogo
-                        // },
-                        {
-                            text: 'PDF Generator',
-                            iconSource: pdfImage,
-                            selectedIconSource: pdfImage
-                        }
-                    ]
-                }
-                iconStyle={{height:30, width:30}}
-                selectedIconStyle={{height:40, width:40}}
-            />
-        )
-    };
+
 
     _handleOnStartUp = () => {
         setTimeout(
@@ -165,6 +178,7 @@ class ResultPage extends PureComponent {
                     ...oldState,
                     ///update position
                     currentPosition: oldState.currentPosition - 1,
+                    // sliderIndicatorActivated: true
                 })
             });
             //update title
@@ -183,7 +197,8 @@ class ResultPage extends PureComponent {
                     ///update position
                     currentPosition: oldState.currentPosition + 1,
                     //activate animation
-                    animationFlag:  true
+                    animationFlag:  true,
+                    // sliderIndicatorActivated: true
                 })
             });
             //update title
@@ -214,7 +229,9 @@ class ResultPage extends PureComponent {
 
     setFormValues = () => {
         //collect current result's formData
-        let formData = this.props.state.main.resultsList[this.state.currentPosition].formData;
+        let formData = this.state.list[this.state.currentPosition].formData;
+        let patientProfileId = this.state.list[this.state.currentPosition].patient;
+
         // console.log("FORM BEFORE: "+
         //     JSON.stringify(this.props.state.main.Page0Data) + ";"+
         //     JSON.stringify(this.props.state.main.Page1Data) + ";"+
@@ -229,7 +246,12 @@ class ResultPage extends PureComponent {
         console.log("patientsList: "+ JSON.stringify(patientsList));
         console.log("patient: " + JSON.stringify(formData[0].patientProfile));
         let patientNotInList = true;
-        let patientProfileId = formData[0].patientProfile.id !== null? formData[0].patientProfile.id: formData[0].patientProfile;
+
+        // verification is needed because patient is stored locally as object with name and id
+        // and when pulled from server it is only a string for the id
+        if(typeof patientProfileId === 'object')
+           patientProfileId = formData[0].patientProfile.id !== null? formData[0].patientProfile.id: formData[0].patientProfile;
+
         for(let i = 0; i < patientsList.length; i++){
             if(patientsList[i].id === patientProfileId)
             {
@@ -241,7 +263,7 @@ class ResultPage extends PureComponent {
         let newFormData0 = null;
 
        newFormData0 = {
-           patientProfile: patientNotInList?"None Selected":formData[0].patientProfile, //always none selected because error otherwise?
+           patientProfile: patientNotInList?{name:"None Selected",id:"None Selected"}:formData[0].patientProfile, //always none selected because error otherwise?
            gender: formData[0].gender,
            weight: formData[0].weight,
            dose0: formData[0].dose0,
@@ -262,9 +284,10 @@ class ResultPage extends PureComponent {
            food3: formData[0].food3,
            amountOfPills: formData[0].amountOfPills,
            kg_lbs: formData[0].kg_lbs ? formData[0].kg_lbs : formData[0].switchWeightFormat
-       }
+       };
+
        if(patientNotInList)
-           alert("The patient with the id " + formData[0].patientProfile.id + " was not used as it is not in the Patients' List and ");
+           alert("The patient with the id " + patientProfileId + " was not used as it is not in the Patients' List and was thus replaced with the default \'None selected\'");
 
         this.props.onAddData(newFormData0?newFormData0:formData[0],0);
         this.props.onAddData(formData[1],1);
@@ -302,10 +325,12 @@ class ResultPage extends PureComponent {
     };
 
     setTitleOnChange = () => {
-        console.log("Changing title");
-        this.props.navigator.setTitle({
-            title: this.props.state.main.resultsList[this.state.currentPosition].name
-        });
+        if(this.state.title !== this.state.list[this.state.currentPosition].name) {
+            console.log("Changing title");
+            this.props.navigator.setTitle({
+                title: this.state.list[this.state.currentPosition].name
+            });
+        }
     };
 
     toggleSpinner = ()=> {
@@ -318,10 +343,13 @@ class ResultPage extends PureComponent {
         })
     };
 
+
+    ///*************************************
     //////STARTING THE PDF SECTION OF THE CODE
+    ///*************************************
 
     generateHtmlInput = () => {
-        let currentResult = this.props.state.main.resultsList[this.state.currentPosition];
+        let currentResult = this.state.list[this.state.currentPosition];
         let inputs = "<div style=\"background-color:lightgrey\"><h3>Inputs<h3></div>" +
             "<br/>"+
             "<br/>"+
@@ -509,7 +537,7 @@ class ResultPage extends PureComponent {
 
     //generate html sets up the html for the html to pdf conversion
     generateHTML = (pkProfileBase64Data, performanceDayBase64Data, performancePMBase64Data, performanceEveningBase64Data) =>{
-        let currentResult = this.props.state.main.resultsList[this.state.currentPosition];
+        let currentResult = this.state.list[this.state.currentPosition];
         //this is a copy of what we find on the render place, because I can't, as of now, think of a way to get the appropriate
         let allPieData= currentResult.data;
         let firstPieData = [
@@ -630,7 +658,7 @@ class ResultPage extends PureComponent {
 
         let html = this.generateHTML(pkProfileBase64Data, performanceDayBase64Data, performancePMBase64Data, performanceEveningBase64Data);
 
-        let fileName = this.props.state.main.resultsList[this.state.currentPosition].name;
+        let fileName = this.state.list[this.state.currentPosition].name;
         //remove all ponctuations off the fileName
         fileName = "MDRA_Result_"+ fileName.replace(/(~|`|!|@|#|$|%|^|&|\*|\(|\)|{|}|\[|\]|;|:|\"|'|<|,|\.|>|\?|\/|\\|\||-|_|\+|=)/g,"");
         //
@@ -649,8 +677,10 @@ class ResultPage extends PureComponent {
         let filePath = file.filePath;
         //console.log("Base64: "+ file.base64);
         let writeResult = "No need, it is IOS";
+
+        const DocumentDir = RNFetchBlob.fs.dirs.DocumentDir;
         if(Platform.OS === 'android'){
-            filePath = RNFetchBlob.fs.dirs.DownloadDir +"/"+ fileName +'.pdf';
+            filePath = DocumentDir +"/resultPdfs/"+ fileName +'.pdf';
             await RNFetchBlob.fs.writeFile(filePath, file.base64, 'base64')
                 .then(response => {
                     console.log('Success Log: ', response);
@@ -709,7 +739,7 @@ class ResultPage extends PureComponent {
     handleGeneratePDF = () => {
         Alert.alert(
             'Confirmation',
-            ('Do you really want to generate a PDF for the result '+this.props.state.main.resultsList[this.state.currentPosition].name+'?'), [
+            ('Do you really want to generate a PDF for the result '+this.state.list[this.state.currentPosition].name+'?'), [
                 {
                     text: 'Cancel',
                     onPress: (() => console.log('Cancel Pressed')),
@@ -735,7 +765,7 @@ class ResultPage extends PureComponent {
     handleDeletePDF = () => {
         Alert.alert(
             'Confirmation',
-            ('Do you really want to delete the PDF for the result '+this.props.state.main.resultsList[this.state.currentPosition].name+'?'), [
+            ('Do you really want to delete the PDF for the result '+this.state.list[this.state.currentPosition].name+'?'), [
                 {
                     text: 'Cancel',
                     onPress: (() => console.log('Cancel Pressed')),
@@ -754,12 +784,12 @@ class ResultPage extends PureComponent {
     };
 
     deletePDF = () => {
-        RNFetchBlob.fs.exists(this.props.state.main.resultsList[this.state.currentPosition].filePDF)
+        RNFetchBlob.fs.exists(this.state.list[this.state.currentPosition].filePDF)
             .then((exist) => {
                 console.log(`file ${exist ? '' : 'not'} exists`);
                 if(exist) {
                     //alert(`file ${exist ? '' : 'not'} exists`);
-                    RNFetchBlob.fs.unlink(this.props.state.main.resultsList[this.state.currentPosition].filePDF);
+                    RNFetchBlob.fs.unlink(this.state.list[this.state.currentPosition].filePDF);
                     this.props.onRemovePDFFromResult(this.state.currentPosition);
                 }
             })
@@ -768,7 +798,7 @@ class ResultPage extends PureComponent {
 
 
     openGeneratedPDF = (sentPath) => {
-        let path = this.props.state.main.resultsList[this.state.currentPosition].filePDF;
+        let path = this.state.list[this.state.currentPosition].filePDF;
         if(sentPath)
         {
             console.log("sent path: "+ sentPath);
@@ -786,18 +816,207 @@ class ResultPage extends PureComponent {
 
     /////// END OF PDF SECTION
 
+    generateFormulationSections = (formData0) => {
+        return(
+            <View>
+                <View style={styles.formulationContainerStyle}>
+                    <View style={{borderWidth: 0.5, marginBottom: 5, padding: 5, alignItems:"center"}}>
+                        <Text>Formulation 1</Text>
+                    </View>
+                    <View style={styles.formulationRowStyle}>
+                        <InputDisplay
+                            rowTitle="Drug"
+                            rowValue={formData0.formula0}
+                        />
+                        <InputDisplay
+                            rowTitle="With food"
+                            rowValue={formData0.food0? "Yes": "No"}
+                        />
+                    </View>
+                    <View style={styles.formulationRowStyle}>
+                        <InputDisplay
+                            rowTitle="Dose"
+                            rowValue={formData0.dose0}
+                        />
+                        <InputDisplay
+                            rowTitle="Time"
+                            rowValue={formData0.adminTime0}
+                        />
+                    </View>
+                </View>
+                {
+                    formData0.amountOfPills > 1 ?
+                        <View style={styles.formulationContainerStyle}>
+                            <View style={{borderWidth: 0.5, marginBottom: 5, padding: 5, alignItems:"center"}}>
+                                <Text>Formulation 2</Text>
+                            </View>
+                            <View style={styles.formulationRowStyle}>
+                                <InputDisplay
+                                    rowTitle="Drug"
+                                    rowValue={formData0.formula1}
+                                />
+                                <InputDisplay
+                                    rowTitle="With food"
+                                    rowValue={formData0.food1? "Yes": "No"}
+                                />
+                            </View>
+                            <View style={styles.formulationRowStyle}>
+                                <InputDisplay
+                                    rowTitle="Dose"
+                                    rowValue={formData0.dose1}
+                                />
+                                <InputDisplay
+                                    rowTitle="Time"
+                                    rowValue={formData0.adminTime1}
+                                />
+                            </View>
+                        </View>
+                        : <View/>
+                }
+                {formData0.amountOfPills > 2 ?
+                    <View style={styles.formulationContainerStyle}>
+                        <View style={{borderWidth: 0.5, marginBottom: 5, padding: 5, alignItems:"center"}}>
+                            <Text>Formulation 3</Text>
+                        </View>
+                        <View style={styles.formulationRowStyle}>
+                            <InputDisplay
+                                rowTitle="Drug"
+                                rowValue={formData0.formula2}
+                            />
+                            <InputDisplay
+                                rowTitle="With food"
+                                rowValue={formData0.food2? "Yes": "No"}
+                            />
+                        </View>
+                        <View style={styles.formulationRowStyle}>
+                            <InputDisplay
+                                rowTitle="Dose"
+                                rowValue={formData0.dose2}
+                            />
+                            <InputDisplay
+                                rowTitle="Time"
+                                rowValue={formData0.adminTime2}
+                            />
+                        </View>
+                    </View>:<View/>
+                }
+                {formData0.amountOfPills > 3 ?
+                    <View style={styles.formulationContainerStyle}>
+                        <View style={{borderWidth: 0.5, marginBottom: 5, padding: 5, alignItems: "center"}}>
+                            <Text>Formulation 4</Text>
+                        </View>
+                        <View style={styles.formulationRowStyle}>
+                            <InputDisplay
+                                rowTitle="Drug"
+                                rowValue={formData0.formula3}
+                            />
+                            <InputDisplay
+                                rowTitle="With food"
+                                rowValue={formData0.food3 ? "Yes" : "No"}
+                            />
+                        </View>
+                        <View style={styles.formulationRowStyle}>
+                            <InputDisplay
+                                rowTitle="Dose"
+                                rowValue={formData0.dose3}
+                            />
+                            <InputDisplay
+                                rowTitle="Time"
+                                rowValue={formData0.adminTime3}
+                            />
+                        </View>
+                    </View>:<View/>
+                }
+            </View>
+        )
+    };
+
+    renderTabIndicator =  () => {
+        return (
+            <PagerTabIndicator
+                tabs={
+                    [
+                        {
+                            text: 'Pk Profile',
+                            iconSource: areaImage,
+                            selectedIconSource: areaImage
+                        },
+                        {
+                            text: 'Performance',
+                            iconSource: pieImage,
+                            selectedIconSource: pieImage
+                        },
+                        {
+                            text: 'Input',
+                            iconSource: textDocument,
+                            selectedIconSource: textDocument
+                        },
+                        {
+                            text: 'PDF Generator',
+                            iconSource: pdfImage,
+                            selectedIconSource: pdfImage
+                        }
+                    ]
+                }
+                iconStyle={{height: 30, width: 30}}
+                selectedIconStyle={{height: 40, width: 40}}
+            />
+        )
+    };
+
+    //**********************************
+    // START OF ARROW HANDLING SECTION
+    //**********************************
+
+    handleArrowActivation = (targetValue) => {
+        this.setState(oldState => {
+            return {
+                ...oldState,
+                sliderIndicatorActivated: targetValue,
+            }
+        })
+    };
+
+    handleArrowOffset = (nativeEvent) => {
+        this.setState(oldState => {
+            return {
+                ...oldState,
+                sliderOffset: Dimensions.get("window").height*0.3 + nativeEvent.contentOffset.y
+            }
+        })
+    };
+
+    isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}) => {
+        const paddingToBottom = 20;
+        return layoutMeasurement.height + contentOffset.y >=
+            contentSize.height - paddingToBottom;
+    };
+
+    //**********************************
+    // END OF ARROW HANDLING SECTION
+    //**********************************
+
 //    Animated.sequence([
 
     render() {
-        this.setTitleOnChange();
-        if(this.state.visible  && Platform.OS === "ios")this._handleOnStartUp();
-        let allPieData= this.props.state.main.resultsList[this.state.currentPosition].data;
-        //console.log("THIS IS THE filePDF OF THIS RESULT: "+JSON.stringify(this.props.state.main.resultsList[this.state.currentPosition].filePDF));
-        //console.log("THIS IS THE FORMDATA page 1 OF THIS RESULT: "+JSON.stringify(this.props.state.main.resultsList[this.state.currentPosition].formData[1]));
+        let currentResult = this.state.list[this.state.currentPosition];
+        console.log("If currentResult has a PDF it is there or this or whatever: "+ JSON.stringify(currentResult.filePDF));
+
+        if(this.state.title !== currentResult.name) {
+            this.setTitleOnChange();
+        }
+
+        if(this.state.visible  && Platform.OS === "ios"){
+            this._handleOnStartUp();
+        }
+
+        let allPieData= currentResult.data;
+        //console.log("THIS IS THE filePDF OF THIS RESULT: "+JSON.stringify(currentResult.filePDF));
+        //console.log("THIS IS THE FORMDATA page 1 OF THIS RESULT: "+JSON.stringify(currentResult.formData[1]));
         let firstPieData = [allPieData.characNR, allPieData.characNRR, allPieData.characR, allPieData.characRAR, allPieData.characAR, allPieData.characNRRAR];
         let secondPieData = [0,0,0,0,0,0];
         let eveningPieData =[allPieData.characNRNuit, allPieData.characNRRNuit, allPieData.characRNuit, allPieData.characRARNuit, allPieData.characARNuit, allPieData.characNRRARNuit];
-        let nbTherapeuticBoxes = this.props.state.main.resultsList[this.state.currentPosition].formData[1].nbTherapeuticBoxes === "Two therapeutic boxes (AM and PM)";
+        let nbTherapeuticBoxes = currentResult.formData[1].nbTherapeuticBoxes === "Two therapeutic boxes (AM and PM)";
         //switching because the returned data is f*cked up
         // as in, it switches pie1 and pie2 data for no reason
         if(nbTherapeuticBoxes)
@@ -808,11 +1027,17 @@ class ResultPage extends PureComponent {
         let backDisabled = this.state.listLength<1 || this.state.currentPosition === 0;
         let nextDisabled = this.state.listLength<1 || this.state.currentPosition > this.state.listLength-2;
 
+        let advancedTabAccessible = currentResult.advanceTabAccessible;
+
+        let patient = "None Selected";
+        if(currentResult.formData[0].patientProfile !== null)
+            patient = currentResult.formData[0].patientProfile.id?currentResult.formData[0].patientProfile.id:currentResult.formData[0].patientProfile;
+
         return (
             <View style={{backgroundColor:"#FFF", flex: 1}}>
                 <IndicatorViewPager
                     style={{height:'90%', width:"100%"}}
-                    indicator={this._renderTabIndicator()}
+                    indicator={this.renderTabIndicator()}
                     indicatorOnTop={true}
                 >
                     <View>
@@ -826,8 +1051,8 @@ class ResultPage extends PureComponent {
                                 <TitleComponent text={"PK Profile"}/>
                                 <ViewShot ref={ref => this.pkProfileRef = ref}>
                                     <GraphComponent
-                                        data={this.props.state.main.resultsList[this.state.currentPosition].data}
-                                        formData = {this.props.state.main.resultsList[this.state.currentPosition].formData}
+                                        data={currentResult.data}
+                                        formData = {currentResult.formData}
                                         style={{backgroundColor:"white"}}
                                         animate={this.state.animationFlag}
                                     />
@@ -836,13 +1061,24 @@ class ResultPage extends PureComponent {
                         </ScrollView>
                     </View>
                     <View>
-                        <ScrollView>
+                        <ScrollView
+                            onScroll={
+                                ({nativeEvent})=> {
+                                    if (this.isCloseToBottom(nativeEvent)) {
+                                        this.handleArrowActivation(false)
+                                    }else{
+                                        this.handleArrowOffset(nativeEvent)
+                                    }
+
+                                }
+                            }
+                        >
                             <View style={this.state.orientation?styles.pieChartStylesPortrait:styles.pieChartStylesLandscape}>
                                 <TitleComponent text={"Performance"}/>
                                 <ViewShot ref={ref => this.performanceDayRef = ref}>
                                     <SinglePieChartComponent
                                         data={firstPieData}
-                                        formData = {this.props.state.main.resultsList[this.state.currentPosition].formData}
+                                        formData = {currentResult.formData}
                                         title={
                                             (nbTherapeuticBoxes)
                                                 ? "AM Pie Graph"
@@ -856,7 +1092,7 @@ class ResultPage extends PureComponent {
                                     <ViewShot ref={ref => this.performancePMRef = ref}>
                                         <SinglePieChartComponent
                                             data={secondPieData}
-                                            formData = {this.props.state.main.resultsList[this.state.currentPosition].formData}
+                                            formData = {currentResult.formData}
                                             title="PM Pie Graph"
                                             style={{backgroundColor:"white"}}
                                             Animated={true}
@@ -867,16 +1103,235 @@ class ResultPage extends PureComponent {
                                 <ViewShot ref={ref => this.performanceEveningRef = ref}>
                                     <SinglePieChartComponent
                                         data={eveningPieData}
-                                        formData = {this.props.state.main.resultsList[this.state.currentPosition].formData}
+                                        formData = {currentResult.formData}
                                         title="Evening Pie Graph"
                                         style={{backgroundColor:"white"}}
                                         Animated={true}
                                     />
                                 </ViewShot>
                             </View>
+                            {this.state.sliderIndicatorActivated!== null && this.state.sliderIndicatorActivated
+                                ?<View
+                                    style={{
+                                        position: "absolute",
+                                        top: this.state.sliderOffset,
+                                        //top: 100,
+                                        alignItems: "center",
+                                        justifyContent:"center",
+                                        flex: 1,
+                                        height: Dimensions.get("window").height*0.15,
+                                        width: Dimensions.get("window").width,
+                                        zIndex: 1
+                                    }}
+                                >
+                                    <ScrollDownIndicator
+                                        activated={this.state.sliderIndicatorActivated}
+                                    />
+                                </View>
+                                :<View/>
+                            }
                         </ScrollView>
                     </View>
-                    {/*<View></View>*/}
+                    <View style={{backgroundColor:"#EEE"}}>
+                        <ScrollView
+                            ref={ref => this.inputScrollView = ref}
+                            onContentSizeChange={(contentWidth, contentHeight)=>{
+                                this.inputScrollView.scrollToEnd({animated: true});
+                            }}
+                        >
+                            <View style={styles.inputContainerStyle}>
+                                <ViewToggle label={"Page 0"} togglerStyle={{borderRadius: 30}}>
+                                    <View>
+                                        <View>
+                                            <InputDisplay
+                                                rowTitle="Patient"
+                                                rowValue={patient}
+                                            />
+                                            <InputDisplay
+                                                rowTitle="Gender"
+                                                rowValue={currentResult.formData[0].gender}
+                                            />
+                                            <InputDisplay
+                                                rowTitle="Weight"
+                                                rowValue={currentResult.formData[0].weight + " "+ (currentResult.formData[0].kg_lbs?"lbs":'kg')}
+                                            />
+                                            {this.generateFormulationSections(currentResult.formData[0])}
+                                        </View>
+                                    </View>
+                                </ViewToggle>
+                            </View>
+                            <View style={styles.inputContainerStyle}>
+                                <ViewToggle label={"Page 1"} togglerStyle={{borderRadius: 30}}>
+                                    <View>
+                                        <View style={{
+                                            padding: 5,
+                                            backgroundColor:"#EEE",
+                                            borderRadius: 50,
+                                            borderWidth:0.5,
+                                            alignItems:"center",
+                                            marginVertical: 10
+                                        }}>
+                                            <Text>{currentResult.formData[1].nbTherapeuticBoxes}</Text>
+                                        </View>
+                                        <View style={styles.formulationContainerStyle}>
+                                            <LinedLabel
+                                                label={ nbTherapeuticBoxes?"Day Box": "AM Box" }
+                                                containerStyle={
+                                                    {
+                                                        paddingTop: 0,
+                                                        width: "70%"
+                                                    }
+                                                }
+                                                textContainerStyle={
+                                                    {
+                                                        backgroundColor:"transparent",
+                                                        height: Dimensions.get("window").height*0.03,
+                                                    }
+                                                }
+                                                lineStyle={
+                                                    {
+                                                        marginTop:Dimensions.get("window").height*0.015
+                                                    }
+                                                }
+
+                                                textStyle={
+                                                    {
+                                                        color: "#000"
+                                                    }
+                                                }
+                                            />
+                                            <View style={styles.formulationRowStyle}>
+                                                <InputDisplay
+                                                    rowTitle="Start"
+                                                    rowValue={currentResult.formData[1].tsDay}
+                                                />
+                                                <InputDisplay
+                                                    rowTitle="End"
+                                                    rowValue={currentResult.formData[1].teDay}
+                                                />
+                                            </View>
+                                        </View>
+                                        {nbTherapeuticBoxes
+                                            ? <View style={styles.formulationContainerStyle}>
+                                                <LinedLabel
+                                                    label={"PM Box"}
+                                                    containerStyle={
+                                                        {
+                                                            paddingTop: 0,
+                                                            width: "70%"
+                                                        }
+                                                    }
+                                                    textContainerStyle={
+                                                        {
+                                                            backgroundColor: "transparent",
+                                                            height: Dimensions.get("window").height * 0.03,
+                                                        }
+                                                    }
+                                                    lineStyle={
+                                                        {
+                                                            marginTop: Dimensions.get("window").height * 0.015
+                                                        }
+                                                    }
+
+                                                    textStyle={
+                                                        {
+                                                            color: "#000"
+                                                        }
+                                                    }
+                                                />
+                                                <View style={styles.formulationRowStyle}>
+                                                    <InputDisplay
+                                                        rowTitle="Start"
+                                                        rowValue={currentResult.formData[1].tsPM}
+                                                    />
+                                                    <InputDisplay
+                                                        rowTitle="End"
+                                                        rowValue={currentResult.formData[1].tePM}
+                                                    />
+                                                </View>
+                                            </View>
+                                            : <View/>
+                                        }
+                                        <View style={styles.formulationContainerStyle}>
+                                            <LinedLabel
+                                                label={"Evening Box"}
+                                                containerStyle={
+                                                    {
+                                                        paddingTop: 0,
+                                                        width: "70%"
+                                                    }
+                                                }
+                                                textContainerStyle={
+                                                    {
+                                                        backgroundColor:"transparent",
+                                                        height: Dimensions.get("window").height*0.03,
+                                                    }
+                                                }
+                                                lineStyle={
+                                                    {
+                                                        marginTop:Dimensions.get("window").height*0.015
+                                                    }
+                                                }
+
+                                                textStyle={
+                                                    {
+                                                        color: "#000"
+                                                    }
+                                                }
+                                            />
+                                            <View style={styles.formulationRowStyle}>
+                                                <InputDisplay
+                                                    rowTitle="Start"
+                                                    rowValue={currentResult.formData[1].tsEvening}
+                                                />
+                                                <InputDisplay
+                                                    rowTitle="End"
+                                                    rowValue={currentResult.formData[1].teEvening}
+                                                />
+                                            </View>
+                                        </View>
+                                        <View>
+                                            <InputDisplay
+                                                rowTitle={"Lunch Time"}
+                                                rowValue={currentResult.formData[1].lunch}
+                                            />
+                                        </View>
+                                        <View>
+                                            <InputDisplay
+                                                rowTitle={"Bed Time"}
+                                                rowValue={currentResult.formData[1].bed}
+                                            />
+                                        </View>
+                                    </View>
+                                </ViewToggle>
+                            </View>
+                            <View style={styles.inputContainerStyle}>
+                                <ViewToggle label={"Page 2"} togglerStyle={{borderRadius: 30}}>
+                                    <View>
+                                        <LifeBar title={(nbTherapeuticBoxes?"Morning":"Day")+" issues"} value={currentResult.formData[2].weight1}/>
+                                        {nbTherapeuticBoxes?
+                                            <LifeBar title={"Afternoon issues"}
+                                                     value={currentResult.formData[2].weight6}/>
+                                            : <View/>
+                                        }
+                                        <LifeBar title={"Evening issues"} value={currentResult.formData[2].weight2}/>
+                                        <LifeBar title={"Roller Coaster"} value={currentResult.formData[2].weight5}/>
+                                    </View>
+                                </ViewToggle>
+                            </View>
+                            {
+                                advancedTabAccessible
+                                    ?<View style={styles.inputContainerStyle}>
+                                        <ViewToggle label={"Page 3"}>
+                                            <View style={{backgroundColor:"green",}}>
+                                                <Text>HALLo</Text>
+                                            </View>
+                                        </ViewToggle>
+                                    </View>
+                                    :<View/>
+                            }
+                        </ScrollView>
+                    </View>
                     <View>
                         <ScrollView
                             contentContainerStyle={{
@@ -884,7 +1339,7 @@ class ResultPage extends PureComponent {
                                 justifyContent: 'space-between'
                             }}
                         >
-                            {this.props.state.main.resultsList[this.state.currentPosition].filePDF
+                            {currentResult.filePDF
                                 ?<View style={{padding: 10, height:"100%"}}>
                                     <TitleComponent text={"PDF already generated for this result"} />
                                     <View style={{justifyContent: 'center', alignItems: 'center'}}>
@@ -943,7 +1398,34 @@ class ResultPage extends PureComponent {
                         </ScrollView>
                     </View>
                 </IndicatorViewPager>
-                <View style={[styles.buttonsContainer, {paddingHorizontal:10, marginLeft:10}]}>
+                {/*{this.state.sliderIndicatorActivated!== null && this.state.sliderIndicatorActivated*/}
+                    {/*?<View*/}
+                        {/*style={{*/}
+                            {/*position: "absolute",*/}
+                            {/*top: Dimensions.get("window").height * 0.5,*/}
+                            {/*//top: 100,*/}
+                            {/*alignItems: "center",*/}
+                            {/*flex: 1,*/}
+                            {/*height: 70,*/}
+                            {/*width: Dimensions.get("window").width,*/}
+                            {/*zIndex: 1*/}
+                        {/*}}*/}
+                        {/*onLayout={event => {*/}
+                            {/*const layout = event.nativeEvent.layout;*/}
+                            {/*// console.log('e height:', layout.height);*/}
+                            {/*// console.log('e width:', layout.width);*/}
+                            {/*// console.log('e x:', layout.x);*/}
+                            {/*console.log('e y:', layout.y);*/}
+                        {/*}}*/}
+                    {/*>*/}
+                        {/*<ScrollDownIndicator activated={this.state.sliderIndicatorActivated}/>*/}
+                    {/*</View>*/}
+                    {/*:<View/>*/}
+                {/*}*/}
+                <View
+                    ref={(ref)=>{this.buttonBar = ref; }}
+                    style={[styles.buttonsContainer, {paddingHorizontal:10, marginLeft:10}]}
+                >
                     <View style={{justifyContent:"center"}}>
                         <TouchableOpacity
                             onPress={this._handleOnPressBack}
@@ -1075,6 +1557,22 @@ const styles = StyleSheet.create({
     selectorTileText:{
         fontSize: Dimensions.get("window").width*0.045,
         color: "#000"
+    },
+
+    inputContainerStyle:{
+        margin:10
+    },
+
+    formulationContainerStyle:{
+        borderWidth: 0.5,
+        margin:5
+    },
+
+    formulationRowStyle:{
+        flexDirection:"row",
+        alignItems:"center",
+        justifyContent:"space-between",
+        paddingHorizontal: 10
     }
 });
 
@@ -1095,49 +1593,3 @@ const mapStateToProps = (state) => {
 };
 
 export default connect(mapStateToProps,mapDispatchToProps)(ResultPage);
-
- {/*<Button*/}
-     {/*title="Go next"*/}
-     {/*onPress={this._handleOnPressNext}*/}
-     {/*iconRight={*/}
-         {/*{*/}
-             {/*name:"chevron-right"*/}
-         {/*}*/}
-     {/*}*/}
-     {/*disabled={*/}
-         {/*this.state.listLength<1 ||*/}
-         {/*this.state.currentPosition > this.state.listLength-2*/}
-     {/*}*/}
-     {/*raise={*/}
-         {/*this.state.listLength < 1 ||*/}
-         {/*this.state.currentPosition > this.state.listLength - 2*/}
-     {/*}*/}
- {/*/>*/}
-{/*<View style={{flexDirection: 'row',justifyContent:"center"}}>*/}
-    {/*<Ionicon*/}
-        {/*size={30}*/}
-        {/*name= {"md-arrow-dropleft"}*/}
-        {/*color= {(this.state.listLength<1 || this.state.currentPosition === 0)?"#eee" :"#52afff"} style={styles.drawerItemIcon}*/}
-        {/*style={{paddingTop:4.5}}*/}
-    {/*/>*/}
-    {/*<Button*/}
-        {/*title="Go back"*/}
-        {/*onPress={this._handleOnPressBack}*/}
-        {/*disabled={*/}
-            {/*this.state.listLength<1 ||*/}
-            {/*this.state.currentPosition === 0*/}
-        {/*}*/}
-        {/*raise={*/}
-            {/*this.state.listLength<1 ||*/}
-            {/*this.state.currentPosition === 0*/}
-        {/*}*/}
-        {/*icon={*/}
-            {/*{*/}
-                {/*name: "chevron-left",*/}
-                {/*color: "white",*/}
-                {/*type: "ionicons"*/}
-            {/*}*/}
-        {/*}*/}
-
-    {/*/>*/}
-{/*</View>*/}

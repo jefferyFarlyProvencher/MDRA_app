@@ -1,5 +1,5 @@
 //system imports
-import React, {PureComponent} from 'react';
+import React, {Component} from 'react';
 import {View, Button, StyleSheet, Dimensions, Text, Animated, TouchableWithoutFeedback, Platform} from 'react-native';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 //components
@@ -9,7 +9,7 @@ import CustomMarker from '../../components/CustomMarker/CustomMarker';
 import timeToAmPmFormat from '../../functions/timeToAmPmFormat'
 import {convertTimeToHourFormat} from '../../functions/FormatTime';
 
-class CustomTimeMultiSlider extends PureComponent{
+class CustomTimeMultiSlider extends Component{
 
     state= {
         numberOfDots: 1,
@@ -33,6 +33,17 @@ class CustomTimeMultiSlider extends PureComponent{
         );
     }
 
+
+    shouldComponentUpdate(nextProps) {
+        return (
+            JSON.stringify(this.props.values) !== JSON.stringify(nextProps.values) || //if values aren't the same or
+            this.props.max !== nextProps.max || //if next max is different than current max
+            this.props.min !== nextProps.min || //if next min is different
+            JSON.stringify(this.state.valuesArray) !== JSON.stringify(this.props.values) //if local values is different than current props values
+        );
+    }
+
+
     _handlesOnValueChangeStart = () => {
         Animated.timing(this.state.screenOpacityAnimation,{
             toValue: 1,
@@ -51,6 +62,7 @@ class CustomTimeMultiSlider extends PureComponent{
 
     render(){
         //console.log(this.generateDataSingle(this.props.data.percentile10));
+        console.log("test for render")
         let isAndroid = Platform.OS === 'android';
 
         let enableAmPm = this.state.enableAmPm;

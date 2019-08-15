@@ -505,12 +505,12 @@ class FormScreenTimeZonage extends PureComponent{
                                                         {/*keyboardType="numeric"*/}
                                                     {/*/>*/}
                                                     <CustomTimeModal
-                                                        label="Start Time"
+                                                        label="End Time"
                                                         onChange={(name, value) => {
                                                             setFieldValue(name, value);
                                                         }}
                                                         value={values.teEvening}
-                                                        name="teDay"
+                                                        name="teEvening"
                                                         error={touched.teEvening && errors.teEvening}
                                                         displayTextStyle={styles.displayText}
                                                     />
@@ -726,6 +726,7 @@ const styles = StyleSheet.create({
     }
 
 });
+
 const mapDispatchToProps = dispatch => {
     return {
         onAddData: (data,position) => dispatch(addData(data,position)),

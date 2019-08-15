@@ -28,6 +28,7 @@ import RetrieveOldResults from './src/screens/RetrieveResultsScreens/RetrieveRes
 import MainScreenTest from './src/screens/MainScreenTest/MainScreenTest';
 import ManagePatientScreen from './src/screens/ManagePatientsScreen/ManagePatientsScreen';
 import PatientPage from './src/screens/PatientPage/PatientPage'
+import TutorialPage from './src/components/TutorialPage/TutorialPage'
 
 import SendForm from './src/components/SendForm/SendForm';
 
@@ -57,6 +58,7 @@ Navigation.registerComponent('MDRA_app.retrieveOldResults',() => RetrieveOldResu
 Navigation.registerComponent('MDRA_app.mainScreenTest',() => MainScreenTest, store, Provider, persistor);
 Navigation.registerComponent('MDRA_app.managePatientsScreen',() => ManagePatientScreen, store, Provider, persistor);
 Navigation.registerComponent('MDRA_app.patientPage',() => PatientPage);
+Navigation.registerComponent('MDRA_app.tutorialPage',() => TutorialPage);
 
 
 //start App

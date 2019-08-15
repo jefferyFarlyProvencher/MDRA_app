@@ -11,7 +11,8 @@ import {
     StatusBar,
     Alert,
     Platform,
-    Dimensions
+    Dimensions,
+    BackHandler
 } from 'react-native';
 import {Formik} from "formik";
 import {Button} from 'react-native-elements';
@@ -55,7 +56,7 @@ class ResultScreen extends Component{
         isDeleteDisabled: false,
         toDeleteList: [],
         darkVisible: false,
-
+        currentSelectedList: []
     };
 
 
@@ -144,8 +145,20 @@ class ResultScreen extends Component{
         });
     };
 
-    handleItemAccessed = key => {
+    /**
+     * handleItemAccessed
+     *
+     * @param key
+     * @param contextSensitiveList
+     *
+     * Finds the position of the current item and pushes new screen
+     */
+
+    handleItemAccessed = (key,contextSensitiveList) => {
         //blocker's purpose is to stop multi pushes on android
+
+        let list = contextSensitiveList;
+
         let activateBlocker = Platform.OS === "android";
         if(this.state.amountOfPushes === 0) {
             if(activateBlocker) {
@@ -153,19 +166,45 @@ class ResultScreen extends Component{
             }
             let selResult = null;
             let selPosition = 0;
-            for (let i = 0; i < this.props.state.main.resultsList.length; i++) {
-                if (this.props.state.main.resultsList[i].key === key) {
-                    selResult = this.props.state.main.resultsList[i];
+            for (let i = 0; i < list.length; i++) {
+                if (list[i].key === key){//this.props.state.main.resultsList[i].key === key) {
+                    selResult = list[i];//this.props.state.main.resultsList[i];
                     selPosition = i;
                 }
             }
             //console.log(key);
             //this.props.navigator.popToRoot();
+
+            //here we push the new screen and we send its position and
+
+            BackHandler.removeEventListener('back',
+                () => {
+                    // if(this.props.state.main.position === 0 || this.props.state.main.position === 4)
+                    Alert.alert(
+                        'Exit App',
+                        'Exiting the application?', [
+                            {
+                                text: 'Cancel',
+                                onPress: (() => console.log('Cancel Pressed')),
+                                style: 'cancel'
+                            }, {
+                                text: 'OK',
+                                onPress: () => BackHandler.exitApp(),
+                            }
+                        ],
+                        {
+                            cancelable: false
+                        }
+                    );
+                return true;}
+            )
+
             this.props.navigator.push({
                 screen: "MDRA_app.resultPage",
-                title: this.props.state.main.resultsList[selPosition].name,
+                title: list[selPosition].name,
                 passProps: {
-                    selectedPosition: selPosition
+                    selectedPosition: selPosition,
+                    contextSensitiveList: list.length === this.props.state.main.resultsList.length?null:list
                 }
             });
 
@@ -199,12 +238,12 @@ class ResultScreen extends Component{
         }
     };
 
-    toggleSelectorList = (key) => {
+    toggleSelectorList = (key, list) => {
         //since this is a toggle, if it's false, then it will become true afterwards
         // and it was sent a key to put in list
         if(!this.state.selectorListAvailable || key)
         {
-            this.handleItemSelected(key)
+            this.handleItemSelected(key, list)
         }
         this.setState((oldState) => {
             return({
@@ -214,13 +253,15 @@ class ResultScreen extends Component{
         })
     };
 
-    handleOnEnablingSelection = (key) => {
-        this.handleItemSelected(key);
-        this.toggleSelectorList(key);
+    handleOnEnablingSelection = (key, list) => {
+        //this.handleItemSelected(key, list);
+        this.toggleSelectorList(key, list);
     };
 
-    handleItemSelected = (key) => {
-        console.log("selectedList before:"+JSON.stringify(this.state.currentlySelectedItem));
+    handleItemSelected = (key, list) => {
+        console.log("handleItemSelected accessed");
+        //console.log("selectedList before:"+JSON.stringify(this.state.currentlySelectedItem));
+        //console.log("currentSelectedList before:"+JSON.stringify(this.state.currentSelectedList));
         //update key
         // let newSelectedList = {};
         // for (let i in this.state.selectedList)
@@ -230,11 +271,14 @@ class ResultScreen extends Component{
             return({
                 ...oldState,
                 currentlySelectedItem: key,
+                currentSelectedList: list,
                 toDeleteList: [key]
             })
         });
         //reload screen
-        console.log("selectedList after:"+JSON.stringify(this.state.currentlySelectedItem));
+        //console.log("selectedList after:"+JSON.stringify(this.state.currentlySelectedItem));
+        //console.log("currentSelectedList after:"+JSON.stringify(this.state.currentSelectedList));
+
     };
 
     setModalVisible = (visible) => {
@@ -439,7 +483,7 @@ class ResultScreen extends Component{
             (this.state.selectorListAvailable)
                 ?<View>
                     <SelectionList
-                        list ={this.props.state.main.resultsList}
+                        list ={this.state.currentSelectedList}
                         onItemSelected={this.handleItemSelected}
                         selectedValue={this.state.currentlySelectedItem}
                         cancelSelection={this.toggleSelectorList}
@@ -624,7 +668,14 @@ const styles = StyleSheet.create({
         borderBottomWidth: 0,
         borderTopWidth: 0.5,
         backgroundColor:"transparent"
-    }
+    },
+
+    surroundTextContainerStyle: {
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center",
+        marginVertical: 50
+    },
 });
 
 const mapStateToProps = (state) => {

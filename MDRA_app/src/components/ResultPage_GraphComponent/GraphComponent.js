@@ -245,23 +245,23 @@ class GraphComponent extends PureComponent{
         let firstBoxPercentage = null;
         let secondBoxPercentage = null;
         //substr removes the %
-        let eveningBoxPercentage = parseFloat(this.props.data.TIEffE);
+        let eveningBoxPercentage = Math.round(parseFloat(this.props.data.TIEffE)*100)/100;
         if(this.props.formData[1].nbTherapeuticBoxes === "Two therapeutic boxes (AM and PM)")
         {
-            firstBoxPercentage = parseFloat(this.props.data.TIEffD1s);
-            secondBoxPercentage = parseFloat(this.props.data.TIEffD2);
+            firstBoxPercentage = Math.round(parseFloat(this.props.data.TIEffD1s)*100)/100;
+            secondBoxPercentage = Math.round(parseFloat(this.props.data.TIEffD2)*100)/100;
         }
         else{
-            firstBoxPercentage = parseFloat(this.props.data.TIEffD2);
+            firstBoxPercentage = Math.round(parseFloat(this.props.data.TIEffD2)*100)/100;
         }
 
         //these are the texts versions
         let displayText = [
-            "Total Score: "+ ((this.props.data.TotalScore === 'NaN')?0:this.props.data.TotalScore),
-            "Roller Coaster Effect: "+ ((this.props.data.rce === 'NaN')?0:this.props.data.rce)
+            "Total Score: "+ ((this.props.data.TotalScore === 'NaN')?0:Math.round(parseFloat(this.props.data.TotalScore)*1000)/1000),
+            "Roller Coaster Effect: "+ ((this.props.data.rce === 'NaN')?0:Math.round(parseFloat(this.props.data.rce)*1000)/1000)
         ];
         //these are only the values
-        let totalScoreAndRce = [this.props.data.TotalScore, this.props.data.rce];
+        let totalScoreAndRce = [this.props.data.TotalScore,this.props.data.rce];
         //configuring bed and lunch times
         let lunchTime = convertTimeToDecimal(this.props.formData[1].lunch);
         let bedTime = convertTimeToDecimal(this.props.formData[1].bed);

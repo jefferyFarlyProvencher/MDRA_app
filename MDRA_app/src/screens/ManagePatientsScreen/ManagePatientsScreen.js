@@ -15,7 +15,7 @@
 // note that patientProfiles should be imported automatically upon log in  (should results be as well?)
 
 import React, {Component} from 'react';
-import {View, Text, StyleSheet, Platform, ScrollView, Dimensions, BackHandler} from 'react-native';
+import {View, Text, StyleSheet, Platform, ScrollView, Dimensions, BackHandler, Alert} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 
 import Input from "../../components/Input/Input";
@@ -105,7 +105,7 @@ class ManagePatientsScreen extends Component{
         }
     }
 
-    handleItemAccessed = key => {
+    handlePatientAccessed = key => {
         // //blocker's purpose is to stop multi pushes on android
         let activateBlocker = Platform.OS === "android";
         let patientsList = this.props.state.main.patientsList;
@@ -121,13 +121,31 @@ class ManagePatientsScreen extends Component{
                     selPosition = i;
                 }
             }
+
+            let patient = patientsList[selPosition];
+
+            let patientResults = (this.props.state.main.resultsList.filter(item => {
+                if(typeof item.patient !== 'undefined' && item.patient !== null) {
+                    const itemData = `${item.patient.toUpperCase()}
+                                  ${item.patient.toUpperCase()}
+                                  ${item.patient.toUpperCase()}`;
+                    const textData = patient.id.toUpperCase();
+
+                    return itemData.indexOf(textData) > -1;
+                }else{
+                    return false
+                }
+            }));
+
+
+
             //console.log(key);
             //this.props.navigator.popToRoot();
             this.props.navigator.push({
                 screen: "MDRA_app.patientPage",
                 title: patientsList[selPosition].name,
                 passProps: {
-                    patientProfile: patientsList[selPosition],
+                    patientProfile: patient,
                     onRemovePatientProfile: async (name,key) =>{
                         console.log("Testing on remove patient profile: "+JSON.stringify(key));
                         await this.props.onRemoveFromPatientsList(key);
@@ -140,7 +158,8 @@ class ManagePatientsScreen extends Component{
                         await this.props.onUpdatePatientInfo(data);
 
                         alert(data.name+" Profile has been updated.")
-                    }
+                    },
+                    patientResultsList: patientResults,
                 }
             });
 
@@ -181,7 +200,7 @@ class ManagePatientsScreen extends Component{
                     <PatientsList
                         list={this.props.state.main.patientsList}
                         style={styles.pickerStyle}
-                        onItemAccessed={this.handleItemAccessed}
+                        onItemAccessed={this.handlePatientAccessed}
                     />
                 </View>
             </View>

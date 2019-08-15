@@ -29,7 +29,11 @@ class ResultTest extends PureComponent{
             objectsArray.push({
                 x: i,
                 y:parsedData,
-                label: (parsedData.toFixed(2)>5)?parsedData.toFixed(2)+"%": " "
+                label: (parsedData>5)
+                    ?(Math.round(parsedData *100)/100) + "%"
+                        // ? parsedData.toFixed(2)+"%"
+                        // : parsedData + "%"
+                    : " "
             })
         }
         return objectsArray
@@ -57,7 +61,7 @@ class ResultTest extends PureComponent{
         let correctedPieData = pieData.slice();
         for(let i=0; i < correctedPieData.length; i++)
         {
-            correctedPieData[i] = (parseFloat(correctedPieData[i])*100).toFixed(2)+"%";
+            correctedPieData[i] = (Math.round(correctedPieData[i]*10000)/100)+"%" ;
         }
         this.setState((oldState) => {
                 return({

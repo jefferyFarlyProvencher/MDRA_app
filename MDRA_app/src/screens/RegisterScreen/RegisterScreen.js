@@ -302,6 +302,20 @@ class RegisterScreen extends Component{
                                         </TouchableOpacity>
                                     </View>
                                 </View>
+                                <View style={[styles.surroundTextContainerStyle,{backgroundColor:"#b8d6ff", width:Dimensions.get("window").width}]}>
+                                    <Text style={styles.surroundTextStyle}> By registering you agree to the </Text>
+                                    <TouchableOpacity onPress={this.logOut}>
+                                        <Text style={[styles.surroundTextStyle,{fontSize:12, fontWeight: "bold"}]}>
+                                            Terms Of Service
+                                        </Text>
+                                    </TouchableOpacity>
+                                    <Text style={styles.surroundTextStyle}> and the </Text>
+                                    <TouchableOpacity onPress={this.logOut}>
+                                        <Text style={[styles.surroundTextStyle,{fontSize:12, fontWeight: "bold"}]}>
+                                            Privacy Policy
+                                        </Text>
+                                    </TouchableOpacity>
+                                </View>
                                 <View>
                                     <View pointerEvents={(isValid?"auto":"none")}>
                                         <TouchableOpacity onPress={handleSubmit}>
@@ -398,6 +412,17 @@ const styles= StyleSheet.create({
     drawerItemIcon: {
         margin: 0,
         padding: 0
+    },
+
+    surroundTextContainerStyle: {
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center",
+    },
+
+    surroundTextStyle: {
+        fontSize: 10,
+        textAlign: "center"
     }
 });
 

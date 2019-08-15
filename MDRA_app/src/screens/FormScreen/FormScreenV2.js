@@ -31,15 +31,33 @@ import {addData, changePosition, toggleIndicatorVisibility} from "../../store/ac
 import WelcomeScreen from "../../components/WelcomeScreen/WelcomeScreen";
 import PatientsList from "../../components/PatientsList/PatientsList";
 //component Imports
+import TutorialPage from '../../components/TutorialPage/TutorialPage';
+
+//Tutorial images imports
+import tutorial_p0_1 from '../../assets/Tutorial/tutorialForm/Tutorial_form_0_1.png'
+import tutorial_p0_2 from '../../assets/Tutorial/tutorialForm/Tutorial_form_0_2.png'
+import tutorial_p0_3 from '../../assets/Tutorial/tutorialForm/Tutorial_form_0_3.png'
+import tutorial_p0_4 from '../../assets/Tutorial/tutorialForm/Tutorial_form_0_4.png'
+import tutorial_p0_5 from '../../assets/Tutorial/tutorialForm/Tutorial_form_0_5.png'
+import tutorial_p0_6 from '../../assets/Tutorial/tutorialForm/Tutorial_form_0_6.png'
+import tutorial_p0_7 from '../../assets/Tutorial/tutorialForm/Tutorial_form_0_7.png'
+import tutorial_p1_0 from '../../assets/Tutorial/tutorialForm/Tutorial_form_1_0.png'
+import tutorial_p1_1 from '../../assets/Tutorial/tutorialForm/Tutorial_form_1_1.png'
+import tutorial_p1_2 from '../../assets/Tutorial/tutorialForm/Tutorial_form_1_2.png'
+import tutorial_p1_3 from '../../assets/Tutorial/tutorialForm/Tutorial_form_1_3.png'
+import tutorial_p1_4 from '../../assets/Tutorial/tutorialForm/Tutorial_form_1_4.png'
+import tutorial_p1_5 from '../../assets/Tutorial/tutorialForm/Tutorial_form_1_5.png'
 
 class FormScreen extends Component{
 
     state={
-        welcomeScreenVisible: true
+        welcomeScreenVisible: true,
+        showTutorial: false,
+        tutorialData: [],
     };
 
     handleBackButton = () => {
-        if(this.props.state.main.position === 0 || this.props.state.main.position === 4)
+       // if(this.props.state.main.position === 0 || this.props.state.main.position === 4)
             Alert.alert(
             'Exit App',
             'Exiting the application?', [
@@ -55,7 +73,7 @@ class FormScreen extends Component{
             {
                 cancelable: false
             }
-        );
+       );
         return true;
     };
 
@@ -76,7 +94,7 @@ class FormScreen extends Component{
     // }
 
     componentDidMount() {
-        BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+        //BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
         this.props.navigator.setStyle({
             navBarBackgroundColor: '#262626',
             navBarTextColor: '#ffffff',
@@ -87,8 +105,13 @@ class FormScreen extends Component{
 
         this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
 
-        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+        BackHandler.removeEventListener('hardwareBackPress',  ()=>{BackHandler.exitApp()});
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
     };
+
+    componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress')
+    }
 
     constructor(props){
         super(props);
@@ -96,7 +119,7 @@ class FormScreen extends Component{
     }
 
     onNavigatorEvent = event => {
-        //console.log("event: " + event);
+        console.log("event: " + JSON.stringify(event));
         if(event.type === "NavBarButtonPress") {
             if(event.id === "sideDrawerToggle") {
                 this.props.navigator.toggleDrawer({
@@ -104,7 +127,7 @@ class FormScreen extends Component{
                 });
             }
             else if(event.id === "informationButton"){
-                this.showInformationAlert()
+                this.showInformationTutorial()
             }
         }
         else if(event.type === "DeepLink"){
@@ -123,6 +146,10 @@ class FormScreen extends Component{
                     side: "left"
                 });
             }
+        }
+        else if(event.type === "hardwareBackPress")
+        {
+            //do nothing
         }
     };
     //Credits to guyca ad M-Jas for the buttons push fix
@@ -151,23 +178,157 @@ class FormScreen extends Component{
     // };
     ///
 
-    showInformationAlert = () => {
-        let message = "Something 0";
+    showInformationTutorial = () => {
+        let images = [
+            {
+                title:"Tutorial Form",
+                path: tutorial_p0_1,
+                position: 1
+            },
+            {
+                title:"Test2",
+                path: tutorial_p0_2,
+                position: 2
+            },
+            {
+                title:"Test3",
+                path: tutorial_p0_3,
+                position: 3
+            },
+            {
+                title:"Test3",
+                path: tutorial_p0_4,
+                position: 4
+            },
+            {
+                title:"Test2",
+                path: tutorial_p0_5,
+                position: 5
+            },
+            {
+                title:"Test3",
+                path: tutorial_p0_6,
+                position: 6
+            },
+            {
+                title:"Test3",
+                path: tutorial_p0_7,
+                position: 7
+            }
+        ];
+
         switch (this.props.state.main.position) {
             case 0:
-                message = "Something 0";
+                images = [
+                    {
+                        title:"form_0_1",
+                        path: tutorial_p0_1,
+                        position: 1
+                    },
+                    {
+                        title:"form_0_2",
+                        path: tutorial_p0_2,
+                        position: 2
+                    },
+                    {
+                        title:"form_0_3",
+                        path: tutorial_p0_3,
+                        position: 3
+                    },
+                    {
+                        title:"form_0_4",
+                        path: tutorial_p0_4,
+                        position: 4
+                    },
+                    {
+                        title:"form_0_5",
+                        path: tutorial_p0_5,
+                        position: 5
+                    },
+                    {
+                        title:"form_0_6",
+                        path: tutorial_p0_6,
+                        position: 6
+                    },
+                    {
+                        title:"form_0_7",
+                        path: tutorial_p0_7,
+                        position: 7
+                    }
+                ];
+                console.log("case 0");
                 break;
             case 1:
-                message = "Something 1";
+                images = [
+                    {
+                        title:"form_1_0",
+                        path: tutorial_p1_0,
+                        position: 1
+                    },
+                    {
+                        title:"form_1_1",
+                        path: tutorial_p1_1,
+                        position: 1
+                    },
+                    {
+                        title:"form_1_2",
+                        path: tutorial_p1_2,
+                        position: 2
+                    },
+                    {
+                        title:"form_1_3",
+                        path: tutorial_p1_3,
+                        position: 3
+                    },
+                    {
+                        title:"form_1_4",
+                        path: tutorial_p1_4,
+                        position: 4
+                    },
+                    {
+                        title:"form_1_5",
+                        path: tutorial_p1_5,
+                        position: 5
+                    },
+                ];
                 break;
             case 2:
-                message = "Something 2";
+                images = "Something 2";
                 break;
             case 3:
-                message = "Something 3";
+                images = "Something 3";
                 break;
+            default:
+                console.log("main.position is null")
         }
-        Alert.alert("Information", message)
+        //Alert.alert("Information", message)
+        this.setState(oldState => {
+            return{
+                ...oldState,
+                tutorialData: images,
+                showTutorial: true,
+            }
+        });
+        // console.log("images test: " + JSON.stringify(images));
+        // console.log("tutorialData: " + this.state.tutorialData)
+    };
+
+    handleShowTutorialToggler = (value) => {
+      if(value){
+          this.setState(oldState => {
+              return{
+                  ...oldState,
+                  showTutorial:value
+              }
+          })
+      }else{
+          this.setState(oldState => {
+              return{
+                  ...oldState,
+                  showTutorial: !oldState.showTutorial
+              }
+          })
+      }
     };
 
     handleRemoveWelcomeScreen = (value) =>{
@@ -378,8 +539,16 @@ class FormScreen extends Component{
                     </View>
                     :<View/>
                 }
+                {this.state.showTutorial
+                    ?<View>
+                        <TutorialPage
+                            tutorialData={this.state.tutorialData}
 
-
+                            handleShowTutorialToggler={this.handleShowTutorialToggler}
+                        />
+                    </View>
+                    : <View/>
+                }
             </View>
         )
     }

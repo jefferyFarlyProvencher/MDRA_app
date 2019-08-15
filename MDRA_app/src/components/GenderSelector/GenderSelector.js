@@ -20,7 +20,7 @@ class GenderSelector extends Component{
             }
         });
 
-        this.props.onPress(targetValue?"male":"female")
+        this.props.onPress(targetValue?"Male":"Female")
     };
 
     render() {
