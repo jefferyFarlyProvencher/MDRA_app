@@ -30,10 +30,10 @@ let SendRetrieval = async(name,dateFrom, dateTo, token) => {
                 console.log('network error: ' + error);
             });
         try {
-            console.log("raw response: " + response);
-            console.log("response: " + JSON.stringify(response));
+            //console.log("raw response: " + response);
+            //console.log("response: " + JSON.stringify(response));
             let responseJson = await response.json();
-            console.log("RESULT:" + JSON.stringify(responseJson));
+            //console.log("RESULT:" + JSON.stringify(responseJson));
             if (responseJson) {
                 console.log("----FETCHING OVER-----\n");
                 let resultToReturn = HandleReceivedSearch((responseJson['data']));

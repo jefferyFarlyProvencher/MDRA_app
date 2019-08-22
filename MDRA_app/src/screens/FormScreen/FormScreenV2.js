@@ -293,7 +293,13 @@ class FormScreen extends Component{
                 ];
                 break;
             case 2:
-                images = "Something 2";
+                images = images = [
+                    {
+                        title:"form_1_0",
+                        path: tutorial_p1_0,
+                        position: 1
+                    },
+                ];
                 break;
             case 3:
                 images = "Something 3";

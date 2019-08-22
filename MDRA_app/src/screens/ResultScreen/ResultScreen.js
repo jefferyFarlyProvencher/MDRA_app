@@ -15,7 +15,7 @@ import {
     BackHandler
 } from 'react-native';
 import {Formik} from "formik";
-import {Button} from 'react-native-elements';
+import {Button, SearchBar} from 'react-native-elements';
 import {connect} from "react-redux";
 import * as Yup from "yup";
 import Picker from 'react-native-picker';
@@ -32,7 +32,10 @@ import Spinner from "react-native-loading-spinner-overlay";
 import SelectionList from "../../components/SelectionList/SelectionList";
 import isSameName from '../../functions/IsSameName';
 import NewYupString from "../../components/NewYupString/NewYupString";
+import DropDownListV2 from "../../components/DropDownList/DropDownListV2"
+import SelectorPicker from '../../components/SelectorPicker/SelectorPicker';
 import * as colors from "../../assets/colors";
+
 
 
 class ResultScreen extends Component{
@@ -56,7 +59,12 @@ class ResultScreen extends Component{
         isDeleteDisabled: false,
         toDeleteList: [],
         darkVisible: false,
-        currentSelectedList: []
+        currentModifiedList: this.props.state.main.resultsList,
+        fullList: this.props.state.main.resultsList,
+        searchTarget: 'Name',
+        searchText : '',
+        patientTarget: "None Selected",
+        refreshList: false,
     };
 
 
@@ -85,6 +93,24 @@ class ResultScreen extends Component{
 
     static navigatorButtons = {
         rightButtons: []
+    };
+
+    onNavigatorEvent = event => {
+        if(event.type === "NavBarButtonPress") {
+            if(event.id === "sideDrawerToggle"){
+                this.props.navigator.toggleDrawer({
+                    side: "left"
+                });
+            }
+            else if(event.id === "deleteButton"){
+                console.log("deleteButton Pressed");
+                this.handleSelectionDeletion(this.state.toDeleteList);
+            }
+            else if(event.id === "cancelButton"){
+                console.log("cancelButton Pressed");
+                this.toggleSelectorList();
+            }
+        }
     };
 
     componentWillMount() {
@@ -116,24 +142,20 @@ class ResultScreen extends Component{
         console.log("New selected dictionary"+JSON.stringify(newSelectedMap))
     }
 
-    onNavigatorEvent = event => {
-        if(event.type === "NavBarButtonPress") {
-            if(event.id === "sideDrawerToggle"){
-                this.props.navigator.toggleDrawer({
-                    side: "left"
-                });
-            }
-            else if(event.id === "deleteButton"){
-                console.log("deleteButton Pressed");
-                this.handleSelectionDeletion(this.state.toDeleteList);
-                this.handleDisableDeleteButton(0, [])
-            }
-            else if(event.id === "cancelButton"){
-                console.log("cancelButton Pressed");
-                this.toggleSelectorList();
-            }
-        }
-    };
+    componentWillReceiveProps(nextProps, nextContext) {
+        console.log("about to start comparison");
+        if(this.state.fullList.length !== this.props.state.main.resultsList.length)
+        {
+            console.log("passed full list comparison, searchText is: "+ this.state.searchText);
+            this.setState(oldState=>{
+                return{
+                    ...oldState,
+                    refreshList: true
+                }
+            })
+        }else
+            console.log("failed comparison")
+    }
 
     spinnerToggler = () => {
         this.setState((oldState)=>{
@@ -238,12 +260,12 @@ class ResultScreen extends Component{
         }
     };
 
-    toggleSelectorList = (key, list) => {
+    toggleSelectorList = (key) => {
         //since this is a toggle, if it's false, then it will become true afterwards
         // and it was sent a key to put in list
         if(!this.state.selectorListAvailable || key)
         {
-            this.handleItemSelected(key, list)
+            this.handleItemSelected(key)
         }
         this.setState((oldState) => {
             return({
@@ -253,15 +275,15 @@ class ResultScreen extends Component{
         })
     };
 
-    handleOnEnablingSelection = (key, list) => {
+    handleOnEnablingSelection = (key) => {
         //this.handleItemSelected(key, list);
-        this.toggleSelectorList(key, list);
+        this.toggleSelectorList(key);
     };
 
-    handleItemSelected = (key, list) => {
+    handleItemSelected = (key) => {
         console.log("handleItemSelected accessed");
         //console.log("selectedList before:"+JSON.stringify(this.state.currentlySelectedItem));
-        //console.log("currentSelectedList before:"+JSON.stringify(this.state.currentSelectedList));
+        //console.log("currenModifiedtList before:"+JSON.stringify(this.state.currentModifiedList));
         //update key
         // let newSelectedList = {};
         // for (let i in this.state.selectedList)
@@ -271,13 +293,12 @@ class ResultScreen extends Component{
             return({
                 ...oldState,
                 currentlySelectedItem: key,
-                currentSelectedList: list,
                 toDeleteList: [key]
             })
         });
         //reload screen
         //console.log("selectedList after:"+JSON.stringify(this.state.currentlySelectedItem));
-        //console.log("currentSelectedList after:"+JSON.stringify(this.state.currentSelectedList));
+        //console.log("currentModifiedList after:"+JSON.stringify(this.state.currentModifiedList));
 
     };
 
@@ -327,6 +348,27 @@ class ResultScreen extends Component{
         // );
     };
 
+    verifyIfNeedToUpdateList= () => {
+        return(this.props.state.main.resultsList.length !== this.state.fullList.length)
+    };
+
+    updateDisplayedList = () => {
+        let searchText= this.state.searchText;
+        this.searchFilterFunction("+");
+        this.searchFilterFunction(searchText);
+
+        this.setState(oldState=>{
+            return{
+                ...oldState,
+                refreshList: false
+            }
+        })
+    };
+
+    /**
+     *
+     * @param list
+     */
     changeDeletionList = (list) =>{
         this.setState(oldState => {
 
@@ -354,7 +396,8 @@ class ResultScreen extends Component{
                 }, {
                     text: 'Yes, erase it',
                     onPress: () =>{
-                        this.props.onRemoveData(key)
+                        this.props.onRemoveData(key);
+                        this.updateDisplayedList();
                     }
                 }
             ],
@@ -372,7 +415,7 @@ class ResultScreen extends Component{
      * Deletes a group (more than 1) of result
      */
 
-    handleSelectionDeletion = (selectedList)=>{
+    handleSelectionDeletion = (deletionList)=>{
         //console.log("selectedList: "+ selectedList);
         if(this.state.toDeleteList.length > 0) {
             Alert.alert(
@@ -385,8 +428,22 @@ class ResultScreen extends Component{
                     }, {
                         text: 'Yes, erase them',
                         onPress: () => {
-                            for (let i = 0; i < selectedList.length; i++)
-                                this.props.onRemoveData(selectedList[i])
+                            let newSelectedList = this.state.currentModifiedList;
+                            console.log("newSelectedList length before: "+ newSelectedList.length);
+                            for (let i = 0; i < deletionList.length; i++) {
+                                this.props.onRemoveData(deletionList[i]);
+                            }
+
+                            console.log("newSelectedList length after: "+ newSelectedList.length);
+
+                            this.setState(oldState => {
+                                return{
+                                    ...oldState,
+                                    currentModifiedList: newSelectedList,
+                                }
+                            });
+                            this.updateDisplayedList();
+                            this.handleDisableDeleteButton(0, [])
                         }
                     }
                 ],
@@ -478,12 +535,193 @@ class ResultScreen extends Component{
         })
     };
 
+    searchFilterFunction = text => {
+        //console.log("searchFilterFunction start and the text is: "+text);
+
+        let list = this.props.state.main.resultsList;
+
+        let tempNewData = null;
+
+        if(text !== null || text !== '') {
+            if (this.state.searchTarget === 'Name') {
+                console.log("filtering with Name");
+                tempNewData = (list).filter(item => {
+                    const itemData = `${item.name.toUpperCase()}
+                              ${item.name.toUpperCase()}
+                              ${item.name.toUpperCase()}`;
+                    const textData = text.toUpperCase();
+
+                    return itemData.indexOf(textData) > -1;
+                });
+            } else if (this.state.searchTarget === 'Date') {
+                console.log("filtering with Date");
+                tempNewData = (list).filter(item => {
+                    if (item.date !== 'null' && typeof item.date !== "undefined") {
+                        console.log("filtering with Date -> passed if");
+                        const itemData = `${item.date.toUpperCase()}
+                              ${item.date.toUpperCase()}
+                              ${item.date.toUpperCase()}`;
+                        const textData = text.toUpperCase();
+
+                        return itemData.indexOf(textData) > -1;
+                    } else {
+                        return false
+                    }
+                });
+            } else if (this.state.searchTarget === 'Patients') {
+                console.log("filtering with Patients");
+                if (text === "None Selected") {
+                    text = ''
+                }
+                tempNewData = (list).filter(item => {
+                    if (typeof item.patient !== 'undefined' && item.patient !== null) {
+                        const itemData = `${item.patient.toUpperCase()}
+                                  ${item.patient.toUpperCase()}
+                                  ${item.patient.toUpperCase()}`;
+                        const textData = text.toUpperCase();
+
+                        return itemData.indexOf(textData) > -1;
+                    } else {
+                        return false
+                    }
+                });
+            }
+            /// OLD CODE START
+            // const newData = (this.props.list).filter(item => {
+            //     const itemData = `${item.name.toUpperCase()}
+            //                       ${item.name.toUpperCase()}
+            //                       ${item.name.toUpperCase()}`;
+            //     const textData = text.toUpperCase();
+            //
+            //     return itemData.indexOf(textData) > -1;
+            // });
+            /// OLD CODE END
+
+            //console.log(JSON.stringify("modList 1: "+ this.state.currentModifiedList));
+            //console.log(JSON.stringify("size modList 1: "+ this.state.currentModifiedList.length));
+        }
+        else{
+            tempNewData = list;
+        }
+
+        const newData = tempNewData;
+        this.setState(oldState => {
+            return{
+                ...oldState,
+                currentModifiedList: newData,
+                searchText: text
+            }
+        });
+        // console.log(JSON.stringify("modList 2: "+ this.state.currentModifiedList));
+        //console.log(JSON.stringify("size modList 2: "+ this.state.currentModifiedList.length));
+        if(this.state.selectorListAvailable && this.state.toDeleteList.length === 0){
+            this.handleDisableDeleteButton(0, [])
+        }
+    };
+
+    handlePatientProfileSelection = (profile) =>{
+        this.setState(oldState=> {
+            return{
+                ...oldState,
+                patientTarget: profile
+            }
+
+        })
+    };
+
+
+    handleSearchTypeSelection = (target) => {
+        console.log("target: "+ target);
+        this.setState(oldState=> {
+            return{
+                ...oldState,
+                searchTarget: target
+            }
+
+        })
+    };
+
+
+    /**
+     * renders header for search
+     * @returns {*}
+     */
+    renderHeader = () => {
+        //console.log("search target: "+ this.state.searchTarget);
+        //console.log("search text: "+ this.state.searchText);
+        let selectorChoices= [
+            {
+                key: '0848496513',
+                name: "Result Name",
+                subtitle:"",
+                displayName: "Name",
+            },
+            {
+                key: '15555884454',
+                name: "Creation Date\n(format: YYYY-MM-DD)",
+                displayName: "Date"
+            },
+            {
+                key: '26655894135',
+                name: "Patient Profile",
+                displayName: "Patients"
+            },
+        ];
+
+        let isPatients = this.state.searchTarget !== "Patients";
+
+
+
+        let patientsList_id = ["None Selected"];
+
+        if(!isPatients){
+            for(let i = 0; i < this.props.state.main.patientsList.length; i++)
+            {
+                patientsList_id.push(this.props.state.main.patientsList[i].id);
+            }
+        }
+
+        return (
+            <View style={{flexDirection:"row", alignItems: "center", justifyContent: "center", backgroundColor:"#262626"}}>
+                <View style={{width: Dimensions.get("window").width *0.8}}>
+                    {isPatients
+                        ?<SearchBar
+                            placeholder={"Press to Search"}
+                            lightTheme={false}
+                            round={true}
+                            onChangeText={text => {
+                                this.searchFilterFunction(text);
+                            }}
+                            autoCorrect={false}
+                            containerStyle={{backgroundColor:"#262626", borderTopWidth:0, borderBottomWidth:0, marginBottom:0, paddingBottom:0}}
+                        />
+                        :<View style={{flexDirection:"row", width:"92%", marginLeft: 10, }}>
+                            <DropDownListV2
+                                value={this.state.patientTarget}
+                                onChange={(name,value)=>{
+                                    this.handlePatientProfileSelection(value);
+                                    this.searchFilterFunction(value);
+                                }}
+                                itemList={patientsList_id}
+                                Picker={Picker}
+                                setDarkVisibility = {this.handleSetDarkVisibility}
+                                pickerBackgroundColor={"#303338"}
+                                textColor={"#FFF"}
+                            />
+                        </View>
+                    }
+                </View>
+                <SelectorPicker choices={selectorChoices} itemSelected={this.handleSearchTypeSelection} style={{borderRadius:100}}/>
+            </View>
+        );
+    };
+
     render(){
         let content = (
             (this.state.selectorListAvailable)
                 ?<View>
                     <SelectionList
-                        list ={this.state.currentSelectedList}
+                        list ={this.state.currentModifiedList}
                         onItemSelected={this.handleItemSelected}
                         selectedValue={this.state.currentlySelectedItem}
                         cancelSelection={this.toggleSelectorList}
@@ -494,12 +732,12 @@ class ResultScreen extends Component{
                 </View>
                 :<View>
                     <ResultsList
-                        list ={this.props.state.main.resultsList}
+                        list ={this.state.currentModifiedList}
                         onToggleSelectorList={this.handleOnEnablingSelection}
                         onItemAccessed={this.handleItemAccessed}
                         onRemoveData={this.handleRemoveResult}
                         onRenameData={this.handleOnRenamePressed}
-                        extraData={this.state}
+                        extraData={this.props.state.main.resultsList.length}
                         listStyle={{height:Dimensions.get("window").height*(Platform.OS === "android"?0.64:0.71)}}
                         patientsList={this.props.state.main.patientsList}
                         Picker={Picker}
@@ -514,6 +752,11 @@ class ResultScreen extends Component{
             this.props.navigator.setButtons({rightButtons:[]});
         }
 
+
+        if(this.state.refreshList){
+            this.updateDisplayedList()
+        }
+
         //console.log(this.props.state.main.resultsList);
         //console.log("This is the current list of results[1]:"+ JSON.stringify(this.props.state.main.resultsList));
 //        console.log("This is the current list of results[2]:"+ JSON.stringify(this.props.state.main.resultsList[2]));
@@ -523,7 +766,10 @@ class ResultScreen extends Component{
             <View>
                 <View style={{margin:0, paddingBottom:0, height:"92%"}}>
                     {this.props.state.main.resultsList.length > 0
-                        ? content
+                        ?<View>
+                            {this.renderHeader()}
+                            {content}
+                        </View>
                         : <View style={{flex:1, alignItems:"center", justifyContent:"center"}}><Text style={{justifyContent:'center', alignItems:'center'}}>This doesn't have any results yet</Text></View>
                     }
                 </View>

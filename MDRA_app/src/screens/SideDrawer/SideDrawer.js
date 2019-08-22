@@ -24,14 +24,18 @@ import {
     backUpBeforeDeletion,
     addData, changePosition
 } from "../../store/actions";
-import testNetWorkConnection from '../../functions/testNetworkConnection';
+import testNetWorkConnection from '../../functions/testNetworkConnection/';
 import * as colors from "../../assets/colors";
 
-//component
-import ManagePatientsScreen from '../ManagePatientsScreen/ManagePatientsScreen';
-
-
 class SideDrawer extends Component{
+
+    handleFetchVersion = () => {
+        //TODO: find a way to get version
+
+        let version = "v0.5.2";
+
+        return version;
+    };
 
     logOutHandler = () => {
         this.props.onChangePosition(0);
@@ -196,7 +200,10 @@ class SideDrawer extends Component{
                     </View>
                 </TouchableOpacity>
                 <TouchableOpacity
-                    onPress={() => alert("Still need to do this...")}
+                    onPress={() => Alert.alert("About MDRA",
+                            "This app was developed in affiliation with the Universite de Montreal for use by a professional.\n It is not necessarily a tool for play. " +
+                        "\n"+ "This app has also partnered with WeTakeCare for a more seamless integration of systems of the mentioned application into this one."
+                        )}
                 >
                     <View  style={[styles.drawerItem,{borderBottomWidth: 1,}]}>
                         <FontAwesome
@@ -207,6 +214,9 @@ class SideDrawer extends Component{
                         <Text>About this app</Text>
                     </View>
                 </TouchableOpacity>
+                <View style={{position:'absolute',bottom:0, left:0}}>
+                    <Text style={{color:"grey"}}>{this.handleFetchVersion()}</Text>
+                </View>
             </View>
         );
     }

@@ -102,7 +102,7 @@ let reverseFindFormulaNumber = (pillNumber) => {
 
 let ReversePrepareToSend = (input) => {
     let currentInput = (input.slice(0,2) === '/?')?input.slice(2,input.length):input;
-    console.log('current reverseprepareSend\'s input: '+ currentInput);
+    //console.log('current reverseprepareSend\'s input: '+ currentInput);
     //lets prepare the objects...?
     //by using the default values
 
@@ -222,7 +222,7 @@ let ReversePrepareToSend = (input) => {
 
     //next we separate each input with its & character
     let formData = currentInput.split("&");
-    console.log('current reverseprepareSend\'s input after \'&\' split: '+ formData);
+    //console.log('current reverseprepareSend\'s input after \'&\' split: '+ formData);
 
     let amountOfPillsCounter = 0;
 
@@ -233,7 +233,7 @@ let ReversePrepareToSend = (input) => {
         formData[i] = formData[i].split("=");
 
         let currentFormData = formData[i];
-        console.log('current reverseprepareSend\'s input after \'=\' split: '+ currentFormData);
+      //  console.log('current reverseprepareSend\'s input after \'=\' split: '+ currentFormData);
 
         /*
         * Since we can't attribute c,d,zc,zd,zzc,zzd before knowing if it it has one or two boxes
@@ -247,12 +247,12 @@ let ReversePrepareToSend = (input) => {
 
         let currentlyEvaluatedIndex = indicesList[currentFormData[0]];
 
-        console.log('current translated index: '+ currentlyEvaluatedIndex);
+        //console.log('current translated index: '+ currentlyEvaluatedIndex);
 
         if(currentlyEvaluatedIndex === 'Morning')
         {
             doesItHaveTwoBoxes = (currentFormData[1] === '1');
-            console.log('doesItHaveTwoBoxes is now set for: '+ doesItHaveTwoBoxes)
+          //  console.log('doesItHaveTwoBoxes is now set for: '+ doesItHaveTwoBoxes)
         }
 
         else if(currentlyEvaluatedIndex !== 'zc' && currentlyEvaluatedIndex !== 'zd' && currentlyEvaluatedIndex !== 'zzc' && currentlyEvaluatedIndex !== 'zzd') {
@@ -318,7 +318,7 @@ let ReversePrepareToSend = (input) => {
         }
     }
 
-    console.log('this is formula0 after loop: '+ newPage0Object['formula0']);
+    //console.log('this is formula0 after loop: '+ newPage0Object['formula0']);
 
     //now we set up the amountOfPills
     newPage0Object['amountOfPills'] = amountOfPillsCounter;
@@ -349,7 +349,7 @@ let ReversePrepareToSend = (input) => {
     let hasAdvancedTabBeenAccessed = verifyIfAdvancedTabAccessed(newPage3Object);
     //now we have to build the new objects?
     let returnedFormData = [newPage0Object,newPage1Object,newPage2Object,newPage3Object];
-    console.log('reversePrepareToSend\'s returned Result: '+ JSON.stringify(returnedFormData));
+    //console.log('reversePrepareToSend\'s returned Result: '+ JSON.stringify(returnedFormData));
     return [newPage0Object,newPage1Object,newPage2Object,newPage3Object, hasAdvancedTabBeenAccessed]
 };
 
@@ -358,7 +358,7 @@ let HandleReceivedSearch = (returnedList) => {
     //console.log('returnedList is this: '+JSON.stringify(returnedList));
     let newObjectList = [];
     if(returnedList) {
-        console.log("Returned List size: "+ returnedList.length);
+        //console.log("Returned List size: "+ returnedList.length);
         for (let i = 0; i < returnedList.length; i++) {
             let currentResult = returnedList[i];
             //console.log('currentResult is this: '+JSON.stringify(returnedList[i]));
@@ -372,10 +372,10 @@ let HandleReceivedSearch = (returnedList) => {
             //if(i === 1)console.log('currentResults\'s input: '+JSON.stringify(newResultFormData));
             let patient = currentResult['patient'];
 
-            console.log("newResultFormData[0] before: " + JSON.stringify(newResultFormData));
+            //console.log("newResultFormData[0] before: " + JSON.stringify(newResultFormData));
             //we need to also set the formData's page 0's patientProfile
             newResultFormData[0]["patientProfile"] = patient;
-            console.log("newResultFormData[0] after: " + JSON.stringify(newResultFormData));
+            //console.log("newResultFormData[0] after: " + JSON.stringify(newResultFormData));
 
           //  console.log(JSON.stringify(currentResult));
 

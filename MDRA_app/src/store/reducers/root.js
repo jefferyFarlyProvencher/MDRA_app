@@ -23,8 +23,8 @@ const initialState = {
     indicatorVisibility: 1, //this removes the visibility of the indicator in order to see what we are typing when the glitch keyboard is active
     linkedAccount:{name:null,token:null},
     patientsList: [
-        {key: Math.random().toString(), name:"Josh Merlin",gender:"Male", weight:"40", kg_lbs:true, color:"#5F55F5" ,dateOfBirth:"2010-09-01", id: "JoshMerlin20100901"},
-        {key: Math.random().toString(), name:"Jocelyn Merlina",gender:"Female", weight:"35", kg_lbs:false, color:"#f593dd" ,dateOfBirth:"2009-08-10", id: "JocelynMerlina20100810"}
+        // {key: Math.random().toString(), name:"Josh Merlin",gender:"Male", weight:"40", kg_lbs:true, color:"#5F55F5" ,dateOfBirth:"2010-09-01", id: "JoshMerlin20100901"},
+        // {key: Math.random().toString(), name:"Jocelyn Merlina",gender:"Female", weight:"35", kg_lbs:false, color:"#f593dd" ,dateOfBirth:"2009-08-10", id: "JocelynMerlina20100810"}
     ], //this is in preparation for the profile
 };
 
@@ -169,16 +169,16 @@ const reducer = (state = initialState, action) => {
             let targetedObject = state.resultsList[target];
             //console.log(JSON.stringify(targetedObject));
             let updatedResult = {
-            key: targetedObject.key,
-            data: targetedObject.data,
-            formData: targetedObject.formData,
-            name: targetedObject.name,
-            id: targetedObject.id,
-            date:targetedObject.date,
+                key: targetedObject.key,
+                data: targetedObject.data,
+                formData: targetedObject.formData,
+                name: targetedObject.name,
+                id: targetedObject.id,
+                date:targetedObject.date,
                 patient:targetedObject.patient,
-            filePDF: action.pdfLocation,
+                filePDF: action.pdfLocation,
 
-        };
+            };
             //console.log(JSON.stringify(updatedResult));
             state.resultsList.splice(target, 1);
             state.resultsList.splice(target,0,updatedResult);
@@ -195,13 +195,14 @@ const reducer = (state = initialState, action) => {
             let targetedObject = state.resultsList[target];
             //console.log(JSON.stringify(targetedObject));
             let updatedResult = {
-            key: targetedObject.key,
-            data: targetedObject.data,
-            formData: targetedObject.formData,
-            name: targetedObject.name,
-            id: targetedObject.id,
-            date:targetedObject.date,
-            filePDF: undefined,
+                key: targetedObject.key,
+                data: targetedObject.data,
+                formData: targetedObject.formData,
+                name: targetedObject.name,
+                id: targetedObject.id,
+                date:targetedObject.date,
+                patient:targetedObject.patient,
+                filePDF: undefined,
         };
             //console.log(JSON.stringify(updatedResult));
             state.resultsList.splice(target, 1);

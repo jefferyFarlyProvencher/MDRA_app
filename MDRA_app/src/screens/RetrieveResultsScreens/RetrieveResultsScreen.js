@@ -101,8 +101,8 @@ class RetrieveResultsScreen extends Component {
         let currentResultList = this.props.state.main.resultsList;
         for(let i = 0; i < currentResultList.length; i++)
         {
-            console.log("this is the current result form from resultList: " + JSON.stringify(currentResultList[i].id));
-            console.log("and this is the result form compared to: "+ JSON.stringify(resultToCompare.name));
+            //console.log("this is the current result form from resultList: " + JSON.stringify(currentResultList[i].id));
+            //console.log("and this is the result form compared to: "+ JSON.stringify(resultToCompare.name));
             if(JSON.stringify(currentResultList[i].id) === JSON.stringify(resultToCompare.name))
             {
                 return false;
@@ -118,10 +118,10 @@ class RetrieveResultsScreen extends Component {
 
     handleRetrieveResults = async() => {
         let dateToCorrected = this.state.dateTo.split("-");
-        console.log("dateTo : "+ this.state.dateTo);
+        //console.log("dateTo : "+ this.state.dateTo);
         dateToCorrected[2] = ""+ (parseInt(dateToCorrected[2]) + 1 );
         dateToCorrected = dateToCorrected.join('-');
-        console.log("dateToCorrected: "+ dateToCorrected);
+        //console.log("dateToCorrected: "+ dateToCorrected);
         let retrievalResult = await SendRetrieval(this.state.resultName,dateFrom=this.state.dateFrom, dateTo=dateToCorrected, this.props.state.main.linkedAccount.token);
         //console.log('handleRetrieveResult: '+ JSON.stringify(retrievalResult));
         if(retrievalResult !== -1 && retrievalResult.length > 0) {
@@ -130,7 +130,7 @@ class RetrieveResultsScreen extends Component {
                 let currentResult = retrievalResult[i];
                 if (this.verifyIfNotDuplicate(currentResult)) {
                     //this.changeDisplayedMessage("Currently adding the result: "+ currentResult.name + " , to the list.");
-                    console.log("TEST 22: "+ JSON.stringify(currentResult));
+                    //console.log("TEST 22: "+ JSON.stringify(currentResult));
                     this.props.onAddToResultList(currentResult.data, currentResult.name, currentResult.formData, currentResult.date, currentResult.patient)
                 } else {
                     possibleDuplicatesList.push(currentResult.name)

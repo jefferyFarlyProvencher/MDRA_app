@@ -86,6 +86,7 @@ class ResultPage extends PureComponent {
     };
 
     componentWillUnmount() {
+
         BackHandler.removeEventListener('hardwareBackPress',  ()=>{BackHandler.exitApp()});
         BackHandler.addEventListener('hardwareBackPress',
             () => {
@@ -330,6 +331,12 @@ class ResultPage extends PureComponent {
             this.props.navigator.setTitle({
                 title: this.state.list[this.state.currentPosition].name
             });
+            this.setState(oldState => {
+                return{
+                    ...oldState,
+                    title: this.state.list[this.state.currentPosition].name
+                }
+            })
         }
     };
 
@@ -651,7 +658,7 @@ class ResultPage extends PureComponent {
         let pkProfileBase64Data = await this.capture(this.pkProfileRef);
         let performanceDayBase64Data = await this.capture(this.performanceDayRef);
         let performancePMBase64Data = false;
-        if(this.performancePMRef)
+        if (this.performancePMRef)
             performancePMBase64Data = await this.capture(this.performancePMRef);
 
         let performanceEveningBase64Data = await this.capture(this.performanceEveningRef);
@@ -660,7 +667,7 @@ class ResultPage extends PureComponent {
 
         let fileName = this.state.list[this.state.currentPosition].name;
         //remove all ponctuations off the fileName
-        fileName = "MDRA_Result_"+ fileName.replace(/(~|`|!|@|#|$|%|^|&|\*|\(|\)|{|}|\[|\]|;|:|\"|'|<|,|\.|>|\?|\/|\\|\||-|_|\+|=)/g,"");
+        fileName = "MDRA_Result_" + fileName.replace(/(~|`|!|@|#|$|%|^|&|\*|\(|\)|{|}|\[|\]|;|:|\"|'|<|,|\.|>|\?|\/|\\|\||-|_|\+|=)/g, "");
         //
         let options = {
             html: html,
@@ -679,16 +686,16 @@ class ResultPage extends PureComponent {
         let writeResult = "No need, it is IOS";
 
         const DocumentDir = RNFetchBlob.fs.dirs.DocumentDir;
-        if(Platform.OS === 'android'){
-            filePath = DocumentDir +"/resultPdfs/"+ fileName +'.pdf';
+        if (Platform.OS === 'android') {
+            filePath = DocumentDir + "/resultPdfs/" + fileName + '.pdf';
             await RNFetchBlob.fs.writeFile(filePath, file.base64, 'base64')
                 .then(response => {
                     console.log('Success Log: ', response);
-                    writeResult = 'Success Log: '+ response;
+                    writeResult = 'Success Log: ' + response;
                 })
                 .catch(errors => {
                     console.log(" Error Log: ", errors);
-                    writeResult = " Error Log: "+ errors;
+                    writeResult = " Error Log: " + errors;
                 })
 
         }
@@ -697,17 +704,21 @@ class ResultPage extends PureComponent {
         //as there
         await this.props.onAddPDFToResult(this.state.currentPosition, filePath);
 
-        this.toggleSpinner();
-        setTimeout(
-            ()=>{
-                if(Platform.OS === 'android')
-                    Alert.alert(
-                    'PDF Creation Confirmation',
-                    ("The pdf was created at this location: " + filePath))
-            },
-            (Platform.OS === 'ios'?200:100)
-        )
-
+        if (this.props.state.main.resultsList[this.state.currentPosition].filePDF){
+            this.toggleSpinner();
+            setTimeout(
+                () => {
+                    if (Platform.OS === 'android')
+                        Alert.alert(
+                            'PDF Creation Confirmation',
+                            ("The pdf was created at this location: " + filePath))
+                },
+                (Platform.OS === 'ios' ? 200 : 100)
+            )
+        }
+        else{
+            alert("PDF creation error")
+        }
     };
 
     /**
@@ -806,7 +817,18 @@ class ResultPage extends PureComponent {
         }
         console.log("CURRENT PATH BEFORE OPENING IS: "+ path);
         if(Platform.OS === "ios"){
-            RNFetchBlob.ios.openDocument(path);
+            RNFetchBlob.fs.exists(this.state.list[this.state.currentPosition].filePDF)
+                .then((exist) => {
+                    console.log(`file ${exist ? '' : 'not'} exists for opening`);
+                    if(exist) {
+                        //alert(`file ${exist ? '' : 'not'} exists`);
+                        RNFetchBlob.ios.openDocument(path);
+                    }
+                    else{
+                        alert("Not able to open because does not exist")
+                    }
+                });
+
         }
         else{
             const android = RNFetchBlob.android;

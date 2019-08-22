@@ -6,6 +6,7 @@ import Swipeout  from 'react-native-swipeout'
 //components
 import CheckBox from '../../components/CheckBox/CheckBox'
 import * as colors from '../../assets/colors'
+import SwipeOut from "../ResultsList/ResultsList";
 
 //credits to vikrant negi which helped with the search bar
 class SelectionList extends Component{
@@ -21,32 +22,36 @@ class SelectionList extends Component{
 
 
     componentWillReceiveProps (nextProps) {
+        console.log("SelectionList will receive props");
         if (nextProps.list !== this.props.list) {
+            //console.log('Next props list: ' + JSON.stringify(nextProps.list));
             this.setState({
-                modifiedList : this.props.list,
+                modifiedList : nextProps.list,
                 searchText : "",
             })
         }
+        //console.log('current props list: ' + JSON.stringify(this.props.list));
+
     }
 
-    searchFilterFunction = text => {
-        console.log("searchFilterFunction start and the text is: "+text);
-        const newData = (this.props.list).filter(item => {
-            const itemData = `${item.name.toUpperCase()}
-                              ${item.name.toUpperCase()}
-                              ${item.name.toUpperCase()}`;
-            const textData = text.toUpperCase();
-
-            return itemData.indexOf(textData) > -1;
-        });
-        this.setState({
-            modifiedList: newData,
-            searchText: text
-        });
-
-    };
-
-    //adds or removes key from list of selected elements
+    // searchFilterFunction = text => {
+    //     console.log("searchFilterFunction start and the text is: "+text);
+    //     const newData = (this.props.list).filter(item => {
+    //         const itemData = `${item.name.toUpperCase()}
+    //                           ${item.name.toUpperCase()}
+    //                           ${item.name.toUpperCase()}`;
+    //         const textData = text.toUpperCase();
+    //
+    //         return itemData.indexOf(textData) > -1;
+    //     });
+    //     this.setState({
+    //         modifiedList: newData,
+    //         searchText: text
+    //     });
+    //
+    // };
+    //
+    // //adds or removes key from list of selected elements
     handleItemSelected = (key) => {
         console.log("selectedList before:"+JSON.stringify(this.state.selectedList));
         //update key
@@ -95,28 +100,28 @@ class SelectionList extends Component{
         return isInList;
     };
 
-    renderHeader = () => {
-        return (
-            <SearchBar
-                placeholder={"Press to Search"}
-                lightTheme={false}
-                round={false}
-                onChangeText={text => this.searchFilterFunction(text)}
-                autoCorrect={false}
-                containerStyle={{backgroundColor:"#262626", borderTopWidth:0, borderBottomWidth:0, marginBottom:0, paddingBottom:0}}
-            />
-        );
-    };
+    // renderHeader = () => {
+    //     return (
+    //         <SearchBar
+    //             placeholder={"Press to Search"}
+    //             lightTheme={false}
+    //             round={false}
+    //             onChangeText={text => this.searchFilterFunction(text)}
+    //             autoCorrect={false}
+    //             containerStyle={{backgroundColor:"#262626", borderTopWidth:0, borderBottomWidth:0, marginBottom:0, paddingBottom:0}}
+    //         />
+    //     );
+    // };
 
     render() {
+        //console.log("size of list inside render: "+this.state.modifiedList.length);
         return (
             <View style={{alignContent:"center",backgroundColor:"#262626"}}>
-                {this.renderHeader()}
                 <List containerStyle={{margin:0, padding:0, borderTopWidth:0, borderBottomWidth:0}}>
                     <FlatList
                         style={[styles.listContainer, this.props.listStyle]}
-                        data={this.state.searchText !== ""?this.state.modifiedList:this.props.list}
-                        extraData={this.state}
+                        data={this.state.modifiedList}
+                        extraData={this.state.modifiedList.length}
                         renderItem={(info) => {
                             return (
                                 <View style={{flexDirection: "row"}}>
@@ -132,7 +137,7 @@ class SelectionList extends Component{
                                             borderWidth: 0,
                                             borderBottomWidth:0.5,
                                             borderBottomColor: "grey",
-                                            backgroundColor: "transparent",
+                                            backgroundColor: ((info.index % 2) === 0) ? "#FFF" : "#f3f3f3",
                                             width:"10%",
                                             alignItems: 'center',
                                             justifyContent: "center"
@@ -147,7 +152,12 @@ class SelectionList extends Component{
                                             this.handleItemSelected(info.item.key)
                                         }
                                         }
-                                        containerStyle={{width:"90%", paddingLeft:0, marginLeft:0}}
+                                        containerStyle={{
+                                            width:"90%",
+                                            paddingLeft:0,
+                                            marginLeft:0,
+                                            backgroundColor:((info.index % 2) === 0) ? "#FFF" : "#f3f3f3"
+                                        }}
                                     />
                                 </View>
                             )
