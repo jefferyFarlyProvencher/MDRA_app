@@ -162,7 +162,7 @@ class ResultsList extends Component{
         }
 
         return (
-            <View style={{flexDirection:"row", alignItems: "center", justifyContent: "center"}}>
+            <View style={{flexDirection:"row", alignItems: "center", justifyContent: "center", backgroundColor:"#f7f7f7"}}>
                 <View style={{width: Dimensions.get("window").width *0.8}}>
                     <SearchBar
                         placeholder={"Press to Search"}
@@ -181,40 +181,36 @@ class ResultsList extends Component{
 
     render() {
         return (
-            <View style={{alignContent:"center",backgroundColor:"#f7f7f7"}}>
+            <View style={{alignContent:"center",backgroundColor:"#FFF", flex:1}}>
                 {this.renderHeader()}
-                <List containerStyle={{margin:0, padding:0, borderTopWidth:0, borderBottomWidth:0}}>
-                    <FlatList
-                        style={[styles.listContainer, this.props.listStyle]}
-                        data={this.state.searchText !== ""?this.state.modifiedList:this.props.list}
-                        extraData={this.props.extraData}
-                        renderItem={(info) => {
-                            //console.log("info: "+JSON.stringify(info));
-                            return (
-                                <ListItem
-                                    roundAvatar
-                                    title={"Test Result: " + info.item.name}
-                                    subtitle={info.item.patient?info.item.patient:" "}
-                                    key={info.item.key}
-                                    onLongPress={() => {
-                                        this.props.onItemAccessed(info.item.key);
-                                        console.log('Item selected: ' + info.item.key);
-                                        console.log('pressed slowly');
-                                    }
-                                    }
-                                    onPress={() => {
-                                        this.props.onItemAccessed(info.item.key, this.state.modifiedList);
-                                        console.log('Item accessed: ' + info.item.key);
-                                        console.log('pressed quickly');
-                                    }}
-                                />
-                            )
-                        }}
+                <FlatList
+                    style={[styles.listContainer, this.props.listStyle]}
+                    data={this.state.searchText !== ""?this.state.modifiedList:this.props.list}
+                    extraData={this.props.extraData}
+                    renderItem={(info) => {
+                        //console.log("info: "+JSON.stringify(info));
+                        return (
+                            <ListItem
+                                roundAvatar
+                                title={"Test Result: " + info.item.name}
+                                subtitle={info.item.patient?info.item.patient:" "}
+                                key={info.item.key}
+                                onLongPress={() => {
+                                    this.props.onItemAccessed(info.item.key);
+                                    console.log('Item selected: ' + info.item.key);
+                                    console.log('pressed slowly');
+                                }}
+                                onPress={() => {
+                                    this.props.onItemAccessed(info.item.key, this.state.modifiedList);
+                                    console.log('Item accessed: ' + info.item.key);
+                                    console.log('pressed quickly');
+                                }}
+                            />
+                        )
+                    }}
 
-                        keyExtractor={item => item.key}
-                    />
-
-                </List>
+                    keyExtractor={item => item.key}
+                />
             </View>
         );
     }
@@ -223,8 +219,8 @@ class ResultsList extends Component{
 const styles = StyleSheet.create({
     listContainer:{
         width: "100%",
-        //height:"100%"
-        height: (Dimensions.get('window').height)*0.70,
+        height:"100%"
+        //height: (Dimensions.get('window').height)*0.70,
     },
 });
 

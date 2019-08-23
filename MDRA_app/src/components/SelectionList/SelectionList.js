@@ -116,55 +116,54 @@ class SelectionList extends Component{
     render() {
         //console.log("size of list inside render: "+this.state.modifiedList.length);
         return (
-            <View style={{alignContent:"center",backgroundColor:"#262626"}}>
-                <List containerStyle={{margin:0, padding:0, borderTopWidth:0, borderBottomWidth:0}}>
-                    <FlatList
-                        style={[styles.listContainer, this.props.listStyle]}
-                        data={this.state.modifiedList}
-                        extraData={this.state.modifiedList.length}
-                        renderItem={(info) => {
-                            return (
-                                <View style={{flexDirection: "row"}}>
-                                    <CheckBox
-                                        checked={this.handleIsItemChecked(info.item.key)}
-                                        onPress={() => {
-                                            console.log("selecting: " + info.item.key);
-                                            this.handleItemSelected(info.item.key)
-                                        }}
-                                        containerStyle={{
-                                            margin: 0,
-                                            paddingHorizontal: 0,
-                                            borderWidth: 0,
-                                            borderBottomWidth:0.5,
-                                            borderBottomColor: "grey",
-                                            backgroundColor: ((info.index % 2) === 0) ? "#FFF" : "#f3f3f3",
-                                            width:"10%",
-                                            alignItems: 'center',
-                                            justifyContent: "center"
-                                        }}
-                                    />
-                                    <ListItem
-                                        title={"Test Result: " + info.item.id}
-                                        subtitle={info.item.name}
-                                        key={info.item.key}
-                                        onPress={() => {
-                                            console.log("selecting: " + info.item.key);
-                                            this.handleItemSelected(info.item.key)
-                                        }
-                                        }
-                                        containerStyle={{
-                                            width:"90%",
-                                            paddingLeft:0,
-                                            marginLeft:0,
-                                            backgroundColor:((info.index % 2) === 0) ? "#FFF" : "#f3f3f3"
-                                        }}
-                                    />
-                                </View>
-                            )
-                        }}
-                        keyExtractor={item => item.name}
-                    />
-                </List>
+            <View style={{alignContent:"center",backgroundColor:"#FFF"}}>
+                <FlatList
+                    style={[styles.listContainer, this.props.listStyle]}
+                    data={this.state.modifiedList}
+                    extraData={this.state.modifiedList.length}
+                    ListHeaderComponent={this.props.header}
+                    renderItem={(info) => {
+                        return (
+                            <View style={{flexDirection: "row"}}>
+                                <CheckBox
+                                    checked={this.handleIsItemChecked(info.item.key)}
+                                    onPress={() => {
+                                        console.log("selecting: " + info.item.key);
+                                        this.handleItemSelected(info.item.key)
+                                    }}
+                                    containerStyle={{
+                                        margin: 0,
+                                        paddingHorizontal: 0,
+                                        borderWidth: 0,
+                                        borderBottomWidth:0.5,
+                                        borderBottomColor: "grey",
+                                        backgroundColor: ((info.index % 2) === 0) ? "#FFF" : "#f3f3f3",
+                                        width:"10%",
+                                        alignItems: 'center',
+                                        justifyContent: "center"
+                                    }}
+                                />
+                                <ListItem
+                                    title={"Test Result: " + info.item.id}
+                                    subtitle={info.item.name}
+                                    key={info.item.key}
+                                    onPress={() => {
+                                        console.log("selecting: " + info.item.key);
+                                        this.handleItemSelected(info.item.key)
+                                    }
+                                    }
+                                    containerStyle={{
+                                        width:"90%",
+                                        paddingLeft:0,
+                                        marginLeft:0,
+                                        backgroundColor:((info.index % 2) === 0) ? "#FFF" : "#f3f3f3"
+                                    }}
+                                />
+                            </View>
+                        )
+                    }}
+                    keyExtractor={item => item.name}
+                />
             </View>
         );
     }
@@ -173,7 +172,7 @@ class SelectionList extends Component{
 const styles = StyleSheet.create({
     listContainer:{
         //width: "100%",
-        height: (Dimensions.get('window').height)*0.70,
+        //height: (Dimensions.get('window').height)*0.70,
     },
 
     buttonContainer:{

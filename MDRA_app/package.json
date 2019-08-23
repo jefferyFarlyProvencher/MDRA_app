@@ -32,6 +32,7 @@
     "react-native-picker": "^4.3.7",
     "react-native-step-indicator": "0.0.9",
     "react-native-svg": "^6.5.1",
+    "react-native-swipeable": "^0.6.0",
     "react-native-swipeout": "^2.3.6",
     "react-native-swiper": "^1.5.14",
     "react-native-vector-icons": "^4.6.0",

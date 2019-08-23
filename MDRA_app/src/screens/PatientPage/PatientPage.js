@@ -544,15 +544,11 @@ class PatientPage extends PureComponent {
                         </ScrollView>
                     </View>
                     {!isNewProfile
-                        ?<View>
+                        ?<View style={{flex:1}}>
                             <PatientResultsList
                                 list ={this.props.patientResultsList}
                                 onItemAccessed={this.handlePatientResultAccessed}
                                 onItemSelected={this.handlePatientResultAccessed}
-                                //onRemoveData={this.handleRemoveResult}
-                                //onRenameData={this.handleOnRenamePressed}
-                                //extraData={this.state}
-                                listStyle={{height:Dimensions.get("window").height*(Platform.OS === "android"?0.64:0.71)}}
                             />
                         </View>
                         :<View/>

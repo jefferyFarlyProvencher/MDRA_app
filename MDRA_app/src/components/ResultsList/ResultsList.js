@@ -1,9 +1,19 @@
 import React, {Component} from 'react'
-import {View, Text, StyleSheet, FlatList, TouchableWithoutFeedback, Dimensions} from 'react-native'
+import {
+    View,
+    Text,
+    StyleSheet,
+    FlatList,
+    TouchableWithoutFeedback,
+    Dimensions,
+    TouchableOpacity,
+    Platform
+} from 'react-native'
 import {List, ListItem, SearchBar} from 'react-native-elements'
 import SwipeOut  from 'react-native-swipeout'
+import Swipeable from 'react-native-swipeable'
 import * as colors from "../../assets/colors";
-
+import Feather from 'react-native-vector-icons/Feather'
 //components
 import SelectorPicker from '../SelectorPicker/SelectorPicker';
 import DropDownListV2 from "../../components/DropDownList/DropDownListV2";
@@ -19,7 +29,8 @@ class ResultsList extends Component{
         searchTarget: 'Name',
         searchText : "",
         date: new Date(),
-        patientTarget: "None Selected"
+        patientTarget: "None Selected",
+        isSwiping:false,
     };
 
 
@@ -216,42 +227,110 @@ class ResultsList extends Component{
     //     );
     // };
 
+    setIsSwiping = (value) => {
+        this.setState(oldState => {
+            return{
+                ...oldState,
+                isSwiping: value
+            }
+        })
+    };
+
     render() {
+        // let rightButtons = [
+        //     <TouchableOpacity
+        //         style={[styles.rightSwipeItem, {backgroundColor:colors.royalBlue4}]}
+        //         onPress={() => {this.handleOnPressRename(info.item.key)}}
+        //     >
+        //         {/*<Text style={{color:"#FFF"}}>Rename</Text>*/}
+        //         <Feather
+        //             size={25}
+        //             name= {"edit"}
+        //             color="#FFF"
+        //             style={[styles.drawerItemIcon]}
+        //         />
+        //     </TouchableOpacity>,
+        //     <TouchableOpacity
+        //         style={[styles.rightSwipeItem, {backgroundColor:"#ff374b"}]}
+        //         onPress={()=>this.handleOnPressDelete(info.item.key)}
+        //     >
+        //         {/*<Text style={{color:"#FFF"}}>Delete</Text>*/}
+        //         <Feather
+        //             size={25}
+        //             name= {"trash"}
+        //             color="#FFF"
+        //             style={[styles.drawerItemIcon]}
+        //         />
+        //     </TouchableOpacity>
+        // ];
         //console.log("size of list inside render: "+this.state.modifiedList.length);
         return (
-            <View style={{alignContent:"center",backgroundColor:"#262626"}}>
-                <List containerStyle={{margin:0, padding:0, borderTopWidth:0, borderBottomWidth:0}}>
+            <View style={{alignContent:"center",backgroundColor:"#FFF", flex:1}}>
+                {/*<List*/}
+                    {/*containerStyle={{margin:0, padding:0, borderTopWidth:0, borderBottomWidth:0}}*/}
+                {/*>*/}
                     <FlatList
                         style={[styles.listContainer, this.props.listStyle]}
                         data={this.state.modifiedList}
                         extraData={this.state.modifiedList}
+                        scrollEnabled={!this.state.isSwiping}
+                        ListHeaderComponent={this.props.header}
                         renderItem={(info) => {
                            //console.log("info: "+JSON.stringify(info));
                             return (
 
-                                <SwipeOut
-                                    right={
+                                <Swipeable
+                                    onRef={ref => this.swipeable = ref}
+                                    rightButtons={
                                         [
-                                            {
-
-                                                text: "Rename",
-                                                color: "white",
-                                                backgroundColor: colors.royalBlue4,
-                                                onPress: () => {
-                                                    this.handleOnPressRename(info.item.key)
-                                                },
-                                            },
-                                            {
-
-                                                text: "Delete",
-                                                color: "white",
-                                                backgroundColor: "#ff374b",
-                                                onPress: () => {
-                                                    this.handleOnPressDelete(info.item.key)
-                                                },
-                                            },]
+                                            <TouchableOpacity
+                                                style={[styles.rightSwipeItem, {backgroundColor:colors.royalBlue4}]}
+                                                onPress={() => {this.handleOnPressRename(info.item.key)}}
+                                            >
+                                                {/*<Text style={{color:"#FFF"}}>Rename</Text>*/}
+                                                <Feather
+                                                    size={25}
+                                                    name= {"edit"}
+                                                    color="#FFF"
+                                                    style={[styles.drawerItemIcon]}
+                                                />
+                                            </TouchableOpacity>,
+                                            <TouchableOpacity
+                                                style={[styles.rightSwipeItem, {backgroundColor:"#ff374b"}]}
+                                                onPress={()=>this.handleOnPressDelete(info.item.key)}
+                                            >
+                                                {/*<Text style={{color:"#FFF"}}>Delete</Text>*/}
+                                                <Feather
+                                                    size={25}
+                                                    name= {"trash"}
+                                                    color="#FFF"
+                                                    style={[styles.drawerItemIcon]}
+                                                />
+                                            </TouchableOpacity>
+                                        ]
+                                        // [
+                                        //     {
+                                        //
+                                        //         text: "Rename",
+                                        //         color: "white",
+                                        //         backgroundColor: colors.royalBlue4,
+                                        //         onPress: () => {
+                                        //             this.handleOnPressRename(info.item.key)
+                                        //         },
+                                        //     },
+                                        //     {
+                                        //
+                                        //         text: "Delete",
+                                        //         color: "white",
+                                        //         backgroundColor: "#ff374b",
+                                        //         onPress: () => {
+                                        //             this.handleOnPressDelete(info.item.key)
+                                        //         },
+                                        //     },]
                                     }
-                                    backgroundColor={((info.index % 2) === 0) ? "#FFF" : "#f3f3f3"}
+                                    onSwipeStart={() => this.setIsSwiping(true)}
+                                    onSwipeRelease={() => this.setIsSwiping(false)}
+                                    // backgroundColor={((info.index % 2) === 0) ? "#FFF" : "#f3f3f3"}
                                 >
                                     <ListItem
                                         roundAvatar
@@ -269,15 +348,18 @@ class ResultsList extends Component{
                                             console.log('Item accessed: ' + info.item.key);
                                             console.log('pressed quickly');
                                         }}
+                                        containerStyle={{
+                                            backgroundColor:((info.index % 2) === 0) ? "#FFF" : "#f3f3f3"
+                                        }}
                                     />
-                                </SwipeOut>
+                                </Swipeable>
                             )
                         }}
 
                         keyExtractor={item => item.key}
                         />
 
-                </List>
+                {/*</List>*/}
             </View>
         );
     }
@@ -286,9 +368,18 @@ class ResultsList extends Component{
 const styles = StyleSheet.create({
     listContainer:{
         width: "100%",
-        //height:"100%"
-        height: (Dimensions.get('window').height)*0.70,
+        //height:"95%"
+        //height: (Dimensions.get('window').height)*0.75,
     },
+
+    rightSwipeItem: {
+        flex: 1,
+        justifyContent: 'center',
+        // alignItems:"center",
+        // width: 75,
+        paddingLeft: 25
+    },
+
 });
 
 export default ResultsList;

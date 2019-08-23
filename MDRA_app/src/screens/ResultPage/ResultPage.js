@@ -1,4 +1,4 @@
-import React, {PureComponent} from 'react';
+import React, {Component} from 'react';
 import {
     View,
     StyleSheet,
@@ -53,7 +53,7 @@ import * as Yup from "yup";
 import NewYupString from "../../components/NewYupString/NewYupString";
 import ScrollDownIndicator from "../../components/ScrollDownIndicator/ScrollDownIndicator";
 
-class ResultPage extends PureComponent {
+class ResultPage extends Component {
     state = {
         listLength: this.props.contextSensitiveList == null
             ?this.props.state.main.resultsList.length
@@ -72,7 +72,9 @@ class ResultPage extends PureComponent {
         animationFlag: true,
         title:"",
         sliderIndicatorActivated: true,
-        sliderOffset: Dimensions.get("window").height*0.3
+        sliderOffset: Dimensions.get("window").height*0.3,
+        updateTitle: false,
+        updateResultPage: true,
     };
 
     handleBackButton = () => {
@@ -82,6 +84,12 @@ class ResultPage extends PureComponent {
     componentDidMount() {
         //BackHandler.removeEventListener('hardwareBackPress');
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+        this.setState(oldState=>{
+            return{
+                ...oldState,
+                updateTitle:true,
+            }
+        })
 
     };
 
@@ -110,6 +118,12 @@ class ResultPage extends PureComponent {
                 return true;
             })
     };
+
+    shouldComponentUpdate(nextProps) {
+        return (
+            this.state.updateResultPage
+        );
+    }
 
     async requestExternalStorageRead() {
         try {
@@ -219,7 +233,12 @@ class ResultPage extends PureComponent {
                     style: 'cancel'
                 }, {
                     text: 'Yes',
-                    onPress: () => this.setFormValues()
+                    onPress: () => {
+                        //Toggle spinner?
+                        this.toggleSpinner();
+                        //setformValues
+                        setTimeout(()=>this.setFormValues(), 500)
+                    }
                 }
             ],
             {
@@ -228,7 +247,18 @@ class ResultPage extends PureComponent {
         );
     };
 
+    /**
+     *
+     */
+
     setFormValues = () => {
+        this.setState(oldState =>
+        {
+            return{
+                ...oldState,
+                updateResultPage: false,
+            }
+        });
         //collect current result's formData
         let formData = this.state.list[this.state.currentPosition].formData;
         let patientProfileId = this.state.list[this.state.currentPosition].patient;
@@ -253,18 +283,32 @@ class ResultPage extends PureComponent {
         if(typeof patientProfileId === 'object')
            patientProfileId = formData[0].patientProfile.id !== null? formData[0].patientProfile.id: formData[0].patientProfile;
 
-        for(let i = 0; i < patientsList.length; i++){
+        let i = 0;
+
+        while(i < patientsList.length){
             if(patientsList[i].id === patientProfileId)
             {
-                patientNotInList=false
+                patientNotInList=false;
+                break;
             }
+            i++;
         }
+        //
+        // for(let i = 0; i < patientsList.length; i++){
+        //     if(patientsList[i].id === patientProfileId)
+        //     {
+        //         patientNotInList=false
+        //         break;
+        //     }
+        // }
+
+        console.log('Is patient In List? '+ !patientNotInList);
 
         //copy formData[0] in order to change patientProfile as it is immutable while in this page
         let newFormData0 = null;
 
        newFormData0 = {
-           patientProfile: patientNotInList?{name:"None Selected",id:"None Selected"}:formData[0].patientProfile, //always none selected because error otherwise?
+           patientProfile: patientNotInList?{name:"None Selected",id:"None Selected"}:patientsList[i], //always none selected because error otherwise?
            gender: formData[0].gender,
            weight: formData[0].weight,
            dose0: formData[0].dose0,
@@ -289,6 +333,9 @@ class ResultPage extends PureComponent {
 
        if(patientNotInList)
            alert("The patient with the id " + patientProfileId + " was not used as it is not in the Patients' List and was thus replaced with the default \'None selected\'");
+        else{
+           console.log(JSON.stringify(formData[0].patientProfile));
+       }
 
         this.props.onAddData(newFormData0?newFormData0:formData[0],0);
         this.props.onAddData(formData[1],1);
@@ -310,33 +357,60 @@ class ResultPage extends PureComponent {
         // );
 
         //Changes here to reset form
-        //go to empty screen, then, back to 1,
+        //go to empty screen (loading... screen), then, back to 1,
         // in order to reset form to new values
         this.props.onChangePosition(6);
         this.props.onChangePosition(0);
 
+
+        //this.props.isInModal
+        this.props.navigator.dismissAllModals();
+
         //close modal
-        this.props.navigator.pop({
+        this.props.navigator.popToRoot({
             animated: false,
         });
+
+
+
         //change screen
         this.props.navigator.switchToTab({
             tabIndex: 0 // (optional) if missing, this screen's tab will become selected
         });
     };
 
+    /**
+     *
+     */
+
     setTitleOnChange = () => {
+        console.log("this.state.title: "+ this.state.title);
+        console.log("this.state.list[this.state.currentPosition].name: "+ this.state.list[this.state.currentPosition].name);
         if(this.state.title !== this.state.list[this.state.currentPosition].name) {
             console.log("Changing title");
             this.props.navigator.setTitle({
                 title: this.state.list[this.state.currentPosition].name
             });
-            this.setState(oldState => {
-                return{
-                    ...oldState,
-                    title: this.state.list[this.state.currentPosition].name
-                }
-            })
+            if(this.state.title===""){
+                setTimeout(
+                    ()=> {
+                        this.setState(oldState => {
+                            return {
+                                ...oldState,
+                                title: this.state.list[this.state.currentPosition].name
+                            }
+                        })
+                    },
+                    2000
+                )
+            }else {
+                this.setState(oldState => {
+                    return {
+                        ...oldState,
+                        title: this.state.list[this.state.currentPosition].name
+                    }
+                })
+            }
         }
     };
 
@@ -347,7 +421,7 @@ class ResultPage extends PureComponent {
                 //remove spinner
                 visible: !oldState.visible
             })
-        })
+        });
     };
 
 
@@ -1022,9 +1096,10 @@ class ResultPage extends PureComponent {
 
     render() {
         let currentResult = this.state.list[this.state.currentPosition];
-        console.log("If currentResult has a PDF it is there or this or whatever: "+ JSON.stringify(currentResult.filePDF));
+        //console.log("If currentResult has a PDF it is there or this or whatever: "+ JSON.stringify(currentResult.filePDF));
 
-        if(this.state.title !== currentResult.name) {
+        //console.log("UpdateTitle? " + this.state.updateTitle);
+        if(this.state.title !== currentResult.name && this.state.updateTitle) {
             this.setTitleOnChange();
         }
 

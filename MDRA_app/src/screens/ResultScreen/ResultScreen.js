@@ -139,11 +139,11 @@ class ResultScreen extends Component{
             }
         });
 
-        console.log("New selected dictionary"+JSON.stringify(newSelectedMap))
+        //console.log("New selected dictionary"+JSON.stringify(newSelectedMap))
     }
 
     componentWillReceiveProps(nextProps, nextContext) {
-        console.log("about to start comparison");
+        //console.log("about to start comparison");
         if(this.state.fullList.length !== this.props.state.main.resultsList.length)
         {
             console.log("passed full list comparison, searchText is: "+ this.state.searchText);
@@ -153,9 +153,14 @@ class ResultScreen extends Component{
                     refreshList: true
                 }
             })
-        }else
-            console.log("failed comparison")
+        }
+        //else
+            //console.log("failed comparison")
     }
+
+    /**
+     *
+     */
 
     spinnerToggler = () => {
         this.setState((oldState)=>{
@@ -682,7 +687,7 @@ class ResultScreen extends Component{
         }
 
         return (
-            <View style={{flexDirection:"row", alignItems: "center", justifyContent: "center", backgroundColor:"#262626"}}>
+            <View style={{flexDirection:"row", alignItems: "center", justifyContent: "center", backgroundColor:"#262626", paddingBottom: 10}}>
                 <View style={{width: Dimensions.get("window").width *0.8}}>
                     {isPatients
                         ?<SearchBar
@@ -717,6 +722,9 @@ class ResultScreen extends Component{
     };
 
     render(){
+
+
+        let header = this.renderHeader();
         let content = (
             (this.state.selectorListAvailable)
                 ?<View>
@@ -727,10 +735,11 @@ class ResultScreen extends Component{
                         cancelSelection={this.toggleSelectorList}
                         deleteSelection={this.handleSelectionDeletion}
                         disableDeleteButton = {this.handleDisableDeleteButton}
-                        listStyle={{height:Dimensions.get("window").height*(Platform.OS === "android"?0.64:0.71)}}
+                        //listStyle={{height:Dimensions.get("window").height*(Platform.OS === "android"?0.64:0.71)}}
+                        //header={header}
                     />
                 </View>
-                :<View>
+                :<View style={styles.container}>
                     <ResultsList
                         list ={this.state.currentModifiedList}
                         onToggleSelectorList={this.handleOnEnablingSelection}
@@ -738,10 +747,11 @@ class ResultScreen extends Component{
                         onRemoveData={this.handleRemoveResult}
                         onRenameData={this.handleOnRenamePressed}
                         extraData={this.props.state.main.resultsList.length}
-                        listStyle={{height:Dimensions.get("window").height*(Platform.OS === "android"?0.64:0.71)}}
+                        //listStyle={{height:Dimensions.get("window").height*(Platform.OS === "android"?0.64:0.71)}}
                         patientsList={this.props.state.main.patientsList}
                         Picker={Picker}
                         handleSetDarkVisibility={this.handleSetDarkVisibility}
+                        //header={header}
                     />
                 </View>
         );
@@ -763,16 +773,14 @@ class ResultScreen extends Component{
 //        console.log("This is the current list of results[3]:"+ JSON.stringify(this.props.state.main.resultsList[3]));
         //console.log("THIS IS THE renameError: " + this.state.renameError);
         return(
-            <View>
-                <View style={{margin:0, paddingBottom:0, height:"92%"}}>
-                    {this.props.state.main.resultsList.length > 0
-                        ?<View>
-                            {this.renderHeader()}
-                            {content}
-                        </View>
-                        : <View style={{flex:1, alignItems:"center", justifyContent:"center"}}><Text style={{justifyContent:'center', alignItems:'center'}}>This doesn't have any results yet</Text></View>
-                    }
-                </View>
+            <View style={styles.container}>
+                {this.props.state.main.resultsList.length > 0
+                    ?<View style={styles.container}>
+                        {header}
+                        {content}
+                    </View>
+                    : <View style={{flex:1, alignItems:"center", justifyContent:"center"}}><Text style={{justifyContent:'center', alignItems:'center'}}>This doesn't have any results yet</Text></View>
+                }
                 <View>
                     <Modal
                         animationType="fade"
@@ -898,6 +906,10 @@ class ResultScreen extends Component{
 }
 
 const styles = StyleSheet.create({
+    container: {
+        flex:1,
+        backgroundColor: "#fff",
+    },
     modalStyle:{
         marginTop: 22,
         width: (4/6*100)+"%",
