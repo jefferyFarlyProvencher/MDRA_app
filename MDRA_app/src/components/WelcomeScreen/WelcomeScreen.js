@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {View, Text, Animated} from 'react-native';
+import {View, Text, Animated, Dimensions} from 'react-native';
 
 class WelcomeScreen extends Component {
     state={
@@ -16,10 +16,10 @@ class WelcomeScreen extends Component {
         setTimeout(
             this.props.removeWelcomeScreen,
             500
-        )
+        );
         Animated.spring(this.state.welcomeScreenX, {
-            toValue: -500,
-            duration: 5000
+            toValue: -Dimensions.get("window").width,
+            duration: 500
         }).start();
         // this.setState({
         //     welcomeScreenVisible: true,

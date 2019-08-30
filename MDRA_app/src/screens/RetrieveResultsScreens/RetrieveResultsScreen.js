@@ -260,41 +260,41 @@ class RetrieveResultsScreen extends Component {
                                     {this.state.displayedMessage}
                                 </Text>
                             </View>
-                            <Formik
-                                initialValues={{ newName: JSON.stringify(this.props.state.main.data)}}
-                                onSubmit={()=>{console.log("I did a thing!")}}
-                                validationSchema={Yup.object().shape({
-                                    resultName: NewYupString().required(),
-                                })}
-                                render={({
-                                             values,
-                                             handleSubmit,
-                                             setFieldValue,
-                                             errors,
-                                             touched,
-                                             setFieldTouched,
-                                             isValid,
-                                             isSubmitting
-                                         }) => (
-                                             <View style={{width:"50%", marginRight:0}}>
-                                                <Input
-                                                    label={"Name of result"}
-                                                    labelPosition={"center"}
-                                                    value={values.resultName}
-                                                    style={{marginRight:0}}
-                                                    onChange={(name,value) =>{
-                                                        setFieldValue(name,value)
-                                                    }}
-                                                    onTouch={setFieldTouched}
-                                                    name="resultName"
-                                                    error={touched.resultName && errors.resultName}
-                                                    onBlur={() =>{
-                                                       //console.log(this.props.state.main.indicatorVisibility)
-                                                    }}
-                                                />
-                                             </View>
-                                )}
-                            />
+                            {/*<Formik*/}
+                                {/*initialValues={{ newName: JSON.stringify(this.props.state.main.data)}}*/}
+                                {/*onSubmit={()=>{console.log("I did a thing!")}}*/}
+                                {/*validationSchema={Yup.object().shape({*/}
+                                    {/*resultName: NewYupString().required(),*/}
+                                {/*})}*/}
+                                {/*render={({*/}
+                                             {/*values,*/}
+                                             {/*handleSubmit,*/}
+                                             {/*setFieldValue,*/}
+                                             {/*errors,*/}
+                                             {/*touched,*/}
+                                             {/*setFieldTouched,*/}
+                                             {/*isValid,*/}
+                                             {/*isSubmitting*/}
+                                         {/*}) => (*/}
+                                             {/*<View style={{width:"50%", marginRight:0}}>*/}
+                                                {/*<Input*/}
+                                                    {/*label={"Name of result"}*/}
+                                                    {/*labelPosition={"center"}*/}
+                                                    {/*value={values.resultName}*/}
+                                                    {/*style={{marginRight:0}}*/}
+                                                    {/*onChange={(name,value) =>{*/}
+                                                        {/*setFieldValue(name,value)*/}
+                                                    {/*}}*/}
+                                                    {/*onTouch={setFieldTouched}*/}
+                                                    {/*name="resultName"*/}
+                                                    {/*error={touched.resultName && errors.resultName}*/}
+                                                    {/*onBlur={() =>{*/}
+                                                       {/*//console.log(this.props.state.main.indicatorVisibility)*/}
+                                                    {/*}}*/}
+                                                {/*/>*/}
+                                             {/*</View>*/}
+                                {/*)}*/}
+                            {/*/>*/}
                             <LinedLabel
                                 label={"Select the start date."}
                             />

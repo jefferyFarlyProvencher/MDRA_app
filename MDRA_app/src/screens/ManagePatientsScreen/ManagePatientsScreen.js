@@ -212,7 +212,7 @@ class ManagePatientsScreen extends Component{
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#F00',
+        backgroundColor: '#FFF',
     },
 
     pickerStyle:{

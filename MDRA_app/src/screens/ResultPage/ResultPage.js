@@ -899,7 +899,24 @@ class ResultPage extends Component {
                         RNFetchBlob.ios.openDocument(path);
                     }
                     else{
-                        alert("Not able to open because does not exist")
+                        Alert.alert(
+                            'Error',
+                            ('An error occurred which prevents the opening of the pdf '+this.state.list[this.state.currentPosition].name+'. \n Do you wish to regenerate the PDF in order to fix this issue?'), [
+                                {
+                                    text: 'No',
+                                    onPress: (() => this.deletePDF()),
+                                    style: 'cancel'
+                                }, {
+                                    text: 'Yes',
+                                    onPress: () =>{
+                                        this.handleRetryGeneratePDF();
+                                    }
+                                }
+                            ],
+                            {
+                                cancelable: false
+                            }
+                        );
                     }
                 });
 
@@ -1061,7 +1078,7 @@ class ResultPage extends Component {
     };
 
     //**********************************
-    // START OF ARROW HANDLING SECTION
+    // START OF SWIPE DOWN SECTION
     //**********************************
 
     handleArrowActivation = (targetValue) => {
@@ -1089,7 +1106,7 @@ class ResultPage extends Component {
     };
 
     //**********************************
-    // END OF ARROW HANDLING SECTION
+    // END OF SWIPE DOWN SECTION
     //**********************************
 
 //    Animated.sequence([
@@ -1129,6 +1146,25 @@ class ResultPage extends Component {
         let patient = "None Selected";
         if(currentResult.formData[0].patientProfile !== null)
             patient = currentResult.formData[0].patientProfile.id?currentResult.formData[0].patientProfile.id:currentResult.formData[0].patientProfile;
+
+        //0% bug fix
+        //percentages
+        let firstBoxPercentage = null;
+        let secondBoxPercentage = null;
+        if(currentResult.formData[1].nbTherapeuticBoxes === "Two therapeutic boxes (AM and PM)")
+        {
+            if(currentResult.data.TIEffD1s !== null) {
+                firstBoxPercentage = Math.round(parseFloat(currentResult.data.TIEffD1s) * 100) / 100;
+            }
+            if(currentResult.data.TIEffD2 !== null) {
+                secondBoxPercentage = Math.round(parseFloat(currentResult.data.TIEffD2) * 100) / 100;
+            }
+        }
+        else{
+            if(currentResult.data.TIEffD1s !== null) {
+                firstBoxPercentage = Math.round(parseFloat(currentResult.data.TIEffD2) * 100) / 100;
+            }
+        }
 
         return (
             <View style={{backgroundColor:"#FFF", flex: 1}}>
@@ -1173,17 +1209,20 @@ class ResultPage extends Component {
                             <View style={this.state.orientation?styles.pieChartStylesPortrait:styles.pieChartStylesLandscape}>
                                 <TitleComponent text={"Performance"}/>
                                 <ViewShot ref={ref => this.performanceDayRef = ref}>
-                                    <SinglePieChartComponent
-                                        data={firstPieData}
-                                        formData = {currentResult.formData}
-                                        title={
-                                            (nbTherapeuticBoxes)
-                                                ? "AM Pie Graph"
-                                                : "Day Pie Graph"
-                                        }
-                                        style={{backgroundColor:"white"}}
-                                        Animated={true}
-                                    />
+                                    <View>
+                                        <SinglePieChartComponent
+                                            data={firstPieData}
+                                            formData = {currentResult.formData}
+                                            title={
+                                                (nbTherapeuticBoxes)
+                                                    ? "AM Pie Graph"
+                                                    : "Day Pie Graph"
+                                            }
+                                            style={{backgroundColor:"white"}}
+                                            Animated={true}
+                                            isAvailable={firstBoxPercentage!==0 && firstBoxPercentage !== null}
+                                        />
+                                    </View>
                                 </ViewShot>
                                 {nbTherapeuticBoxes?
                                     <ViewShot ref={ref => this.performancePMRef = ref}>
@@ -1193,6 +1232,7 @@ class ResultPage extends Component {
                                             title="PM Pie Graph"
                                             style={{backgroundColor:"white"}}
                                             Animated={true}
+                                            isAvailable={secondBoxPercentage!==0 && secondBoxPercentage !== null}
                                         />
                                     </ViewShot>
                                     :<View/>
@@ -1204,6 +1244,8 @@ class ResultPage extends Component {
                                         title="Evening Pie Graph"
                                         style={{backgroundColor:"white"}}
                                         Animated={true}
+                                        isAvailable={true}
+
                                     />
                                 </ViewShot>
                             </View>
@@ -1438,8 +1480,8 @@ class ResultPage extends Component {
                         >
                             {currentResult.filePDF
                                 ?<View style={{padding: 10, height:"100%"}}>
-                                    <TitleComponent text={"PDF already generated for this result"} />
-                                    <View style={{justifyContent: 'center', alignItems: 'center'}}>
+                                    <TitleComponent text={"PDF generation completed"} />
+                                    <View style={{justifyContent: 'center', alignItems: 'center', height:"90%"}}>
                                         <TouchableOpacity
                                             onPress={()=>{
                                                 console.log("not implemented yet?");
@@ -1457,19 +1499,19 @@ class ResultPage extends Component {
                                                 </View>
                                             </View>
                                         </TouchableOpacity>
-                                        <TouchableOpacity onPress={this.handleRetryGeneratePDF}>
-                                            <View  style={styles.drawerItem}>
-                                                <Ionicon
-                                                    size={40}
-                                                    name= {"ios-repeat"}
-                                                    color="#52afff"
-                                                    style={styles.drawerItemIcon}
-                                                />
-                                                <View style={styles.drawerTextContainer}>
-                                                    <Text style={styles.drawerText}>{"Press to generate PDF again in case of an Error"}</Text>
-                                                </View>
-                                            </View>
-                                        </TouchableOpacity>
+                                        {/*<TouchableOpacity onPress={this.handleRetryGeneratePDF}>*/}
+                                            {/*<View  style={styles.drawerItem}>*/}
+                                                {/*<Ionicon*/}
+                                                    {/*size={40}*/}
+                                                    {/*name= {"ios-repeat"}*/}
+                                                    {/*color="#52afff"*/}
+                                                    {/*style={styles.drawerItemIcon}*/}
+                                                {/*/>*/}
+                                                {/*<View style={styles.drawerTextContainer}>*/}
+                                                    {/*<Text style={styles.drawerText}>{"Press to generate PDF again in case of an Error"}</Text>*/}
+                                                {/*</View>*/}
+                                            {/*</View>*/}
+                                        {/*</TouchableOpacity>*/}
                                         <TouchableOpacity onPress={this.handleDeletePDF}>
                                             <View  style={[styles.drawerItem]}>
                                                 <Ionicon
@@ -1631,7 +1673,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent:"center",
         padding:10,
-        marginVertical: 10,
+        marginVertical: 20,
         backgroundColor: "#eee",
     },
 

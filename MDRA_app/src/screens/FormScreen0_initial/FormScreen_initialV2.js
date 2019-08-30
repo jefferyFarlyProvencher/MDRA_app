@@ -73,7 +73,10 @@ class FormScreenInitial extends PureComponent{
 
         //selectedPatientProfile: this.props.state.main.patientsList[0].name
 
-        defaultPatient: {name:"None Selected", id: "None Selected"}
+        defaultPatient: {name:"None Selected", id: "None Selected"},
+
+        height:Dimensions.get("window").height,
+        width: Dimensions.get("window").width
     };
 
     // componentDidMount() {
@@ -478,7 +481,7 @@ class FormScreenInitial extends PureComponent{
                                                         maxLength={5}
                                                     />
                                                 </View>
-                                                <View style={{paddingTop:"20%", marginLeft:0, paddingRight:20, flexDirection:'row', justifyContent:'center'}}>
+                                                <View style={styles.kgLbsSwitch}>
                                                     <View style={{paddingTop:"25%"}}>
                                                         <Text>{(this.state.switchValue?"lbs":"kg ")}</Text>
                                                     </View>
@@ -1046,6 +1049,15 @@ const styles = StyleSheet.create({
         padding: 10,
         paddingTop:0
     },
+
+    kgLbsSwitch:{
+        paddingTop:Dimensions.get("window").width < Dimensions.get("window").height?"0%":0,
+        marginLeft:0,
+        paddingRight:20,
+        flexDirection:'row',
+        justifyContent:'center',
+        alignItems:"center"
+    }
 
 });
 

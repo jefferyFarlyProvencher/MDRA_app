@@ -10,7 +10,8 @@ import {
     StyleSheet,
     Dimensions,
     Platform,
-    Alert, BackHandler
+    Alert, BackHandler,
+    ScrollView
 } from 'react-native';
 
 //Navigation
@@ -24,9 +25,11 @@ import testNetWorkConnection from '../../functions/testNetworkConnection';
 //screens
 import LogInScreen from '../../screens/LogInScreen/LogInScreen'
 import RegisterScreen from '../../screens/RegisterScreen/RegisterScreen'
-//REdyx
+//Redux
 import {connect} from "react-redux";
-import {addAccount, emptyResultList} from "../../store/actions";
+import {addAccount, emptyResultList, emptyPatientsList, setStayConnected} from "../../store/actions";
+// import CheckBox from "../../components/CheckBox/CheckBox";
+import {CheckBox} from "react-native-elements";
 
 class StartScreen extends Component{
 
@@ -34,8 +37,22 @@ class StartScreen extends Component{
         loading:false,
         startAnim: new Animated.Value(1),
         attempt: -1,
-        isItLogIn: true
+        isItLogIn: true,
+        stayConnected: this.props.state.main.stayConnected, //!== null && typeof this.props.state.main.stayConnected !== 'undefined'
+            // ? this.props.state.main.stayConnected
+            // : false
+        storedGlobalStayConnected: this.props.state.main.stayConnected,
+        stayConnectedErrorCorrected: false,
     };
+
+    componentWillMount() {
+        this.startBreathAnimation();
+        this.delayDisplay()
+    }
+
+    componentWillUpdate() {
+
+    }
 
     _handleWaitingOnStart_grow = () => {
         Animated.timing(this.state.startAnim,{
@@ -112,6 +129,36 @@ class StartScreen extends Component{
         BackHandler.removeEventListener('hardwareBackPress',  this.handleBackButton)
     }
 
+    /**
+     * delayDisplay() and toggleDisplay
+     *  this is to fix the glitched display at start (log in is showed when button should instead)
+     *  and to fix the Stay Logged In
+     */
+
+    delayDisplay = () => {
+        // setTimeout(
+        //     ()=>{
+        //         this.toggleDisplay();
+        //     },
+        //     50
+        // )
+    };
+
+    toggleDisplay = () => {
+
+        if(this.props.state.main.stayConnected  !== this.state.storedGlobalStayConnected)
+        {
+            this.handleStayConnected();
+            this.setState(oldState => {
+            return{
+                stayConnectedErrorCorrected:true,
+            }
+        })
+        }
+
+    };
+
+
 
     displayConnectionError = () =>{
 
@@ -142,11 +189,29 @@ class StartScreen extends Component{
         );
     };
     handleScreenToggle = (value) => {
+        //toggleScreen
         this.setState(oldState => {
             return{
                 ...oldState,
                 isItLogIn: value? value: !oldState.isItLogIn
             }
+        })
+    };
+
+    /**
+     * handleStayConnected
+     *
+     * sets the LOCAL value of stay Connected
+     *
+     * the GLOBAL value is set on log in
+     */
+    handleStayConnected = () => {
+        console.log("Switching local stay connected");
+        this.setState(oldState => {
+          return{
+              ...oldState,
+              stayConnected:!oldState.stayConnected,
+          }
         })
     };
 
@@ -177,14 +242,17 @@ class StartScreen extends Component{
     };
 
     launchNewScreen = () => {
+        //setStayConnected
+        this.props.onSetStayConnected(this.state.stayConnected);
+        //launch screen
         console.log("launching new screen");
         setTimeout(()=>{console.log("main tabs starting");startMainTabs();},500);
     };
 
     //attempts to load the app, basically does a verification of network status and waits .5 secs before launching
-    _startMainApp = async (account) => {
+    _startMainApp = async (account, email) => {
         if(!(typeof this.props.state.main.linkedAccount !== "undefined"&&this.props.state.main.linkedAccount.token&&typeof this.props.state.main.linkedAccount.token !== "undefined"))
-            await this.props.onAddAccount(account['name'], account['token']);
+            await this.props.onAddAccount(email, account['name'], account['token']);
         this.setState((oldState)=>{
             return{
                 ...oldState,
@@ -206,8 +274,17 @@ class StartScreen extends Component{
     };
 
     render(){
-        this.startBreathAnimation();
+        console.log("value of stay logged in (local): "+ this.state.stayConnected);
+        console.log("value of stay logged in (global): "+ this.props.state.main.stayConnected);
+        //this.startBreathAnimation();
         let displayLogRegScreens = !(typeof this.props.state.main.linkedAccount !== "undefined"&&this.props.state.main.linkedAccount.token&&typeof this.props.state.main.linkedAccount.token !== "undefined");
+        // console.log("displayLogRegScreens: "+ displayLogRegScreens);
+        // console.log("this.props.state.main.linkedAccount === null: "+(this.props.state.main.linkedAccount === null));
+        // console.log("typeof this.props.state.main.linkedAccount === \"undefined\": "+ (typeof this.props.state.main.linkedAccount === "undefined"));
+        let globalStayConnected = this.props.state.main.stayConnected;
+
+        if(!this.state.stayConnectedErrorCorrected && !this.state.loading)
+            this.toggleDisplay();
         return(
             <ImageBackground source={backgroundImage} resizeMode='cover' style={styles.backgroundImage} blurRadius={0.5}>
                 {this.state.loading
@@ -222,52 +299,123 @@ class StartScreen extends Component{
                     </View>
                     :<View>
                         {!displayLogRegScreens
-                        ?<View>
-                            <View style={styles.surroundTextContainerStyle}>
-                                <Text style={[styles.surroundTextStyle, {fontSize:30}]}>
-                                    Welcome back Dr.{this.props.state.main.linkedAccount.name} !
-                                </Text>
-                            </View>
-                            <View style={{alignItems: "center", justifyContent:"center"}}>
-                                <Animated.View
-                                    style={[
-
-                                        {transform: [{scale: this.state.startAnim.interpolate({
-                                                    inputRange: [1,1.1],
-                                                    outputRange: [1,1.1]
-                                                })
-                                            }]
-                                        },
-                                        (this.state.loading)?null:styles.mainContainer
-                                    ]}
-                                >
-                                    <View style={{alignItems:"center", justifyContent:"center"}}>
-                                        <TouchableWithoutFeedback onPress={this._startMainApp}>
-                                                <View style={[styles.textContainer,{}]}>
-                                                    <Text style={[
-                                                        styles.textStyle,
-                                                        ]}
-                                                    >
-                                                        Press to Start
-                                                    </Text>
-                                                </View>
-                                        </TouchableWithoutFeedback>
-                                    </View>
-                                </Animated.View>
-                            </View>
-                            <View style={[styles.surroundTextContainerStyle,{backgroundColor:"#b8d6ff", width:Dimensions.get("window").width}]}>
-                                <Text style={styles.surroundTextStyle}>Not {this.props.state.main.linkedAccount.name?this.props.state.main.linkedAccount.name:"Error Man"}? Press </Text>
-                                <TouchableOpacity onPress={this.logOut}>
-                                    <Text style={[styles.surroundTextStyle,{fontSize:20, fontWeight: "bold"}]}>
-                                        HERE
+                        ?
+                            <View style={{alignItems:"center"}}>
+                                <View style={styles.surroundTextContainerStyle}>
+                                    <Text
+                                        style={[
+                                            styles.surroundTextStyle,
+                                            {
+                                                fontSize:Dimensions.get('window').width*0.08,
+                                                color:"black"
+                                            }
+                                        ]}
+                                    >
+                                        Welcome back Dr.{this.props.state.main.linkedAccount.name} !
                                     </Text>
-                                </TouchableOpacity>
-                                <Text style={styles.surroundTextStyle}> to Sign Out</Text>
+                                </View>
+                                {globalStayConnected
+                                ?<View>
+                                    <View style={{alignItems: "center", justifyContent:"center"}}>
+                                        <Animated.View
+                                            style={[
+
+                                                {transform: [{scale: this.state.startAnim.interpolate({
+                                                            inputRange: [1,1.1],
+                                                            outputRange: [1,1.1]
+                                                        })
+                                                    }]
+                                                },
+                                                (this.state.loading)?null:styles.mainContainer
+                                            ]}
+                                        >
+                                            <View style={{alignItems:"center", justifyContent:"center"}}>
+                                                <TouchableWithoutFeedback onPress={this._startMainApp}>
+                                                        <View style={[styles.textContainer,{}]}>
+                                                            <Text style={[
+                                                                styles.textStyle,
+                                                                ]}
+                                                            >
+                                                                Press to Start
+                                                            </Text>
+                                                        </View>
+                                                </TouchableWithoutFeedback>
+                                            </View>
+                                        </Animated.View>
+                                    </View>
+                                    <View style={styles.checkContainer}>
+                                        <CheckBox
+                                            center
+                                            title={'Stay logged In'}
+                                            checked={this.state.stayConnected}
+                                            checkedColor={'#112ab0'}
+                                            onPress={()=>this.handleStayConnected()}
+                                            containerStyle={{backgroundColor:'rgba(256,256,256,0.50)'}}
+
+                                        />
+                                    </View>
+                                </View>
+                                :<LogInScreen
+                                    style={{display:"flex"}}
+                                    handleStayConnected={() => {this.handleStayConnected()}}
+                                    stayConnected = {this.state.stayConnected}
+                                    frozenEmail={this.props.state.main.linkedAccount.email}
+                                    startMainApp = {this._startMainApp}
+                                    displayConnectionError={this.displayConnectionError}
+                                />
+                                }
+                                <View
+                                    style={
+                                        [
+                                            styles.surroundTextContainerStyle,
+                                            {   width:Dimensions.get("window").width,
+                                                backgroundColor: 'rgba(17,42,176,0.5)',
+                                            },
+
+                                        ]
+                                    }
+                                >
+                                    <Text style={styles.surroundTextStyle}>Not {this.props.state.main.linkedAccount.name?this.props.state.main.linkedAccount.name:"Error Man"}? Press </Text>
+                                    <TouchableOpacity onPress={this.logOut}>
+                                        <Text style={[styles.surroundTextStyle,{fontSize:20, fontWeight: "bold", color:"#FFF"}]}>
+                                            HERE
+                                        </Text>
+                                    </TouchableOpacity>
+                                    <Text style={styles.surroundTextStyle}> to Sign Out</Text>
+                                </View>
                             </View>
-                        </View>
-                        :<View style={{display: !displayLogRegScreens?"none":"flex"}}>
-                            <LogInScreen  style={{display:this.state.isItLogIn?"flex":"none"}} handleScreenToggle={() => {console.log("Trying stuff 1"); this.handleScreenToggle(false)}} startMainApp = {this._startMainApp} displayConnectionError={this.displayConnectionError}/>
-                            <RegisterScreen style={{display:this.state.isItLogIn?"none":"flex"}} handleScreenToggle={() => {console.log("Trying stuff 2"); this.handleScreenToggle(true)}} startMainApp = {this._startMainApp}/>
+                        :<View
+                            style={
+                                {
+                                    display: !displayLogRegScreens?"none":"flex",
+                                    alignItems:"center", justifyContent:"center",
+                                    height:"100%"
+                                }
+                            }
+                        >
+                                <LogInScreen
+                                    style={{display:this.state.isItLogIn?"flex":"none"}}
+                                    handleStayConnected={() => {this.handleStayConnected()}}
+                                    stayConnected = {this.state.stayConnected}
+                                    startMainApp = {this._startMainApp} displayConnectionError={this.displayConnectionError}
+                                />
+                                <RegisterScreen
+                                    style={{display:this.state.isItLogIn?"none":"flex"}}
+                                    handleStayConnected={() => {this.handleStayConnected()}}
+                                    stayConnected = {this.state.stayConnected}
+                                    startMainApp = {this._startMainApp}
+                                />
+                                <TouchableOpacity onPress={()=>{this.handleScreenToggle()}}>
+                                    <View>
+                                        <Text
+                                            style={[
+                                                styles.textStyle,{color: "#000", fontSize: 17, fontWeight: 'bold'}
+                                            ]}
+                                        >
+                                            {this.state.isItLogIn?"Register here":"Log In Here"}
+                                        </Text>
+                                    </View>
+                                </TouchableOpacity>
                         </View>
                         }
                     </View>
@@ -280,11 +428,11 @@ class StartScreen extends Component{
 
 const styles= StyleSheet.create({
     mainContainer:{
-        height: 200,
-        width: "90%",
+        height: Dimensions.get('window').height*0.3,
+        width: Dimensions.get('window').width*0.9,
         opacity: 0.9,
         backgroundColor: '#111e6c',
-        borderRadius:80,
+        borderRadius:Platform.isPad?120:80,
         padding: 5,
         alignItems: 'center',
         justifyContent: 'center',
@@ -316,12 +464,17 @@ const styles= StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "center",
-        marginVertical: 50
+        marginVertical: 10,
+        paddingVertical: 5,
     },
 
     surroundTextStyle: {
         fontSize: 15,
-        textAlign: "center"
+        textAlign: "center",
+        color:"white"
+    },
+    checkContainer: {
+        marginTop:20
     }
 });
 
@@ -333,9 +486,10 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onAddAccount: (name, token) => dispatch(addAccount(name, token)),
+        onAddAccount: (email,name, token) => dispatch(addAccount(email,name, token)),
         onEmptyResultList: () => dispatch(emptyResultList()),
-        onEmptyPatientsList: () => dispatch(emptyPatientsList())
+        onEmptyPatientsList: () => dispatch(emptyPatientsList()),
+        onSetStayConnected: (value) => dispatch(setStayConnected(value))
     };
 };
 

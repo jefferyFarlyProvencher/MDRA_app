@@ -13,6 +13,7 @@ import {
 
 import {VictoryPie} from 'victory-native';
 import TitleComponent from "../TitleComponent/TitleComponent";
+import ViewShot from "../../screens/ResultPage/ResultPage";
 
 class ResultTest extends PureComponent{
     state = {
@@ -86,6 +87,8 @@ class ResultTest extends PureComponent{
     render() {
         //determines wether or not they have animation
         let willBeAnimated = this.props.Animated;
+        //determines wether an error occured which prevents display of pie graph
+        let isAvailable = this.props.isAvailable && typeof this.props.isAvailable !== 'undefined' && this.props.isAvailable !== null;
         return(
             <View>
                 <TouchableOpacity
@@ -99,15 +102,30 @@ class ResultTest extends PureComponent{
                                 {this.props.title}
                             </Text>
                         </View>
+                        {isAvailable?
                         <View style={this.props.style} pointerEvents="none">
                             <VictoryPie
-                                radius={100}
+                                radius={Dimensions.get('window').height*0.20}
                                 data={this.generateDataObjects(this.props.data)}
                                 colorScale={['#1b3e70', '#62c9e4', '#c2c822', '#f8c82c', '#ed5f6d','#f6922d']}
                                 animate={willBeAnimated?{duration: 500}: null}
-                                innerRadius={50}
+                                innerRadius={Dimensions.get('window').height*0.1}
                             />
                         </View>
+                            :<View
+                                style={
+                                    {
+                                        width:Dimensions.get('window').width,
+                                        height:Dimensions.get('window').height*0.5,
+                                        backgroundColor:"#dddddd",
+                                        alignItems:'center',
+                                        justifyContent:'center'
+                                    }
+                                }
+                            >
+                                <Text style={{fontSize:50}}>N/A</Text>
+                            </View>
+                        }
                     </View>
                 </TouchableOpacity>
                 <View>
@@ -179,7 +197,7 @@ class ResultTest extends PureComponent{
                                                 text={'Responder :'}
                                             />
                                             <Text style={styles.ColorTextStyle}>
-                                                {this.state.modalPieData?this.state.modalPieData[2]:"2"}
+                                                {this.state.modalPieData && isAvailable?this.state.modalPieData[2]:"0%"}
                                                 </Text>
                                         </View>
                                         <View style={[{backgroundColor: '#f8c82c',},styles.modalColors]}>

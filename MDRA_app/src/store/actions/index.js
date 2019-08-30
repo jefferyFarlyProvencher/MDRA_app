@@ -33,3 +33,5 @@ export {updatePatientInfo} from './updatePatientInfo';
 export {setPatientLatestForm} from './setPatientLatestForm';
 
 export {emptyPatientsList} from './emptyPatientsList';
+
+export {setStayConnected} from './setStayConnected'

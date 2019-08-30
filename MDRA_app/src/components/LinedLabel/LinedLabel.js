@@ -24,8 +24,18 @@ class LinedLabel extends PureComponent{
     // and style props for the back of the style of the line label container
 
     state={
-      textPosition: this.props.textPosition? this.props.textPosition: "center"
+      textPosition: this.props.textPosition? this.props.textPosition: "center",
+        isRotated: false
     };
+
+    onLayout(){
+        this.setState(oldState=>{
+            return{
+                ...oldState,
+                isRotated: !oldState.isRotated
+            }
+        })
+    }
 
     giveLineWidth = (line) => {
       switch (this.state.textPosition){
@@ -62,7 +72,16 @@ class LinedLabel extends PureComponent{
         return(
             <View style={[styles.root,this.props.containerStyle]}>
                 <View
-                    style={[styles.lineStyle, this.props.lineStyle,{ width: (this.giveLineWidth(1)),}]}
+                    style={[
+                        styles.lineStyle,
+                        this.props.lineStyle,
+                        {
+                            width: (this.giveLineWidth(1)),
+                        },
+                        this.state.isRotated
+                            ? styles.lineStyleTurned
+                            : styles.lineStyleBase
+                    ]}
                 />
                 <View style={[styles.textContainerStyle, this.props.textContainerStyle]}>
                     <Text style={[{color: "#FFF"},this.props.textStyle]}>
@@ -70,7 +89,16 @@ class LinedLabel extends PureComponent{
                     </Text>
                 </View>
                 <View
-                    style={[styles.lineStyle, this.props.lineStyle,{ width: (this.giveLineWidth(2)),}]}
+                    style={[
+                        styles.lineStyle,
+                        this.props.lineStyle,
+                        {
+                            width: (this.giveLineWidth(2)),
+                        },
+                        this.state.isRotated
+                            ? styles.lineStyleTurned
+                            : styles.lineStyleBase
+                    ]}
                 />
             </View>
         );
@@ -85,10 +113,16 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         paddingTop: Dimensions.get("window").height*0.05,
     },
-    lineStyle: {
+    lineStyleBase: {
         backgroundColor: colors.royalBlue1,
         height: 1,
-        marginTop:Dimensions.get("window").height*0.02
+        marginTop: Dimensions.get("window").height*0.02
+    },
+
+    lineStyleTurned:{
+        backgroundColor: colors.royalBlue1,
+        height: 1,
+        marginTop: Dimensions.get("window").width*0.02
     },
 
     textContainerStyle: {

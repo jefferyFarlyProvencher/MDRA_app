@@ -33,7 +33,6 @@ class SideDrawer extends Component{
         //TODO: find a way to get version
 
         let version = "v0.5.2";
-
         return version;
     };
 

@@ -723,6 +723,7 @@ class ResultScreen extends Component{
 
     render(){
 
+//        console.log("current redux list size: "+ this.props.state.main.resultsList.length);
 
         let header = this.renderHeader();
         let content = (

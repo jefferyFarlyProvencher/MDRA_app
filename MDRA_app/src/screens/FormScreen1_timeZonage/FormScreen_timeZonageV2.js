@@ -625,7 +625,7 @@ class FormScreenTimeZonage extends PureComponent{
                                         <View style={[styles.buttonContainer]}>
                                             <Button
                                                 buttonStyle={styles.button}
-                                                title="Go to weights"
+                                                title="Adjust model weights"
                                                 onPress={handleSubmit}
                                                 loading={isSubmitting}
                                             />

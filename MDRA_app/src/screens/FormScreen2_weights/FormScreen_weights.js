@@ -61,7 +61,7 @@ class FormScreenWeights extends PureComponent{
             <View style={styles.container}>
                 <KeyboardAwareScrollView>
                     <View style={[styles.centerElements,{ width:"100%"}]}>
-                        <TitleComponent text={"Weights"}/>
+                        <TitleComponent text={"Adjust model weights"}/>
                     </View>
                     <FormBackButton
                         onPress={this._handleGoToPreviousStep}

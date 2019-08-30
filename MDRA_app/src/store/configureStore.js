@@ -12,7 +12,7 @@ const persistConfig = {
     transforms: [
         createWhitelistFilter(
             'main',
-            ['resultsList', 'patientsList', "indicatorVisibility", "linkedAccount"]
+            ["stayConnected",'resultsList', 'patientsList', "indicatorVisibility", "linkedAccount" ]
         )
     ]
 };

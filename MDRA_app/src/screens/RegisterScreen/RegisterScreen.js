@@ -120,7 +120,7 @@ class RegisterScreen extends Component{
         if(typeof registerResult === "object")
         {
             alert(JSON.stringify("Register Successful"));
-            this.props.startMainApp(registerResult);
+            this.props.startMainApp(registerResult, values.email);
         }
         else{
             await this.toggleLoading();
@@ -189,23 +189,24 @@ class RegisterScreen extends Component{
                                      isSubmitting
                                  }) => (
                             <View style={[{alignItems:"center", justifyContent:"center"},this.props.style]}>
-                                <View style={[styles.inputStyle,{width: Dimensions.get("window").width*0.80}]}>
+                                <View style={[styles.inputStyle, {width: Dimensions.get("window").width * 0.80}]}>
                                     <Input
                                         value={values.email}
-                                        style={{marginRight:0,}}
-                                        inputStyle={[styles.textStyle,{color:"#FFF"}]}
-                                        autoCapitalize = 'none'
-                                        onChange={(name,value) =>{
-                                            if(typeof value != "undefined") {
+                                        style={{marginRight: 0,}}
+                                        inputStyle={[styles.textStyle, {color: "#FFF"}]}
+                                        autoCapitalize='none'
+                                        onChange={(name, value) => {
+                                            if (typeof value != "undefined") {
                                                 console.log("value of name: " + name);
                                                 setFieldValue(name, value);
                                                 console.log("input of " + name + " is: " + value)
                                             }
                                         }}
-                                        onTouch={() => {}}
+                                        onTouch={() => {
+                                        }}
                                         name="email"
                                         error={touched.email && errors.email}
-                                        onBlur={() =>{
+                                        onBlur={() => {
                                             //console.log(this.props.state.main.indicatorVisibility)
                                             setFieldTouched('email', true)
                                         }}
@@ -334,13 +335,6 @@ class RegisterScreen extends Component{
                         )}
                     />
                 </View>
-                <TouchableOpacity onPress={()=>{this.props.handleScreenToggle()}}>
-                    <View>
-                        <Text style={[
-                            styles.textStyle,{color: "#000", fontSize: 17, fontWeight: 'bold'}
-                        ]}>Log In</Text>
-                    </View>
-                </TouchableOpacity>
             </View>
         )
     }

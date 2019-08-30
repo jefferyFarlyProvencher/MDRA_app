@@ -28,6 +28,7 @@ import Spinner from "react-native-loading-spinner-overlay";
 import testNetWorkConnection from '../../functions/testNetworkConnection';
 import {logIn} from '../../functions/AccountFunctions';
 import Ionicon from 'react-native-vector-icons/Ionicons';
+import {CheckBox} from "react-native-elements";
 
 
 
@@ -44,20 +45,8 @@ class LogInScreen extends Component{
 
     };
 
-    _handleWaitingOnStart_grow = () => {
-        Animated.timing(this.state.startAnim,{
-            toValue: 1.1,
-            duration: 200,
-            useNativeDriver: true
-        }).start()
-    };
-
-    _handleWaitingOnStart_small = () => {
-        Animated.timing(this.state.startAnim,{
-            toValue: 1,
-            duration: 500,
-            useNativeDriver: true
-        }).start()
+    onLayout = () =>{
+        this.forceUpdate()
     };
 
     handleToggleLogIn = () => {
@@ -69,24 +58,6 @@ class LogInScreen extends Component{
         })
     };
 
-    startBreathAnimation = () => {
-        if(!this.state.loading)
-        {
-            this._handleWaitingOnStart_grow();
-            setTimeout(
-                ()=>
-                {
-                    this._handleWaitingOnStart_small();
-                    setTimeout(
-                        ()=> {
-                            this.startBreathAnimation();
-                        },
-                        550)
-                }
-                ,230
-            )
-        }
-    };
 
     displayConnectionError = () =>{
 
@@ -135,7 +106,12 @@ class LogInScreen extends Component{
             }
         }
     };
-
+    /**
+     *  _handlerLogIn
+     * does as it says
+     * Note: email is sent as well but is not received by server for security reasons
+     * Thus, we keep the local email in the local account
+    **/
     _handlerLogIn = async (values, bag) => {
         await this.toggleLoading();
         console.log("the log in is starting");
@@ -143,7 +119,8 @@ class LogInScreen extends Component{
         console.log("the log in ended");
         if(typeof logInResult === "object")
         {
-            this.props.startMainApp(logInResult);
+            //
+            this.props.startMainApp(logInResult, values.email);
         }
         else{
             await this.toggleLoading();
@@ -168,7 +145,7 @@ class LogInScreen extends Component{
     };
 
     render(){
-        //this.startBreathAnimation();
+        let isEmailFrozen = typeof this.props.frozenEmail !== 'undefined' && this.props.frozenEmail !== null && this.props.frozenEmail;
         return(
             <View style={[{alignItems:"center", justifyContent:"center"}, this.props.style]}>
                 <View>
@@ -203,7 +180,10 @@ class LogInScreen extends Component{
                         {/*/>*/}
                     {/*</View>*/}
                     <Formik
-                        initialValues={{ newName: null}}
+                        initialValues={{
+                            email:isEmailFrozen?this.props.frozenEmail: null ,
+                            password: null
+                        }}
                         onSubmit={(values, bag) => {console.log("the log in is starting"); this._handlerLogIn(values, bag)}}
                         validationSchema={Yup.object().shape({
                             email: NewYupString().required(),
@@ -220,32 +200,48 @@ class LogInScreen extends Component{
                                      isSubmitting
                                  }) => (
                             <View style={{alignItems:"center", justifyContent:"center"}}>
-                                <View style={[styles.inputStyle,{width: Dimensions.get("window").width*0.80}]}>
-                                    <Input
-                                        value={values.email}
-                                        style={{marginRight:0,}}
-                                        inputStyle={[styles.textStyle,{color:"#FFF"}]}
-                                        autoCapitalize = 'none'
-                                        onChange={(name,value) =>{
-                                            if(typeof value != "undefined") {
-                                                //console.log("value of name: " + name);
-                                                setFieldValue(name, value);
-                                                //console.log("input of " + name + " is: " + value)
+                                {isEmailFrozen
+                                    ? <View style={
+                                        [
+                                            styles.inputStyle,
+                                            {
+                                                height: Dimensions.get("window").height * 0.09,
+                                                width: Dimensions.get("window").width * 0.80,
+                                                opacity:0.95,
+                                                justifyContent:"center"
                                             }
-                                        }}
-                                        onTouch={() => {}}
-                                        name="email"
-                                        error={touched.email && errors.email}
-                                        onBlur={() =>{
-                                            //console.log(this.props.state.main.indicatorVisibility)
-                                            setFieldTouched('email', true)
-                                        }}
-                                        labelPosition={"center"}
-                                        placeholderTextColor={'white'}
-                                        maxLength={320}
-                                        keyboardType={"email-address"}
-                                    />
-                                </View>
+                                        ]
+                                    }>
+                                        <Text style={{textAlign: "center",fontSize:17, color:"#efefef"}}>{this.props.frozenEmail}</Text>
+                                    </View>
+                                    : <View style={[styles.inputStyle, {width: Dimensions.get("window").width * 0.80}]}>
+                                        <Input
+                                            value={values.email}
+                                            style={{marginRight: 0,}}
+                                            inputStyle={[styles.textStyle, {color: "#FFF"}]}
+                                            autoCapitalize='none'
+                                            onChange={(name, value) => {
+                                                if (typeof value != "undefined") {
+                                                    //console.log("value of name: " + name);
+                                                    setFieldValue(name, value);
+                                                    //console.log("input of " + name + " is: " + value)
+                                                }
+                                            }}
+                                            onTouch={() => {
+                                            }}
+                                            name="email"
+                                            error={touched.email && errors.email}
+                                            onBlur={() => {
+                                                //console.log(this.props.state.main.indicatorVisibility)
+                                                setFieldTouched('email', true)
+                                            }}
+                                            labelPosition={"center"}
+                                            placeholderTextColor={'white'}
+                                            maxLength={320}
+                                            keyboardType={"email-address"}
+                                        />
+                                    </View>
+                                }
                                 <View style={[styles.inputStyle,{width: Dimensions.get("window").width*0.80, flexDirection:"row"}]}>
                                     <Input
                                         value={values.password}
@@ -294,6 +290,17 @@ class LogInScreen extends Component{
                                         styles.textStyle,{color: "#FFF", fontSize: 15}
                                     ]}>Forgot Password</Text>
                                 </View>
+                                <View style={styles.checkContainer}>
+                                    <CheckBox
+                                        center
+                                        title={'Stay logged In'}
+                                        checked={this.props.stayConnected}
+                                        checkedColor={'#112ab0'}
+                                        onPress={()=>this.props.handleStayConnected()}
+                                        containerStyle={{backgroundColor:'rgba(256,256,256,0.50)'}}
+
+                                    />
+                                </View>
                                 <View>
                                     <View pointerEvents={(isValid?"auto":"none")}>
                                         <TouchableOpacity onPress={handleSubmit}>
@@ -325,15 +332,6 @@ class LogInScreen extends Component{
                     {/*}*/}
                     <Spinner visible={this.state.loading} textContent={"Attempting to Log In..."} textStyle={{color: '#FFF'}}/>
                 </View>
-                <TouchableOpacity onPress={()=>{this.props.handleScreenToggle()}}>
-                    <View>
-                        <Text
-                            style={[
-                                styles.textStyle,{color: "#000", fontSize: 17, fontWeight: 'bold'}
-                            ]}
-                        >Register here</Text>
-                    </View>
-                </TouchableOpacity>
             </View>
         )
     }
@@ -390,6 +388,7 @@ const styles= StyleSheet.create({
         margin: 10,
         borderRadius:10,
         width: Dimensions.get("window").width*0.66,
+        height: Dimensions.get("window").height * 0.09
 
     },
     ForgotPasswordContainer: {
@@ -414,8 +413,11 @@ const styles= StyleSheet.create({
         top:0,
         width: Dimensions.get("window").width,
         height: Dimensions.get("window").height,
-    }
+    },
 
+    checkContainer: {
+        width:"90%"
+    }
 
 });
 

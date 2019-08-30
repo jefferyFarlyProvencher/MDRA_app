@@ -9,7 +9,7 @@ import {
     TouchableOpacity,
     Platform
 } from 'react-native'
-import {List, ListItem, SearchBar} from 'react-native-elements'
+import {List, ListItem, SearchBar, Avatar} from 'react-native-elements'
 import SwipeOut  from 'react-native-swipeout'
 import Swipeable from 'react-native-swipeable'
 import * as colors from "../../assets/colors";
@@ -17,6 +17,7 @@ import Feather from 'react-native-vector-icons/Feather'
 //components
 import SelectorPicker from '../SelectorPicker/SelectorPicker';
 import DropDownListV2 from "../../components/DropDownList/DropDownListV2";
+import {FieldArray} from "formik";
 
 //credits to vikrant negi which helped with the search bar
 class ResultsList extends Component{
@@ -236,6 +237,41 @@ class ResultsList extends Component{
         })
     };
 
+    findAvatarColor = (totalScore) =>{
+        console.log("TOTAL SCORE: "+ totalScore);
+        let score = (Math.round(parseFloat(totalScore) * 100) / 100)+"";
+        //console.log("score: "+ score);
+        if (parseFloat(score) >= 80) {
+            return(
+                <Avatar
+                    rounded
+                    title={score}
+                    size={'medium'}
+                    overlayContainerStyle={{backgroundColor: '#C2C822'}}
+                />
+            );
+        } else if (parseFloat(score) >= 65){
+            return(
+                <Avatar
+                    rounded
+                    title={score}
+                    size={'medium'}
+                    overlayContainerStyle={{backgroundColor: '#F6922D'}}
+                />
+            );
+        } else {
+            return(
+                <Avatar
+                    rounded
+                    title={score}
+                    size={'medium'}
+                    overlayContainerStyle={{backgroundColor: '#ED5F6D'}}
+                />
+            );
+        }
+    };
+
+
     render() {
         // let rightButtons = [
         //     <TouchableOpacity
@@ -333,7 +369,7 @@ class ResultsList extends Component{
                                     // backgroundColor={((info.index % 2) === 0) ? "#FFF" : "#f3f3f3"}
                                 >
                                     <ListItem
-                                        roundAvatar
+                                        avatar={this.findAvatarColor(info.item.data['TotalScore'])}
                                         title={"Test Result: " + info.item.name}
                                         subtitle={info.item.patient?info.item.patient:" "}
                                         key={info.item.key}

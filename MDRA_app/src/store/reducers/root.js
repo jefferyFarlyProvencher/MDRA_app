@@ -5,12 +5,14 @@ import {
     TOGGLE_INDICATOR_VISIBILITY, REMOVE_PDF_LIST,
     ADD_ACCOUNT, ADD_TO_PATIENT_LIST,
     REMOVE_FROM_PATIENTS_LIST, UPDATE_PATIENT_INFO,
-    SET_PATIENT_FORMDATA, EMPTY_PATIENTS_LIST
+    SET_PATIENT_FORMDATA, EMPTY_PATIENTS_LIST,
+    SET_STAY_CONNECTED
 } from '../actions/actionTypes'
 
 import { Platform } from 'react-native';
 
 const initialState = {
+    stayConnected: false,
     position: 0,
     Page0Data: null,
     Page1Data: null,
@@ -21,7 +23,7 @@ const initialState = {
     resultsList: [],//{key:'1',data:[data],formData:[], name:name, id: id, date, filePDF}}],
     backUpResultList: [], //backup for when doing a full deletion (NOTE: could be done for partial deletion as well)
     indicatorVisibility: 1, //this removes the visibility of the indicator in order to see what we are typing when the glitch keyboard is active
-    linkedAccount:{name:null,token:null},
+    linkedAccount:{name:null,email:null, token:null},
     patientsList: [
         // {key: Math.random().toString(), name:"Josh Merlin",gender:"Male", weight:"40", kg_lbs:true, color:"#5F55F5" ,dateOfBirth:"2010-09-01", id: "JoshMerlin20100901"},
         // {key: Math.random().toString(), name:"Jocelyn Merlina",gender:"Female", weight:"35", kg_lbs:false, color:"#f593dd" ,dateOfBirth:"2009-08-10", id: "JocelynMerlina20100810"}
@@ -234,6 +236,7 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 linkedAccount: {
+                    email: action.email,
                     name: action.name,
                     token: action.token
                 }
@@ -366,6 +369,23 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 patientsList: newPatientsList
             }
+        }
+
+        case(SET_STAY_CONNECTED):
+        {
+            console.log("TEST STAY CONNECTED: "+ action.value);
+            if(action.value !== null || typeof action.value !== 'undefined'){
+                return{
+                    ...state,
+                    stayConnected: action.value
+                }
+            }else{
+                return{
+                    ...state,
+                    stayConnected: !state.stayConnected
+                }
+            }
+
         }
 
         /* case(SET_PAGES_DATA)
