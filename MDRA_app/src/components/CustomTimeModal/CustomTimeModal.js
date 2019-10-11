@@ -386,7 +386,7 @@ class CustomTimeModal extends PureComponent{
                                                         />
                                                     </View>
                                                     {(this.state.amOrPmMode)
-                                                        ?<View style={{width:"15%", backgroundColor:"#FFF", marginVertical:15, justifyContent:"center"}}>
+                                                        ?<View style={{width:"15%", backgroundColor:"#FFF", marginVertical:15, justifyContent:"center", marginRight: 10}}>
                                                             <TouchableOpacity onPress={this.switchAmOrPm}>
                                                                 <Text style={{fontSize:25, paddingVertical: 10, textAlign:"center"}}>
                                                                     {this.state.amOrPmSwitch?"AM":"PM"}

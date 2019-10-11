@@ -94,8 +94,15 @@ class ScrollDownIndicator extends PureComponent {
     };
 
     render() {
+        this.state.backgroundAnim.addListener(({value}) => this._backgroundVisible = value );
+        console.log("Is background visible: "+ this.state.backgroundAnim._backgroundVisible);
+        console.log("Update of ScrollDownIndicator");
         return(
-            <View style={[styles.rootStyle,  this.props.style,]}>
+            <View
+                style={[
+                    styles.rootStyle,
+                ]}
+            >
                 {/*<Animated.View*/}
                     {/*style={[*/}
                         {/*{*/}

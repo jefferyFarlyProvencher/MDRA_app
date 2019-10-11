@@ -20,62 +20,16 @@ class GraphComponent extends PureComponent{
 
     hasNotUnMounted = true;
 
-    componentDidMount(){
-        //this.handleChangeText(); enable if we want animation+ add currentTextTurn as
-    }
-
     componentWillUnmount(){
         this.hasNotUnMounted = false;
     }
 
-    animationFadeOut = () => {
-        Animated.timing(
-            this.state.fadeAnim,
-            {
-                toValue: 0,
-                duration: this.state.fadeOutAnimDuration,
-                useNativeDriver: true,
-            }
-        ).start();
-        //console.log("CurrentTextTurn: " + this.state.currentTextTurn);
-    };
-
-    animationFadeIn = () => {
-        this.setState((oldState)=>{
-            return{
-                ...oldState,
-                currentTextTurn: (oldState.currentTextTurn+1)%2
-            }
-        });
-        Animated.timing(
-            this.state.fadeAnim,
-            {
-                toValue: 1,
-                duration: this.state.fadeInAnimDuration,
-                useNativeDriver: true,
-            }
-        ).start();
-    };
-
-    //changes the text turn from zero to 1
-    handleChangeText = () =>{
-        this.animationFadeIn();
-        setTimeout(
-            ()=>
-            {
-                this.animationFadeOut();
-                setTimeout(
-                    ()=> {
-                        if(this.hasNotUnMounted){
-                            this.handleChangeText();
-                        }
-                    },
-                    this.state.fadeOutAnimDuration)
-            }
-            ,this.state.fadeInAnimDuration
-        )
-    };
-
+    /***
+     * generateVerticalLine
+     *
+     * @param startTime
+     * @returns {{x: number, y: number}[]}
+     */
     generateVerticalLine = (startTime) => {
         let startTimeParsed = parseFloat(startTime);
         let lines = [{x:startTimeParsed,y:0}];
@@ -87,11 +41,18 @@ class GraphComponent extends PureComponent{
         //console.log("lines is:"+ JSON.stringify(lines));
         return lines;
     };
-
+    /***
+     * scoreColorIdentification
+     *
+     * @param score
+     * @returns {string}
+     *
+     * Note: used for setting results' color in graph (squares and score text)
+     */
     scoreColorIdentification = (score) => {
         //console.log("score: "+ score);
         if (parseFloat(score) >= 80) {
-            return('#C2C822');
+            return('#5aad0a');
         } else if (parseFloat(score) >= 65){
             return('#F6922D');
         } else {
@@ -99,18 +60,33 @@ class GraphComponent extends PureComponent{
         }
     };
 
+    /***
+     * generateDataDouble
+     *
+     * @param scoreTable
+     * @returns {Array}
+     */
     generateDataSingle = (scoreTable) => {
         //identifies the lateral translation required for the graph
         let startXPosition = this.findStartXPosition();
-
+        //graphResolution exists because performance is kinda bad on Android for the graph generation
+        //due to the amount of data. Reducing the amount of data also reduces the "resolution"
+        let graphResolution = Platform.OS === "ios"?3:4;
         let returnResult = [];
-        for(let i = 0; i < scoreTable.length-1; i+=3){
+        for(let i = 0; i < scoreTable.length-1; i+=graphResolution){
             returnResult.push({x:(i/10)+startXPosition, y:parseFloat(scoreTable[i])});
         }
         return returnResult;
     };
-
-    //generates the couples used for the tracing of the area graph
+    /***
+     * generateDataDouble
+     *
+     * @param scoreTableY
+     * @param scoreTableY0
+     * @returns {Array}
+     *
+     * Note: generates the couples used for the tracing of the area graph
+     */
     generateDataDouble = (scoreTableY,scoreTableY0) => {
         //identifies the lateral translation required for the graph
         let startXPosition = this.findStartXPosition();
@@ -128,7 +104,17 @@ class GraphComponent extends PureComponent{
         return returnResult;
     };
 
-    //generates the data used to trace the line for the top corner of the rectangles
+    /***
+     * generateSquareTopLeft
+     *
+     * @param x
+     * @param y
+     * @param height
+     * @param width
+     * @returns {{x: *, y: *}[]}
+     *
+     * Note: generates the data used to trace the line for the top corner of the rectangles
+     */
     generateSquareTopLeft = (x,y,height,width) => {
         let square = [{x:x,y:y}];
         //left side
@@ -143,7 +129,17 @@ class GraphComponent extends PureComponent{
         }
         return square;
     };
-    //generates the data used to trace the line for the bottom corner of the rectangles
+    /***
+     * generateSquareBottomRight
+     *
+     * @param x
+     * @param y
+     * @param height
+     * @param width
+     * @returns {{x: *, y: *}[]}
+     *
+     * Note: generates the data used to trace the line for the bottom corner of the rectangles
+     */
     generateSquareBottomRight = (x,y,height,width) =>{
         let square = [{x:x,y:y}];
         //top
@@ -192,6 +188,7 @@ class GraphComponent extends PureComponent{
     };
 
     render(){
+        console.log("Update of GraphComponent");
         //console.log(this.generateDataSingle(this.props.data.percentile10));
         //setting advanced page data if null
         let advancedPageData = this.props.formData[3]
@@ -257,8 +254,8 @@ class GraphComponent extends PureComponent{
 
         //these are the texts versions
         let displayText = [
-            "Total Score: "+ ((this.props.data.TotalScore === 'NaN')?0:Math.round(parseFloat(this.props.data.TotalScore)*1000)/1000),
-            "Roller Coaster Effect: "+ ((this.props.data.rce === 'NaN')?0:Math.round(parseFloat(this.props.data.rce)*1000)/1000)
+            "Total Score: "+ ((this.props.data.TotalScore === 'NaN')?0:Math.round(parseFloat(this.props.data.TotalScore))),
+            "Roller Coaster Effect: "+ ((this.props.data.rce === 'NaN')?0:Math.round(parseFloat(this.props.data.rce)))
         ];
         //these are only the values
         let totalScoreAndRce = [this.props.data.TotalScore,this.props.data.rce];
@@ -271,6 +268,9 @@ class GraphComponent extends PureComponent{
                 <VictoryGroup
                     domain={{x:[0,30],y: [-4,25]}}
                     label ={{x:"A",y:"B"}}
+                    width={Dimensions.get("window").width*0.9}
+                    height={Dimensions.get("window").width*0.8}
+
                 >
                     <VictoryArea
                         style={{data: {fill: '#cbe3f3'}}}
@@ -299,12 +299,15 @@ class GraphComponent extends PureComponent{
                     />
                </VictoryGroup>
                 <View
-                    style={{position: "absolute"}}
+                    style={{position: "absolute", width:414}}
                 >
                     <VictoryChart
                         animate={null}
                         domain={{x:[0,30],y: [-4,25]}}
                         label ={{x:"A",y:"B"}}
+                        width={Dimensions.get("window").width*0.9}
+                        height={Dimensions.get("window").width*0.8}
+
                     >
                         <VictoryLabel text={"Time (h)"} datum={{x:29,y:1}}/>
                         <VictoryLabel text={"Concentration (ng/mL)"} datum={{x:0,y:26}}/>

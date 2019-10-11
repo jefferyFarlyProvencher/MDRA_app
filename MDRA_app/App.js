@@ -57,7 +57,7 @@ Navigation.registerComponent('MDRA_app.testCapturePDF',() => TestCapturePDF, sto
 Navigation.registerComponent('MDRA_app.retrieveOldResults',() => RetrieveOldResults, store, Provider, persistor);
 Navigation.registerComponent('MDRA_app.mainScreenTest',() => MainScreenTest, store, Provider, persistor);
 Navigation.registerComponent('MDRA_app.managePatientsScreen',() => ManagePatientScreen, store, Provider, persistor);
-Navigation.registerComponent('MDRA_app.patientPage',() => PatientPage);
+Navigation.registerComponent('MDRA_app.patientPage',() => PatientPage,store, Provider, persistor);
 Navigation.registerComponent('MDRA_app.tutorialPage',() => TutorialPage);
 
 
@@ -69,3 +69,6 @@ Navigation.startSingleScreenApp({
     },
     navBarHidden: true,
 });
+
+
+console.disableYellowBox = true;

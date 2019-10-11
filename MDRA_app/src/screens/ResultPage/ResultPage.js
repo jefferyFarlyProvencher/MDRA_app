@@ -55,13 +55,9 @@ import ScrollDownIndicator from "../../components/ScrollDownIndicator/ScrollDown
 
 class ResultPage extends Component {
     state = {
-        listLength: this.props.contextSensitiveList == null
-            ?this.props.state.main.resultsList.length
-            :this.props.contextSensitiveList.length,
-        list: this.props.contextSensitiveList == null
-            ?this.props.state.main.resultsList
-            :this.props.contextSensitiveList,
-        currentPosition: this.props.selectedPosition,
+        positionsListLength: this.props.positionsList.length,
+        list: this.props.state.main.resultsList,
+        currentPosition: this.props.currentPosition,
         orientation: true, //portrait true, landscape false
         modalVisible: false,
         visible: Platform.OS==="ios",
@@ -84,6 +80,10 @@ class ResultPage extends Component {
     componentDidMount() {
         //BackHandler.removeEventListener('hardwareBackPress');
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+        if(typeof this.props.filterText !== "undefined" && this.props.filterText !== null) {
+            //this._updateList();
+            //this.searchFilterFunction(this.props.filterText, this.props.filterTarget);
+        }
         this.setState(oldState=>{
             return{
                 ...oldState,
@@ -125,6 +125,13 @@ class ResultPage extends Component {
         );
     }
 
+    /**
+     * requestExternalStorageRead
+     *
+     * @returns {Promise<boolean>}
+     *
+     * Note: Might Not be useful
+     */
     async requestExternalStorageRead() {
         try {
             const granted = await PermissionsAndroid.request(
@@ -143,6 +150,13 @@ class ResultPage extends Component {
         }
     }
 
+    /**
+     * requestExternalStorageWrite
+     *
+     * @returns {Promise<boolean>}
+     *
+     * Note: Might not be useful
+     */
     async requestExternalStorageWrite() {
         try {
             const granted = await PermissionsAndroid.request(        // this.buttonBar.measure((fx, fy, width, height, px, py) => {
@@ -204,7 +218,7 @@ class ResultPage extends Component {
     };
 
     _handleOnPressNext = () => {
-        if(this.state.currentPosition<this.state.listLength-1) {
+        if(this.state.currentPosition<this.state.positionsListLength-1) {
             console.log("changing pos");
             this.setState((oldState)=>{
                 return({
@@ -249,6 +263,92 @@ class ResultPage extends Component {
 
     /**
      *
+     * @private
+     */
+    _updateList = () =>{
+        console.log("updating resultPage\'s list");
+        this.searchFilterFunction(this.props.filterText, this.props.filterTarget);
+    };
+
+    /***
+     *
+     * @param text
+     * @param target
+     *
+     * JSON.parse(JSON.stringify(data).filter... is used to remove the deep copy function of JS' filter function
+     */
+    searchFilterFunction = (text, target) => {
+        console.log("searchFilterFunction start and the text is: "+text);
+        let tempNewData = null;
+        let searchTarget = target;
+        let list = this.props.state.main.resultsList;
+        if(searchTarget === 'Name'){
+            console.log("filtering with Name");
+            tempNewData = (list).filter(item => {
+                const itemData = `${item.name.toUpperCase()}
+                              ${item.name.toUpperCase()}
+                              ${item.name.toUpperCase()}`;
+                const textData = text.toUpperCase();
+
+                return itemData.indexOf(textData) > -1;
+            });
+        }
+        else if(searchTarget === 'Date'){
+            console.log("filtering with Date");
+            tempNewData = (list).filter(item => {
+                const itemData = `${item.creationDate.toUpperCase()}
+                              ${item.date.toUpperCase()}
+                              ${item.date.toUpperCase()}`;
+                const textData = text.toUpperCase();
+
+                return itemData.indexOf(textData) > -1;
+            });
+        }
+        else if(searchTarget === 'Patients'){
+            console.log("filtering with Patients");
+            if(text === "None Selected"){
+                text = ''
+            }
+            tempNewData = (list).filter(item => {
+                if(typeof item.patient !== 'undefined' && item.patient !== null) {
+                    const itemData = `${item.patient.toUpperCase()}
+                                  ${item.patient.toUpperCase()}
+                                  ${item.patient.toUpperCase()}`;
+                    const textData = text.toUpperCase();
+
+                    return itemData.indexOf(textData) > -1;
+                }else{
+                    return false
+                }
+            });
+        }
+        /// OLD CODE START
+        // const newData = (this.props.list).filter(item => {
+        //     const itemData = `${item.name.toUpperCase()}
+        //                       ${item.name.toUpperCase()}
+        //                       ${item.name.toUpperCase()}`;
+        //     const textData = text.toUpperCase();
+        //
+        //     return itemData.indexOf(textData) > -1;
+        // });
+        /// OLD CODE END
+        const newData = tempNewData;
+        // console.log(JSON.stringify("modList 1: "+ this.state.modifiedList));
+        // console.log(JSON.stringify("size modList 1: "+ this.state.modifiedList.length));
+        this.setState({
+            positionsListLength:newData.length,
+            list: newData,
+
+        });
+        // console.log(JSON.stringify("modList 2: "+ this.state.modifiedList));
+        // console.log(JSON.stringify("size modList 2: "+ this.state.modifiedList.length));
+    };
+
+
+    /**
+     * setFormValues
+     *
+     * Used by restore form, so it sets the values on the form
      */
 
     setFormValues = () => {
@@ -260,8 +360,8 @@ class ResultPage extends Component {
             }
         });
         //collect current result's formData
-        let formData = this.state.list[this.state.currentPosition].formData;
-        let patientProfileId = this.state.list[this.state.currentPosition].patient;
+        let formData = this.state.list[this.props.positionsList[this.state.currentPosition]].formData;
+        let patientProfileId = this.state.list[this.props.positionsList[this.state.currentPosition]].patient;
 
         // console.log("FORM BEFORE: "+
         //     JSON.stringify(this.props.state.main.Page0Data) + ";"+
@@ -375,21 +475,23 @@ class ResultPage extends Component {
 
         //change screen
         this.props.navigator.switchToTab({
-            tabIndex: 0 // (optional) if missing, this screen's tab will become selected
+            tabIndex: 1 // (optional) if missing, this screen's tab will become selected
         });
     };
 
     /**
+     * setTitleOnChange
      *
+     * sets the title when changing result with the bottom buttons
      */
 
     setTitleOnChange = () => {
         console.log("this.state.title: "+ this.state.title);
-        console.log("this.state.list[this.state.currentPosition].name: "+ this.state.list[this.state.currentPosition].name);
-        if(this.state.title !== this.state.list[this.state.currentPosition].name) {
+        console.log("this.state.list[this.props.positionsList[this.state.currentPosition]].name: "+ this.state.list[this.props.positionsList[this.state.currentPosition]].name);
+        if(this.state.title !== this.state.list[this.props.positionsList[this.state.currentPosition]].name) {
             console.log("Changing title");
             this.props.navigator.setTitle({
-                title: this.state.list[this.state.currentPosition].name
+                title: this.state.list[this.props.positionsList[this.state.currentPosition]].name
             });
             if(this.state.title===""){
                 setTimeout(
@@ -397,7 +499,7 @@ class ResultPage extends Component {
                         this.setState(oldState => {
                             return {
                                 ...oldState,
-                                title: this.state.list[this.state.currentPosition].name
+                                title: this.state.list[this.props.positionsList[this.state.currentPosition]].name
                             }
                         })
                     },
@@ -407,12 +509,18 @@ class ResultPage extends Component {
                 this.setState(oldState => {
                     return {
                         ...oldState,
-                        title: this.state.list[this.state.currentPosition].name
+                        title: this.state.list[this.props.positionsList[this.state.currentPosition]].name
                     }
                 })
             }
         }
     };
+
+    /**
+     *  toggleSpinner
+     *
+     *  Used for turn off loading screen on result page opening and then on when restoring results to form.
+     */
 
     toggleSpinner = ()=> {
         this.setState((oldState) =>{
@@ -425,12 +533,13 @@ class ResultPage extends Component {
     };
 
 
-    ///*************************************
+    /***
+    ///**********************************************************************
     //////STARTING THE PDF SECTION OF THE CODE
-    ///*************************************
-
+    ///**********************************************************************
+    */
     generateHtmlInput = () => {
-        let currentResult = this.state.list[this.state.currentPosition];
+        let currentResult = this.state.list[this.props.positionsList[this.state.currentPosition]];
         let inputs = "<div style=\"background-color:lightgrey\"><h3>Inputs<h3></div>" +
             "<br/>"+
             "<br/>"+
@@ -618,7 +727,7 @@ class ResultPage extends Component {
 
     //generate html sets up the html for the html to pdf conversion
     generateHTML = (pkProfileBase64Data, performanceDayBase64Data, performancePMBase64Data, performanceEveningBase64Data) =>{
-        let currentResult = this.state.list[this.state.currentPosition];
+        let currentResult = this.state.list[this.props.positionsList[this.state.currentPosition]];
         //this is a copy of what we find on the render place, because I can't, as of now, think of a way to get the appropriate
         let allPieData= currentResult.data;
         let firstPieData = [
@@ -670,6 +779,7 @@ class ResultPage extends Component {
         //console.log("this.is inputs: "+inputs);
 
         let html ="<!-- This nosy one is looking up this html, please, go ahead, just note that this was made by Jeffery Farly-Provencher-->"+
+            "<div style=\"height:100%;\">"+
             "<div class=\"navbar-header\"style=\"color:#53a1d8; font-size: 4em !important; text-align: center;\"><strong>We Take Care &trade;</strong></div>"+
             "<h1 style=\"background-color:grey; color:white; text-align: center; padding:0.5em\">Results for the test: "+ currentResult.name +"</h1>"+
             "<h2>Results were calculated on the "+currentResult.date+"</h3>"+
@@ -677,25 +787,27 @@ class ResultPage extends Component {
             "<div style=\"padding-bottom:"+((currentResult.formData[4])?"40%":"50%")+"\">" +
             this.generateHtmlInput()+
             "</div>"+
+            "</div>"+
             //pk profile graph
             "<div style=\"background-color:lightgrey\"><h3>PK Profile<h3></div>"+
-            "<div> <img src=\"data:image/jpeg;base64,"+ pkProfileBase64Data +"\" alt=\"PK_Profile_image\" style=\""+(Platform.OS==="ios"?"height:70%":"width:80%")+"; display: block;margin-left: auto;margin-right: auto;\"/>"+
+            "<div> <img src=\"data:image/jpeg;base64,"+ pkProfileBase64Data +"\" alt=\"PK_Profile_image\" style=\"width:80%; display: block;margin-left: auto;margin-right: auto;\"/>"+
             //there should be percentages here
             //here we start the pie graphs
             //performance
-            "<br/>"+
-            "<br/>"+
-            "<br/>"+
-            "<br/>"+
-            "<br/>"+
-            "<br/>"+
-            "<br/>"+
-            "<br/>"+
-            "<br/>"+
-            "<br/>"+
-            "<br/>"+
-            "<br/>"+
-            "<br/>"+
+            // "<br/>"+
+            // "<br/>"+
+            // "<br/>"+
+            // "<br/>"+
+            // "<br/>"+
+            // "<br/>"+
+            // "<br/>"+
+            // "<br/>"+
+            // "<br/>"+
+            // "<br/>"+
+            // "<br/>"+
+            // "<br/>"+
+            // "<br/>"
+            "<div style=\"right:0; height:" + (Platform.OS==="ios"?"30%":"15%") +"; top:100px;\"> </div>"+
             "<div>   </div>"+
             "<div style=\"background-color:lightgrey; margin-top: 10em\"><h3>Performance<h3></div>"+
             //day
@@ -726,6 +838,8 @@ class ResultPage extends Component {
     };
 
     generatePDF = async() => {
+        let currentResult = this.state.list[this.props.positionsList[this.state.currentPosition]];
+
         await this.toggleSpinner();
         await this.requestExternalStorageRead();
         await this.requestExternalStorageWrite();
@@ -739,7 +853,7 @@ class ResultPage extends Component {
 
         let html = this.generateHTML(pkProfileBase64Data, performanceDayBase64Data, performancePMBase64Data, performanceEveningBase64Data);
 
-        let fileName = this.state.list[this.state.currentPosition].name;
+        let fileName = this.state.list[this.props.positionsList[this.state.currentPosition]].name;
         //remove all ponctuations off the fileName
         fileName = "MDRA_Result_" + fileName.replace(/(~|`|!|@|#|$|%|^|&|\*|\(|\)|{|}|\[|\]|;|:|\"|'|<|,|\.|>|\?|\/|\\|\||-|_|\+|=)/g, "");
         //
@@ -776,10 +890,11 @@ class ResultPage extends Component {
 
 
         //as there
-        await this.props.onAddPDFToResult(this.state.currentPosition, filePath);
+        await this.props.onAddPDFToResult(this.props.positionsList[this.state.currentPosition], filePath);
 
-        if (this.props.state.main.resultsList[this.state.currentPosition].filePDF){
+        if (this.props.state.main.resultsList[this.props.positionsList[this.state.currentPosition]].filePDF) {
             this.toggleSpinner();
+            //this._updateList();
             setTimeout(
                 () => {
                     if (Platform.OS === 'android')
@@ -788,10 +903,16 @@ class ResultPage extends Component {
                             ("The pdf was created at this location: " + filePath))
                 },
                 (Platform.OS === 'ios' ? 200 : 100)
+            );
+        } else {
+            this.toggleSpinner();
+            setTimeout(
+                () => {
+                        alert("PDF creation error")
+                },
+                (Platform.OS === 'ios' ? 200 : 100)
             )
-        }
-        else{
-            alert("PDF creation error")
+
         }
     };
 
@@ -824,7 +945,7 @@ class ResultPage extends Component {
     handleGeneratePDF = () => {
         Alert.alert(
             'Confirmation',
-            ('Do you really want to generate a PDF for the result '+this.state.list[this.state.currentPosition].name+'?'), [
+            ('Do you really want to generate a PDF for the result '+this.state.list[this.props.positionsList[this.state.currentPosition]].name+'?'), [
                 {
                     text: 'Cancel',
                     onPress: (() => console.log('Cancel Pressed')),
@@ -850,7 +971,7 @@ class ResultPage extends Component {
     handleDeletePDF = () => {
         Alert.alert(
             'Confirmation',
-            ('Do you really want to delete the PDF for the result '+this.state.list[this.state.currentPosition].name+'?'), [
+            ('Do you really want to delete the PDF for the result '+this.state.list[this.props.positionsList[this.state.currentPosition]].name+'?'), [
                 {
                     text: 'Cancel',
                     onPress: (() => console.log('Cancel Pressed')),
@@ -869,21 +990,29 @@ class ResultPage extends Component {
     };
 
     deletePDF = () => {
-        RNFetchBlob.fs.exists(this.state.list[this.state.currentPosition].filePDF)
-            .then((exist) => {
-                console.log(`file ${exist ? '' : 'not'} exists`);
-                if(exist) {
-                    //alert(`file ${exist ? '' : 'not'} exists`);
-                    RNFetchBlob.fs.unlink(this.state.list[this.state.currentPosition].filePDF);
-                    this.props.onRemovePDFFromResult(this.state.currentPosition);
-                }
-            })
+        let currentResult = this.state.list[this.props.positionsList[this.state.currentPosition]];
+        if(currentResult.filePDF !== null && typeof currentResult.filePDF !== 'undefined') {
+            RNFetchBlob.fs.exists(currentResult.filePDF)
+                .then(async (exist) => {
+                    console.log(`file ${exist ? 'does' : 'does not'} exist`);
+                    if (exist) {
+                        //alert(`file ${exist ? '' : 'not'} exists`);
+                        await RNFetchBlob.fs.unlink(this.state.list[this.props.positionsList[this.state.currentPosition]].filePDF);
+                        await this.props.onRemovePDFFromResult(this.props.positionsList[this.state.currentPosition]);
+                        //await this._updateList();
+                        alert("PDF deleted");
+                    }
+                    else{
+                        console.log("pdf deletion target does not exist")
+                    }
+                });
+        }
     };
 
 
 
     openGeneratedPDF = (sentPath) => {
-        let path = this.state.list[this.state.currentPosition].filePDF;
+        let path = this.state.list[this.props.positionsList[this.state.currentPosition]].filePDF;
         if(sentPath)
         {
             console.log("sent path: "+ sentPath);
@@ -891,7 +1020,7 @@ class ResultPage extends Component {
         }
         console.log("CURRENT PATH BEFORE OPENING IS: "+ path);
         if(Platform.OS === "ios"){
-            RNFetchBlob.fs.exists(this.state.list[this.state.currentPosition].filePDF)
+            RNFetchBlob.fs.exists(this.state.list[this.props.positionsList[this.state.currentPosition]].filePDF)
                 .then((exist) => {
                     console.log(`file ${exist ? '' : 'not'} exists for opening`);
                     if(exist) {
@@ -901,7 +1030,7 @@ class ResultPage extends Component {
                     else{
                         Alert.alert(
                             'Error',
-                            ('An error occurred which prevents the opening of the pdf '+this.state.list[this.state.currentPosition].name+'. \n Do you wish to regenerate the PDF in order to fix this issue?'), [
+                            ('An error occurred which prevents the opening of the pdf '+this.state.list[this.props.positionsList[this.state.currentPosition]].name+'. \n Do you wish to regenerate the PDF in order to fix this issue?'), [
                                 {
                                     text: 'No',
                                     onPress: (() => this.deletePDF()),
@@ -1112,7 +1241,14 @@ class ResultPage extends Component {
 //    Animated.sequence([
 
     render() {
-        let currentResult = this.state.list[this.state.currentPosition];
+        console.log("Update of ResultPage");
+        //if(this.state.list.length < 5)
+        // {
+        //     for(let i = 0; 0 < this.state.list.length; i++)
+        //         console.log(this.state.list[i].name)
+        // }
+        //console.log("width of screen: "+ Dimensions.get("window").width);
+        let currentResult = this.state.list[this.props.positionsList[this.state.currentPosition]];
         //console.log("If currentResult has a PDF it is there or this or whatever: "+ JSON.stringify(currentResult.filePDF));
 
         //console.log("UpdateTitle? " + this.state.updateTitle);
@@ -1125,7 +1261,7 @@ class ResultPage extends Component {
         }
 
         let allPieData= currentResult.data;
-        //console.log("THIS IS THE filePDF OF THIS RESULT: "+JSON.stringify(currentResult.filePDF));
+        console.log("THIS IS THE filePDF OF THIS RESULT: "+JSON.stringify(currentResult.filePDF));
         //console.log("THIS IS THE FORMDATA page 1 OF THIS RESULT: "+JSON.stringify(currentResult.formData[1]));
         let firstPieData = [allPieData.characNR, allPieData.characNRR, allPieData.characR, allPieData.characRAR, allPieData.characAR, allPieData.characNRRAR];
         let secondPieData = [0,0,0,0,0,0];
@@ -1138,8 +1274,8 @@ class ResultPage extends Component {
             secondPieData = firstPieData;
             firstPieData = [allPieData.characNRAM, allPieData.characNRRAM, allPieData.characRAM, allPieData.characRARAM, allPieData.characARAM, allPieData.characNRRARAM]
         }
-        let backDisabled = this.state.listLength<1 || this.state.currentPosition === 0;
-        let nextDisabled = this.state.listLength<1 || this.state.currentPosition > this.state.listLength-2;
+        let backDisabled = this.state.positionsListLength<1 || this.state.currentPosition === 0;
+        let nextDisabled = this.state.positionsListLength<1 || this.state.currentPosition > this.state.positionsListLength-2;
 
         let advancedTabAccessible = currentResult.advanceTabAccessible;
 
@@ -1149,7 +1285,9 @@ class ResultPage extends Component {
 
         //0% bug fix
         //percentages
-        let firstBoxPercentage = null;
+        let firstBoxPercentage = currentResult.data.TIEffD2 !== null
+            ? Math.round(parseFloat(currentResult.data.TIEffD2) * 100) / 100
+            : null;
         let secondBoxPercentage = null;
         if(currentResult.formData[1].nbTherapeuticBoxes === "Two therapeutic boxes (AM and PM)")
         {
@@ -1160,11 +1298,8 @@ class ResultPage extends Component {
                 secondBoxPercentage = Math.round(parseFloat(currentResult.data.TIEffD2) * 100) / 100;
             }
         }
-        else{
-            if(currentResult.data.TIEffD1s !== null) {
-                firstBoxPercentage = Math.round(parseFloat(currentResult.data.TIEffD2) * 100) / 100;
-            }
-        }
+
+        //console.log("firstBoxPercentage: "+ firstBoxPercentage);
 
         return (
             <View style={{backgroundColor:"#FFF", flex: 1}}>
@@ -1222,31 +1357,38 @@ class ResultPage extends Component {
                                             Animated={true}
                                             isAvailable={firstBoxPercentage!==0 && firstBoxPercentage !== null}
                                         />
+                                        {/*<View style={{position:"absolute", top:"50%", left:"50%"}}>*/}
+                                            {/*<Text>Touch for details</Text>*/}
+                                        {/*</View>*/}
                                     </View>
                                 </ViewShot>
                                 {nbTherapeuticBoxes?
                                     <ViewShot ref={ref => this.performancePMRef = ref}>
+                                        <View>
                                         <SinglePieChartComponent
                                             data={secondPieData}
                                             formData = {currentResult.formData}
                                             title="PM Pie Graph"
-                                            style={{backgroundColor:"white"}}
+                                            style={{backgroundColor:"white"}}// width:414, height:414, }}
                                             Animated={true}
                                             isAvailable={secondBoxPercentage!==0 && secondBoxPercentage !== null}
                                         />
+                                        </View>
                                     </ViewShot>
                                     :<View/>
                                 }
                                 <ViewShot ref={ref => this.performanceEveningRef = ref}>
+                                    <View>
                                     <SinglePieChartComponent
                                         data={eveningPieData}
                                         formData = {currentResult.formData}
                                         title="Evening Pie Graph"
-                                        style={{backgroundColor:"white"}}
+                                        style={{backgroundColor:"white"}}// width:414, height:414, }}
                                         Animated={true}
                                         isAvailable={true}
 
                                     />
+                                    </View>
                                 </ViewShot>
                             </View>
                             {this.state.sliderIndicatorActivated!== null && this.state.sliderIndicatorActivated
@@ -1484,7 +1626,7 @@ class ResultPage extends Component {
                                     <View style={{justifyContent: 'center', alignItems: 'center', height:"90%"}}>
                                         <TouchableOpacity
                                             onPress={()=>{
-                                                console.log("not implemented yet?");
+                                                //console.log("not implemented yet?");
                                                 this.openGeneratedPDF();}}
                                         >
                                             <View  style={[styles.drawerItem]}>

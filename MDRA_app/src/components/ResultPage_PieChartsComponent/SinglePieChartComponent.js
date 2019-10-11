@@ -9,9 +9,10 @@ import {
     TouchableHighlight,
     Modal,
     Dimensions,
+    PixelRatio
 } from 'react-native';
 
-import {VictoryPie} from 'victory-native';
+import {VictoryPie, VictoryLabel} from 'victory-native';
 import TitleComponent from "../TitleComponent/TitleComponent";
 import ViewShot from "../../screens/ResultPage/ResultPage";
 
@@ -84,11 +85,20 @@ class ResultTest extends PureComponent{
         );
     }
 
+    adjustPixelRatioToThree = (value) =>{
+        return value * 3 / PixelRatio.get()
+    };
+
     render() {
+        console.log("Update of SinglePieChart");
+        let window = Dimensions.get("window");
+        let isLandScape = window.width > window.height;
         //determines wether or not they have animation
         let willBeAnimated = this.props.Animated;
         //determines wether an error occured which prevents display of pie graph
         let isAvailable = this.props.isAvailable && typeof this.props.isAvailable !== 'undefined' && this.props.isAvailable !== null;
+        //console.log("height size:" + Dimensions.get('window').height*0.20);
+        //console.log("Pixel Ratio: "+ PixelRatio.get());
         return(
             <View>
                 <TouchableOpacity
@@ -103,13 +113,16 @@ class ResultTest extends PureComponent{
                             </Text>
                         </View>
                         {isAvailable?
-                        <View style={this.props.style} pointerEvents="none">
+                        <View style={[this.props.style,{justifyContent:"center", alignItems:"center"}]} pointerEvents="none">
                             <VictoryPie
-                                radius={Dimensions.get('window').height*0.20}
+                                radius={Dimensions.get('window').width*0.30}//147.2}
                                 data={this.generateDataObjects(this.props.data)}
                                 colorScale={['#1b3e70', '#62c9e4', '#c2c822', '#f8c82c', '#ed5f6d','#f6922d']}
                                 animate={willBeAnimated?{duration: 500}: null}
-                                innerRadius={Dimensions.get('window').height*0.1}
+                                labelRadius={Dimensions.get('window').width*0.17}
+                                innerRadius={Dimensions.get('window').width*0.12}//72.1}
+                                // labelComponent={<VictoryLabel style={{fontSize:Dimensions.get('window').width*0.035, fill:"white"}}/>}
+                                style={{labels: { fill: "white", fontSize: Dimensions.get('window').width*0.035,}}}
                             />
                         </View>
                             :<View
@@ -173,7 +186,7 @@ class ResultTest extends PureComponent{
                                         <View style={[{backgroundColor:'#1b3e70'},styles.modalColors]}>
                                             <TitleComponent
                                                 containerStyle={{marginBottom: 10, paddingBottom:0}}
-                                                textStyle={[styles.ColorTextStyle,{fontSize:15, paddingBottom:0}]}
+                                                textStyle={[styles.ColorTitleTextStyle,{paddingBottom:0}]}
                                                 text={'Non Responder :'}
                                             />
                                             <Text style={styles.ColorTextStyle}>
@@ -183,7 +196,7 @@ class ResultTest extends PureComponent{
                                         <View style={[{backgroundColor:'#62c9e4'},styles.modalColors]}>
                                             <TitleComponent
                                                 containerStyle={{marginBottom: 10, paddingBottom:0}}
-                                                textStyle={[styles.ColorTextStyle,{fontSize:15, paddingBottom:0}]}
+                                                textStyle={[styles.ColorTitleTextStyle,{paddingBottom:0}]}
                                                 text={'Non Responder / Responder :'}
                                             />
                                             <Text style={styles.ColorTextStyle}>
@@ -193,7 +206,7 @@ class ResultTest extends PureComponent{
                                         <View style={[{backgroundColor:'#c2c822'},styles.modalColors]}>
                                             <TitleComponent
                                                 containerStyle={{marginBottom: 10, paddingBottom:0}}
-                                                textStyle={[styles.ColorTextStyle,{fontSize:15, paddingBottom:0}]}
+                                                textStyle={[styles.ColorTitleTextStyle,{paddingBottom:0}]}
                                                 text={'Responder :'}
                                             />
                                             <Text style={styles.ColorTextStyle}>
@@ -203,7 +216,7 @@ class ResultTest extends PureComponent{
                                         <View style={[{backgroundColor: '#f8c82c',},styles.modalColors]}>
                                             <TitleComponent
                                                 containerStyle={{marginBottom: 10, paddingBottom:0}}
-                                                textStyle={[styles.ColorTextStyle,{fontSize:15, paddingBottom:0}]}
+                                                textStyle={[styles.ColorTitleTextStyle,{paddingBottom:0}]}
                                                 text={'Responder / Adverse Responder :'}
                                             />
                                             <Text style={styles.ColorTextStyle}>
@@ -213,17 +226,17 @@ class ResultTest extends PureComponent{
                                         <View style={[{backgroundColor:'#ed5f6d'},styles.modalColors]}>
                                             <TitleComponent
                                                 containerStyle={{marginBottom: 10, paddingBottom:0}}
-                                                textStyle={[styles.ColorTextStyle,{fontSize:15, paddingBottom:0}]}
+                                                textStyle={[styles.ColorTitleTextStyle,{paddingBottom:0}]}
                                                 text={'Adverse Responder :'}
                                             />
                                             <Text style={styles.ColorTextStyle}>
                                                 {this.state.modalPieData?this.state.modalPieData[4]:"4"}
                                                 </Text>
                                         </View>
-                                        <View style={[{backgroundColor:'#f6922d'},styles.modalColors, {height: (Dimensions.get("window").height*0.8)/7}]}>
+                                        <View style={[{backgroundColor:'#f6922d'},styles.modalColors, {height: (window.height*0.8)/7}]}>
                                             <TitleComponent
                                                 containerStyle={{marginBottom: 10, paddingBottom:0}}
-                                                textStyle={[styles.ColorTextStyle,{fontSize:13, paddingBottom:0}]}
+                                                textStyle={[styles.ColorTitleTextStyle,{paddingBottom:0}]}
                                                 text={'Non Responder / Responder / Adverse Responder :'}
                                             />
                                             <Text style={styles.ColorTextStyle}>
@@ -260,7 +273,7 @@ const styles = StyleSheet.create({
 
     modalColors: {
         height: (Dimensions.get("window").height*0.8)/8,
-        width: "100%",
+        width: (Dimensions.get("window").height*0.8)*0.8,
         justifyContent: "center",
         alignItems: "center",
     },
@@ -270,9 +283,19 @@ const styles = StyleSheet.create({
         height:(Dimensions.get('window').height)*0.05,
         justifyContent: "center"
     },
+    pieTitleTextStyle:{
+        color:"#FFF",
+        fontSize:20
+    },
     ColorTextStyle: {
         color: "#FFF",
         paddingBottom: 10,
+        fontSize: Dimensions.get("window").width*0.035
+    },
+    ColorTitleTextStyle: {
+        color: "#FFF",
+        paddingBottom: 10,
+        fontSize: Dimensions.get("window").width*0.04
     }
 });
 

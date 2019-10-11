@@ -238,8 +238,8 @@ class ResultsList extends Component{
     };
 
     findAvatarColor = (totalScore) =>{
-        console.log("TOTAL SCORE: "+ totalScore);
-        let score = (Math.round(parseFloat(totalScore) * 100) / 100)+"";
+        //console.log("TOTAL SCORE: "+ totalScore);
+        let score = (Math.round(parseFloat(totalScore)))+"";
         //console.log("score: "+ score);
         if (parseFloat(score) >= 80) {
             return(
@@ -247,7 +247,7 @@ class ResultsList extends Component{
                     rounded
                     title={score}
                     size={'medium'}
-                    overlayContainerStyle={{backgroundColor: '#C2C822'}}
+                    overlayContainerStyle={{backgroundColor: '#5aad0a'}}
                 />
             );
         } else if (parseFloat(score) >= 65){
@@ -300,6 +300,8 @@ class ResultsList extends Component{
         //     </TouchableOpacity>
         // ];
         //console.log("size of list inside render: "+this.state.modifiedList.length);
+        console.log("Update of ResultsList");
+
         return (
             <View style={{alignContent:"center",backgroundColor:"#FFF", flex:1}}>
                 {/*<List*/}

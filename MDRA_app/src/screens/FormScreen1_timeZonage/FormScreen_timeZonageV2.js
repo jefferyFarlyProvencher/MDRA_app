@@ -166,6 +166,7 @@ class FormScreenTimeZonage extends PureComponent{
     };
 
     render() {
+        console.log("Update of TimeZonage2");
         return(
             <View>
                 <KeyboardAwareScrollView>

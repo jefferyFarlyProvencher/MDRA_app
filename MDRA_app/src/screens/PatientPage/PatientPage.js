@@ -30,6 +30,8 @@ import {convertTimeToHourFormat} from "../../functions/FormatTime";
 import {Button} from "react-native-elements";
 import PatientResultsList from "../../components/PatientResultsList/PatientResultsList";
 import Picker from "react-native-picker";
+import {connect} from "react-redux";
+import Spinner from "react-native-loading-spinner-overlay";
 
 //assets
 //import {udemDark} from "../../assets/colors";
@@ -54,8 +56,10 @@ class PatientPage extends PureComponent {
         maxDate:  this.dateObject.toISOString().slice(0,10),
         dateError: false,
         //verify if patientprofile exists, if not sets it to true (lbs)
+        fullList: this.props.state.main.resultsList,
         switchValue: this.props.patientProfile?this.props.patientProfile.kg_lbs:false,
-        amountOfPushes: 0
+        amountOfPushes: 0,
+        spinnerIsVisible: false
     };
 
     constructor(props) {
@@ -164,21 +168,42 @@ class PatientPage extends PureComponent {
     handlePatientResultAccessed = (key,contextSensitiveList) => {
         //blocker's purpose is to stop multi pushes on android
 
-        let list = contextSensitiveList;
+        let contextList = contextSensitiveList;
 
         let activateBlocker = Platform.OS === "android";
         if(this.state.amountOfPushes === 0) {
             if(activateBlocker) {
                 this.spinnerToggler();
             }
-            let selResult = null;
-            let selPosition = 0;
-            for (let i = 0; i < list.length; i++) {
-                if (list[i].key === key){//this.props.state.main.resultsList[i].key === key) {
-                    selResult = list[i];//this.props.state.main.resultsList[i];
-                    selPosition = i;
+            //// WE NEED TO DO A POS LIST IN ORDER TO FIX PDF NOT UPDATING BUG
+            let positionsList = [];
+            let accessedItemPosition = null;
+
+            let positionInFullList = 0;
+            let positionInContextList = 0;
+
+
+            while(positionInContextList < contextList.length){
+                console.log("positionInContextList: "+positionInContextList);
+                while(positionInFullList < this.state.fullList.length){
+                    console.log("positionInFullList: "+positionInFullList);
+                    if(contextList[positionInContextList].key === this.state.fullList[positionInFullList].key){
+                        //pos found so
+                        //we push pos in array
+                        positionsList.push(positionInFullList);
+                        if(accessedItemPosition === null && contextList[positionInContextList].key === key){
+                            accessedItemPosition = positionInContextList
+                        }
+                        positionInContextList++;
+                    }
+                    if(contextSensitiveList.length === positionsList.length){
+                        break
+                    }
+                    positionInFullList++;
+
                 }
             }
+            /////
             //console.log(key);
             //this.props.navigator.popToRoot();
 
@@ -208,10 +233,12 @@ class PatientPage extends PureComponent {
 
             this.props.navigator.push({
                 screen: "MDRA_app.resultPage",
-                title: list[selPosition].name,
+                title: contextList[accessedItemPosition].name,
                 passProps: {
-                    selectedPosition: selPosition,
-                    contextSensitiveList: list
+                    currentPosition: accessedItemPosition,
+                    // filterText: this.state.searchText,
+                    // filterTarget: this.state.searchTarget,
+                    positionsList: positionsList
                 }
             });
 
@@ -228,7 +255,9 @@ class PatientPage extends PureComponent {
                             }
                         });
                     },
-                    1000)
+                    100)
+
+
             }
         }
         else{
@@ -312,6 +341,7 @@ class PatientPage extends PureComponent {
     };
 
     render() {
+        console.log("Update of PatientPage");
         let isNewProfile = typeof this.state.currentProfile === 'undefined' || this.state.currentProfile === null;
 
         this.handleSetNavigatorButtons(isNewProfile);
@@ -504,7 +534,7 @@ class PatientPage extends PureComponent {
                                                          <View style={styles.separatorStyle}/>
                                                          <View>
                                                              <CustomTimeModal
-                                                                 label="Diner Time"
+                                                                 label="Lunch Time"
                                                                  onChange={(name, value) => {
                                                                      // let formattedTime = this.handleFormatTime(time[0]+":"+ time[1]);
                                                                      setFieldValue(name, this.handleFormatTime(value));
@@ -546,14 +576,18 @@ class PatientPage extends PureComponent {
                     {!isNewProfile
                         ?<View style={{flex:1}}>
                             <PatientResultsList
-                                list ={this.props.patientResultsList}
+                                list ={this.props.state.main.resultsList}
                                 onItemAccessed={this.handlePatientResultAccessed}
                                 onItemSelected={this.handlePatientResultAccessed}
+                                filterText={this.state.currentProfile.id}
                             />
                         </View>
-                        :<View/>
+                        :null
                     }
                 </IndicatorViewPager>
+                <View>
+                    <Spinner visible={this.state.spinnerIsVisible} textContent={"Loading..."} textStyle={{color: '#FFF'}} />
+                </View>
             </View>
         )
     }
@@ -580,4 +614,10 @@ const styles = StyleSheet.create({
     },
 });
 
-export default PatientPage;
+const mapStateToProps = (state) => {
+    return {
+        state
+    }
+};
+
+export default connect(mapStateToProps,null)(PatientPage);

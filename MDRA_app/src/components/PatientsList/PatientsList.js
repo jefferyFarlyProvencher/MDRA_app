@@ -126,6 +126,7 @@ class PatientsList extends Component{
     };
 
     render() {
+        console.log("Update of PatientsList");
         return (
             <View style={{alignContent:"center",backgroundColor:"#262626"}}>
                 {this.renderHeader()}

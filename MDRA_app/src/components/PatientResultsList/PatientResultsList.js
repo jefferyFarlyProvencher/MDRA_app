@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {View, Text, StyleSheet, FlatList, TouchableWithoutFeedback, Dimensions} from 'react-native'
-import {List, ListItem, SearchBar} from 'react-native-elements'
+import {Avatar, List, ListItem, SearchBar} from 'react-native-elements'
 import SwipeOut  from 'react-native-swipeout'
 import * as colors from "../../assets/colors";
 
@@ -21,6 +21,11 @@ class ResultsList extends Component{
         date: new Date(),
     };
 
+    componentWillMount() {
+        if(this.props.filterText !== null || this.props.filterText !== ""){
+            this.searchFilterFunction(this.props.filterText, "Patients")
+        }
+    }
 
     componentWillReceiveProps (nextProps) {
         if (nextProps.list !== this.props.list) {
@@ -58,10 +63,48 @@ class ResultsList extends Component{
         this.props.onRenameData(key);
     };
 
-    searchFilterFunction = text => {
+    findAvatarColor = (totalScore) =>{
+        //console.log("TOTAL SCORE: "+ totalScore);
+        let score = (Math.round(parseFloat(totalScore)))+"";
+        //console.log("score: "+ score);
+        if (parseFloat(score) >= 80) {
+            return(
+                <Avatar
+                    rounded
+                    title={score}
+                    size={'medium'}
+                    overlayContainerStyle={{backgroundColor: '#5aad0a'}}
+                />
+            );
+        } else if (parseFloat(score) >= 65){
+            return(
+                <Avatar
+                    rounded
+                    title={score}
+                    size={'medium'}
+                    overlayContainerStyle={{backgroundColor: '#F6922D'}}
+                />
+            );
+        } else {
+            return(
+                <Avatar
+                    rounded
+                    title={score}
+                    size={'medium'}
+                    overlayContainerStyle={{backgroundColor: '#ED5F6D'}}
+                />
+            );
+        }
+    };
+
+    searchFilterFunction = (text, target) => {
         console.log("searchFilterFunction start and the text is: "+text);
         let tempNewData = null;
-        if(this.state.searchTarget === 'Name'){
+        let searchTarget = this.state.searchTarget;
+        if(typeof searchTarget != "undefined" && searchTarget != null){
+            searchTarget = target
+        }
+        if(searchTarget === 'Name'){
             console.log("filtering with Name");
             tempNewData = (this.props.list).filter(item => {
                 const itemData = `${item.name.toUpperCase()}
@@ -72,7 +115,7 @@ class ResultsList extends Component{
                 return itemData.indexOf(textData) > -1;
             });
         }
-        else if(this.state.searchTarget === 'Date'){
+        else if(searchTarget === 'Date'){
             console.log("filtering with Date");
             tempNewData = (this.props.list).filter(item => {
                 const itemData = `${item.creationDate.toUpperCase()}
@@ -83,7 +126,7 @@ class ResultsList extends Component{
                 return itemData.indexOf(textData) > -1;
             });
         }
-        else if(this.state.searchTarget === 'Patients'){
+        else if(searchTarget === 'Patients'){
             console.log("filtering with Patients");
             if(text === "None Selected"){
                 text = ''
@@ -180,23 +223,24 @@ class ResultsList extends Component{
     };
 
     render() {
+        console.log("Update of PatientResultsList");
         return (
             <View style={{alignContent:"center",backgroundColor:"#FFF", flex:1}}>
                 {this.renderHeader()}
                 <FlatList
                     style={[styles.listContainer, this.props.listStyle]}
-                    data={this.state.searchText !== ""?this.state.modifiedList:this.props.list}
+                    data={this.state.searchText !== ""?this.state.modifiedList:this.state.modifiedList}
                     extraData={this.props.extraData}
                     renderItem={(info) => {
                         //console.log("info: "+JSON.stringify(info));
                         return (
                             <ListItem
-                                roundAvatar
+                                avatar={this.findAvatarColor(info.item.data['TotalScore'])}
                                 title={"Test Result: " + info.item.name}
                                 subtitle={info.item.patient?info.item.patient:" "}
                                 key={info.item.key}
                                 onLongPress={() => {
-                                    this.props.onItemAccessed(info.item.key);
+                                    this.props.onItemAccessed(info.item.key, this.state.modifiedList);
                                     console.log('Item selected: ' + info.item.key);
                                     console.log('pressed slowly');
                                 }}

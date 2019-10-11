@@ -3,6 +3,8 @@ import { StyleSheet, Image } from 'react-native';
 
 class CustomMarker extends React.Component {
     render() {
+        console.log("Update of CustomMarker");
+
         return (
             <Image
                 style={styles.image}

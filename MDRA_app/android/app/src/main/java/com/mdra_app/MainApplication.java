@@ -19,6 +19,7 @@ import fr.greweb.reactnativeviewshot.RNViewShotPackage;
 
 import com.christopherdro.htmltopdf.RNHTMLtoPDFPackage;
 
+import br.com.classapp.RNSensitiveInfo.RNSensitiveInfoPackage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -40,8 +41,8 @@ public class MainApplication extends NavigationApplication  {
            new PickerViewPackage(),
            new RNViewShotPackage(),
            new RNHTMLtoPDFPackage(),
+           new RNSensitiveInfoPackage(),
            new RNFetchBlobPackage()
-
        );
     }
 

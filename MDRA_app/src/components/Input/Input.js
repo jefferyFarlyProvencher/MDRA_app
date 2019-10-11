@@ -1,4 +1,4 @@
-import React, {PureComponent} from 'react';
+import React, {Component} from 'react';
 import {StyleSheet, View, Platform, TextInput} from 'react-native';
 
 import {
@@ -22,7 +22,7 @@ import {
  *
  */
 
-class Input extends PureComponent{
+class Input extends Component{
 
     state = {
 
@@ -100,11 +100,12 @@ class Input extends PureComponent{
 
 
     render() {
-        const {label, error, backgroundColor, name, center,onBlur, maxLength, inputStyle,...rest } = this.props;
+        console.log("Update of Input");
+        const {label, error, backgroundColor, name, center,onBlur, maxLength, inputStyle,displayLabel,...rest } = this.props;
         let labelPosition = this.props.labelPosition;
         return(
             <View style={[styles.root,this.props.style]}>
-                {label
+                {displayLabel !== false && label
                     ?<FormLabel
                         containerStyle={
                             {

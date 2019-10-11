@@ -24,8 +24,7 @@ class TutorialPage extends PureComponent {
     // }
 
     render() {
-
-
+        console.log("Update of TutorialPage");
         const swiperItems = this.state.tutorialData.map(item => {
             return(
                 <View  key={item.position}>

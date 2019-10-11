@@ -1,4 +1,4 @@
-import React, {PureComponent} from 'react';
+import React, {Component} from 'react';
 import {StyleSheet, View, Dimensions, Text} from 'react-native';
 
 import * as colors from "../../assets/colors"
@@ -17,7 +17,7 @@ import * as colors from "../../assets/colors"
  */
 
 
-class LinedLabel extends PureComponent{
+class LinedLabel extends Component{
 
     //props that it takes:
     // textPosition, label
@@ -27,6 +27,10 @@ class LinedLabel extends PureComponent{
       textPosition: this.props.textPosition? this.props.textPosition: "center",
         isRotated: false
     };
+
+    shouldComponentUpdate(nextProps, nextState, nextContext) {
+        return nextProps.label !== this.props.label
+    }
 
     onLayout(){
         this.setState(oldState=>{
@@ -69,6 +73,7 @@ class LinedLabel extends PureComponent{
     };
 
     render() {
+        console.log("Update of LinedLabel");
         return(
             <View style={[styles.root,this.props.containerStyle]}>
                 <View

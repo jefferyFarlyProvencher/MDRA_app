@@ -49,6 +49,8 @@ class CustomMultiSlider extends PureComponent{
 
     render(){
         //console.log(this.generateDataSingle(this.props.data.percentile10));
+        console.log("Update of CustomsMultiSlider");
+
         let isAndroid = Platform.OS === 'android';
         return(
             <View style={[this.props.style, styles.containerStyle]}>

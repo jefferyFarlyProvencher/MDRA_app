@@ -5,6 +5,7 @@ import * as colors from "../../assets/colors";
 
 class FormBackButton extends Component {
     render(){
+        console.log("Update of FormBackButton");
         return (
             <View style={{backgroundColor: colors.royalBlue2}}>
                 <Button

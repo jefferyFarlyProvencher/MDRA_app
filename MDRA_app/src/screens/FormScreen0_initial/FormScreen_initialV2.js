@@ -347,6 +347,7 @@ class FormScreenInitial extends PureComponent{
     };
 
     render() {
+        console.log("Update of FormScreen_initialV2");
         let drugList = ["Ritalin IR","Pms-Methylphenidate IR", "Concerta", "Pms-Methylphenidate ER"];
 
         let patientsList_id = ["None Selected"];

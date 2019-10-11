@@ -26,6 +26,7 @@ class lifeBar extends PureComponent{
     }
 
     render() {
+        console.log("Update of LifeBar");
         return(
             <View style={[styles.root,this.props.style]}>
                 <View style={{width:"30%", justifyContent: "center"}}>

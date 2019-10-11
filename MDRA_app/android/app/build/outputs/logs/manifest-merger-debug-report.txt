@@ -12,22 +12,23 @@ MERGED from [:react-native-svg] /Users/jefferyfarly-provencher/WebstormProjects/
 MERGED from [:react-native-picker] /Users/jefferyfarly-provencher/WebstormProjects/MDRA_app/MDRA_app/node_modules/react-native-picker/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-13:12
 MERGED from [:react-native-navigation] /Users/jefferyfarly-provencher/WebstormProjects/MDRA_app/MDRA_app/node_modules/react-native-navigation/android/app/build/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-20:12
 MERGED from [:react-native-html-to-pdf] /Users/jefferyfarly-provencher/WebstormProjects/MDRA_app/MDRA_app/node_modules/react-native-html-to-pdf/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-11:12
+MERGED from [:react-native-sensitive-info] /Users/jefferyfarly-provencher/WebstormProjects/MDRA_app/MDRA_app/node_modules/react-native-sensitive-info/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-13:12
 MERGED from [com.facebook.react:react-native:0.55.4] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/cb83f1f934ff96989ed1240a166352d1/AndroidManifest.xml:2:1-15:12
 MERGED from [com.aurelhubert:ahbottomnavigation:2.0.6] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/2061b9b8e1273536fe8278acbe392b52/AndroidManifest.xml:2:1-13:12
 MERGED from [com.android.support:design:25.3.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/85b8e7b3b5e1e85b2ceadadd12439ddc/AndroidManifest.xml:17:1-31:12
 MERGED from [com.balysv.materialmenu:material-menu-toolbar:1.5.4] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/000881049f5dc26948fabc4dda6e8d34/AndroidManifest.xml:2:1-14:12
 MERGED from [com.android.support:appcompat-v7:25.3.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/16299dcd02c1d26691eba0bf8b43e9db/AndroidManifest.xml:17:1-31:12
-MERGED from [com.android.support:transition:25.3.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/9deaf7a22236ed7587dc75955a19b822/AndroidManifest.xml:17:1-28:12
-MERGED from [com.android.support:support-v4:25.3.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/2a7703dba470f6eea14caf20f15baaf1/AndroidManifest.xml:17:1-31:12
-MERGED from [cn.aigestudio.wheelpicker:WheelPicker:1.0.3] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/f6f3d8436116e8aa450c70b3ba6f876c/AndroidManifest.xml:2:1-12:12
 MERGED from [com.android.support:animated-vector-drawable:25.3.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/679712e2f61c5492cc78ff79459b5ff7/AndroidManifest.xml:17:1-28:12
 MERGED from [com.android.support:support-vector-drawable:25.3.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/bb9c3e0bfa0cd7585c46d7202a5d4cbc/AndroidManifest.xml:17:1-28:12
+MERGED from [com.android.support:transition:25.3.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/9deaf7a22236ed7587dc75955a19b822/AndroidManifest.xml:17:1-28:12
+MERGED from [com.android.support:support-v4:25.3.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/2a7703dba470f6eea14caf20f15baaf1/AndroidManifest.xml:17:1-31:12
 MERGED from [com.android.support:support-fragment:25.3.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/c801a2eefab3766388d6ebd053a7f3ed/AndroidManifest.xml:17:1-31:12
 MERGED from [com.android.support:support-media-compat:25.3.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/57e2b3ab9c694d26c00caa4844abb570/AndroidManifest.xml:17:1-31:12
 MERGED from [com.android.support:support-core-utils:25.3.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/4a7541d1e4934cdb5245cf0a526c2c77/AndroidManifest.xml:17:1-31:12
 MERGED from [com.android.support:recyclerview-v7:25.3.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/16ff25d0649ce86b8d84dc6758da0ae9/AndroidManifest.xml:17:1-26:12
 MERGED from [com.android.support:support-core-ui:25.3.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/5ee326c7f82a7cf1e4a8b2a805db549a/AndroidManifest.xml:17:1-31:12
 MERGED from [com.android.support:support-compat:25.3.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/80155a890f8c0f88495af976802e21bf/AndroidManifest.xml:17:1-31:12
+MERGED from [cn.aigestudio.wheelpicker:WheelPicker:1.0.3] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/f6f3d8436116e8aa450c70b3ba6f876c/AndroidManifest.xml:2:1-12:12
 MERGED from [com.facebook.fbui.textlayoutbuilder:textlayoutbuilder:1.0.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/7fbe837287f0c2af32ad800074690c58/AndroidManifest.xml:10:1-18:12
 MERGED from [com.facebook.fresco:fresco:1.3.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/27c0bcfaaf0ad27c7ebac118ec4e8216/AndroidManifest.xml:2:1-9:12
 MERGED from [com.facebook.fresco:imagepipeline-okhttp3:1.3.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/3de283dd7ec2fc8eef3bf52f2712a99f/AndroidManifest.xml:2:1-9:12
@@ -99,14 +100,14 @@ MERGED from [com.balysv.materialmenu:material-menu-toolbar:1.5.4] /Users/jeffery
 MERGED from [com.balysv.materialmenu:material-menu-toolbar:1.5.4] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/000881049f5dc26948fabc4dda6e8d34/AndroidManifest.xml:12:5-20
 MERGED from [com.android.support:appcompat-v7:25.3.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/16299dcd02c1d26691eba0bf8b43e9db/AndroidManifest.xml:29:5-20
 MERGED from [com.android.support:appcompat-v7:25.3.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/16299dcd02c1d26691eba0bf8b43e9db/AndroidManifest.xml:29:5-20
-MERGED from [com.android.support:transition:25.3.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/9deaf7a22236ed7587dc75955a19b822/AndroidManifest.xml:26:5-20
-MERGED from [com.android.support:transition:25.3.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/9deaf7a22236ed7587dc75955a19b822/AndroidManifest.xml:26:5-20
-MERGED from [com.android.support:support-v4:25.3.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/2a7703dba470f6eea14caf20f15baaf1/AndroidManifest.xml:29:5-20
-MERGED from [com.android.support:support-v4:25.3.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/2a7703dba470f6eea14caf20f15baaf1/AndroidManifest.xml:29:5-20
 MERGED from [com.android.support:animated-vector-drawable:25.3.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/679712e2f61c5492cc78ff79459b5ff7/AndroidManifest.xml:26:5-20
 MERGED from [com.android.support:animated-vector-drawable:25.3.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/679712e2f61c5492cc78ff79459b5ff7/AndroidManifest.xml:26:5-20
 MERGED from [com.android.support:support-vector-drawable:25.3.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/bb9c3e0bfa0cd7585c46d7202a5d4cbc/AndroidManifest.xml:26:5-20
 MERGED from [com.android.support:support-vector-drawable:25.3.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/bb9c3e0bfa0cd7585c46d7202a5d4cbc/AndroidManifest.xml:26:5-20
+MERGED from [com.android.support:transition:25.3.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/9deaf7a22236ed7587dc75955a19b822/AndroidManifest.xml:26:5-20
+MERGED from [com.android.support:transition:25.3.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/9deaf7a22236ed7587dc75955a19b822/AndroidManifest.xml:26:5-20
+MERGED from [com.android.support:support-v4:25.3.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/2a7703dba470f6eea14caf20f15baaf1/AndroidManifest.xml:29:5-20
+MERGED from [com.android.support:support-v4:25.3.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/2a7703dba470f6eea14caf20f15baaf1/AndroidManifest.xml:29:5-20
 MERGED from [com.android.support:support-fragment:25.3.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/c801a2eefab3766388d6ebd053a7f3ed/AndroidManifest.xml:29:5-20
 MERGED from [com.android.support:support-fragment:25.3.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/c801a2eefab3766388d6ebd053a7f3ed/AndroidManifest.xml:29:5-20
 MERGED from [com.android.support:support-media-compat:25.3.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/57e2b3ab9c694d26c00caa4844abb570/AndroidManifest.xml:29:5-20
@@ -195,6 +196,8 @@ MERGED from [:react-native-navigation] /Users/jefferyfarly-provencher/WebstormPr
 MERGED from [:react-native-navigation] /Users/jefferyfarly-provencher/WebstormProjects/MDRA_app/MDRA_app/node_modules/react-native-navigation/android/app/build/intermediates/library_manifest/debug/AndroidManifest.xml:7:5-9:41
 MERGED from [:react-native-html-to-pdf] /Users/jefferyfarly-provencher/WebstormProjects/MDRA_app/MDRA_app/node_modules/react-native-html-to-pdf/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:7:5-9:41
 MERGED from [:react-native-html-to-pdf] /Users/jefferyfarly-provencher/WebstormProjects/MDRA_app/MDRA_app/node_modules/react-native-html-to-pdf/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-sensitive-info] /Users/jefferyfarly-provencher/WebstormProjects/MDRA_app/MDRA_app/node_modules/react-native-sensitive-info/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-sensitive-info] /Users/jefferyfarly-provencher/WebstormProjects/MDRA_app/MDRA_app/node_modules/react-native-sensitive-info/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:7:5-9:41
 MERGED from [com.facebook.react:react-native:0.55.4] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/cb83f1f934ff96989ed1240a166352d1/AndroidManifest.xml:7:5-9:41
 MERGED from [com.facebook.react:react-native:0.55.4] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/cb83f1f934ff96989ed1240a166352d1/AndroidManifest.xml:7:5-9:41
 MERGED from [com.aurelhubert:ahbottomnavigation:2.0.6] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/2061b9b8e1273536fe8278acbe392b52/AndroidManifest.xml:7:5-9:41
@@ -205,16 +208,14 @@ MERGED from [com.balysv.materialmenu:material-menu-toolbar:1.5.4] /Users/jeffery
 MERGED from [com.balysv.materialmenu:material-menu-toolbar:1.5.4] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/000881049f5dc26948fabc4dda6e8d34/AndroidManifest.xml:8:5-10:41
 MERGED from [com.android.support:appcompat-v7:25.3.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/16299dcd02c1d26691eba0bf8b43e9db/AndroidManifest.xml:21:5-23:78
 MERGED from [com.android.support:appcompat-v7:25.3.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/16299dcd02c1d26691eba0bf8b43e9db/AndroidManifest.xml:21:5-23:78
-MERGED from [com.android.support:transition:25.3.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/9deaf7a22236ed7587dc75955a19b822/AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:transition:25.3.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/9deaf7a22236ed7587dc75955a19b822/AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:support-v4:25.3.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/2a7703dba470f6eea14caf20f15baaf1/AndroidManifest.xml:21:5-23:54
-MERGED from [com.android.support:support-v4:25.3.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/2a7703dba470f6eea14caf20f15baaf1/AndroidManifest.xml:21:5-23:54
-MERGED from [cn.aigestudio.wheelpicker:WheelPicker:1.0.3] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/f6f3d8436116e8aa450c70b3ba6f876c/AndroidManifest.xml:8:5-10:41
-MERGED from [cn.aigestudio.wheelpicker:WheelPicker:1.0.3] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/f6f3d8436116e8aa450c70b3ba6f876c/AndroidManifest.xml:8:5-10:41
 MERGED from [com.android.support:animated-vector-drawable:25.3.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/679712e2f61c5492cc78ff79459b5ff7/AndroidManifest.xml:20:5-44
 MERGED from [com.android.support:animated-vector-drawable:25.3.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/679712e2f61c5492cc78ff79459b5ff7/AndroidManifest.xml:20:5-44
 MERGED from [com.android.support:support-vector-drawable:25.3.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/bb9c3e0bfa0cd7585c46d7202a5d4cbc/AndroidManifest.xml:20:5-43
 MERGED from [com.android.support:support-vector-drawable:25.3.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/bb9c3e0bfa0cd7585c46d7202a5d4cbc/AndroidManifest.xml:20:5-43
+MERGED from [com.android.support:transition:25.3.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/9deaf7a22236ed7587dc75955a19b822/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:transition:25.3.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/9deaf7a22236ed7587dc75955a19b822/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-v4:25.3.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/2a7703dba470f6eea14caf20f15baaf1/AndroidManifest.xml:21:5-23:54
+MERGED from [com.android.support:support-v4:25.3.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/2a7703dba470f6eea14caf20f15baaf1/AndroidManifest.xml:21:5-23:54
 MERGED from [com.android.support:support-fragment:25.3.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/c801a2eefab3766388d6ebd053a7f3ed/AndroidManifest.xml:21:5-23:60
 MERGED from [com.android.support:support-fragment:25.3.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/c801a2eefab3766388d6ebd053a7f3ed/AndroidManifest.xml:21:5-23:60
 MERGED from [com.android.support:support-media-compat:25.3.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/57e2b3ab9c694d26c00caa4844abb570/AndroidManifest.xml:21:5-23:63
@@ -227,6 +228,8 @@ MERGED from [com.android.support:support-core-ui:25.3.0] /Users/jefferyfarly-pro
 MERGED from [com.android.support:support-core-ui:25.3.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/5ee326c7f82a7cf1e4a8b2a805db549a/AndroidManifest.xml:21:5-23:58
 MERGED from [com.android.support:support-compat:25.3.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/80155a890f8c0f88495af976802e21bf/AndroidManifest.xml:21:5-23:58
 MERGED from [com.android.support:support-compat:25.3.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/80155a890f8c0f88495af976802e21bf/AndroidManifest.xml:21:5-23:58
+MERGED from [cn.aigestudio.wheelpicker:WheelPicker:1.0.3] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/f6f3d8436116e8aa450c70b3ba6f876c/AndroidManifest.xml:8:5-10:41
+MERGED from [cn.aigestudio.wheelpicker:WheelPicker:1.0.3] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/f6f3d8436116e8aa450c70b3ba6f876c/AndroidManifest.xml:8:5-10:41
 MERGED from [com.facebook.fbui.textlayoutbuilder:textlayoutbuilder:1.0.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/7fbe837287f0c2af32ad800074690c58/AndroidManifest.xml:14:5-16:41
 MERGED from [com.facebook.fbui.textlayoutbuilder:textlayoutbuilder:1.0.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/7fbe837287f0c2af32ad800074690c58/AndroidManifest.xml:14:5-16:41
 MERGED from [com.facebook.fresco:fresco:1.3.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/27c0bcfaaf0ad27c7ebac118ec4e8216/AndroidManifest.xml:5:5-7:41
@@ -289,18 +292,22 @@ ADDED from [:rn-fetch-blob] /Users/jefferyfarly-provencher/WebstormProjects/MDRA
 		ADDED from [:rn-fetch-blob] /Users/jefferyfarly-provencher/WebstormProjects/MDRA_app/MDRA_app/node_modules/rn-fetch-blob/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:43:17-55
 	android:name
 		ADDED from [:rn-fetch-blob] /Users/jefferyfarly-provencher/WebstormProjects/MDRA_app/MDRA_app/node_modules/rn-fetch-blob/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:42:17-67
+uses-permission#android.permission.USE_FINGERPRINT
+ADDED from [:react-native-sensitive-info] /Users/jefferyfarly-provencher/WebstormProjects/MDRA_app/MDRA_app/node_modules/react-native-sensitive-info/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:11:5-74
+	android:name
+		ADDED from [:react-native-sensitive-info] /Users/jefferyfarly-provencher/WebstormProjects/MDRA_app/MDRA_app/node_modules/react-native-sensitive-info/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:11:22-71
 meta-data#android.support.VERSION
 ADDED from [com.android.support:design:25.3.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/85b8e7b3b5e1e85b2ceadadd12439ddc/AndroidManifest.xml:25:5-27:34
 MERGED from [com.android.support:appcompat-v7:25.3.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/16299dcd02c1d26691eba0bf8b43e9db/AndroidManifest.xml:25:5-27:34
 MERGED from [com.android.support:appcompat-v7:25.3.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/16299dcd02c1d26691eba0bf8b43e9db/AndroidManifest.xml:25:5-27:34
-MERGED from [com.android.support:transition:25.3.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/9deaf7a22236ed7587dc75955a19b822/AndroidManifest.xml:22:5-24:34
-MERGED from [com.android.support:transition:25.3.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/9deaf7a22236ed7587dc75955a19b822/AndroidManifest.xml:22:5-24:34
-MERGED from [com.android.support:support-v4:25.3.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/2a7703dba470f6eea14caf20f15baaf1/AndroidManifest.xml:25:5-27:34
-MERGED from [com.android.support:support-v4:25.3.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/2a7703dba470f6eea14caf20f15baaf1/AndroidManifest.xml:25:5-27:34
 MERGED from [com.android.support:animated-vector-drawable:25.3.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/679712e2f61c5492cc78ff79459b5ff7/AndroidManifest.xml:22:5-24:34
 MERGED from [com.android.support:animated-vector-drawable:25.3.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/679712e2f61c5492cc78ff79459b5ff7/AndroidManifest.xml:22:5-24:34
 MERGED from [com.android.support:support-vector-drawable:25.3.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/bb9c3e0bfa0cd7585c46d7202a5d4cbc/AndroidManifest.xml:22:5-24:34
 MERGED from [com.android.support:support-vector-drawable:25.3.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/bb9c3e0bfa0cd7585c46d7202a5d4cbc/AndroidManifest.xml:22:5-24:34
+MERGED from [com.android.support:transition:25.3.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/9deaf7a22236ed7587dc75955a19b822/AndroidManifest.xml:22:5-24:34
+MERGED from [com.android.support:transition:25.3.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/9deaf7a22236ed7587dc75955a19b822/AndroidManifest.xml:22:5-24:34
+MERGED from [com.android.support:support-v4:25.3.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/2a7703dba470f6eea14caf20f15baaf1/AndroidManifest.xml:25:5-27:34
+MERGED from [com.android.support:support-v4:25.3.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/2a7703dba470f6eea14caf20f15baaf1/AndroidManifest.xml:25:5-27:34
 MERGED from [com.android.support:support-fragment:25.3.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/c801a2eefab3766388d6ebd053a7f3ed/AndroidManifest.xml:25:5-27:34
 MERGED from [com.android.support:support-fragment:25.3.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/c801a2eefab3766388d6ebd053a7f3ed/AndroidManifest.xml:25:5-27:34
 MERGED from [com.android.support:support-media-compat:25.3.0] /Users/jefferyfarly-provencher/.gradle/caches/transforms-2/files-2.1/57e2b3ab9c694d26c00caa4844abb570/AndroidManifest.xml:25:5-27:34

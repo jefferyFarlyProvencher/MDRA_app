@@ -11,6 +11,7 @@ class CheckBox extends React.Component {
     };
 
     render() {
+        console.log("Update of Checkbox");
         return (
             <View style={[styles.containerStyle, this.props.containerStyle]}>
                 <TouchableWithoutFeedback onPress={this.props.onPress}>

@@ -276,7 +276,8 @@ class StartScreen extends Component{
     render(){
         console.log("value of stay logged in (local): "+ this.state.stayConnected);
         console.log("value of stay logged in (global): "+ this.props.state.main.stayConnected);
-        //this.startBreathAnimation();
+        console.log("Update of StartScreen");
+//this.startBreathAnimation();
         let displayLogRegScreens = !(typeof this.props.state.main.linkedAccount !== "undefined"&&this.props.state.main.linkedAccount.token&&typeof this.props.state.main.linkedAccount.token !== "undefined");
         // console.log("displayLogRegScreens: "+ displayLogRegScreens);
         // console.log("this.props.state.main.linkedAccount === null: "+(this.props.state.main.linkedAccount === null));

@@ -1,10 +1,16 @@
 import React from 'react';
 import { createStore, combineReducers, compose} from 'redux';
 import { createWhitelistFilter } from 'redux-persist-transform-filter';
-import { persistStore, persistReducer } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
+import { persistStore, persistCombineReducers, persistReducer } from 'redux-persist';
+//import storage from 'redux-persist/lib/storage';
+import createSensitiveStorage from "redux-persist-sensitive-storage";
 
 import reducer from './reducers/root';
+
+const storage = createSensitiveStorage({
+        keychainService: "myKeychain",
+        sharedPreferencesName: "mySharedPrefs"
+});
 
 const persistConfig = {
     key: 'root',

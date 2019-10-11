@@ -90,7 +90,7 @@ class NewYupString extends yup.string {
         })
     }
 
-    //IMPROTANT
+    //**********IMPORTANT***********
     // since ref and msg are the only items sent when calling this function
     //they will be used to pass the list address and the key
     // so list->ref and currentTarget->msg

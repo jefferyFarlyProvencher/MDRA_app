@@ -32,11 +32,28 @@ class RetrieveResultsScreen extends Component {
         this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent);
     }
 
+    static navigatorButtons = (Platform.OS === "ios"
+        ?{leftButtons: [
+            {
+                title: '< Go back', // for a textual button, provide the button title (label)
+                id: 'backButton', // id for this button, given in onNavigatorEvent(event) to help understand which button was clicked
+                disabled: false, // optional, used to disable the button (appears faded and doesn't interact)
+                disableIconTint: true, // optional, by default the image colors are overridden and tinted to navBarButtonColor, set to true to keep the original image colors
+                showAsAction: 'ifRoom', // optional, Android only. Control how the button is displayed in the Toolbar. Accepted valued: 'ifRoom' (default) - Show this item as a button in an Action Bar if the system decides there is room for it. 'always' - Always show this item as a button in an Action Bar. 'withText' - When this item is in the action bar, always show it with a text label even if it also has an icon specified. 'never' - Never show this item as a button in an Action Bar.
+                buttonColor: '#3057e1', // Optional, iOS only. Set color for the button (can also be used in setButtons function to set different button style programatically)
+                buttonFontSize: 18, // Set font size for the button (can also be used in setButtons function to set different button style programatically)
+                buttonFontWeight: '600', // Set font weight for the button (can also be used in setButtons function to set different button style programatically)
+            },
+        ]}
+        :null
+    );
+
     dateObject = new Date();
 
     state = {
         searchItems: false,
         displayedMessage: "Enter proper information to make the appropriate search",
+        displayedDuringRetrieval:"Fetching data...\n",
         dateFrom: "2019-01-01",
         dateTo:  this.dateObject.toISOString().slice(0,10),
         dateFromError: false,
@@ -65,6 +82,8 @@ class RetrieveResultsScreen extends Component {
                 this.props.navigator.toggleDrawer({
                     side: "left"
                 });
+            }else if(event.id === "backButton"){
+                this.props.navigator.dismissAllModals();
             }
         }
     };
@@ -99,7 +118,8 @@ class RetrieveResultsScreen extends Component {
     verifyIfNotDuplicate = (resultToCompare) =>{
 
         let currentResultList = this.props.state.main.resultsList;
-        for(let i = 0; i < currentResultList.length; i++)
+        let totalResultAmount = currentResultList.length;
+        for(let i = 0; i < totalResultAmount; i++)
         {
             //console.log("this is the current result form from resultList: " + JSON.stringify(currentResultList[i].id));
             //console.log("and this is the result form compared to: "+ JSON.stringify(resultToCompare.name));
@@ -139,10 +159,14 @@ class RetrieveResultsScreen extends Component {
             }
 
             this.toggleSpinnerVisibility();
+
+            let amountAdded = retrievalResult.length-possibleDuplicatesList.length;
+
             if (possibleDuplicatesList.length > 0) {
+
                 setTimeout(
                     ()=> {
-                        alert((retrievalResult.length-possibleDuplicatesList.length+" were added to the Results List\n")+(possibleDuplicatesList.length === 1 ? "This result was a possible duplicate and thus has " : "These results were possible duplicates and thus have ") + "not been added to the list: " + possibleDuplicatesList)
+                        alert((amountAdded+ (amountAdded === 1? " result was ":  " results were ")+"added to the Results List\n")+(possibleDuplicatesList.length === 1 ? ("1 result was a possible duplicate and thus has ") : (possibleDuplicatesList.length+ " results were possible duplicates and thus have ")) + "not been added to the list.")
                     }
                     ,10
                 )
@@ -150,7 +174,7 @@ class RetrieveResultsScreen extends Component {
             else if(possibleDuplicatesList.length === 0){
                 setTimeout(
                     ()=> {
-                        alert((retrievalResult.length-possibleDuplicatesList.length+" were added to the Results List\n"))
+                        alert((amountAdded+ (amountAdded === 1? " result was ":  " results were ")+" were added to the Results List\n"))
                     }
                     ,10
                 )
@@ -247,8 +271,9 @@ class RetrieveResultsScreen extends Component {
 
     render() {
         // console.log("this is dateTo: "+ this.state.dateTo);
+        console.log("Update of Retrieval");
         return (
-            <View style={{flex:1}}>
+            <View style={{flex:1, backgroundColor:"white"}}>
                 <TitleComponent
                     text={"Retrieve old results"}
                 />
@@ -432,7 +457,7 @@ class RetrieveResultsScreen extends Component {
                     </TouchableOpacity>
                 </View>
                 <View>
-                    <Spinner visible={this.state.visible} textContent="Fetching data..." textStyle={{color: '#FFF'}} />
+                    <Spinner visible={this.state.visible} textContent={this.state.displayedDuringRetrieval} textStyle={{color: '#FFF'}} />
                 </View>
             </View>
         );

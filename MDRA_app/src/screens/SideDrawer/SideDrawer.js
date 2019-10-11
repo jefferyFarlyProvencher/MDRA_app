@@ -46,8 +46,8 @@ class SideDrawer extends Component{
         });
     };
 
-    handlePatientProfilesScreen = () => {
-        this.props.navigator.handleDeepLink({ link: "managePatientsScreen"});
+    handleRetrieveResultsScreen = () => {
+        this.props.navigator.handleDeepLink({ link: "retrieveOldResults"});
     };
 
     handleConnectionTest = async()=>{
@@ -110,6 +110,7 @@ class SideDrawer extends Component{
 
     render() {
         let IsBackUpRestoreDisabled = (this.props.state.main.backUpResultList === undefined || this.props.state.main.backUpResultList.length === 0 );
+        console.log("Update of SideDrawer");
         return(
             <View style = {[{width: Dimensions.get("window").width *0.7}, styles.container]}>
                 <View>
@@ -128,18 +129,17 @@ class SideDrawer extends Component{
                 </TouchableOpacity>
                 <TouchableOpacity
                     onPress={()=>{
-                        console.log("This is in development????");
-                        this.handlePatientProfilesScreen();
+                        this.handleRetrieveResultsScreen();
                     }}
                 >
                 <View  style={[styles.drawerItem]}>
                     <Ionicon
                         size={40}
-                        name= {Platform.OS==='android'? "md-people" :"ios-people"}
+                        name={Platform.OS==='android'? "md-search" :"ios-search"}
                         color="#52afff"
                         style={styles.drawerItemIcon}
                     />
-                    <Text style={{color:"#000000"}}>Manage Patient Profiles</Text>
+                    <Text style={{color:"#000000"}}>Retrieve Old Results</Text>
                 </View>
             </TouchableOpacity>
                 <TouchableOpacity onPress={this.props.allowAdvancedOptions}>
@@ -170,7 +170,7 @@ class SideDrawer extends Component{
                             color="#52afff"
                             style={styles.drawerItemIcon}
                         />
-                        <Text>Connect test</Text>
+                        <Text>Connection test</Text>
                     </View>
                 </TouchableOpacity>
                 <TouchableOpacity
@@ -195,7 +195,7 @@ class SideDrawer extends Component{
                             name= {Platform.OS==='android'? "md-trash" :"ios-trash"}
                             color="#52afff" style={[styles.drawerItemIcon]}
                         />
-                        <Text>Empty Result List</Text>
+                        <Text>Empty ResultsList</Text>
                     </View>
                 </TouchableOpacity>
                 <TouchableOpacity

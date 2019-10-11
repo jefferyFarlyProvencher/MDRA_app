@@ -62,7 +62,7 @@ class CustomTimeMultiSlider extends Component{
 
     render(){
         //console.log(this.generateDataSingle(this.props.data.percentile10));
-        console.log("test for render")
+        console.log("Update of TimeMultiSlider");
         let isAndroid = Platform.OS === 'android';
 
         let enableAmPm = this.state.enableAmPm;

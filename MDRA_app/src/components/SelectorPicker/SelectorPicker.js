@@ -57,7 +57,7 @@ class ResultPage extends PureComponent {
 //    Animated.sequence([
 
     render() {
-
+        console.log("Update of ResultPage");
         const pickerElements = this.props.choices.map(item => {
             return(
                 <View  key={item.key}>

@@ -24,6 +24,7 @@ class InputDisplay extends PureComponent{
     }
 
     render() {
+        console.log("Update of InputDisplay");
         return(
             <View style={[styles.root,this.props.style]}>
                 <Text style={{fontWeight:"bold"}}>{this.props.rowTitle + ": "}</Text>

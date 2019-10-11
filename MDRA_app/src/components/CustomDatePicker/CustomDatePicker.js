@@ -64,6 +64,8 @@ class CustomDatePicker extends PureComponent{
     };
 
     render() {
+        console.log("Update of CustomDatePicker");
+
         const {label, error, backgroundColor, name, ...rest } = this.props;
         let labelPosition = this.props.labelPosition;
         return(

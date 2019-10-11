@@ -57,6 +57,7 @@ class FormScreenWeights extends PureComponent{
     });
 
     render() {
+        console.log("Update of weights");
         return(
             <View style={styles.container}>
                 <KeyboardAwareScrollView>

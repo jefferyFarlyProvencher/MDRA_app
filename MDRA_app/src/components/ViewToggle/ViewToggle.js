@@ -1,4 +1,4 @@
-import React, {PureComponent} from 'react';
+import React, {Component} from 'react';
 import {StyleSheet, View, Platform, TouchableWithoutFeedback, TouchableHighlight, Animated, ScrollView} from 'react-native';
 
 import {
@@ -19,7 +19,7 @@ import LinedLabel from '../LinedLabel/LinedLabel'
  *
  */
 
-class ViewToggle extends PureComponent{
+class ViewToggle extends Component{
 
     state = {
 
@@ -30,6 +30,10 @@ class ViewToggle extends PureComponent{
 
     constructor(props){
         super(props);
+    }
+
+    shouldComponentUpdate(nextProps, nextState, nextContext) {
+        return nextProps.children !== this.props.children || nextState.toggleValue !== this.state.toggleValue
     }
 
     _setMaxHeight = (event) =>{
@@ -78,7 +82,7 @@ class ViewToggle extends PureComponent{
         Animated.spring(this.state.animation,{
             toValue: value,
             duration: 200
-        }).start()
+        }).start();
 
         setTimeout(() => this.setState(oldState => {
                         return {
@@ -128,6 +132,7 @@ class ViewToggle extends PureComponent{
     };
 
     render() {
+        console.log("Update of ViewToggle");
         const {label, error, backgroundColor, name, center,onBlur, maxLength, inputStyle,...rest } = this.props;
         let labelPosition = this.props.labelPosition;
 

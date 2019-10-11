@@ -145,7 +145,7 @@ class SendFormScreen extends PureComponent{
                 this.setState((oldState) => ({
                     ...oldState,
                     dataReceived: true,
-                    textToDisplay: "*****CONNECTION ERROR*****",
+                    textToDisplay: "CONNECTION ERROR",
                     iconName: "ios-warning-outline"
                 }));
             }
@@ -160,6 +160,7 @@ class SendFormScreen extends PureComponent{
     };
 
     render() {
+        console.log("Update of SendForm");
         return(
             <View style={styles.container}>
                 <TouchableOpacity onPress={this._handlerOnPress}>
@@ -183,8 +184,14 @@ class SendFormScreen extends PureComponent{
                         {
                             !this.state.dataReceived
                                 ?<Text style={{padding: 20}}>Sending Data to server...</Text>
-                                :(
-                                    <Text style={{padding: 20}}>{"Redo Form?"}</Text>
+                                : (this.state.textToDisplay === "CONNECTION ERROR"
+                                    ? <Text style={{textAlign: "center", padding:20}}>
+                                        Form was not sent due to a connection issue with the server.
+                                        Please verify that the application is connected to the server by using
+                                        the side menu's [Connection Test] Button and then pressing the warning triangle
+                                        to try again.
+                                    </Text>
+                                    : <Text style={{padding: 20}}>{"Redo Form?"}</Text>
                                 )
                         }
                     </View>

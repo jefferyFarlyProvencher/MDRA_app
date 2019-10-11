@@ -89,6 +89,7 @@ class DropDownListV2 extends Component {
     };
 
     render() {
+        console.log("Update of DropDownV2");
         const {label, error, ...rest } = this.props;
         let newItemList = [];
         return (
@@ -114,7 +115,11 @@ class DropDownListV2 extends Component {
                         <View style={
                                 [
                                     styles.angleDownContainer,
-                                    {backgroundColor:this.props.pickerBackgroundColor?this.props.pickerBackgroundColor:"#c8e5f9"}
+                                    {
+                                        backgroundColor:this.props.pickerBackgroundColor
+                                            ? this.props.pickerBackgroundColor
+                                            :"#c8e5f9"
+                                    }
 
                                 ]
                             }
@@ -160,7 +165,9 @@ const styles = StyleSheet.create({
         backgroundColor: "#c8e5f9",
         justifyContent:"center",
         borderTopRightRadius: borderRadius,
-        borderBottomRightRadius: borderRadius
+        borderBottomRightRadius: borderRadius,
+        alignItems:"flex-end",
+        paddingRight: 10
     },
 
     pickerContainer:{

@@ -15,7 +15,7 @@
 // note that patientProfiles should be imported automatically upon log in  (should results be as well?)
 
 import React, {Component} from 'react';
-import {View, Text, StyleSheet, Platform, ScrollView, Dimensions, BackHandler, Alert} from 'react-native';
+import {View, Text, StyleSheet, Platform, ScrollView, Dimensions, BackHandler, Alert, Button} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 
 import Input from "../../components/Input/Input";
@@ -79,10 +79,40 @@ class ManagePatientsScreen extends Component{
         });
     };
 
-    onNavigatorEvent(event) { // this is the onPress handler for the two buttons together
-        if (event.type === 'NavBarButtonPress') { // this is the event type for button presses
-            if (event.id === 'backButton') { // this is the same id field from the static navigatorButtons definition
-                this.props.navigator.dismissModal()
+    // onNavigatorEvent(event) { // this is the onPress handler for the two buttons together
+    //     console.log("event.id: "+ event.id);
+    //     if (event.type === 'NavBarButtonPress') { // this is the event type for button presses
+    //         if (event.id === 'backButton') { // this is the same id field from the static navigatorButtons definition
+    //             this.props.navigator.dismissModal()
+    //         }
+    //         else if(event.id === 'addPatient')
+    //         {
+    //             //alert("Add patient? Maybe? No? Okay...?")
+    //             this.props.navigator.push({
+    //                 screen: "MDRA_app.patientPage",
+    //                 title: "Create Account",
+    //                 passProps: {
+    //                     patientProfile: null,
+    //                     onCreatePatientProfile: async (data)=>{
+    //                         console.log("Testing on create patient profile: "+JSON.stringify(data));
+    //                         await this.props.onAddToPatientList(data);
+    //
+    //                         alert(data.name+"'s Profile has been added!")
+    //                     },
+    //                 }
+    //             });
+    //
+    //         }
+    //     }
+    // }
+
+    onNavigatorEvent = event => {
+        console.log("event: " + JSON.stringify(event));
+        if(event.type === "NavBarButtonPress") {
+            if(event.id === "sideDrawerToggle") {
+                this.props.navigator.toggleDrawer({
+                    side: "left"
+                });
             }
             else if(event.id === 'addPatient')
             {
@@ -103,7 +133,28 @@ class ManagePatientsScreen extends Component{
 
             }
         }
-    }
+        else if(event.type === "DeepLink"){
+            if(event.link === "managePatientsScreen")
+            {
+                this.props.navigator.popToRoot({
+                    animated: false,
+                    //animationType: 'fade',
+                });
+
+                this.props.navigator.showModal({
+                    screen: "MDRA_app.managePatientsScreen",
+                    title: "Patients List",
+                });
+                this.props.navigator.toggleDrawer({
+                    side: "left"
+                });
+            }
+        }
+        else if(event.type === "hardwareBackPress")
+        {
+            //do nothing
+        }
+    };
 
     handlePatientAccessed = key => {
         // //blocker's purpose is to stop multi pushes on android
@@ -159,7 +210,7 @@ class ManagePatientsScreen extends Component{
 
                         alert(data.name+" Profile has been updated.")
                     },
-                    patientResultsList: patientResults,
+                    //patientResultsList: patientResults,
                 }
             });
 
@@ -194,14 +245,28 @@ class ManagePatientsScreen extends Component{
     };
 
     render() {
+        console.log("Update of ManagePatients");
+        let patientsList =  this.props.state.main.patientsList;
+
         return(
             <View style={styles.container}>
                 <View style={styles.pickerStyle}>
-                    <PatientsList
-                        list={this.props.state.main.patientsList}
-                        style={styles.pickerStyle}
-                        onItemAccessed={this.handlePatientAccessed}
-                    />
+                    {patientsList.length > 0
+                        ?<PatientsList
+                            list={this.props.state.main.patientsList}
+                            style={styles.pickerStyle}
+                            onItemAccessed={this.handlePatientAccessed}
+                        />
+                        :<View style={{alignItems: "center", justifyContent: "center", width:"100%", height: "100%"}}>
+                            <Button
+                                title={"Press here to add a Patient"}
+                                onPress={()=> {
+                                        this.onNavigatorEvent({type: "NavBarButtonPress",id:"addPatient"})
+                                    }
+                                }
+                            />
+                        </View>
+                    }
                 </View>
             </View>
         )
@@ -217,7 +282,7 @@ const styles = StyleSheet.create({
 
     pickerStyle:{
         height: "100%",
-        width: "100%"
+        width: "100%",
     }
 });
 

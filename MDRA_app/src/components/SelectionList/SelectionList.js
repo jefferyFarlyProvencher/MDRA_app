@@ -114,6 +114,7 @@ class SelectionList extends Component{
     // };
 
     render() {
+        console.log("Update of SelectionList");
         //console.log("size of list inside render: "+this.state.modifiedList.length);
         return (
             <View style={{alignContent:"center",backgroundColor:"#FFF"}}>

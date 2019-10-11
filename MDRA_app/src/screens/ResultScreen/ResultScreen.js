@@ -160,6 +160,9 @@ class ResultScreen extends Component{
 
     /**
      *
+     *
+     *
+     * Toggles spin for android when a result is loading
      */
 
     spinnerToggler = () => {
@@ -170,6 +173,66 @@ class ResultScreen extends Component{
                 amountOfPushes: 1
             }
         });
+    };
+
+    /**
+     * handleRetrieveResultsScreen
+     *
+     * Opens the retrieveOldResult screen in a modal
+     */
+    handleRetrieveResultsScreen = () => {
+        //First alert is to confirm if user wants to retrieve old results
+        Alert.alert(
+            'Confirmation',
+            'Do you want to retrieve old results?', [
+                {
+                    text: 'Cancel',
+                    onPress: (() => console.log('Cancel Pressed')),
+                    style: 'cancel'
+                }, {
+                    text: 'Yes',
+                    onPress: () =>{
+
+                        //Second Alert is to confirm if user has generated old results
+
+                        Alert.alert(
+                            'Have you generated results in the past?',
+                            '', [
+                                {
+                                    text: 'No',
+                                    onPress: () => {this.props.navigator.switchToTab({tabIndex:1})},
+                                },
+                                {
+                                    text: 'Yes',
+                                    onPress: () =>{
+                                        this.props.navigator.showModal({
+                                            screen: "MDRA_app.retrieveOldResults",
+                                            title: "Retrieve Old Results",
+                                            options: {
+                                                topBar: {
+                                                    drawBehind: true,
+                                                    backButton: {
+                                                        visible: true,
+                                                        enabled: true
+                                                    }
+                                                }
+                                            }
+                                        })
+                                    }
+                                }
+                            ],
+                            {
+                                cancelable: false
+                            }
+                        );
+                    }
+                }
+            ],
+            {
+                cancelable: false
+            }
+        );
+
     };
 
     /**
@@ -184,23 +247,43 @@ class ResultScreen extends Component{
     handleItemAccessed = (key,contextSensitiveList) => {
         //blocker's purpose is to stop multi pushes on android
 
-        let list = contextSensitiveList;
+        let contextList = contextSensitiveList;
 
         let activateBlocker = Platform.OS === "android";
         if(this.state.amountOfPushes === 0) {
             if(activateBlocker) {
                 this.spinnerToggler();
             }
-            let selResult = null;
-            let selPosition = 0;
-            for (let i = 0; i < list.length; i++) {
-                if (list[i].key === key){//this.props.state.main.resultsList[i].key === key) {
-                    selResult = list[i];//this.props.state.main.resultsList[i];
-                    selPosition = i;
+
+            //// WE NEED TO DO A POS LIST IN ORDER TO FIX PDF NOT UPDATING BUG
+            let positionsList = [];
+            let accessedItemPosition = null;
+
+            let positionInFullList = 0;
+            let positionInContextList = 0;
+
+
+            while(positionInContextList < contextList.length){
+                console.log("positionInContextList: "+positionInContextList);
+                while(positionInFullList < this.state.fullList.length){
+                    console.log("positionInFullList: "+positionInFullList);
+                    if(contextList[positionInContextList].key === this.state.fullList[positionInFullList].key){
+                        //pos found so
+                        //we push pos in array
+                        positionsList.push(positionInFullList);
+                        if(accessedItemPosition === null && contextList[positionInContextList].key === key){
+                            accessedItemPosition = positionInContextList
+                        }
+                        positionInContextList++;
+                    }
+                    if(contextSensitiveList.length === positionsList.length){
+                        break
+                    }
+                    positionInFullList++;
+
                 }
             }
-            //console.log(key);
-            //this.props.navigator.popToRoot();
+            /////
 
             //here we push the new screen and we send its position and
 
@@ -224,14 +307,16 @@ class ResultScreen extends Component{
                         }
                     );
                 return true;}
-            )
+            );
 
             this.props.navigator.push({
                 screen: "MDRA_app.resultPage",
-                title: list[selPosition].name,
+                title: contextList[accessedItemPosition].name,
                 passProps: {
-                    selectedPosition: selPosition,
-                    contextSensitiveList: list.length === this.props.state.main.resultsList.length?null:list
+                    currentPosition: accessedItemPosition,
+                    // filterText: this.state.searchText,
+                    // filterTarget: this.state.searchTarget,
+                    positionsList: positionsList
                 }
             });
 
@@ -244,7 +329,7 @@ class ResultScreen extends Component{
                         this.setState((oldState)=>{
                             return {
                                 ...oldState,
-                                amountOfPushes: 0
+                                amountOfPushes: 1
                             }
                         });
                     },
@@ -722,7 +807,7 @@ class ResultScreen extends Component{
     };
 
     render(){
-
+        console.log("Update of ResultScreen");
 //        console.log("current redux list size: "+ this.props.state.main.resultsList.length);
 
         let header = this.renderHeader();
@@ -780,7 +865,16 @@ class ResultScreen extends Component{
                         {header}
                         {content}
                     </View>
-                    : <View style={{flex:1, alignItems:"center", justifyContent:"center"}}><Text style={{justifyContent:'center', alignItems:'center'}}>This doesn't have any results yet</Text></View>
+                    :<View style={{alignItems: "center", justifyContent: "center", flex:1}}>
+                        <Text style={{justifyContent:'center', alignItems:'center'}}>This doesn't have any results yet</Text>
+                        <Button
+                        title={"Press here to retrieve old Results"}
+                        onPress={()=> {
+                                this.handleRetrieveResultsScreen()
+                            }
+                        }
+                        />
+                    </View>
                 }
                 <View>
                     <Modal

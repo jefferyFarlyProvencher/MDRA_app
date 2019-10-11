@@ -124,6 +124,9 @@ class LogInScreen extends Component{
         }
         else{
             await this.toggleLoading();
+            if(logInResult === -1){
+                logInResult = 'No account linked to given credentials'
+            }
             this.setState((oldState)=>{
                 return{
                     ...oldState,
@@ -145,6 +148,7 @@ class LogInScreen extends Component{
     };
 
     render(){
+        console.log("Update of LogIn");
         let isEmailFrozen = typeof this.props.frozenEmail !== 'undefined' && this.props.frozenEmail !== null && this.props.frozenEmail;
         return(
             <View style={[{alignItems:"center", justifyContent:"center"}, this.props.style]}>
@@ -181,13 +185,13 @@ class LogInScreen extends Component{
                     {/*</View>*/}
                     <Formik
                         initialValues={{
-                            email:isEmailFrozen?this.props.frozenEmail: null ,
-                            password: null
+                            email:isEmailFrozen?this.props.frozenEmail: "" ,
+                            password: ""
                         }}
                         onSubmit={(values, bag) => {console.log("the log in is starting"); this._handlerLogIn(values, bag)}}
                         validationSchema={Yup.object().shape({
-                            email: NewYupString().required(),
-                            password: NewYupString().required(),
+                            email: NewYupString("This item is required").required("This item is required"),
+                            password: NewYupString("This item is required").required("This item is required"),
                         })}
                         render={({
                                      values,
@@ -214,7 +218,7 @@ class LogInScreen extends Component{
                                     }>
                                         <Text style={{textAlign: "center",fontSize:17, color:"#efefef"}}>{this.props.frozenEmail}</Text>
                                     </View>
-                                    : <View style={[styles.inputStyle, {width: Dimensions.get("window").width * 0.80}]}>
+                                    : <View style={[styles.inputStyle, {width: Dimensions.get("window").width * 0.80, flexDirection:"row"}]}>
                                         <Input
                                             value={values.email}
                                             style={{marginRight: 0,}}

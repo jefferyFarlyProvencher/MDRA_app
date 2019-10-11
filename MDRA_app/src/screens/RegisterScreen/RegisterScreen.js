@@ -29,7 +29,8 @@ class RegisterScreen extends Component{
         loading:false,
         startAnim: new Animated.Value(1),
         attempt: -1,
-        passwordNotVisible: true
+        passwordNotVisible: true,
+        passwordConfirmationNotVisible: true,
     };
 
     _handleWaitingOnStart_grow = () => {
@@ -67,14 +68,24 @@ class RegisterScreen extends Component{
         }
     };
 
-    handlePasswordVisibility = () => {
-        this.setState(oldState =>{
-            return{
-                ...oldState,
-                passwordNotVisible: !oldState.passwordNotVisible
-            };
+    handlePasswordVisibility = (isConfirmation) => {
+        if(isConfirmation === 1)
+            this.setState(oldState =>{
+                return{
+                    ...oldState,
+                    passwordNotVisible: !oldState.passwordNotVisible
+                };
 
-        })
+            })
+        else if(isConfirmation === 2){
+            this.setState(oldState =>{
+                return{
+                    ...oldState,
+                    passwordConfirmationNotVisible: !oldState.passwordConfirmationNotVisible
+                };
+
+            })
+        }
     };
 
     displayConnectionError = () =>{
@@ -137,6 +148,7 @@ class RegisterScreen extends Component{
 
     render(){
         //this.startBreathAnimation();
+        console.log("Update of TitleComponent");
         return(
             <View style={[{alignItems:"center", justifyContent:"center"},this.props.style]}>
                 <View>
@@ -170,12 +182,18 @@ class RegisterScreen extends Component{
                     <Formik
                         style={this.props.style}
                         initialValues={{
+                            firstName: "",
+                            lastName: "",
+                            password: "",
+                            confirmPassword:"",
+                            email: "",
                         }}
                         onSubmit={(values, bag) => {console.log("the register is starting"); this._handleRegister(values,bag)}}
                         validationSchema={Yup.object().shape({
                             firstName: NewYupString().required(),
                             lastName: NewYupString().required(),
                             password: NewYupString().required(),
+                            confirmPassword:NewYupString().equalTo(Yup.ref('password', null),"Not equal to password").required(),
                             email: NewYupString().email().required(),
                         })}
                         render={({
@@ -229,6 +247,8 @@ class RegisterScreen extends Component{
                                         }}
                                         onTouch={() => {}}
                                         name="firstName"
+                                        label={"First Name"}
+                                        displayLabel={false}
                                         error={touched.firstName && errors.firstName}
                                         onBlur={() =>{
                                             //console.log(this.props.state.main.indicatorVisibility)
@@ -253,6 +273,8 @@ class RegisterScreen extends Component{
                                         }}
                                         onTouch={() => {}}
                                         name="lastName"
+                                        label={"Last Name"}
+                                        displayLabel={false}
                                         error={touched.lastName && errors.lastName}
                                         onBlur={() =>{
                                             //console.log(this.props.state.main.indicatorVisibility)
@@ -286,8 +308,50 @@ class RegisterScreen extends Component{
                                         maxLength={20}
                                     />
                                     <View  style={[styles.drawerItem,{margin:0, position: "absolute", right: "1%", top:"25%"}]}>
-                                        <TouchableOpacity onPress={this.handlePasswordVisibility}>
+                                        <TouchableOpacity onPress={() => this.handlePasswordVisibility(1)}>
                                             {this.state.passwordNotVisible
+                                                ?<Ionicon
+                                                    size={40}
+                                                    name= {Platform.OS==='android'? "md-eye" :"ios-eye"}
+                                                    color="#FFF"
+                                                    style={styles.drawerItemIcon}
+                                                />:<Ionicon
+                                                    size={40}
+                                                    name= {Platform.OS==='android'? "md-eye-off" :"ios-eye-off"}
+                                                    color="#FFF"
+                                                    style={styles.drawerItemIcon}
+                                                />
+                                            }
+                                        </TouchableOpacity>
+                                    </View>
+                                </View>
+                                <View style={[styles.inputStyle,{width: Dimensions.get("window").width*0.80, flexDirection:"row"}]}>
+                                    <Input
+                                        value={values.confirmPassword}
+                                        style={{marginRight:0,paddingRight: 0,}}
+                                        inputStyle={[styles.textStyle,{color:"#FFF", marginRight:0}]}
+                                        secureTextEntry={this.state.passwordConfirmationNotVisible}
+                                        onChange={(name,value) =>{
+                                            if(typeof value != "undefined") {
+                                                console.log("value of name: " + name);
+                                                setFieldValue(name, value);
+                                                console.log("input of " + name + " is: " + value)
+                                            }
+                                        }}
+                                        onTouch={setFieldTouched}
+                                        name="confirmPassword"
+                                        label={"Confirm Password"}
+                                        displayLabel={false}
+                                        error={touched.confirmPassword && errors.confirmPassword}
+                                        onBlur={() =>{
+                                            //setFieldTouched('confirmPassword', true)
+                                        }}
+                                        placeholderTextColor={'white'}
+                                        maxLength={20}
+                                    />
+                                    <View  style={[styles.drawerItem,{margin:0, position: "absolute", right: "1%", top:"25%"}]}>
+                                        <TouchableOpacity onPress={() => this.handlePasswordVisibility(2)}>
+                                            {this.state.passwordConfirmationNotVisible
                                                 ?<Ionicon
                                                     size={40}
                                                     name= {Platform.OS==='android'? "md-eye" :"ios-eye"}

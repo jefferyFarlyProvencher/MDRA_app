@@ -10,7 +10,13 @@ import {View, Text, StyleSheet} from 'react-native';
  */
 
 class TitleComponent extends Component{
+
+    shouldComponentUpdate(nextProps, nextState, nextContext) {
+        return nextProps.text !== this.props.text
+    }
+
     render(){
+        console.log("Update of TitleComponent");
         return(
             <View style={[styles.titleContainer,this.props.containerStyle]}>
                 <Text style={[styles.titleStyle, this.props.textStyle]}>

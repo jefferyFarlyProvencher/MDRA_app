@@ -131,7 +131,7 @@ class FormScreen extends Component{
             }
         }
         else if(event.type === "DeepLink"){
-            if(event.link === "managePatientsScreen")
+            if(event.link === "retrieveOldResults")
             {
                 this.props.navigator.popToRoot({
                     animated: false,
@@ -139,8 +139,8 @@ class FormScreen extends Component{
                 });
 
                 this.props.navigator.showModal({
-                    screen: "MDRA_app.managePatientsScreen",
-                    title: "Patients List",
+                    screen: "MDRA_app.retrieveOldResults",
+                    title: "Retrieve Old Results",
                 });
                 this.props.navigator.toggleDrawer({
                     side: "left"
@@ -449,6 +449,7 @@ class FormScreen extends Component{
         //console.log("indicator Height: "+ indicatorHeight);
 
         //console.log("formscreen patientsList: "+ JSON.stringify(this.props.state.main.patientsList));
+        console.log("Update of FormScreenV2");
 
         return(
             <View style={styles.overTheIndicatorContainer}>
@@ -478,9 +479,9 @@ class FormScreen extends Component{
                                 <View>
                                     <FormScreenAdvanced data={this.props.state.main.Page3Data} setPage={this.handleSetPage}/>
                                 </View>
-                                :<View>
-                                    <Text>
-                                        //empty page in case of errors when switch from results
+                                :<View style={{flex:1, alignItems:"center", justifyContent: "center"}}>
+                                    <Text style={{fontSize: 40}}>
+                                        Loading...
                                     </Text>
                                 </View>
                             }

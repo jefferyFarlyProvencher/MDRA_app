@@ -24,6 +24,8 @@ class GenderSelector extends Component{
     };
 
     render() {
+        console.log("Update of GenderSelector");
+
         return(
             <View style={styles.container}>
                 <FormLabel>Gender</FormLabel>

@@ -42,6 +42,7 @@ class FormScreenAdvanced extends PureComponent{
 
     render() {
         //console.log("Fuck this shit");
+        console.log("Update of advanced");
         return(
                 <KeyboardAwareScrollView>
                     <View style={styles.container}>
@@ -115,16 +116,19 @@ class FormScreenAdvanced extends PureComponent{
                                             />
                                         </View>
                                         <View style={[styles.inputContainer, {width:"100%"}]}>
-                                            <Input
-                                                autoCapitalize="none"
-                                                value={values.numberOfSimulations}
-                                                onChange={setFieldValue}
-                                                onTouch={setFieldTouched}
-                                                name="numberOfSimulations"
-                                                error={errors.numberOfSimulations}
-                                                keyboardType="numeric"
-                                                style={{width:"80%"}}
-                                            />
+                                            {/*<Input*/}
+                                                {/*autoCapitalize="none"*/}
+                                                {/*value={values.numberOfSimulations}*/}
+                                                {/*onChange={setFieldValue}*/}
+                                                {/*onTouch={setFieldTouched}*/}
+                                                {/*name="numberOfSimulations"*/}
+                                                {/*error={errors.numberOfSimulations}*/}
+                                                {/*keyboardType="numeric"*/}
+                                                {/*style={{width:"80%"}}*/}
+                                            {/*/>*/}
+                                            <View style={[styles.inputContainer,{alignItems:"center", backgroundColor:"#DDD", height:"10%"}]}>
+                                                <Text style={{color:"#AAA", alignText:"center"}}>1000</Text>
+                                            </View>
                                         </View>
                                     </View>
                                     {this.props.state.main.Page1Data?
