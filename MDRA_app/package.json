@@ -46,7 +46,7 @@
     "redux-persist-transform-filter": "0.0.18",
     "rn-fetch-blob": "^0.10.15",
     "rn-viewpager": "^1.2.9",
-    "victory-native": "^30.1.0",
+    "victory-native": "^36.6.8",
     "yup": "^0.25.1"
   }
 }
